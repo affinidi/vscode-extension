@@ -6,36 +6,6 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"type": "aws-sam",
-			"request": "direct-invoke",
-			"name": "byor-user-login-prod:route_user.handler_user_login (python3.8)",
-			"invokeTarget": {
-				"target": "code",
-				"projectRoot": "${workspaceFolder}/byor-user-login-prod",
-				"lambdaHandler": "route_user.handler_user_login"
-			},
-			"lambda": {
-				"runtime": "python3.8",
-				"payload": {},
-				"environmentVariables": {}
-			}
-		},
-		{
-			"type": "aws-sam",
-			"request": "direct-invoke",
-			"name": "byor-user-logout-prod:route_user.handler_user_logout (python3.8)",
-			"invokeTarget": {
-				"target": "code",
-				"projectRoot": "${workspaceFolder}/byor-user-logout-prod",
-				"lambdaHandler": "route_user.handler_user_logout"
-			},
-			"lambda": {
-				"runtime": "python3.8",
-				"payload": {},
-				"environmentVariables": {}
-			}
-		},
-		{
 			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
