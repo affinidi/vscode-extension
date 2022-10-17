@@ -2,15 +2,8 @@
 
 ## Prerequisites
 
-1. [AWS Serverless Application Model
-](https://aws.amazon.com/serverless/sam/):
-```
-brew tap aws/tap
-brew install aws-sam-cli
-```
-2. Docker running.
-3. `npm install`
-4. `npm run compile`
+1. `npm install`
+2. `npm run compile`
 
 ## Let's build an awesome extension!
 

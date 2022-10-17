@@ -1,7 +1,7 @@
 {
-  "name": "affinidi-dev-console",
-  "displayName": "Affinidi Dev Console",
-  "description": "Fast-track your Web 2.0 to Web 3.0 journey with Affinidi Dev Console",
+  "name": "affinidi",
+  "displayName": "Affinidi",
+  "description": "Fast-track your Web 2.0 to Web 3.0 journey with Affinidi",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.70.0"
@@ -11,15 +11,107 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:affinidi-dev-console.helloWorld",
+    "onCommand:affinidi.login",
+    "onCommand:affinidi.logout",
+    "onCommand:affinidi.register",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
+    "onCommand:affinidiExplorer.refresh",
     "onView:affinidiDevTools",
-    "onCommand:affinidi.codegen.verifier"
+    "onCommand:affinidi.codegen.verifier",
+    "onCommand:affinidi.schema.create"
   ],
   "main": "./out/main",
   "contributes": {
-
+    "commands": [
+      {
+        "command": "affinidi.login",
+        "category": "Affinidi",
+        "title": "Sign In"
+      },
+      {
+        "command": "affinidi.logout",
+        "category": "Affinidi",
+        "title": "Sign Out"
+      },
+      {
+        "command": "affinidi.register",
+        "category": "Affinidi",
+        "title": "Register"
+      },
+      {
+        "command": "affinidiExplorer.refresh",
+        "title": "Refresh",
+        "category": "Affinidi",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "affinidi.schema.create",
+        "title": "Create Schema",
+        "category": "Affinidi Schemas",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "affinidi.codegen.verifier",
+        "title": "Create new verifier sample application",
+        "category": "Affinidi Tools",
+        "icon": "$(rocket)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "affinidiExplorer.refresh",
+          "when": "never"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "affinidiExplorer.refresh",
+          "when": "view == affinidiExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "affinidi.codegen.verifier",
+          "when": "view == affinidiExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "affinidi.schema.create",
+          "when": "view == affinidiExplorer && viewItem == rootSchemas",
+          "group": "inline"
+        }
+      ]
+    },
+    "views": {
+      "affinidi": [
+        {
+          "id": "affinidiExplorer",
+          "name": "Resources"
+        },
+        {
+          "id": "affinidiDevTools",
+          "name": "Developer Tools"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "affinidi",
+          "title": "Affinidi",
+          "icon": "media/affinidi-logo.svg"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "affinidiDevTools",
+        "contents": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiTools2)\nBuild a rule that checks validity of verifiable credentials against one or more schemas\n[Create Rule](command:affinidiTools3)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiTools4)"
+      }
+    ],
     "walkthroughs": [
       {
         "id": "affinidi-walkthrough",
@@ -31,101 +123,29 @@
             "id": "createSchema",
             "title": "Create Schema",
             "description": "Easily generate a schema for a verifiable credential.\n[Create Schema](command:getting-started.createSchema)",
-            "media": { "image": "media/affinidi-logo.svg", "altText": "Affinidi" },
-            "completionEvents": ["onCommand:getting-started.createschema"]
+            "media": {
+              "image": "media/affinidi-logo.svg",
+              "altText": "Affinidi"
+            },
+            "completionEvents": [
+              "onCommand:getting-started.createschema"
+            ]
           },
           {
             "id": "createRule",
             "title": "Create Rules",
             "description": "Create powerful rules that match verifiable credentials\n[Create Rule](command:getting-started.createRule)",
-            "media": { "image": "media/affinidi-logo.svg", "altText": "Affinidi" },
-            "completionEvents": ["onSettingChanged:getting-started.sampleSetting"]
+            "media": {
+              "image": "media/affinidi-logo.svg",
+              "altText": "Affinidi"
+            },
+            "completionEvents": [
+              "onSettingChanged:getting-started.sampleSetting"
+            ]
           }
         ]
       }
-    ],    
-    "menus": {
-      "view/title": [
-          {
-              "command": "affinidiExplorer.refresh",
-              "when": "view == affinidiExplorer",
-              "group": "navigation"
-          },
-          {
-            "command": "affinidiExplorer.createSchema",
-            "when": "view == affinidiExplorer",
-            "group": "navigation"
-          },
-          {
-            "command": "affinidi.codegen.verifier",
-            "when": "view == affinidiExplorer",
-            "group": "navigation"
-          }
-      ]
-    },
-    "commands": [
-      {
-        "command": "affinidi-dev-console.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "affinidi-dev-console.login",
-        "title": "Login to Affinidi account"
-      },
-      {
-        "command" : "affinidiExplorer.refresh",
-        "title": "Refresh",
-        "category": "Affinidi Tools",
-        "icon": "$(extensions-refresh)"
-      },
-      {
-        "command" : "affinidiExplorer.createSchema",
-        "title": "Create Schema",
-        "category": "Affinidi Tools",
-        "icon": "$(notebook-mimetype)"
-      },
-      {
-        "command": "affinidi.codegen.verifier",
-        "title": "Create new verifier sample application",
-        "category": "Affinidi Tools",
-        "icon": "$(rocket)"
-      }
-    ],
-    "views": {
-      "affinidi-toolkit": [
-        {
-          "id": "affinidiExplorer",
-          "name": "Affinidi Resources"
-        },
-        {
-          "id": "affinidiDevTools",
-          "name": "Affinidi Developer Tools"
-        }
-      ]
-    },
-
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "affinidi-toolkit",
-          "title": "Affinidi",
-          "icon": "media/affinidi-logo.svg"
-        }
-      ]
-    },
-    "package-explorer": [
-      {
-        "id": "affinidiExplorer",
-        "name": "Affinidi Tools",        
-        "contextualTitle": "Affinidi Tools"
-      }
-    ],
-    "viewsWelcome": [
-      {
-        "view": "affinidiDevTools",
-        "contents": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiTools2)\nBuild a rule that checks validity of verifiable credentials against one or more schemas\n[Create Rule](command:affinidiTools3)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiTools4)"
-      }
-    ]            
+    ]
   },
   "authentication": [
     {
@@ -140,9 +160,6 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
-  },
-  "dependencies": {
-    "node-fetch": "^3.2.10"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",

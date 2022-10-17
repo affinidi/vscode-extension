@@ -1,20 +1,10 @@
-import {
-	authentication,
-	AuthenticationProvider,
-	AuthenticationProviderAuthenticationSessionsChangeEvent,
-	AuthenticationSession,
-	Disposable,
-	Event,
-	EventEmitter,
-	SecretStorage,
-	window,
-} from 'vscode';
+import * as vscode from 'vscode';
 
 /*
 	This doesn't work. It was a copy and paste from a sample, but we need to get it working ;)
 */
 
-class AffinidiOTPSession implements AuthenticationSession {
+class AffinidiOTPSession implements vscode.AuthenticationSession {
 	readonly account = { id: AffinidiLoginProvider.id, label: 'Affinidi Access Token' };
 	readonly id = AffinidiLoginProvider.id;
 	readonly scopes = [];
@@ -26,21 +16,21 @@ class AffinidiOTPSession implements AuthenticationSession {
 	constructor(public readonly accessToken: string) {}
 }
 
-export class AffinidiLoginProvider implements AuthenticationProvider, Disposable {
+export class AffinidiLoginProvider implements vscode.AuthenticationProvider, vscode.Disposable {
 	static id = 'AffinidiOTP';
 	private static secretKey = 'AffinidiOTP';
 
 	// this property is used to determine if the token has been changed in another window of VS Code.
 	// It is used in the checkForUpdates function.
 	private currentToken: Promise<string | undefined> | undefined;
-	private initializedDisposable: Disposable | undefined;
+	private initializedDisposable: vscode.Disposable | undefined;
 
-	private _onDidChangeSessions = new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>();
-	get onDidChangeSessions(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
+	private _onDidChangeSessions = new vscode.EventEmitter<vscode.AuthenticationProviderAuthenticationSessionsChangeEvent>();
+	get onDidChangeSessions(): vscode.Event<vscode.AuthenticationProviderAuthenticationSessionsChangeEvent> {
 		return this._onDidChangeSessions.event;
 	}
 
-	constructor(private readonly secretStorage: SecretStorage) { }
+	constructor(private readonly secretStorage: vscode.SecretStorage) { }
 
 	dispose(): void {
 		this.initializedDisposable?.dispose();
@@ -50,7 +40,7 @@ export class AffinidiLoginProvider implements AuthenticationProvider, Disposable
 		if (this.initializedDisposable === undefined) {
 			void this.cacheTokenFromStorage();
 
-			this.initializedDisposable = Disposable.from(
+			this.initializedDisposable = vscode.Disposable.from(
 				// This onDidChange event happens when the secret storage changes in _any window_ since
 				// secrets are shared across all open windows.
 				this.secretStorage.onDidChange(e => {
@@ -59,7 +49,7 @@ export class AffinidiLoginProvider implements AuthenticationProvider, Disposable
 					}
 				}),
 				// This fires when the user initiates a "silent" auth flow via the Accounts menu.
-				authentication.onDidChangeSessions(e => {
+				vscode.authentication.onDidChangeSessions(e => {
 					if (e.provider.id === AffinidiLoginProvider.id) {
 						void this.checkForUpdates();
 					}
@@ -71,9 +61,9 @@ export class AffinidiLoginProvider implements AuthenticationProvider, Disposable
 	// This is a crucial function that handles whether or not the token has changed in
 	// a different window of VS Code and sends the necessary event if it has.
 	private async checkForUpdates(): Promise<void> {
-		const added: AuthenticationSession[] = [];
-		const removed: AuthenticationSession[] = [];
-		const changed: AuthenticationSession[] = [];
+		const added: vscode.AuthenticationSession[] = [];
+		const removed: vscode.AuthenticationSession[] = [];
+		const changed: vscode.AuthenticationSession[] = [];
 
 		const previousToken = await this.currentToken;
 		const session = (await this.getSessions())[0];
@@ -98,7 +88,7 @@ export class AffinidiLoginProvider implements AuthenticationProvider, Disposable
 	}
 
 	// This function is called first when `vscode.authentication.getSessions` is called.
-	async getSessions(_scopes?: string[]): Promise<readonly AuthenticationSession[]> {
+	async getSessions(_scopes?: string[]): Promise<readonly vscode.AuthenticationSession[]> {
 		this.ensureInitialized();
 		const token = await this.cacheTokenFromStorage();
 		return token ? [new AffinidiOTPSession(token)] : [];
@@ -108,10 +98,10 @@ export class AffinidiLoginProvider implements AuthenticationProvider, Disposable
 	// - `this.getSessions` returns nothing but `createIfNone` was set to `true` in `vscode.authentication.getSessions`
 	// - `vscode.authentication.getSessions` was called with `forceNewSession: true`
 	// - The end user initiates the "silent" auth flow via the Accounts menu
-	async createSession(_scopes: string[]): Promise<AuthenticationSession> {
+	async createSession(_scopes: string[]): Promise<vscode.AuthenticationSession> {
 		this.ensureInitialized();
 
-		const token = await window.showInputBox({
+		const token = await vscode.window.showInputBox({
 			ignoreFocusOut: true,
 			placeHolder: 'Affinidi Access Token',
 			prompt: 'Enter your Affinidi Access Token',

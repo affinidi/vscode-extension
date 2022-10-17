@@ -7,9 +7,9 @@ import * as extension from './extension';
 import type { ExtensionContext } from 'vscode';
 
 export async function activate(context: ExtensionContext) {
-    return extension.affToolkitActivate(context);
+    return extension.activateInternal(context);
 }
 
 export async function deactivate() {
-    await extension.affToolkitDeactivate();
+    await extension.deactivateInternal();
 }
