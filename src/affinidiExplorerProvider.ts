@@ -45,19 +45,8 @@ export class AffinidiExplorerProvider
             treeNodes,
             AffinidiVariantTypes.project,
             "aff:default:project:2854793",
-            "<default>",
-            "Default project",
-            vscode.TreeItemCollapsibleState.Collapsed,
-            false,
-            new ThemeIcon('project')
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.project,
-            "aff:default:project:14334",
-            "My Project",
-            "Special project for customer test",
+            "My Awesome Project",
+            "",
             vscode.TreeItemCollapsibleState.Collapsed,
             false,
             new ThemeIcon('project')
@@ -67,23 +56,24 @@ export class AffinidiExplorerProvider
 
       case AffinidiVariantTypes[AffinidiVariantTypes.project]:
         {
+
           this.addNewTreeItem(
             treeNodes,
-            AffinidiVariantTypes.rootRules,
+            AffinidiVariantTypes.rootIssuance,
             "",
-            "Rules",
-            "Defined rules and rule sets",
+            "Issuances",
+            "",
             vscode.TreeItemCollapsibleState.Collapsed,
             false,
-            new ThemeIcon('server-process')
+            new ThemeIcon('output')
           );
 
           this.addNewTreeItem(
             treeNodes,
             AffinidiVariantTypes.rootSchemas,
             "",
-            "Schemas",
             "VC Schemas",
+            "",
             vscode.TreeItemCollapsibleState.Collapsed,
             false,
             new ThemeIcon('bracket')
@@ -91,10 +81,21 @@ export class AffinidiExplorerProvider
 
           this.addNewTreeItem(
             treeNodes,
+            AffinidiVariantTypes.rootRules,
+            "",
+            "Rules",
+            "",
+            vscode.TreeItemCollapsibleState.Collapsed,
+            false,
+            new ThemeIcon('server-process')
+          );
+
+          this.addNewTreeItem(
+            treeNodes,
             AffinidiVariantTypes.rootAnalytics,
             "",
             "Analytics",
-            "Data analytics",
+            "",
             vscode.TreeItemCollapsibleState.Collapsed,
             false,
             new ThemeIcon('graph')
@@ -109,12 +110,28 @@ export class AffinidiExplorerProvider
             AffinidiVariantTypes.schema,
             "aff:default:schema:34232",
             "Education",
-            "Defines education",
+            "",
             vscode.TreeItemCollapsibleState.None,
-            true
+            true,
+            new ThemeIcon('bracket')
           );
         }
         break;
+
+        case AffinidiVariantTypes[AffinidiVariantTypes.rootIssuance]:
+          {
+            this.addNewTreeItem(
+              treeNodes,
+              AffinidiVariantTypes.issuance,
+              "aff:default:issuance:34231",
+              "30/02/2022",
+              "",
+              vscode.TreeItemCollapsibleState.None,
+              true,
+              new ThemeIcon('output')
+            );
+          }
+          break;
 
       case AffinidiVariantTypes[AffinidiVariantTypes.rootRules]:
         {
@@ -125,7 +142,8 @@ export class AffinidiExplorerProvider
             "Education match",
             "Checks education for validity",
             vscode.TreeItemCollapsibleState.Collapsed,
-            true
+            true,
+            new ThemeIcon('server-process')
           );
 
           this.addNewTreeItem(
@@ -135,7 +153,8 @@ export class AffinidiExplorerProvider
             "Health skills check",
             "Set of rules for hospital",
             vscode.TreeItemCollapsibleState.Collapsed,
-            true
+            true,
+            new ThemeIcon('server-process')
           );
 
           this.addNewTreeItem(
@@ -145,7 +164,8 @@ export class AffinidiExplorerProvider
             "License compliance",
             "Validation of driver license",
             vscode.TreeItemCollapsibleState.Collapsed,
-            true
+            true,
+            new ThemeIcon('server-process')
           );
 
           this.addNewTreeItem(
@@ -155,7 +175,8 @@ export class AffinidiExplorerProvider
             "Email validator",
             "Email is valid check",
             vscode.TreeItemCollapsibleState.Collapsed,
-            true
+            true,
+            new ThemeIcon('server-process')
           );
         }
         break;
@@ -169,7 +190,8 @@ export class AffinidiExplorerProvider
             "Id " + "aff:default:rule:19805",
             "",
             vscode.TreeItemCollapsibleState.None,
-            false
+            false,
+            new ThemeIcon('gear')
           );
 
           this.addNewTreeItem(
@@ -179,7 +201,8 @@ export class AffinidiExplorerProvider
             "Valid from: 31/10/2001",
             "",
             vscode.TreeItemCollapsibleState.None,
-            false
+            false,
+            new ThemeIcon('gear')
           );
 
           this.addNewTreeItem(
@@ -189,7 +212,8 @@ export class AffinidiExplorerProvider
             "Valid to: 31/10/2024",
             "",
             vscode.TreeItemCollapsibleState.None,
-            false
+            false,
+            new ThemeIcon('gear')
           );
 
           this.addNewTreeItem(
@@ -199,7 +223,8 @@ export class AffinidiExplorerProvider
             "Created by: Adam Larter",
             "",
             vscode.TreeItemCollapsibleState.None,
-            false
+            false,
+            new ThemeIcon('gear')
           );
         }
         break;
@@ -213,7 +238,8 @@ export class AffinidiExplorerProvider
             "(empty)",
             "",
             vscode.TreeItemCollapsibleState.None,
-            false
+            false,
+            new ThemeIcon('dash')
           );
         }
         break;
