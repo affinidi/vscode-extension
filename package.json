@@ -14,12 +14,15 @@
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.register",
+    "onCommand:affinidi.issuance.refresh",
+    "onCommand:affinidi.schema.create",
+    "onCommand:affinidi.codegen.verifier",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
-    "onCommand:affinidiExplorer.refresh",
-    "onView:affinidiDevTools",
-    "onCommand:affinidi.codegen.verifier",
-    "onCommand:affinidi.schema.create"
+    "onCommand:affinidiExplorer.projectRefresh",
+    "onCommand:affinidiExplorer.schemaRefresh",
+    "onCommand:affinidiExplorer.issuanceRefresh",
+    "onView:affinidiDevTools"
   ],
   "main": "./out/main",
   "contributes": {
@@ -40,12 +43,6 @@
         "title": "Register"
       },
       {
-        "command": "affinidiExplorer.refresh",
-        "title": "Refresh",
-        "category": "Affinidi",
-        "icon": "$(refresh)"
-      },
-      {
         "command": "affinidi.schema.create",
         "title": "Create Schema",
         "category": "Affinidi Schemas",
@@ -56,18 +53,44 @@
         "title": "Create new verifier sample application",
         "category": "Affinidi Tools",
         "icon": "$(rocket)"
+      },
+      {
+        "command": "affinidiExplorer.projectRefresh",
+        "title": "Refresh Projects",
+        "category": "Affinidi Explorer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "affinidiExplorer.schemaRefresh",
+        "title": "Refresh Schemas",
+        "category": "Affinidi Explorer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "affinidiExplorer.issuanceRefresh",
+        "title": "Refresh Issuances",
+        "category": "Affinidi Explorer",
+        "icon": "$(refresh)"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "affinidiExplorer.refresh",
+          "command": "affinidiExplorer.projectRefresh",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.schemaRefresh",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.issuanceRefresh",
           "when": "never"
         }
       ],
       "view/title": [
         {
-          "command": "affinidiExplorer.refresh",
+          "command": "affinidiExplorer.projectRefresh",
           "when": "view == affinidiExplorer",
           "group": "navigation"
         },
@@ -81,6 +104,16 @@
         {
           "command": "affinidi.schema.create",
           "when": "view == affinidiExplorer && viewItem == rootSchemas",
+          "group": "inline"
+        },
+        {
+          "command": "affinidiExplorer.schemaRefresh",
+          "when": "view == affinidiExplorer && viewItem == rootSchemas",
+          "group": "inline"
+        },
+        {
+          "command": "affinidiExplorer.issuanceRefresh",
+          "when": "view == affinidiExplorer && viewItem == rootIssuance",
           "group": "inline"
         }
       ]

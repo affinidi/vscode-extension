@@ -22,7 +22,7 @@ export async function activateInternal(context: vscode.ExtensionContext) {
     dragAndDropController: affExplorerTreeProvider,
   });
 
-  vscode.commands.registerCommand("affinidiExplorer.refresh", () =>
+  vscode.commands.registerCommand("affinidiExplorer.projectRefresh", () =>
     affExplorerTreeProvider.refresh()
   );
 

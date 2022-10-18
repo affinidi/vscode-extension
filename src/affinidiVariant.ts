@@ -14,6 +14,7 @@ export enum AffinidiVariantTypes
     rootIssuance,
     rootAnalytics,
     rootRules,
+    rootDID,
     empty,
     other
 }
