@@ -13,6 +13,7 @@
     "onStartupFinished",
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
+    "onCommand:affinidi.me",
     "onCommand:affinidi.register",
     "onCommand:affinidi.issuance.refresh",
     "onCommand:affinidi.schema.create",
@@ -36,6 +37,11 @@
         "command": "affinidi.logout",
         "category": "Affinidi",
         "title": "Sign Out"
+      },
+      {
+        "command": "affinidi.me",
+        "category": "Affinidi",
+        "title": "My User Details"
       },
       {
         "command": "affinidi.register",
@@ -178,14 +184,14 @@
           }
         ]
       }
+    ],
+    "authentication": [
+      {
+        "id": "AffinidiOTP",
+        "label": "Affinidi OTP"
+      }
     ]
   },
-  "authentication": [
-    {
-      "id": "affinidiotp",
-      "label": "Affinidi OTP"
-    }
-  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -198,6 +204,7 @@
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.0",
     "@types/node": "16.x",
+    "@types/node-fetch": "^2.6.2",
     "@types/vscode": "^1.72.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
@@ -206,5 +213,8 @@
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
     "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
   }
 }
