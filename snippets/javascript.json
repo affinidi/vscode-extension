@@ -28,7 +28,7 @@
       "if (String(response.status).startsWith('2')) {",
       "  console.log('Issuance ID:', json.id);",
       "} else {",
-      "  console.log('Error:', json.code, json.message);",
+      "  console.log('Could not create an issuance:', json.code, json.message);",
       "}"
     ],
     "description": "Create bulk issuance entity (using fetch)"
@@ -60,9 +60,9 @@
       "});",
       "",
       "if (String(status).startsWith('2')) {",
-      "  console.log('issuance:', json.id);",
+      "  console.log('Issuance:', json.id);",
       "} else {",
-      "  console.log('error:', json.code, json.message);",
+      "  console.log('Could not create an issuance:', json.code, json.message);",
       "}"
     ],
     "description": "Create bulk issuance entity (using axios)"
@@ -94,13 +94,13 @@
       "",
       "const json = await response.json();",
       "if (String(response.status).startsWith('2')) {",
-      "  console.log('Issuance ID:', json.id);",
+      "  console.log('Offer ID:', json.id);",
       "} else if (json.code === 'VIS-10') {",
       "  console.log('Issuance has not been found');",
       "} else if (json.code === 'VIS-18') {",
       "  console.log('Credential subject is invalid, errors:', json.context.errors);",
       "} else {",
-      "  console.log('Error:', json.code, json.message);",
+      "  console.log('Could not create an offer:', json.code, json.message);",
       "}"
     ],
     "description": "Create & send bulk issuance offer (using fetch)"
@@ -132,13 +132,13 @@
       "});",
       "",
       "if (String(status).startsWith('2')) {",
-      "  console.log('Issuance ID:', json.id);",
+      "  console.log('Offer ID:', json.id);",
       "} else if (json.code === 'VIS-10') {",
       "  console.log('Issuance has not been found');",
       "} else if (json.code === 'VIS-18') {",
       "  console.log('Credential subject is invalid, errors:', json.context.errors);",
       "} else {",
-      "  console.log('Error:', json.code, json.message);",
+      "  console.log('Could not create an offer:', json.code, json.message);",
       "}"
     ],
     "description": "Create & send bulk issuance offer (using axios)"
