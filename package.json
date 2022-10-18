@@ -7,6 +7,7 @@
     "vscode": "^1.70.0"
   },
   "categories": [
+    "Snippets",
     "Other"
   ],
   "activationEvents": [
@@ -177,6 +178,16 @@
             ]
           }
         ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets/javascript.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/typescript.json"
       }
     ]
   },
