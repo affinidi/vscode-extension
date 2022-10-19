@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { commands, ExtensionContext, window } from "vscode";
-import { AffinidiExplorerProvider } from "./AffinidiExplorerProvider";
+import { AffinidiExplorerProvider } from "./affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 

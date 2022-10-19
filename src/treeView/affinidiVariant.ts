@@ -12,9 +12,3 @@ export enum AffinidiVariantTypes {
   empty,
   other,
 }
-
-export interface AffinidiVariant {
-  affId: string;
-  type: AffinidiVariantTypes;
-  data: any;
-}
