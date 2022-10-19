@@ -1,18 +1,27 @@
 import * as vscode from "vscode";
 import { ThemeIcon } from "vscode";
 import { AffinidiVariant, AffinidiVariantTypes } from "./affinidiVariant";
+import IssuanceService from "./services/issuancesService";
+
+import AffResourceTreeItem from "./treeView/treeItem";
 
 export class AffinidiExplorerProvider
   implements
     vscode.TreeDataProvider<AffResourceTreeItem>,
     vscode.TreeDragAndDropController<AffResourceTreeItem>
 {
+  private _onDidChangeTreeData: vscode.EventEmitter<
+    AffResourceTreeItem | undefined | void
+  > = new vscode.EventEmitter<AffResourceTreeItem | undefined | void>();
   public dropMimeTypes = ["application/vnd.code.tree.affTreeViewDragDrop"];
   public dragMimeTypes = ["text/uri-list"];
 
   private rawResources: AffinidiVariant[] = [];
 
   constructor() {}
+
+  apiUrl = `https://console-vc-issuance.dev.affinity-project.org/api/v1`;
+  issuanceService = new IssuanceService(this.apiUrl, "", "");
 
   public getTreeItem(element: AffResourceTreeItem): vscode.TreeItem {
     return element;
@@ -65,51 +74,47 @@ export class AffinidiExplorerProvider
             vscode.TreeItemCollapsibleState.Collapsed,
             false,
             new ThemeIcon("lock")
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.rootIssuance,
-            "",
-            "Issuances",
-            "",
-            vscode.TreeItemCollapsibleState.Collapsed,
-            false,
-            new ThemeIcon("output")
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.rootSchemas,
-            "",
-            "VC Schemas",
-            "",
-            vscode.TreeItemCollapsibleState.Collapsed,
-            false,
-            new ThemeIcon("bracket")
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.rootRules,
-            "",
-            "Rules",
-            "",
-            vscode.TreeItemCollapsibleState.Collapsed,
-            false,
-            new ThemeIcon("server-process")
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.rootAnalytics,
-            "",
-            "Analytics",
-            "",
-            vscode.TreeItemCollapsibleState.Collapsed,
-            false,
-            new ThemeIcon("graph")
-          );
+          ),
+            this.addNewTreeItem(
+              treeNodes,
+              AffinidiVariantTypes.rootIssuance,
+              "",
+              "Issuances",
+              "",
+              vscode.TreeItemCollapsibleState.Collapsed,
+              false,
+              new ThemeIcon("output")
+            ),
+            this.addNewTreeItem(
+              treeNodes,
+              AffinidiVariantTypes.rootSchemas,
+              "",
+              "VC Schemas",
+              "",
+              vscode.TreeItemCollapsibleState.Collapsed,
+              false,
+              new ThemeIcon("bracket")
+            ),
+            this.addNewTreeItem(
+              treeNodes,
+              AffinidiVariantTypes.rootRules,
+              "",
+              "Rules",
+              "",
+              vscode.TreeItemCollapsibleState.Collapsed,
+              false,
+              new ThemeIcon("server-process")
+            ),
+            this.addNewTreeItem(
+              treeNodes,
+              AffinidiVariantTypes.rootAnalytics,
+              "",
+              "Analytics",
+              "",
+              vscode.TreeItemCollapsibleState.Collapsed,
+              false,
+              new ThemeIcon("graph")
+            );
         }
         break;
 
@@ -144,18 +149,10 @@ export class AffinidiExplorerProvider
         break;
 
       case AffinidiVariantTypes[AffinidiVariantTypes.rootIssuance]:
-        {
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.issuance,
-            "aff:default:issuance:34231",
-            "30/02/2022",
-            "",
-            vscode.TreeItemCollapsibleState.None,
-            true,
-            new ThemeIcon("output")
-          );
-        }
+        //@ts-ignore
+
+        treeNodes.push(this.issuanceService.getAllIssuances());
+
         break;
 
       case AffinidiVariantTypes[AffinidiVariantTypes.rootRules]:
@@ -293,7 +290,7 @@ export class AffinidiExplorerProvider
 
   refresh(): void {
     console.log("Refreshing explorer");
-    //this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire();
   }
 
   public async handleDrag(
@@ -344,30 +341,4 @@ export class AffinidiExplorerProvider
       });
     }
   }
-}
-
-class AffResourceTreeItem extends vscode.TreeItem {
-  constructor(
-    public readonly resourceType: string,
-    public readonly metadata: any,
-    public readonly label: string,
-    public readonly description: string,
-    public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-    public readonly icon: ThemeIcon
-  ) {
-    super(label, collapsibleState);
-    this.resourceType = resourceType;
-    this.tooltip = `${this.label}`;
-    this.description = this.description;
-    this.metadata = metadata;
-    this.iconPath = icon;
-    this.contextValue = resourceType;
-  }
-
-  private _onDidChangeTreeData: vscode.EventEmitter<
-    AffResourceTreeItem | undefined | null | void
-  > = new vscode.EventEmitter<AffResourceTreeItem | undefined | null | void>();
-  readonly onDidChangeTreeData: vscode.Event<
-    AffResourceTreeItem | undefined | null | void
-  > = this._onDidChangeTreeData.event;
 }
