@@ -14,7 +14,6 @@
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
-    "onCommand:affinidi.register",
     "onCommand:affinidi.issuance.refresh",
     "onCommand:affinidi.schema.create",
     "onCommand:affinidi.codegen.verifier",
@@ -41,12 +40,7 @@
       {
         "command": "affinidi.me",
         "category": "Affinidi",
-        "title": "My User Details"
-      },
-      {
-        "command": "affinidi.register",
-        "category": "Affinidi",
-        "title": "Register"
+        "title": "Account Details"
       },
       {
         "command": "affinidi.schema.create",
@@ -215,6 +209,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "nanoid": "^3.3.4",
     "node-fetch": "^2.6.7"
   }
 }
