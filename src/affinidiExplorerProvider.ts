@@ -35,9 +35,9 @@ export class AffinidiExplorerProvider
     return element;
   }
 
-  public getChildren(
+  public async getChildren(
     element?: AffResourceTreeItem
-  ): Thenable<AffResourceTreeItem[]> {
+  ): Promise<AffResourceTreeItem[]> {
     const treeNodes: AffResourceTreeItem[] = [];
 
     switch (element?.resourceType) {
@@ -142,9 +142,7 @@ export class AffinidiExplorerProvider
         break;
 
       case AffinidiVariantTypes[AffinidiVariantTypes.rootIssuance]:
-        //@ts-ignore
-
-        treeNodes.push(this._getIssuanceItems());
+        await this._getIssuanceItems(treeNodes);
 
         break;
 
@@ -233,20 +231,26 @@ export class AffinidiExplorerProvider
     */
   }
 
-  private async _getIssuanceItems(): Promise<AffResourceTreeItem> {
+  private async _getIssuanceItems(
+    treeNodes: AffResourceTreeItem[]
+  ): Promise<void> {
     const issuanceListResponse: IssuanceList = await getProjectIssuances({
       apiKeyHash:
         "9b61dfbea987ec4004698ca8424640917a7196805a56edca39fbc330bb575050",
       projectId: "46280878-142a-410b-96de-b9c0b6d36440",
     });
 
-    return new AffResourceTreeItem(
-      AffinidiVariantTypes[AffinidiVariantTypes.issuance],
-      issuanceListResponse.issuances[0].id,
-      issuanceListResponse.issuances[0].id,
-      "",
-      vscode.TreeItemCollapsibleState.None,
-      new ThemeIcon("output")
+    issuanceListResponse.issuances.map((issuance) =>
+      this.addNewTreeItem(
+        treeNodes,
+        AffinidiVariantTypes.issuance,
+        issuance.id,
+        issuance.id,
+        "",
+        vscode.TreeItemCollapsibleState.None,
+        true,
+        new ThemeIcon("output")
+      )
     );
   }
 
