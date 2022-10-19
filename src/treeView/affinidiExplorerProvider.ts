@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import { ThemeIcon } from "vscode";
-import { getProjectIssuances, IssuanceList } from "./services/issuancesService";
-import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
-import AffResourceTreeItem from "./treeView/treeItem";
+import { getProjectIssuances, IssuanceList } from "../services/issuancesService";
+import { AffinidiVariantTypes } from "./affinidiVariant";
+import AffResourceTreeItem from "./treeItem";
 
 export class AffinidiExplorerProvider
   implements vscode.TreeDataProvider<AffResourceTreeItem>
