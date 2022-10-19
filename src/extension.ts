@@ -22,7 +22,6 @@ export async function activateInternal(context: ExtensionContext) {
     treeDataProvider: affExplorerTreeProvider,
     canSelectMany: false,
     showCollapseAll: true,
-    dragAndDropController: affExplorerTreeProvider,
   });
 
   commands.registerCommand("affinidiExplorer.projectRefresh", () => {
