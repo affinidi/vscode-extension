@@ -10,6 +10,9 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
+import {
+  getPublicSchemas,
+} from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import AffResourceTreeItem from "./treeItem";
 
@@ -177,16 +180,18 @@ export class AffinidiExplorerProvider
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem
   ): Promise<void> {
-    this.addNewTreeItem(
+    const res = await getPublicSchemas();
+
+    res.schemas.map(schema => this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.schema,
-      "aff:default:schema:34232",
-      "Education",
-      "MOCKED",
+      AffinidiVariantTypes.rootSchemas,
+      schema.type,
+      schema.description,
+      '',
       vscode.TreeItemCollapsibleState.None,
       new ThemeIcon("bracket"),
       parent
-    );
+    ));
   }
 
   private async _addIssuanceItems(
