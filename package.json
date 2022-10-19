@@ -23,6 +23,7 @@
     "onCommand:affinidiExplorer.projectRefresh",
     "onCommand:affinidiExplorer.schemaRefresh",
     "onCommand:affinidiExplorer.issuanceRefresh",
+    "onCommand:affinidi.openBulkIssuanceMarkDown",
     "onView:affinidiDevTools"
   ],
   "main": "./out/main",
@@ -72,6 +73,11 @@
         "title": "Refresh Issuances",
         "category": "Affinidi Explorer",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "affinidi.openBulkIssuanceMarkDown",
+        "title": "About Page",
+        "category": "Affinidi"
       }
     ],
     "menus": {
@@ -86,6 +92,10 @@
         },
         {
           "command": "affinidiExplorer.issuanceRefresh",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.openBulkIssuanceMarkDown",
           "when": "never"
         }
       ],
@@ -116,6 +126,11 @@
           "command": "affinidiExplorer.issuanceRefresh",
           "when": "view == affinidiExplorer && viewItem == rootIssuance",
           "group": "inline"
+        },
+        {
+          "command": "affinidi.openBulkIssuanceMarkDown",
+          "when": "view == affinidiExplorer && viewItem == rootIssuance",
+          "group": "z_commands"
         }
       ]
     },
@@ -221,6 +236,7 @@
   },
   "dependencies": {
     "nanoid": "^3.3.4",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "path": "^0.12.7"
   }
 }

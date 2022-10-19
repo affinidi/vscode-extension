@@ -1,5 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import * as vscode from "vscode";
+import * as path from "path";
 import { commands, ExtensionContext, window } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
@@ -35,6 +37,15 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand("affinidiExplorer.schemaRefresh", () => {
     affExplorerTreeProvider.refresh();
   });
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("affinidi.openBulkIssuanceMarkDown", () => {
+      let uri: vscode.Uri = vscode.Uri.file(
+        path.join(context.extensionPath, "/document/bulkIssuance.md")
+      );
+      vscode.commands.executeCommand("markdown.showPreview", uri);
+    })
+  );
 
   context.subscriptions.push(
     commands.registerCommand("affinidi.schema.create", () => {
