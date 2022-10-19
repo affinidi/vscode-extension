@@ -50,3 +50,25 @@ export const apiFetch = async <T = unknown>({
 
   return json;
 };
+
+// generateCookieHeader(): Record<string, string> {
+//   return { "Api-Key": this.apiKeyHash };
+// }
+
+export function generateApiKeyHeader(
+  apiKeyHash: string
+): Record<string, string> {
+  return { "Api-Key": apiKeyHash };
+}
+
+export function buildURL(
+  baseUrl: string,
+  path: string,
+  qs?: string[][] | Record<string, string> | string | URLSearchParams
+): string {
+  //@ts-ignore
+  const search = new URLSearchParams(qs).toString();
+  const url = `${baseUrl}${path}${search ? "?" + search : ""}`;
+
+  return new URL(url).toString();
+}
