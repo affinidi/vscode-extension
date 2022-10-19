@@ -25,9 +25,13 @@ export async function activateInternal(context: ExtensionContext) {
     dragAndDropController: affExplorerTreeProvider,
   });
 
-  commands.registerCommand("affinidiExplorer.projectRefresh", () =>
-    affExplorerTreeProvider.refresh()
-  );
+  commands.registerCommand("affinidiExplorer.projectRefresh", () => {
+    affExplorerTreeProvider.refresh();
+  });
+
+  commands.registerCommand("affinidiExplorer.issuanceRefresh", () => {
+    affExplorerTreeProvider.refresh();
+  });
 
   context.subscriptions.push(
     commands.registerCommand("affinidi.schema.create", () => {
