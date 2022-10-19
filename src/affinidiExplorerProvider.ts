@@ -1,8 +1,10 @@
 import * as vscode from "vscode";
 import { ThemeIcon } from "vscode";
-import { AffinidiVariant, AffinidiVariantTypes } from "./affinidiVariant";
-import IssuanceService from "./services/issuancesService";
-
+import { getProjectIssuances, IssuanceList } from "./services/issuancesService";
+import {
+  AffinidiVariant,
+  AffinidiVariantTypes,
+} from "./treeView/affinidiVariant";
 import AffResourceTreeItem from "./treeView/treeItem";
 
 export class AffinidiExplorerProvider
@@ -13,6 +15,10 @@ export class AffinidiExplorerProvider
   private _onDidChangeTreeData: vscode.EventEmitter<
     AffResourceTreeItem | undefined | void
   > = new vscode.EventEmitter<AffResourceTreeItem | undefined | void>();
+  readonly onDidChangeTreeData: vscode.Event<
+    AffResourceTreeItem | undefined | void
+  > = this._onDidChangeTreeData.event;
+
   public dropMimeTypes = ["application/vnd.code.tree.affTreeViewDragDrop"];
   public dragMimeTypes = ["text/uri-list"];
 
@@ -20,8 +26,10 @@ export class AffinidiExplorerProvider
 
   constructor() {}
 
-  apiUrl = `https://console-vc-issuance.dev.affinity-project.org/api/v1`;
-  issuanceService = new IssuanceService(this.apiUrl, "", "");
+  refresh(): void {
+    console.log("Refreshing explorer");
+    this._onDidChangeTreeData.fire();
+  }
 
   public getTreeItem(element: AffResourceTreeItem): vscode.TreeItem {
     return element;
@@ -33,21 +41,6 @@ export class AffinidiExplorerProvider
     const treeNodes: AffResourceTreeItem[] = [];
 
     switch (element?.resourceType) {
-      // case undefined:
-      //   {
-      //     this.addNewTreeItem(
-      //       treeNodes,
-      //       AffinidiVariantTypes.rootProjects,
-      //       "",
-      //       "Projects",
-      //       "Affinidi projects",
-      //       vscode.TreeItemCollapsibleState.Expanded,
-      //       false,
-      //       undefined
-      //     );
-      //   }
-      //   break;
-
       case undefined:
         {
           this.addNewTreeItem(
@@ -125,7 +118,7 @@ export class AffinidiExplorerProvider
             AffinidiVariantTypes.schema,
             "aff:default:did:123456",
             "did:elem:EiA1niEsAUc3hq6ks5yK39oU2OM5u8ZZ01pky7xUwyc0Yw",
-            "",
+            "MOCKED",
             vscode.TreeItemCollapsibleState.None,
             true,
             new ThemeIcon("lock")
@@ -140,7 +133,7 @@ export class AffinidiExplorerProvider
             AffinidiVariantTypes.schema,
             "aff:default:schema:34232",
             "Education",
-            "",
+            "MOCKED",
             vscode.TreeItemCollapsibleState.None,
             true,
             new ThemeIcon("bracket")
@@ -151,7 +144,7 @@ export class AffinidiExplorerProvider
       case AffinidiVariantTypes[AffinidiVariantTypes.rootIssuance]:
         //@ts-ignore
 
-        treeNodes.push(this.issuanceService.getAllIssuances());
+        treeNodes.push(this._getIssuanceItems());
 
         break;
 
@@ -162,8 +155,8 @@ export class AffinidiExplorerProvider
             AffinidiVariantTypes.rule,
             "aff:default:rule:21835",
             "Education match",
-            "Checks education for validity",
-            vscode.TreeItemCollapsibleState.Collapsed,
+            "MOCKED",
+            vscode.TreeItemCollapsibleState.None,
             true,
             new ThemeIcon("server-process")
           );
@@ -173,8 +166,8 @@ export class AffinidiExplorerProvider
             AffinidiVariantTypes.rule,
             "aff:default:rule:54835",
             "Health skills check",
-            "Set of rules for hospital",
-            vscode.TreeItemCollapsibleState.Collapsed,
+            "MOCKED",
+            vscode.TreeItemCollapsibleState.None,
             true,
             new ThemeIcon("server-process")
           );
@@ -184,8 +177,8 @@ export class AffinidiExplorerProvider
             AffinidiVariantTypes.rule,
             "aff:default:rule:19805",
             "License compliance",
-            "Validation of driver license",
-            vscode.TreeItemCollapsibleState.Collapsed,
+            "MOCKED",
+            vscode.TreeItemCollapsibleState.None,
             true,
             new ThemeIcon("server-process")
           );
@@ -195,58 +188,10 @@ export class AffinidiExplorerProvider
             AffinidiVariantTypes.rule,
             "aff:default:rule:74802",
             "Email validator",
-            "Email is valid check",
-            vscode.TreeItemCollapsibleState.Collapsed,
+            "MOCKED",
+            vscode.TreeItemCollapsibleState.None,
             true,
             new ThemeIcon("server-process")
-          );
-        }
-        break;
-
-      case AffinidiVariantTypes[AffinidiVariantTypes.rule]:
-        {
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.ruleData,
-            "",
-            "Id " + "aff:default:rule:19805",
-            "",
-            vscode.TreeItemCollapsibleState.None,
-            false,
-            new ThemeIcon("gear")
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.ruleData,
-            "",
-            "Valid from: 31/10/2001",
-            "",
-            vscode.TreeItemCollapsibleState.None,
-            false,
-            new ThemeIcon("gear")
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.ruleData,
-            "",
-            "Valid to: 31/10/2024",
-            "",
-            vscode.TreeItemCollapsibleState.None,
-            false,
-            new ThemeIcon("gear")
-          );
-
-          this.addNewTreeItem(
-            treeNodes,
-            AffinidiVariantTypes.ruleData,
-            "",
-            "Created by: Adam Larter",
-            "",
-            vscode.TreeItemCollapsibleState.None,
-            false,
-            new ThemeIcon("gear")
           );
         }
         break;
@@ -288,9 +233,21 @@ export class AffinidiExplorerProvider
     */
   }
 
-  refresh(): void {
-    console.log("Refreshing explorer");
-    this._onDidChangeTreeData.fire();
+  private async _getIssuanceItems(): Promise<AffResourceTreeItem> {
+    const issuanceListResponse: IssuanceList = await getProjectIssuances({
+      apiKeyHash:
+        "9b61dfbea987ec4004698ca8424640917a7196805a56edca39fbc330bb575050",
+      projectId: "46280878-142a-410b-96de-b9c0b6d36440",
+    });
+
+    return new AffResourceTreeItem(
+      AffinidiVariantTypes[AffinidiVariantTypes.issuance],
+      issuanceListResponse.issuances[0].id,
+      issuanceListResponse.issuances[0].id,
+      "",
+      vscode.TreeItemCollapsibleState.None,
+      new ThemeIcon("output")
+    );
   }
 
   public async handleDrag(
