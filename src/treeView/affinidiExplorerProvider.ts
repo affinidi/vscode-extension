@@ -24,7 +24,7 @@ export class AffinidiExplorerProvider
   > = this._onDidChangeTreeData.event;
 
   projectsSummary: ProjectSummary[] = [];
-  
+
   constructor() {}
 
   refresh(): void {
@@ -193,24 +193,29 @@ export class AffinidiExplorerProvider
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem
   ): Promise<void> {
-    const issuanceListResponse: IssuanceList = await getProjectIssuances({
-      apiKeyHash:
-        "9b61dfbea987ec4004698ca8424640917a7196805a56edca39fbc330bb575050",
-      projectId: "46280878-142a-410b-96de-b9c0b6d36440",
-    });
-
-    issuanceListResponse.issuances.map((issuance) =>
-      this.addNewTreeItem(
-        treeNodes,
-        AffinidiVariantTypes.issuance,
-        issuance.id,
-        issuance.id,
-        "",
-        vscode.TreeItemCollapsibleState.None,
-        new ThemeIcon("output"),
-        parent
-      )
+    const projectInfo = this.projectsSummary.find(
+      (projectSummary) =>
+        projectSummary.project.projectId === parent?.parent?.metadata
     );
+    if (projectInfo) {
+      const issuanceListResponse: IssuanceList = await getProjectIssuances({
+        apiKeyHash: projectInfo.apiKey.apiKeyHash,
+        projectId: projectInfo.project.projectId,
+      });
+
+      issuanceListResponse.issuances.map((issuance) =>
+        this.addNewTreeItem(
+          treeNodes,
+          AffinidiVariantTypes.issuance,
+          issuance.id,
+          issuance.id,
+          "",
+          vscode.TreeItemCollapsibleState.None,
+          new ThemeIcon("output"),
+          parent
+        )
+      );
+    }
   }
 
   private async _addRuleItems(
