@@ -158,8 +158,8 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const issuanceListResponse: IssuanceList = await getProjectIssuances({
       apiKeyHash:
-        "9b61dfbea987ec4004698ca8424640917a7196805a56edca39fbc330bb575050",
-      projectId: "46280878-142a-410b-96de-b9c0b6d36440",
+        "",
+      projectId: "",
     });
 
     issuanceListResponse.issuances.map((issuance) =>
