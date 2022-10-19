@@ -15,14 +15,10 @@
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
-    "onCommand:affinidi.issuance.refresh",
-    "onCommand:affinidi.schema.create",
-    "onCommand:affinidi.codegen.verifier",
+    "onCommand:affinidi.codegen.schemaOffers",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
-    "onCommand:affinidiExplorer.projectRefresh",
-    "onCommand:affinidiExplorer.schemaRefresh",
-    "onCommand:affinidiExplorer.issuanceRefresh",
+    "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidi.openBulkIssuanceMarkDown",
     "onView:affinidiDevTools"
   ],
@@ -45,92 +41,57 @@
         "title": "Account Details"
       },
       {
-        "command": "affinidi.schema.create",
-        "title": "Create Schema",
-        "category": "Affinidi Schemas",
-        "icon": "$(plus)"
-      },
-      {
-        "command": "affinidi.codegen.verifier",
-        "title": "Create new verifier sample application",
+        "command": "affinidi.codegen.schemaOffers",
+        "title": "Build: Send VC offers with this schema",
         "category": "Affinidi Tools",
         "icon": "$(rocket)"
       },
       {
-        "command": "affinidiExplorer.projectRefresh",
-        "title": "Refresh Projects",
-        "category": "Affinidi Explorer",
-        "icon": "$(refresh)"
-      },
-      {
-        "command": "affinidiExplorer.schemaRefresh",
-        "title": "Refresh Schemas",
-        "category": "Affinidi Explorer",
-        "icon": "$(refresh)"
-      },
-      {
-        "command": "affinidiExplorer.issuanceRefresh",
-        "title": "Refresh Issuances",
+        "command": "affinidiExplorer.refresh",
+        "title": "Refresh",
         "category": "Affinidi Explorer",
         "icon": "$(refresh)"
       },
       {
         "command": "affinidi.openBulkIssuanceMarkDown",
-        "title": "About Page",
-        "category": "Affinidi"
+        "title": "About Issuance",
+        "category": "Affinidi",
+        "icon": "$(info)"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "affinidiExplorer.projectRefresh",
-          "when": "never"
-        },
-        {
-          "command": "affinidiExplorer.schemaRefresh",
-          "when": "never"
-        },
-        {
-          "command": "affinidiExplorer.issuanceRefresh",
-          "when": "never"
-        },
-        {
           "command": "affinidi.openBulkIssuanceMarkDown",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.codegen.schemaOffers",
           "when": "never"
         }
       ],
       "view/title": [
         {
-          "command": "affinidiExplorer.projectRefresh",
-          "when": "view == affinidiExplorer",
-          "group": "navigation"
-        },
-        {
-          "command": "affinidi.codegen.verifier",
+          "command": "affinidiExplorer.refresh",
           "when": "view == affinidiExplorer",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "affinidi.schema.create",
-          "when": "view == affinidiExplorer && viewItem == rootSchemas",
-          "group": "inline"
-        },
-        {
-          "command": "affinidiExplorer.schemaRefresh",
-          "when": "view == affinidiExplorer && viewItem == rootSchemas",
-          "group": "inline"
-        },
-        {
-          "command": "affinidiExplorer.issuanceRefresh",
-          "when": "view == affinidiExplorer && viewItem == rootIssuance",
+          "command": "affinidiExplorer.refresh",
+          "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == rootIssuance",
           "group": "inline"
         },
         {
           "command": "affinidi.openBulkIssuanceMarkDown",
           "when": "view == affinidiExplorer && viewItem == rootIssuance",
-          "group": "z_commands"
+          "group": "inline"
+        },
+        {
+          "command": "affinidi.codegen.schemaOffers",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "1"
         }
       ]
     },

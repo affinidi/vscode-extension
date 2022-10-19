@@ -1,5 +1,14 @@
-import * as vscode from "vscode";
-import { ThemeIcon } from "vscode";
+import {
+  authentication,
+  AuthenticationProviderAuthenticationSessionsChangeEvent,
+  Command,
+  Event,
+  EventEmitter,
+  ThemeIcon,
+  TreeDataProvider,
+  TreeItem,
+  TreeItemCollapsibleState,
+} from "vscode";
 import {
   getProjectIssuances,
   IssuanceList,
@@ -10,32 +19,47 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
-import {
-  getPublicSchemas,
-} from "../services/schemaManagerService";
+import { getPublicSchemas } from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import AffResourceTreeItem from "./treeItem";
+import { ext } from "../extensionVariables";
+import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
+
+const isSignedIn = async () => {
+  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+    createIfNone: false,
+  });
+  return !!session;
+};
 
 export class AffinidiExplorerProvider
-  implements vscode.TreeDataProvider<AffResourceTreeItem>
+  implements TreeDataProvider<AffResourceTreeItem>
 {
-  private _onDidChangeTreeData: vscode.EventEmitter<
+  private _onDidChangeTreeData: EventEmitter<
     AffResourceTreeItem | undefined | void
-  > = new vscode.EventEmitter<AffResourceTreeItem | undefined | void>();
-  readonly onDidChangeTreeData: vscode.Event<
-    AffResourceTreeItem | undefined | void
-  > = this._onDidChangeTreeData.event;
+  > = new EventEmitter<AffResourceTreeItem | undefined | void>();
+  readonly onDidChangeTreeData: Event<AffResourceTreeItem | undefined | void> =
+    this._onDidChangeTreeData.event;
 
   projectsSummary: ProjectSummary[] = [];
 
-  constructor() {}
+  constructor() {
+    ext.context.subscriptions.push(
+      ext.authProvider.onDidChangeSessions(this.authListener)
+    );
+  }
 
   refresh(): void {
-    console.log("Refreshing explorer");
     this._onDidChangeTreeData.fire();
   }
 
-  public getTreeItem(element: AffResourceTreeItem): vscode.TreeItem {
+  private authListener = async (
+    event: AuthenticationProviderAuthenticationSessionsChangeEvent
+  ) => {
+    this.refresh();
+  };
+
+  public getTreeItem(element: AffResourceTreeItem): TreeItem {
     return element;
   }
 
@@ -43,6 +67,11 @@ export class AffinidiExplorerProvider
     element?: AffResourceTreeItem
   ): Promise<AffResourceTreeItem[]> {
     const treeNodes: AffResourceTreeItem[] = [];
+
+    if (!(await isSignedIn())) {
+      await this._addLoginItem(treeNodes);
+      return Promise.resolve(treeNodes);
+    }
 
     switch (element?.resourceType) {
       case undefined:
@@ -90,7 +119,7 @@ export class AffinidiExplorerProvider
         project.projectId,
         project.name,
         "",
-        vscode.TreeItemCollapsibleState.Collapsed,
+        TreeItemCollapsibleState.Collapsed,
         new ThemeIcon("project"),
         parent
       );
@@ -109,7 +138,7 @@ export class AffinidiExplorerProvider
       "",
       "Digital Identities",
       "",
-      vscode.TreeItemCollapsibleState.Collapsed,
+      TreeItemCollapsibleState.Collapsed,
       new ThemeIcon("lock"),
       parent
     );
@@ -119,7 +148,7 @@ export class AffinidiExplorerProvider
       "",
       "Issuances",
       "",
-      vscode.TreeItemCollapsibleState.Collapsed,
+      TreeItemCollapsibleState.Collapsed,
       new ThemeIcon("output"),
       parent
     );
@@ -129,7 +158,7 @@ export class AffinidiExplorerProvider
       "",
       "VC Schemas",
       "",
-      vscode.TreeItemCollapsibleState.Collapsed,
+      TreeItemCollapsibleState.Collapsed,
       new ThemeIcon("bracket"),
       parent
     );
@@ -139,7 +168,7 @@ export class AffinidiExplorerProvider
       "",
       "Rules",
       "",
-      vscode.TreeItemCollapsibleState.Collapsed,
+      TreeItemCollapsibleState.Collapsed,
       new ThemeIcon("server-process"),
       parent
     );
@@ -149,7 +178,7 @@ export class AffinidiExplorerProvider
       "",
       "Analytics",
       "",
-      vscode.TreeItemCollapsibleState.Collapsed,
+      TreeItemCollapsibleState.Collapsed,
       new ThemeIcon("graph"),
       parent
     );
@@ -170,7 +199,7 @@ export class AffinidiExplorerProvider
       projectInfo?.wallet.didUrl || "",
       projectInfo?.wallet.did || "",
       "",
-      vscode.TreeItemCollapsibleState.None,
+      TreeItemCollapsibleState.None,
       new ThemeIcon("lock"),
       parent
     );
@@ -182,16 +211,18 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const res = await getPublicSchemas();
 
-    res.schemas.map(schema => this.addNewTreeItem(
-      treeNodes,
-      AffinidiVariantTypes.rootSchemas,
-      schema.type,
-      schema.description,
-      '',
-      vscode.TreeItemCollapsibleState.None,
-      new ThemeIcon("bracket"),
-      parent
-    ));
+    res.schemas.map((schema) =>
+      this.addNewTreeItem(
+        treeNodes,
+        AffinidiVariantTypes.schema,
+        schema.type,
+        schema.description,
+        "",
+        TreeItemCollapsibleState.None,
+        new ThemeIcon("bracket"),
+        parent
+      )
+    );
   }
 
   private async _addIssuanceItems(
@@ -215,7 +246,7 @@ export class AffinidiExplorerProvider
           issuance.id,
           issuance.id,
           "",
-          vscode.TreeItemCollapsibleState.None,
+          TreeItemCollapsibleState.None,
           new ThemeIcon("output"),
           parent
         )
@@ -233,7 +264,7 @@ export class AffinidiExplorerProvider
       "aff:default:rule:21835",
       "Education match",
       "MOCKED",
-      vscode.TreeItemCollapsibleState.None,
+      TreeItemCollapsibleState.None,
       new ThemeIcon("server-process"),
       parent
     );
@@ -244,7 +275,7 @@ export class AffinidiExplorerProvider
       "aff:default:rule:54835",
       "Health skills check",
       "MOCKED",
-      vscode.TreeItemCollapsibleState.None,
+      TreeItemCollapsibleState.None,
       new ThemeIcon("server-process"),
       parent
     );
@@ -255,7 +286,7 @@ export class AffinidiExplorerProvider
       "aff:default:rule:19805",
       "License compliance",
       "MOCKED",
-      vscode.TreeItemCollapsibleState.None,
+      TreeItemCollapsibleState.None,
       new ThemeIcon("server-process"),
       parent
     );
@@ -266,7 +297,7 @@ export class AffinidiExplorerProvider
       "aff:default:rule:74802",
       "Email validator",
       "MOCKED",
-      vscode.TreeItemCollapsibleState.None,
+      TreeItemCollapsibleState.None,
       new ThemeIcon("server-process"),
       parent
     );
@@ -282,9 +313,26 @@ export class AffinidiExplorerProvider
       "",
       "(empty)",
       "",
-      vscode.TreeItemCollapsibleState.None,
+      TreeItemCollapsibleState.None,
       new ThemeIcon("dash"),
       parent
+    );
+  }
+
+  private async _addLoginItem(
+    treeNodes: AffResourceTreeItem[],
+    parent?: AffResourceTreeItem
+  ): Promise<void> {
+    this.addNewTreeItem(
+      treeNodes,
+      AffinidiVariantTypes.login,
+      "",
+      "Sign in to Affinidi",
+      "",
+      TreeItemCollapsibleState.None,
+      new ThemeIcon("sign-in"),
+      parent,
+      { title: "Sign In", command: "affinidi.login" }
     );
   }
 
@@ -294,9 +342,10 @@ export class AffinidiExplorerProvider
     affId: string,
     label: string,
     description: string,
-    state: vscode.TreeItemCollapsibleState,
+    state: TreeItemCollapsibleState,
     icon: ThemeIcon = ThemeIcon.Folder,
-    parent?: AffResourceTreeItem
+    parent?: AffResourceTreeItem,
+    command?: Command
   ) {
     treeNodes.push(
       new AffResourceTreeItem(
@@ -306,7 +355,8 @@ export class AffinidiExplorerProvider
         description,
         state,
         icon,
-        parent
+        parent,
+        command
       )
     );
   }

@@ -1,8 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from "vscode";
 import * as path from "path";
-import { commands, ExtensionContext, window } from "vscode";
+import { commands, ExtensionContext, Uri, window } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
@@ -26,30 +25,22 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   });
 
-  commands.registerCommand("affinidiExplorer.projectRefresh", () => {
-    affExplorerTreeProvider.refresh();
-  });
-
-  commands.registerCommand("affinidiExplorer.issuanceRefresh", () => {
-    affExplorerTreeProvider.refresh();
-  });
-
-  commands.registerCommand("affinidiExplorer.schemaRefresh", () => {
+  commands.registerCommand("affinidiExplorer.refresh", () => {
     affExplorerTreeProvider.refresh();
   });
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("affinidi.openBulkIssuanceMarkDown", () => {
-      let uri: vscode.Uri = vscode.Uri.file(
+    commands.registerCommand("affinidi.openBulkIssuanceMarkDown", () => {
+      let uri: Uri = Uri.file(
         path.join(context.extensionPath, "/document/bulkIssuance.md")
       );
-      vscode.commands.executeCommand("markdown.showPreview", uri);
+      commands.executeCommand("markdown.showPreview", uri);
     })
   );
 
   context.subscriptions.push(
-    commands.registerCommand("affinidi.schema.create", () => {
-      window.showErrorMessage("Creating a schema...");
+    commands.registerCommand("affinidi.codegen.schemaOffers", () => {
+      window.showErrorMessage("Code generation is still WIP");
     })
   );
 }
