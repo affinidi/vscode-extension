@@ -66,6 +66,12 @@ export class AffinidiAuthenticationProvider
 
     await this._secretStorage.store(AUTH_SECRET_KEY, JSON.stringify([session]));
 
+    this._onDidChangeSessions.fire({
+      added: [session],
+      removed: [],
+      changed: [],
+    });
+
     return session;
   }
 

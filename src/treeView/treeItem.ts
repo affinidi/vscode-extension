@@ -1,15 +1,15 @@
-import * as vscode from "vscode";
-import { ThemeIcon } from "vscode";
+import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from "vscode";
 
-class AffResourceTreeItem extends vscode.TreeItem {
+class AffResourceTreeItem extends TreeItem {
   constructor(
     public readonly resourceType: string,
     public readonly metadata: any,
     public readonly label: string,
     public readonly description: string,
-    public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    public readonly collapsibleState: TreeItemCollapsibleState,
     public readonly icon: ThemeIcon,
-    public readonly parent?: AffResourceTreeItem
+    public readonly parent?: AffResourceTreeItem,
+    public readonly command?: Command,
   ) {
     super(label, collapsibleState);
     this.resourceType = resourceType;
@@ -19,6 +19,7 @@ class AffResourceTreeItem extends vscode.TreeItem {
     this.iconPath = icon;
     this.contextValue = resourceType;
     this.parent = parent;
+    this.command = command;
   }
 }
 

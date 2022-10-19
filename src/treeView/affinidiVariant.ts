@@ -11,4 +11,5 @@ export enum AffinidiVariantTypes {
   rootAnalytics,
   empty,
   other,
+  login,
 }
