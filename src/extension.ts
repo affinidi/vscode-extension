@@ -32,6 +32,10 @@ export async function activateInternal(context: ExtensionContext) {
     affExplorerTreeProvider.refresh();
   });
 
+  commands.registerCommand("affinidiExplorer.schemaRefresh", () => {
+    affExplorerTreeProvider.refresh();
+  });
+
   context.subscriptions.push(
     commands.registerCommand("affinidi.schema.create", () => {
       window.showErrorMessage("Creating a schema...");
