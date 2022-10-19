@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { AffinidiOTPAuthenticationProvider } from "./auth/authProvider";
+import { AffinidiAuthenticationProvider } from "./auth/authentication-provider/affinidi-authentication-provider";
 
 export namespace ext {
   export let context: vscode.ExtensionContext;
   export let outputChannel: vscode.OutputChannel;
-  export let authProvider: AffinidiOTPAuthenticationProvider;
+  export let authProvider: AffinidiAuthenticationProvider;
 }
