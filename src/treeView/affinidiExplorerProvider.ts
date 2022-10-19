@@ -4,6 +4,12 @@ import {
   getProjectIssuances,
   IssuanceList,
 } from "../services/issuancesService";
+import {
+  getProjects,
+  getProjectSummary,
+  ProjectList,
+  ProjectSummary,
+} from "../services/iamService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import AffResourceTreeItem from "./treeItem";
 
@@ -17,6 +23,8 @@ export class AffinidiExplorerProvider
     AffResourceTreeItem | undefined | void
   > = this._onDidChangeTreeData.event;
 
+  projectsSummary: ProjectSummary[] = [];
+  
   constructor() {}
 
   refresh(): void {
@@ -70,16 +78,22 @@ export class AffinidiExplorerProvider
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem
   ): Promise<void> {
-    this.addNewTreeItem(
-      treeNodes,
-      AffinidiVariantTypes.project,
-      "aff:default:project:2854793",
-      "My Awesome Project",
-      "",
-      vscode.TreeItemCollapsibleState.Collapsed,
-      new ThemeIcon("project"),
-      parent
-    );
+    const projectListResponse: ProjectList = await getProjects();
+
+    projectListResponse.projects.map(async (project) => {
+      this.addNewTreeItem(
+        treeNodes,
+        AffinidiVariantTypes.project,
+        project.projectId,
+        project.name,
+        "",
+        vscode.TreeItemCollapsibleState.Collapsed,
+        new ThemeIcon("project"),
+        parent
+      );
+      const projectSummary = await getProjectSummary(project.projectId);
+      this.projectsSummary.push(projectSummary);
+    });
   }
 
   private async _addProductItems(
@@ -142,12 +156,17 @@ export class AffinidiExplorerProvider
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem
   ): Promise<void> {
+    const projectInfo = this.projectsSummary.find(
+      (projectSummary) =>
+        projectSummary.project.projectId === parent?.parent?.metadata
+    );
+
     this.addNewTreeItem(
       treeNodes,
       AffinidiVariantTypes.schema,
-      "aff:default:did:123456",
-      "did:elem:EiA1niEsAUc3hq6ks5yK39oU2OM5u8ZZ01pky7xUwyc0Yw",
-      "MOCKED",
+      projectInfo?.wallet.didUrl || "",
+      projectInfo?.wallet.did || "",
+      "",
       vscode.TreeItemCollapsibleState.None,
       new ThemeIcon("lock"),
       parent
