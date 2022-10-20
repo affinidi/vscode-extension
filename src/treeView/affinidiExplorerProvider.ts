@@ -216,7 +216,7 @@ export class AffinidiExplorerProvider
         treeNodes,
         AffinidiVariantTypes.schema,
         schema.type,
-        schema.description,
+        schema.type,
         "",
         TreeItemCollapsibleState.None,
         new ThemeIcon("bracket"),
