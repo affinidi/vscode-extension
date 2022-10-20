@@ -39,7 +39,9 @@ export async function activateInternal(context: ExtensionContext) {
     // If no panel is open, create a new one and update the HTML
     if (!panel) {
       // @ts-ignore
-      panel = window.createWebviewPanel("schemaDetailView", selectedTreeViewItem?.label, ViewColumn.One);
+      panel = window.createWebviewPanel("schemaDetailView", selectedTreeViewItem?.label, ViewColumn.One, {
+        enableScripts: true,
+      });
     }
 
     // If a panel is open, update the HTML with the selected item's content
