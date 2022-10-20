@@ -5,6 +5,8 @@ import { commands, ExtensionContext, Uri, window } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
+const fs = require("fs");
+import { viewProjectProperties } from "./services/viewPropertiesService";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -42,6 +44,13 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand("affinidi.codegen.schemaOffers", () => {
       window.showErrorMessage("Code generation is still WIP");
     })
+  );
+
+  commands.registerCommand(
+    "affinidiExplorer.viewProjectProperties",
+    async (context: any) => {
+      viewProjectProperties(context, affExplorerTreeProvider.projectsSummary);
+    }
   );
 }
 
