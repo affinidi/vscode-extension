@@ -202,7 +202,7 @@ export class AffinidiExplorerProvider
     this.addNewTreeItem(
       treeNodes,
       {
-        type: AffinidiVariantTypes.schema,
+        type: AffinidiVariantTypes.did,
         metadata: projectInfo?.wallet.didUrl,
         label: projectInfo?.wallet.did || "",
         icon: new ThemeIcon("lock"),
@@ -221,7 +221,7 @@ export class AffinidiExplorerProvider
     res.schemas.map(schema => this.addNewTreeItem(
       treeNodes,
       {
-        type: AffinidiVariantTypes.rootSchemas,
+        type: AffinidiVariantTypes.schema,
         label: schema.type,
         description: schema.type,
         metadata: schema,

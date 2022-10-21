@@ -20,6 +20,8 @@
     "onView:affinidiExplorer",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidi.openBulkIssuanceMarkDown",
+    "onCommand:affinidi.copyJsonURL",
+    "onCommand:affinidi.copyJsonLDURL",
     "onCommand:affinidiExplorer.viewProperties",
     "onView:affinidiDevTools"
   ],
@@ -56,13 +58,22 @@
       {
         "command": "affinidi.openBulkIssuanceMarkDown",
         "title": "About Issuance",
-        "category": "Affinidi",
+        "category": "Affinidi Explorer",
         "icon": "$(info)"
       },
       {
-        "command": "affinidiExplorer.viewProperties",
+        "command": "affinidi.copyJsonURL",
+        "title": "Copy JSON URL",
+        "category": "Affinidi Explorer"
+      },
+      {
+        "command": "affinidi.copyJsonLDURL",
+        "title": "Copy JSON-LD URL",
+        "category": "Affinidi Explorer"
+      },
+      { "command": "affinidiExplorer.viewProperties",
         "title": "View Properties",
-        "category": "Affinidi"
+        "category": "Affinidi Explorer"
       }
     ],
     "menus": {
@@ -73,6 +84,14 @@
         },
         {
           "command": "affinidi.openBulkIssuanceMarkDown",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.copyJsonURL",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.copyJsonLDURL",
           "when": "never"
         },
         {
@@ -108,7 +127,16 @@
           "group": "1"
         },
         {
-          "command": "affinidiExplorer.viewProperties",
+          "command": "affinidi.copyJsonURL",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "6_copypath"
+        },
+        {
+          "command": "affinidi.copyJsonLDURL",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "6_copypath"
+        },  
+        { "command": "affinidiExplorer.viewProperties",
           "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance",
           "group": "z_commands"
         }

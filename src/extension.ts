@@ -1,15 +1,17 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from "path";
-import { commands, ExtensionContext, window, ViewColumn, WebviewPanel, Uri } from "vscode";
+import { commands, ExtensionContext, Uri, window, env, ViewColumn, WebviewPanel } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
-const fs = require("fs");
-import { viewProjectProperties } from "./services/viewPropertiesService";
-import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
 import AffResourceTreeItem from "./treeView/treeItem";
+import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
+import { viewProjectProperties } from "./services/viewPropertiesService";
+import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
+
+const fs = require("fs");
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -81,6 +83,20 @@ export async function activateInternal(context: ExtensionContext) {
     })
   );
 
+  context.subscriptions.push(
+    commands.registerCommand("affinidi.copyJsonURL", async (treeItem: AffResourceTreeItem) => {
+     const schema =  await getSchema(treeItem.metadata.id as string);
+     env.clipboard.writeText(schema.jsonSchemaUrl);
+    })
+  );
+  
+  context.subscriptions.push(
+    commands.registerCommand("affinidi.copyJsonLDURL", async (treeItem: AffResourceTreeItem) => {
+      const schema =  await getSchema(treeItem.metadata.id as string);
+      env.clipboard.writeText(schema.jsonLdContextUrl);
+    })
+  );
+
   commands.registerCommand(
     "affinidiExplorer.viewProperties",
     async (element: AffResourceTreeItem) => {
@@ -90,7 +106,7 @@ export async function activateInternal(context: ExtensionContext) {
       ) {
         viewProjectProperties(
           element.metadata,
-          element.label,
+          element.label as string,
           affExplorerTreeProvider.projectsSummary
         );
       }
