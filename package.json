@@ -58,13 +58,13 @@
       {
         "command": "affinidi.openBulkIssuanceMarkDown",
         "title": "About Issuance",
-        "category": "Affinidi",
+        "category": "Affinidi Explorer",
         "icon": "$(info)"
       },
       {
         "command": "affinidi.copyJsonURL",
         "title": "Copy JSON URL",
-        "category": "Affinidi Tools"
+        "category": "Affinidi Explorer"
       },
       {
         "command": "affinidi.copyJsonLDURL",
@@ -73,7 +73,7 @@
       },
       { "command": "affinidiExplorer.viewProperties",
         "title": "View Properties",
-        "category": "Affinidi"
+        "category": "Affinidi Explorer"
       }
     ],
     "menus": {
