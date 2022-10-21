@@ -11,7 +11,6 @@ import {
 } from "vscode";
 import {
   getProjectIssuances,
-  IssuanceEntity,
   IssuanceList,
 } from "../services/issuancesService";
 import {
@@ -20,11 +19,7 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
-import {
-  getPublicSchemas,
-  getSchema,
-  SchemaEntity,
-} from "../services/schemaManagerService";
+import { getPublicSchemas } from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import AffResourceTreeItem from "./treeItem";
 import { ext } from "../extensionVariables";
@@ -45,10 +40,6 @@ export class AffinidiExplorerProvider
   > = new EventEmitter<AffResourceTreeItem | undefined | void>();
   readonly onDidChangeTreeData: Event<AffResourceTreeItem | undefined | void> =
     this._onDidChangeTreeData.event;
-
-  projectsSummary: ProjectSummary[] = [];
-  issuancesSummary: IssuanceEntity[] = [];
-  schemasSummary: SchemaEntity[] = [];
 
   constructor() {
     ext.context.subscriptions.push(
@@ -119,19 +110,18 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const projectListResponse: ProjectList = await getProjects();
 
-    projectListResponse.projects.map(async (project) => {
+    for (const project of projectListResponse.projects) {
+      const projectSummary = await getProjectSummary(project.projectId);
+
       this.addNewTreeItem(treeNodes, {
         type: AffinidiVariantTypes.project,
-        metadata: project.projectId,
+        metadata: projectSummary,
         label: project.name,
         state: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon("project"),
         parent,
       });
-
-      const projectSummary = await getProjectSummary(project.projectId);
-      this.projectsSummary.push(projectSummary);
-    });
+    }
   }
 
   private async _addProductItems(
@@ -183,15 +173,12 @@ export class AffinidiExplorerProvider
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem
   ): Promise<void> {
-    const projectInfo = this.projectsSummary.find(
-      (projectSummary) =>
-        projectSummary.project.projectId === parent?.parent?.metadata
-    );
+    const projectInfo: ProjectSummary = parent?.parent?.metadata;
 
     this.addNewTreeItem(treeNodes, {
       type: AffinidiVariantTypes.did,
-      metadata: projectInfo?.wallet.didUrl,
-      label: projectInfo?.wallet.did || "",
+      metadata: projectInfo.wallet,
+      label: projectInfo.wallet.did,
       icon: new ThemeIcon("lock"),
       parent,
     });
@@ -203,7 +190,7 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const res = await getPublicSchemas();
 
-    res.schemas.map(async (schema) => {
+    res.schemas.map((schema) => {
       this.addNewTreeItem(treeNodes, {
         type: AffinidiVariantTypes.schema,
         label: schema.type,
@@ -212,8 +199,6 @@ export class AffinidiExplorerProvider
         icon: new ThemeIcon("bracket"),
         parent,
       });
-
-      this.schemasSummary.push(schema);
     });
   }
 
@@ -221,27 +206,22 @@ export class AffinidiExplorerProvider
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem
   ): Promise<void> {
-    const projectInfo = this.projectsSummary.find(
-      (projectSummary) =>
-        projectSummary.project.projectId === parent?.parent?.metadata
-    );
-    if (projectInfo) {
-      const issuanceListResponse: IssuanceList = await getProjectIssuances({
-        apiKeyHash: projectInfo.apiKey.apiKeyHash,
-        projectId: projectInfo.project.projectId,
-      });
+    const projectInfo: ProjectSummary = parent?.parent?.metadata;
 
-      issuanceListResponse.issuances.map((issuance) => {
-        this.addNewTreeItem(treeNodes, {
-          type: AffinidiVariantTypes.issuance,
-          label: issuance.id,
-          metadata: issuance.id,
-          icon: new ThemeIcon("output"),
-          parent,
-        });
-        this.issuancesSummary.push(issuance);
+    const issuanceListResponse: IssuanceList = await getProjectIssuances({
+      apiKeyHash: projectInfo.apiKey.apiKeyHash,
+      projectId: projectInfo.project.projectId,
+    });
+
+    issuanceListResponse.issuances.map((issuance) => {
+      this.addNewTreeItem(treeNodes, {
+        type: AffinidiVariantTypes.issuance,
+        label: issuance.id,
+        metadata: issuance,
+        icon: new ThemeIcon("output"),
+        parent,
       });
-    }
+    });
   }
 
   private async _addRuleItems(
