@@ -37,3 +37,12 @@ export const getPublicSchemas = async (): Promise<ResponseType> => {
     // headers: {},
   });
 };
+
+export const getSchema = async (schemaId: string): Promise<SchemaEntity> => {
+  const url = buildURL(SCHEMA_MANAGER_API_BASE, `/v1/schemas/${schemaId}`);
+  return apiFetch({
+    method: "GET",
+    endpoint: url,
+    // headers: {},
+  });
+};

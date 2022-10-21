@@ -220,7 +220,9 @@ export class AffinidiExplorerProvider
         "",
         TreeItemCollapsibleState.None,
         new ThemeIcon("bracket"),
-        parent
+        parent,
+        undefined,
+        schema.id
       )
     );
   }
@@ -345,7 +347,8 @@ export class AffinidiExplorerProvider
     state: TreeItemCollapsibleState,
     icon: ThemeIcon = ThemeIcon.Folder,
     parent?: AffResourceTreeItem,
-    command?: Command
+    command?: Command,
+    id?: string
   ) {
     treeNodes.push(
       new AffResourceTreeItem(
@@ -356,7 +359,8 @@ export class AffinidiExplorerProvider
         state,
         icon,
         parent,
-        command
+        command,
+        id,
       )
     );
   }

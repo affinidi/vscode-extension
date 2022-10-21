@@ -1,10 +1,12 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from "path";
-import { commands, ExtensionContext, Uri, window } from "vscode";
+import { commands, ExtensionContext, Uri, window, env } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
+import { getSchema } from "./services/schemaManagerService";
+import AffResourceTreeItem from "./treeView/treeItem";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -41,6 +43,21 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand("affinidi.codegen.schemaOffers", () => {
       window.showErrorMessage("Code generation is still WIP");
+    })
+  );
+
+  context.subscriptions.push(
+    commands.registerCommand("affinidi.copyJsonURL", async (node: AffResourceTreeItem) => {
+     const schema =  await getSchema(node.id as string);
+     env.clipboard.writeText(schema.jsonSchemaUrl);
+     
+    })
+  );
+  
+  context.subscriptions.push(
+    commands.registerCommand("affinidi.copyJsonLDURL", async (node: AffResourceTreeItem) => {
+      const schema =  await getSchema(node.id as string);
+      env.clipboard.writeText(schema.jsonLdContextUrl);
     })
   );
 }

@@ -20,6 +20,8 @@
     "onView:affinidiExplorer",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidi.openBulkIssuanceMarkDown",
+    "onCommand:affinidi.copyJsonURL",
+    "onCommand:affinidi.copyJsonLDURL",
     "onView:affinidiDevTools"
   ],
   "main": "./out/main",
@@ -57,6 +59,16 @@
         "title": "About Issuance",
         "category": "Affinidi",
         "icon": "$(info)"
+      },
+      {
+        "command": "affinidi.copyJsonURL",
+        "title": "Copy JSON URL",
+        "category": "Affinidi Tools"
+      },
+      {
+        "command": "affinidi.copyJsonLDURL",
+        "title": "Copy JSON-LD URL",
+        "category": "Affinidi Tools"
       }
     ],
     "menus": {
@@ -67,6 +79,14 @@
         },
         {
           "command": "affinidi.openBulkIssuanceMarkDown",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.copyJsonURL",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.copyJsonLDURL",
           "when": "never"
         },
         {
@@ -96,6 +116,16 @@
           "command": "affinidi.codegen.schemaOffers",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "1"
+        },
+        {
+          "command": "affinidi.copyJsonURL",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "6_copypath"
+        },
+        {
+          "command": "affinidi.copyJsonLDURL",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "6_copypath"
         }
       ]
     },
