@@ -50,7 +50,6 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand("affinidi.copyJsonURL", async (treeItem: AffResourceTreeItem) => {
      const schema =  await getSchema(treeItem.metadata as string);
      env.clipboard.writeText(schema.jsonSchemaUrl);
-     
     })
   );
   
