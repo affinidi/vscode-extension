@@ -1,12 +1,22 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from "path";
-import { commands, ExtensionContext, window, ViewColumn, WebviewPanel, Uri } from "vscode";
+import {
+  commands,
+  ExtensionContext,
+  window,
+  ViewColumn,
+  WebviewPanel,
+  Uri,
+} from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 const fs = require("fs");
-import { viewProjectProperties } from "./services/viewPropertiesService";
+import {
+  viewIssuanceProperties,
+  viewProjectProperties,
+} from "./services/viewPropertiesService";
 import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
 import AffResourceTreeItem from "./treeView/treeItem";
 import { getWebviewContent } from "./ui/getWebviewContent";
@@ -33,36 +43,47 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand("affinidiExplorer.refresh", () => {
     affExplorerTreeProvider.refresh();
   });
-  
+
   let panel: WebviewPanel | undefined = undefined;
 
-  const openSchema = commands.registerCommand("schema.showSchemaDetails", () => {
-    const selectedTreeViewItem = treeView.selection[0];
-    
-    // If no panel is open, create a new one and update the HTML
-    if (!panel) {
+  const openSchema = commands.registerCommand(
+    "schema.showSchemaDetails",
+    () => {
+      const selectedTreeViewItem = treeView.selection[0];
+
+      // If no panel is open, create a new one and update the HTML
+      if (!panel) {
+        // @ts-ignore
+        panel = window.createWebviewPanel(
+          "schemaDetailView",
+          selectedTreeViewItem?.label,
+          ViewColumn.One,
+          {
+            enableScripts: true,
+          }
+        );
+      }
+
+      // If a panel is open, update the HTML with the selected item's content
       // @ts-ignore
-      panel = window.createWebviewPanel("schemaDetailView", selectedTreeViewItem?.label, ViewColumn.One, {
-        enableScripts: true,
-      });
+      panel.title = selectedTreeViewItem.label;
+
+      panel.webview.html = getWebviewContent(
+        panel.webview,
+        context.extensionUri,
+        selectedTreeViewItem
+      );
+
+      panel?.onDidDispose(
+        () => {
+          // When the panel is closed, cancel any future updates to the webview content
+          panel = undefined;
+        },
+        null,
+        context.subscriptions
+      );
     }
-
-    // If a panel is open, update the HTML with the selected item's content
-    // @ts-ignore
-    panel.title = selectedTreeViewItem.label;
-    
-    panel.webview.html = getWebviewContent(panel.webview, context.extensionUri, selectedTreeViewItem);
-    
-
-    panel?.onDidDispose(
-      () => {
-        // When the panel is closed, cancel any future updates to the webview content
-        panel = undefined;
-      },
-      null,
-      context.subscriptions
-    );
-  });
+  );
 
   context.subscriptions.push(openSchema);
 
@@ -90,8 +111,19 @@ export async function activateInternal(context: ExtensionContext) {
       ) {
         viewProjectProperties(
           element.metadata,
-          element.label,
+          element?.label,
           affExplorerTreeProvider.projectsSummary
+        );
+      }
+
+      if (
+        element.resourceType ===
+        AffinidiVariantTypes[AffinidiVariantTypes.issuance]
+      ) {
+        viewIssuanceProperties(
+          element.metadata,
+          element.label,
+          affExplorerTreeProvider.issuancesSummary
         );
       }
     }
