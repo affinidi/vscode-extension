@@ -48,7 +48,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand("affinidi.copyJsonURL", async (treeItem: AffResourceTreeItem) => {
-     const schema =  await getSchema(treeItem.id as string);
+     const schema =  await getSchema(treeItem.metadata as string);
      env.clipboard.writeText(schema.jsonSchemaUrl);
      
     })
@@ -56,7 +56,7 @@ export async function activateInternal(context: ExtensionContext) {
   
   context.subscriptions.push(
     commands.registerCommand("affinidi.copyJsonLDURL", async (treeItem: AffResourceTreeItem) => {
-      const schema =  await getSchema(treeItem.id as string);
+      const schema =  await getSchema(treeItem.metadata as string);
       env.clipboard.writeText(schema.jsonLdContextUrl);
     })
   );

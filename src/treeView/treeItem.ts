@@ -9,8 +9,7 @@ class AffResourceTreeItem extends TreeItem {
     public readonly collapsibleState: TreeItemCollapsibleState,
     public readonly icon: ThemeIcon,
     public readonly parent?: AffResourceTreeItem,
-    public readonly command?: Command,
-    public readonly id?: string
+    public readonly command?: Command
   ) {
     super(label, collapsibleState);
     this.resourceType = resourceType;
@@ -21,7 +20,6 @@ class AffResourceTreeItem extends TreeItem {
     this.contextValue = resourceType;
     this.parent = parent;
     this.command = command;
-    this.id = id;
   }
 }
 

@@ -215,14 +215,12 @@ export class AffinidiExplorerProvider
       this.addNewTreeItem(
         treeNodes,
         AffinidiVariantTypes.schema,
-        schema.type,
+        schema.id,
         schema.type,
         "",
         TreeItemCollapsibleState.None,
         new ThemeIcon("bracket"),
-        parent,
-        undefined,
-        schema.id
+        parent
       )
     );
   }
@@ -359,8 +357,7 @@ export class AffinidiExplorerProvider
         state,
         icon,
         parent,
-        command,
-        id,
+        command
       )
     );
   }
