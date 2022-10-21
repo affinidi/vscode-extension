@@ -1,7 +1,7 @@
 import { openReadOnlyJson } from "../utils/openReadOnlyContent";
 import { ProjectSummary } from "./iamService";
 
-export const viewProjectProperties = (
+export const viewProjectProperties = async (
   projectId: string,
   projectName: string,
   projectsSummary: ProjectSummary[]
@@ -10,18 +10,9 @@ export const viewProjectProperties = (
     (projectSummary) => projectSummary.project.projectId === projectId
   );
   if (projectInfo) {
-    openPropertiesDataInJson(
-      projectName,
-      projectInfo.project.projectId,
+    await openReadOnlyJson(
+      { label: projectName, fullId: projectInfo.project.projectId },
       projectInfo
     );
   }
-};
-
-const openPropertiesDataInJson = async (
-  label: string,
-  id: string,
-  data: any
-) => {
-  await openReadOnlyJson({ label, fullId: id }, data);
 };
