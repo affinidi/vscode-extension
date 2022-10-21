@@ -71,7 +71,8 @@
         "title": "Copy JSON-LD URL",
         "category": "Affinidi Explorer"
       },
-      { "command": "affinidiExplorer.viewProperties",
+      {
+        "command": "affinidiExplorer.viewProperties",
         "title": "View Properties",
         "category": "Affinidi Explorer"
       }
@@ -135,9 +136,10 @@
           "command": "affinidi.copyJsonLDURL",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "6_copypath"
-        },  
-        { "command": "affinidiExplorer.viewProperties",
-          "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance",
+        },
+        {
+          "command": "affinidiExplorer.viewProperties",
+          "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance || view == affinidiExplorer && viewItem == schema",
           "group": "z_commands"
         }
       ]

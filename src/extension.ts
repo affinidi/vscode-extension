@@ -18,11 +18,10 @@ import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
 import {
   viewIssuanceProperties,
   viewProjectProperties,
+  viewSchemaProperties,
 } from "./services/viewPropertiesService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
-
-const fs = require("fs");
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -145,9 +144,15 @@ export async function activateInternal(context: ExtensionContext) {
       ) {
         viewIssuanceProperties(
           element.metadata,
-          element.label as string,
           affExplorerTreeProvider.issuancesSummary
         );
+      }
+
+      if (
+        element.resourceType ===
+        AffinidiVariantTypes[AffinidiVariantTypes.schema]
+      ) {
+        viewSchemaProperties(element.metadata);
       }
     }
   );

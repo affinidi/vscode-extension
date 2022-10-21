@@ -20,7 +20,11 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
-import { getPublicSchemas } from "../services/schemaManagerService";
+import {
+  getPublicSchemas,
+  getSchema,
+  SchemaEntity,
+} from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import AffResourceTreeItem from "./treeItem";
 import { ext } from "../extensionVariables";
@@ -44,6 +48,7 @@ export class AffinidiExplorerProvider
 
   projectsSummary: ProjectSummary[] = [];
   issuancesSummary: IssuanceEntity[] = [];
+  schemasSummary: SchemaEntity[] = [];
 
   constructor() {
     ext.context.subscriptions.push(
@@ -198,7 +203,7 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const res = await getPublicSchemas();
 
-    res.schemas.map((schema) =>
+    res.schemas.map(async (schema) => {
       this.addNewTreeItem(treeNodes, {
         type: AffinidiVariantTypes.schema,
         label: schema.type,
@@ -206,8 +211,10 @@ export class AffinidiExplorerProvider
         metadata: schema,
         icon: new ThemeIcon("bracket"),
         parent,
-      })
-    );
+      });
+
+      this.schemasSummary.push(schema);
+    });
   }
 
   private async _addIssuanceItems(
