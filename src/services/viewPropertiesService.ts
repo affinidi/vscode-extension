@@ -1,41 +1,24 @@
+import { AffinidiVariantTypes } from "../treeView/affinidiVariant";
 import { openReadOnlyJson } from "../utils/openReadOnlyContent";
-import { ProjectSummary } from "./iamService";
-import { IssuanceEntity, SchemaDescription } from "./issuancesService";
-import { SchemaEntity } from "./schemaManagerService";
 
-export const viewProjectProperties = async (
-  projectId: string,
-  projectName: string,
-  projectsSummary: ProjectSummary[]
+export const viewProperties = async (
+  resourceType: string,
+  resourceInfo: any
 ) => {
-  const projectInfo = projectsSummary.find(
-    (projectSummary) => projectSummary.project.projectId === projectId
-  );
-  if (projectInfo) {
-    await openReadOnlyJson(
-      { label: projectName, fullId: projectInfo.project.projectId },
-      projectInfo
-    );
+  let label: string = "";
+  let fullId: string = "";
+  switch (resourceType) {
+    case AffinidiVariantTypes[AffinidiVariantTypes.project]:
+      label = resourceInfo.project.name;
+      fullId = resourceInfo.project.projectId;
+      break;
+      
+    case AffinidiVariantTypes[AffinidiVariantTypes.issuance]:
+    case AffinidiVariantTypes[AffinidiVariantTypes.schema]:
+      label = resourceInfo.id;
+      fullId = resourceInfo.id;
+      break;
   }
-};
 
-export const viewIssuanceProperties = async (
-  issuanceId: string,
-  issuancesSummary: IssuanceEntity[]
-) => {
-  const issuanceInfo = issuancesSummary.find(
-    (issuanceSummary) => issuanceSummary.id === issuanceId
-  );
-
-  if (issuanceInfo) {
-    await openReadOnlyJson(
-      { label: issuanceId, fullId: issuanceId },
-      issuanceInfo
-    );
-  }
-};
-
-export const viewSchemaProperties = async (schemaSummary: SchemaEntity) => {
-  const id = schemaSummary.id;
-  await openReadOnlyJson({ label: id, fullId: id }, schemaSummary);
+  await openReadOnlyJson({ label, fullId }, resourceInfo);
 };

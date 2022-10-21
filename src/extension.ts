@@ -14,12 +14,7 @@ import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 import AffResourceTreeItem from "./treeView/treeItem";
-import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
-import {
-  viewIssuanceProperties,
-  viewProjectProperties,
-  viewSchemaProperties,
-} from "./services/viewPropertiesService";
+import { viewProperties } from "./services/viewPropertiesService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
 
@@ -127,33 +122,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand(
     "affinidiExplorer.viewProperties",
     async (element: AffResourceTreeItem) => {
-      if (
-        element.resourceType ===
-        AffinidiVariantTypes[AffinidiVariantTypes.project]
-      ) {
-        viewProjectProperties(
-          element.metadata,
-          element.label as string,
-          affExplorerTreeProvider.projectsSummary
-        );
-      }
-
-      if (
-        element.resourceType ===
-        AffinidiVariantTypes[AffinidiVariantTypes.issuance]
-      ) {
-        viewIssuanceProperties(
-          element.metadata,
-          affExplorerTreeProvider.issuancesSummary
-        );
-      }
-
-      if (
-        element.resourceType ===
-        AffinidiVariantTypes[AffinidiVariantTypes.schema]
-      ) {
-        viewSchemaProperties(element.metadata);
-      }
+      viewProperties(element.resourceType, element.metadata);
     }
   );
 }

@@ -34,7 +34,6 @@ export const getPublicSchemas = async (): Promise<ResponseType> => {
   return apiFetch({
     method: "GET",
     endpoint: url,
-    // headers: {},
   });
 };
 
@@ -43,6 +42,5 @@ export const getSchema = async (schemaId: string): Promise<SchemaEntity> => {
   return apiFetch({
     method: "GET",
     endpoint: url,
-    // headers: {},
   });
 };
