@@ -1,5 +1,6 @@
 import { openReadOnlyJson } from "../utils/openReadOnlyContent";
 import { ProjectSummary } from "./iamService";
+import { IssuanceEntity } from "./issuancesService";
 
 export const viewProjectProperties = async (
   projectId: string,
@@ -13,6 +14,23 @@ export const viewProjectProperties = async (
     await openReadOnlyJson(
       { label: projectName, fullId: projectInfo.project.projectId },
       projectInfo
+    );
+  }
+};
+
+export const viewIssuanceProperties = async (
+  issuanceId: string,
+  id: string,
+  issuancesSummary: IssuanceEntity[]
+) => {
+  const issuanceInfo = issuancesSummary.find(
+    (issuanceSummary) => issuanceSummary.id === issuanceId
+  );
+
+  if (issuanceInfo) {
+    await openReadOnlyJson(
+      { label: id, fullId: issuanceInfo.id },
+      issuanceInfo
     );
   }
 };
