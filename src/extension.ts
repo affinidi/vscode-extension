@@ -47,16 +47,16 @@ export async function activateInternal(context: ExtensionContext) {
   );
 
   context.subscriptions.push(
-    commands.registerCommand("affinidi.copyJsonURL", async (node: AffResourceTreeItem) => {
-     const schema =  await getSchema(node.id as string);
+    commands.registerCommand("affinidi.copyJsonURL", async (treeItem: AffResourceTreeItem) => {
+     const schema =  await getSchema(treeItem.id as string);
      env.clipboard.writeText(schema.jsonSchemaUrl);
      
     })
   );
   
   context.subscriptions.push(
-    commands.registerCommand("affinidi.copyJsonLDURL", async (node: AffResourceTreeItem) => {
-      const schema =  await getSchema(node.id as string);
+    commands.registerCommand("affinidi.copyJsonLDURL", async (treeItem: AffResourceTreeItem) => {
+      const schema =  await getSchema(treeItem.id as string);
       env.clipboard.writeText(schema.jsonLdContextUrl);
     })
   );
