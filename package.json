@@ -22,6 +22,7 @@
     "onCommand:affinidi.openBulkIssuanceMarkDown",
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.copyJsonLDURL",
+    "onCommand:affinidiExplorer.viewProperties",
     "onView:affinidiDevTools"
   ],
   "main": "./out/main",
@@ -69,6 +70,10 @@
         "command": "affinidi.copyJsonLDURL",
         "title": "Copy JSON-LD URL",
         "category": "Affinidi Tools"
+      },
+      { "command": "affinidiExplorer.viewProperties",
+        "title": "View Properties",
+        "category": "Affinidi"
       }
     ],
     "menus": {
@@ -91,6 +96,10 @@
         },
         {
           "command": "affinidi.codegen.schemaOffers",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.viewProperties",
           "when": "never"
         }
       ],
@@ -126,6 +135,10 @@
           "command": "affinidi.copyJsonLDURL",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "6_copypath"
+        },  
+        { "command": "affinidiExplorer.viewProperties",
+          "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance",
+          "group": "z_commands"
         }
       ]
     },
@@ -230,6 +243,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@vscode/webview-ui-toolkit": "^1.1.0",
     "nanoid": "^3.3.4",
     "node-fetch": "^2.6.7",
     "path": "^0.12.7"

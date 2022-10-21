@@ -115,14 +115,16 @@ export class AffinidiExplorerProvider
     projectListResponse.projects.map(async (project) => {
       this.addNewTreeItem(
         treeNodes,
-        AffinidiVariantTypes.project,
-        project.projectId,
-        project.name,
-        "",
-        TreeItemCollapsibleState.Collapsed,
-        new ThemeIcon("project"),
-        parent
+        {
+          type: AffinidiVariantTypes.project,
+          metadata: project.projectId,
+          label: project.name,
+          state: TreeItemCollapsibleState.Collapsed,
+          icon: new ThemeIcon("project"),
+          parent
+        }
       );
+
       const projectSummary = await getProjectSummary(project.projectId);
       this.projectsSummary.push(projectSummary);
     });
@@ -134,53 +136,57 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rootDID,
-      "",
-      "Digital Identities",
-      "",
-      TreeItemCollapsibleState.Collapsed,
-      new ThemeIcon("lock"),
-      parent
+      {
+        type: AffinidiVariantTypes.rootDID,
+        label: "Digital Identities",
+        state: TreeItemCollapsibleState.Collapsed,
+        icon: new ThemeIcon("lock"),
+        parent
+      }
     );
+
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rootIssuance,
-      "",
-      "Issuances",
-      "",
-      TreeItemCollapsibleState.Collapsed,
-      new ThemeIcon("output"),
-      parent
+      {
+        type: AffinidiVariantTypes.rootIssuance,
+        label: "Issuances",
+        state: TreeItemCollapsibleState.Collapsed,
+        icon: new ThemeIcon("output"),
+        parent
+      }
     );
+
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rootSchemas,
-      "",
-      "VC Schemas",
-      "",
-      TreeItemCollapsibleState.Collapsed,
-      new ThemeIcon("bracket"),
-      parent
+      {
+        type: AffinidiVariantTypes.rootSchemas,
+        label: "VC Schemas",
+        state: TreeItemCollapsibleState.Collapsed,
+        icon: new ThemeIcon("bracket"),
+        parent
+      }
     );
+
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rootRules,
-      "",
-      "Rules",
-      "",
-      TreeItemCollapsibleState.Collapsed,
-      new ThemeIcon("server-process"),
-      parent
+      {
+        type: AffinidiVariantTypes.rootRules,
+        label: "Rules",
+        state: TreeItemCollapsibleState.Collapsed,
+        icon: new ThemeIcon("server-process"),
+        parent
+      }
     );
+
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rootAnalytics,
-      "",
-      "Analytics",
-      "",
-      TreeItemCollapsibleState.Collapsed,
-      new ThemeIcon("graph"),
-      parent
+      {
+        type: AffinidiVariantTypes.rootAnalytics,
+        label: "Analytics",
+        state: TreeItemCollapsibleState.Collapsed,
+        icon: new ThemeIcon("graph"),
+        parent
+      }
     );
   }
 
@@ -195,13 +201,13 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.schema,
-      projectInfo?.wallet.didUrl || "",
-      projectInfo?.wallet.did || "",
-      "",
-      TreeItemCollapsibleState.None,
-      new ThemeIcon("lock"),
-      parent
+      {
+        type: AffinidiVariantTypes.did,
+        metadata: projectInfo?.wallet.didUrl,
+        label: projectInfo?.wallet.did || "",
+        icon: new ThemeIcon("lock"),
+        parent
+      }
     );
   }
 
@@ -211,18 +217,18 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const res = await getPublicSchemas();
 
-    res.schemas.map((schema) =>
-      this.addNewTreeItem(
-        treeNodes,
-        AffinidiVariantTypes.schema,
-        schema.id,
-        schema.type,
-        "",
-        TreeItemCollapsibleState.None,
-        new ThemeIcon("bracket"),
+
+    res.schemas.map(schema => this.addNewTreeItem(
+      treeNodes,
+      {
+        type: AffinidiVariantTypes.schema,
+        label: schema.type,
+        description: schema.type,
+        metadata: schema,
+        icon: new ThemeIcon("bracket"),
         parent
-      )
-    );
+      }
+    ));
   }
 
   private async _addIssuanceItems(
@@ -242,13 +248,13 @@ export class AffinidiExplorerProvider
       issuanceListResponse.issuances.map((issuance) =>
         this.addNewTreeItem(
           treeNodes,
-          AffinidiVariantTypes.issuance,
-          issuance.id,
-          issuance.id,
-          "",
-          TreeItemCollapsibleState.None,
-          new ThemeIcon("output"),
-          parent
+          {
+            type: AffinidiVariantTypes.issuance,
+            label: issuance.id,
+            metadata: issuance.id,
+            icon: new ThemeIcon("output"),
+            parent
+          }
         )
       );
     }
@@ -260,46 +266,50 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rule,
-      "aff:default:rule:21835",
-      "Education match",
-      "MOCKED",
-      TreeItemCollapsibleState.None,
-      new ThemeIcon("server-process"),
-      parent
+      {
+        type: AffinidiVariantTypes.rule,
+        metadata: "aff:default:rule:21835",
+        label: "Education match",
+        description: "MOCKED",
+        icon: new ThemeIcon("server-process"),
+        parent
+      }
     );
 
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rule,
-      "aff:default:rule:54835",
-      "Health skills check",
-      "MOCKED",
-      TreeItemCollapsibleState.None,
-      new ThemeIcon("server-process"),
-      parent
+      {
+        type: AffinidiVariantTypes.rule,
+        metadata: "aff:default:rule:54835",
+        label: "Health skills check",
+        description: "MOCKED",
+        icon: new ThemeIcon("server-process"),
+        parent
+      }
     );
 
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.rule,
-      "aff:default:rule:19805",
-      "License compliance",
-      "MOCKED",
-      TreeItemCollapsibleState.None,
-      new ThemeIcon("server-process"),
-      parent
+      {
+        type: AffinidiVariantTypes.rule,
+        metadata: "aff:default:rule:19805",
+        label: "License compliance",
+        description: "MOCKED",
+        icon: new ThemeIcon("server-process"),
+        parent
+      }
     );
 
     this.addNewTreeItem(
-      treeNodes,
-      AffinidiVariantTypes.rule,
-      "aff:default:rule:74802",
-      "Email validator",
-      "MOCKED",
-      TreeItemCollapsibleState.None,
-      new ThemeIcon("server-process"),
-      parent
+      treeNodes, 
+      {
+        type: AffinidiVariantTypes.rule,
+        metadata: "aff:default:rule:74802",
+        label: "Email validator",
+        description: "MOCKED",
+        icon: new ThemeIcon("server-process"),
+        parent
+      }
     );
   }
 
@@ -309,13 +319,12 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.empty,
-      "",
-      "(empty)",
-      "",
-      TreeItemCollapsibleState.None,
-      new ThemeIcon("dash"),
-      parent
+      {
+        type: AffinidiVariantTypes.empty,
+        label: "(empty)",
+        icon: new ThemeIcon("dash"),
+        parent
+      }
     );
   }
 
@@ -325,39 +334,49 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(
       treeNodes,
-      AffinidiVariantTypes.login,
-      "",
-      "Sign in to Affinidi",
-      "",
-      TreeItemCollapsibleState.None,
-      new ThemeIcon("sign-in"),
-      parent,
-      { title: "Sign In", command: "affinidi.login" }
+      {
+        type: AffinidiVariantTypes.login,
+        label: "Sign in to Affinidi",
+        icon: new ThemeIcon("sign-in"),
+        parent,
+        command: { title: "Sign In", command: "affinidi.login" }
+      }
     );
   }
 
   private addNewTreeItem(
-    treeNodes: AffResourceTreeItem[],
-    type: AffinidiVariantTypes,
-    affId: string,
-    label: string,
-    description: string,
-    state: TreeItemCollapsibleState,
-    icon: ThemeIcon = ThemeIcon.Folder,
-    parent?: AffResourceTreeItem,
-    command?: Command
+    treeNodes: AffResourceTreeItem[], 
+    {
+      type,
+      metadata,
+      label,
+      description,
+      state = TreeItemCollapsibleState.None,
+      icon = ThemeIcon.Folder,
+      command,
+      parent,
+    }: {
+      type: AffinidiVariantTypes,
+      metadata?: any,
+      label: string,
+      description?: string,
+      state?: TreeItemCollapsibleState,
+      icon: ThemeIcon,
+      parent?: AffResourceTreeItem
+      command?: Command
+    }
   ) {
     treeNodes.push(
-      new AffResourceTreeItem(
-        AffinidiVariantTypes[type],
-        affId,
+      new AffResourceTreeItem({
+        resourceType: AffinidiVariantTypes[type],
+        metadata,
         label,
         description,
-        state,
+        collapsibleState: state,
         icon,
         parent,
         command
-      )
+      })
     );
   }
 }
