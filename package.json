@@ -62,7 +62,7 @@
       {
         "command": "affinidiExplorer.viewProperties",
         "title": "View Properties",
-        "category": "Affinidi"
+        "category": "Affinidi Explorer"
       }
     ],
     "menus": {
