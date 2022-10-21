@@ -69,7 +69,7 @@
       {
         "command": "affinidi.copyJsonLDURL",
         "title": "Copy JSON-LD URL",
-        "category": "Affinidi Tools"
+        "category": "Affinidi Explorer"
       },
       { "command": "affinidiExplorer.viewProperties",
         "title": "View Properties",
