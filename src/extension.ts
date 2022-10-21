@@ -1,10 +1,12 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from "path";
-import { commands, ExtensionContext, Uri, window } from "vscode";
+import { commands, ExtensionContext, window, ViewColumn, WebviewPanel, Uri } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
+import { getWebviewContent } from "./ui/getWebviewContent";
+import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -19,7 +21,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider();
 
-  window.createTreeView("affinidiExplorer", {
+  const treeView = window.createTreeView("affinidiExplorer", {
     treeDataProvider: affExplorerTreeProvider,
     canSelectMany: false,
     showCollapseAll: true,
@@ -28,6 +30,38 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand("affinidiExplorer.refresh", () => {
     affExplorerTreeProvider.refresh();
   });
+  
+  let panel: WebviewPanel | undefined = undefined;
+
+  const openSchema = commands.registerCommand("schema.showSchemaDetails", () => {
+    const selectedTreeViewItem = treeView.selection[0];
+    
+    // If no panel is open, create a new one and update the HTML
+    if (!panel) {
+      // @ts-ignore
+      panel = window.createWebviewPanel("schemaDetailView", selectedTreeViewItem?.label, ViewColumn.One, {
+        enableScripts: true,
+      });
+    }
+
+    // If a panel is open, update the HTML with the selected item's content
+    // @ts-ignore
+    panel.title = selectedTreeViewItem.label;
+    
+    panel.webview.html = getWebviewContent(panel.webview, context.extensionUri, selectedTreeViewItem);
+    
+
+    panel?.onDidDispose(
+      () => {
+        // When the panel is closed, cancel any future updates to the webview content
+        panel = undefined;
+      },
+      null,
+      context.subscriptions
+    );
+  });
+
+  context.subscriptions.push(openSchema);
 
   context.subscriptions.push(
     commands.registerCommand("affinidi.openBulkIssuanceMarkDown", () => {
