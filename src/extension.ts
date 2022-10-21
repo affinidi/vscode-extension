@@ -4,22 +4,25 @@ import * as path from "path";
 import {
   commands,
   ExtensionContext,
+  Uri,
   window,
+  env,
   ViewColumn,
   WebviewPanel,
-  Uri,
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
-const fs = require("fs");
+import AffResourceTreeItem from "./treeView/treeItem";
+import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
 import {
   viewIssuanceProperties,
   viewProjectProperties,
 } from "./services/viewPropertiesService";
-import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
-import AffResourceTreeItem from "./treeView/treeItem";
+import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
+
+const fs = require("fs");
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -56,7 +59,7 @@ export async function activateInternal(context: ExtensionContext) {
         // @ts-ignore
         panel = window.createWebviewPanel(
           "schemaDetailView",
-          selectedTreeViewItem?.label,
+          selectedTreeViewItem?.label as string,
           ViewColumn.One,
           {
             enableScripts: true,
@@ -102,6 +105,26 @@ export async function activateInternal(context: ExtensionContext) {
     })
   );
 
+  context.subscriptions.push(
+    commands.registerCommand(
+      "affinidi.copyJsonURL",
+      async (treeItem: AffResourceTreeItem) => {
+        const schema = await getSchema(treeItem.metadata.id as string);
+        env.clipboard.writeText(schema.jsonSchemaUrl);
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    commands.registerCommand(
+      "affinidi.copyJsonLDURL",
+      async (treeItem: AffResourceTreeItem) => {
+        const schema = await getSchema(treeItem.metadata.id as string);
+        env.clipboard.writeText(schema.jsonLdContextUrl);
+      }
+    )
+  );
+
   commands.registerCommand(
     "affinidiExplorer.viewProperties",
     async (element: AffResourceTreeItem) => {
@@ -111,7 +134,7 @@ export async function activateInternal(context: ExtensionContext) {
       ) {
         viewProjectProperties(
           element.metadata,
-          element?.label,
+          element.label as string,
           affExplorerTreeProvider.projectsSummary
         );
       }
@@ -122,7 +145,7 @@ export async function activateInternal(context: ExtensionContext) {
       ) {
         viewIssuanceProperties(
           element.metadata,
-          element.label,
+          element.label as string,
           affExplorerTreeProvider.issuancesSummary
         );
       }
