@@ -7,6 +7,8 @@ import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 const fs = require("fs");
 import { viewProjectProperties } from "./services/viewPropertiesService";
+import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
+import AffResourceTreeItem from "./treeView/treeItem";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -47,9 +49,18 @@ export async function activateInternal(context: ExtensionContext) {
   );
 
   commands.registerCommand(
-    "affinidiExplorer.viewProjectProperties",
-    async (context: any) => {
-      viewProjectProperties(context, affExplorerTreeProvider.projectsSummary);
+    "affinidiExplorer.viewProperties",
+    async (element: AffResourceTreeItem) => {
+      if (
+        element.resourceType ===
+        AffinidiVariantTypes[AffinidiVariantTypes.project]
+      ) {
+        viewProjectProperties(
+          element.metadata,
+          element.label,
+          affExplorerTreeProvider.projectsSummary
+        );
+      }
     }
   );
 }

@@ -2,15 +2,16 @@ import { openReadOnlyJson } from "../utils/openReadOnlyContent";
 import { ProjectSummary } from "./iamService";
 
 export const viewProjectProperties = (
-  context: any,
+  projectId: string,
+  projectName: string,
   projectsSummary: ProjectSummary[]
 ) => {
   const projectInfo = projectsSummary.find(
-    (projectSummary) => projectSummary.project.projectId === context.metadata
+    (projectSummary) => projectSummary.project.projectId === projectId
   );
   if (projectInfo) {
     openPropertiesDataInJson(
-      context.label,
+      projectName,
       projectInfo.project.projectId,
       projectInfo
     );
