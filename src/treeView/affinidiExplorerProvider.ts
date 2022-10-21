@@ -178,7 +178,7 @@ export class AffinidiExplorerProvider
     this.addNewTreeItem(treeNodes, {
       type: AffinidiVariantTypes.did,
       metadata: projectInfo.wallet,
-      label: projectInfo.wallet.did || "",
+      label: projectInfo.wallet.did,
       icon: new ThemeIcon("lock"),
       parent,
     });
