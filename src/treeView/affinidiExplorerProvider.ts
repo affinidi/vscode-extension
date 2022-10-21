@@ -345,8 +345,7 @@ export class AffinidiExplorerProvider
     state: TreeItemCollapsibleState,
     icon: ThemeIcon = ThemeIcon.Folder,
     parent?: AffResourceTreeItem,
-    command?: Command,
-    id?: string
+    command?: Command
   ) {
     treeNodes.push(
       new AffResourceTreeItem(
