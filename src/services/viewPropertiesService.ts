@@ -19,12 +19,12 @@ export const viewProjectProperties = async (
 };
 
 export const viewIssuanceProperties = async (
-  projectId: string,
+  issuanceId: string,
   id: string,
   issuancesSummary: IssuanceEntity[]
 ) => {
   const issuanceInfo = issuancesSummary.find(
-    (issuanceSummary) => issuanceSummary.id === projectId
+    (issuanceSummary) => issuanceSummary.id === issuanceId
   );
 
   if (issuanceInfo) {
