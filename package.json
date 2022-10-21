@@ -20,6 +20,7 @@
     "onView:affinidiExplorer",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidi.openBulkIssuanceMarkDown",
+    "onCommand:affinidiExplorer.viewProperties",
     "onView:affinidiDevTools"
   ],
   "main": "./out/main",
@@ -57,6 +58,11 @@
         "title": "About Issuance",
         "category": "Affinidi",
         "icon": "$(info)"
+      },
+      {
+        "command": "affinidiExplorer.viewProperties",
+        "title": "View Properties",
+        "category": "Affinidi"
       }
     ],
     "menus": {
@@ -71,6 +77,10 @@
         },
         {
           "command": "affinidi.codegen.schemaOffers",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.viewProperties",
           "when": "never"
         }
       ],
@@ -96,6 +106,11 @@
           "command": "affinidi.codegen.schemaOffers",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "1"
+        },
+        {
+          "command": "affinidiExplorer.viewProperties",
+          "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance",
+          "group": "z_commands"
         }
       ]
     },

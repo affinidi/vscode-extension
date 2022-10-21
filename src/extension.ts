@@ -5,8 +5,11 @@ import { commands, ExtensionContext, window, ViewColumn, WebviewPanel, Uri } fro
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
-import { getWebviewContent } from "./ui/getWebviewContent";
+const fs = require("fs");
+import { viewProjectProperties } from "./services/viewPropertiesService";
 import { AffinidiVariantTypes } from "./treeView/affinidiVariant";
+import AffResourceTreeItem from "./treeView/treeItem";
+import { getWebviewContent } from "./ui/getWebviewContent";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -76,6 +79,22 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand("affinidi.codegen.schemaOffers", () => {
       window.showErrorMessage("Code generation is still WIP");
     })
+  );
+
+  commands.registerCommand(
+    "affinidiExplorer.viewProperties",
+    async (element: AffResourceTreeItem) => {
+      if (
+        element.resourceType ===
+        AffinidiVariantTypes[AffinidiVariantTypes.project]
+      ) {
+        viewProjectProperties(
+          element.metadata,
+          element.label,
+          affExplorerTreeProvider.projectsSummary
+        );
+      }
+    }
   );
 }
 
