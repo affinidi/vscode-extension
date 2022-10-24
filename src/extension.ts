@@ -17,6 +17,7 @@ import AffResourceTreeItem from "./treeView/treeItem";
 import { viewProperties } from "./services/viewPropertiesService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
+import { initSnippets } from './snippets/init-snippets';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -28,6 +29,8 @@ export async function activateInternal(context: ExtensionContext) {
   ext.context = context;
   ext.outputChannel = window.createOutputChannel("Affinidi");
   ext.authProvider = initAuthentication();
+  
+  initSnippets();
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider();
 

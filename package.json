@@ -44,6 +44,11 @@
         "title": "Account Details"
       },
       {
+        "command": "affinidi.codegen.sendVcOfferToEmail",
+        "category": "Affinidi",
+        "title": "Generate a snippet for \"Send a VC offer to an email\""
+      },
+      {
         "command": "affinidi.codegen.schemaOffers",
         "title": "Build: Send VC offers with this schema",
         "category": "Affinidi Tools",

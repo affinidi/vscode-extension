@@ -4,7 +4,7 @@ import {
   generateApiKeyHeader,
 } from "../api-client/api-fetch";
 
-const ISSUANCE_API_BASE =
+export const ISSUANCE_API_BASE =
   "https://console-vc-issuance.dev.affinity-project.org/api";
 
 export type VerificationMethod = "email";
