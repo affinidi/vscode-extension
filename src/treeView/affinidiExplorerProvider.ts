@@ -198,6 +198,10 @@ export class AffinidiExplorerProvider
         metadata: schema,
         icon: new ThemeIcon("bracket"),
         parent,
+        command: {
+          title: "Open schema details",
+          command: "schema.showSchemaDetails",
+        }
       });
     });
   }

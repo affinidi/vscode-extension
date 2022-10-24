@@ -29,14 +29,6 @@ class AffResourceTreeItem extends TreeItem {
     this.contextValue = item.resourceType;
     this.parent = item.parent;
     this.command = item.command;
-
-    // show info only for schemas
-    if (item.resourceType === AffinidiVariantTypes[AffinidiVariantTypes.rootSchemas] && item.metadata) {
-      this.command = {
-        title: "Open schema details",
-        command: "schema.showSchemaDetails",
-      }; 
-    }
   }
 }
 
