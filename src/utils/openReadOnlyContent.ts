@@ -35,24 +35,26 @@ function getContentProvider(): ReadOnlyContentProvider {
   return _cachedContentProvider;
 }
 
-export async function openReadOnlyJson(
-  node: { label: string; fullId: string },
-  data: {}
-): Promise<void> {
-  const content: string = JSON.stringify(data, null, 2);
-  await openReadOnlyContent(node, content, ".json");
+interface Item {
+  label: string;
+  id: string;
 }
 
-export async function openReadOnlyContent(
-  node: { label: string; fullId: string },
-  content: string,
-  fileExtension: string,
-  options?: TextDocumentShowOptions
-): Promise<ReadOnlyContent> {
+export async function openReadOnlyContent({
+  node,
+  content,
+  fileExtension = ".json",
+  options,
+}: {
+  node: Item;
+  content: any;
+  fileExtension?: string;
+  options?: TextDocumentShowOptions;
+}): Promise<ReadOnlyContent> {
   const contentProvider = getContentProvider();
   return await contentProvider.openReadOnlyContent(
     node,
-    content,
+    JSON.stringify(content, null, 2),
     fileExtension,
     options
   );
@@ -96,14 +98,14 @@ class ReadOnlyContentProvider implements TextDocumentContentProvider {
   }
 
   public async openReadOnlyContent(
-    node: { label: string; fullId: string },
+    node: { label: string; id: string },
     content: string,
     fileExtension: string,
     options?: TextDocumentShowOptions
   ): Promise<ReadOnlyContent> {
     const scheme = getScheme();
     const idHash: string = randomUtils.getPseudononymousStringHash(
-      node.fullId,
+      node.id,
       "hex"
     );
     // Remove special characters which may prove troublesome when parsing the uri. We'll allow the same set as `encodeUriComponent`
