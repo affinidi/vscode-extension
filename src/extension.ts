@@ -17,7 +17,8 @@ import AffResourceTreeItem from "./treeView/treeItem";
 import { viewProperties, viewSchemaContent } from "./services/viewDataService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
-import { initSnippets } from './snippets/init-snippets';
+import { initSnippets } from "./snippets/init-snippets";
+import { viewMarkdown } from "./services/markdownService";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -29,7 +30,7 @@ export async function activateInternal(context: ExtensionContext) {
   ext.context = context;
   ext.outputChannel = window.createOutputChannel("Affinidi");
   ext.authProvider = initAuthentication();
-  
+
   initSnippets();
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider();
@@ -88,12 +89,19 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(openSchema);
 
   context.subscriptions.push(
-    commands.registerCommand("affinidi.openBulkIssuanceMarkDown", () => {
-      let uri: Uri = Uri.file(
-        path.join(context.extensionPath, "/document/bulkIssuance.md")
-      );
-      commands.executeCommand("markdown.showPreview", uri);
-    })
+    commands.registerCommand(
+      "affinidi.openMarkDown",
+      async (element: AffResourceTreeItem) => {
+        let uri: Uri = Uri.file(
+          path.join(
+            context.extensionPath,
+            `${await viewMarkdown(element.resourceType)}`
+          )
+        );
+
+        commands.executeCommand("markdown.showPreview", uri);
+      }
+    )
   );
 
   context.subscriptions.push(
