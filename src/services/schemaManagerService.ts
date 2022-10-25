@@ -1,7 +1,10 @@
+import { authentication } from "vscode";
+
 import {
   apiFetch,
   buildURL,
 } from "../api-client/api-fetch";
+import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
 
 
 export type SchemaEntity = {
@@ -17,6 +20,8 @@ export type SchemaEntity = {
   revision: number;
   type: string;
 };
+
+export type SchemaScopeType = 'public' | 'unlisted';
 
 export type ResponseType = {
   count: number
@@ -34,6 +39,32 @@ export const getPublicSchemas = async (): Promise<ResponseType> => {
   return apiFetch({
     method: "GET",
     endpoint: url,
+  });
+};
+
+
+type GetMySchemasProps = {
+  did: string
+  scope: SchemaScopeType
+};
+
+export const getMySchemas = async ({ did, scope }: GetMySchemasProps): Promise<ResponseType> => {
+  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+    createIfNone: true,
+  });
+
+  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/v1/schemas", {
+    did,
+    authorDid: did,
+    scope
+  });
+
+  return apiFetch({
+    method: "GET",
+    endpoint: url,
+    headers: {
+      cookie: session.accessToken,
+    },
   });
 };
 

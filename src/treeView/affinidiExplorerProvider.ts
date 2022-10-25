@@ -19,7 +19,7 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
-import { getPublicSchemas } from "../services/schemaManagerService";
+import { getMySchemas, SchemaScopeType } from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import AffResourceTreeItem from "./treeItem";
 import { ext } from "../extensionVariables";
@@ -85,6 +85,10 @@ export class AffinidiExplorerProvider
         break;
 
       case AffinidiVariantTypes[AffinidiVariantTypes.rootSchemas]:
+        await this._addSubRootSchemaItems(treeNodes, element);
+        break;
+
+      case AffinidiVariantTypes[AffinidiVariantTypes.subRootSchemas]:
         await this._addSchemaItems(treeNodes, element);
         break;
 
@@ -184,11 +188,40 @@ export class AffinidiExplorerProvider
     });
   }
 
+  private _addSubRootSchemaItems(
+    treeNodes: AffResourceTreeItem[],
+    parent?: AffResourceTreeItem
+  ) {
+    this.addNewTreeItem(treeNodes, {
+      type: AffinidiVariantTypes.subRootSchemas,
+      label: "Public",
+      metadata: {
+        scope: 'public' as SchemaScopeType
+      },
+      state: TreeItemCollapsibleState.Collapsed,
+      icon: new ThemeIcon("bracket"),
+      parent,
+    });
+
+    this.addNewTreeItem(treeNodes, {
+      type: AffinidiVariantTypes.subRootSchemas,
+      label: "Unlisted",
+      metadata: {
+        scope: 'unlisted' as SchemaScopeType
+      },
+      state: TreeItemCollapsibleState.Collapsed,
+      icon: new ThemeIcon("bracket"),
+      parent,
+    });
+  }
+
   private async _addSchemaItems(
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem
   ): Promise<void> {
-    const res = await getPublicSchemas();
+    const projectInfo: ProjectSummary = parent?.parent?.parent?.metadata;
+
+    const res = await getMySchemas({ did: projectInfo.wallet.did, scope: parent?.metadata?.scope });
 
     res.schemas.map((schema) => {
       this.addNewTreeItem(treeNodes, {
