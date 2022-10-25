@@ -14,7 +14,7 @@ import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 import AffResourceTreeItem from "./treeView/treeItem";
-import { viewProperties } from "./services/viewPropertiesService";
+import { viewProperties, viewSchemaContent } from "./services/viewDataService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
 import { initSnippets } from './snippets/init-snippets';
@@ -124,8 +124,29 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand(
     "affinidiExplorer.viewProperties",
-    async (element: AffResourceTreeItem) => {
+    (element: AffResourceTreeItem) => {
       viewProperties(element.resourceType, element.metadata);
+    }
+  );
+
+  commands.registerCommand(
+    "affinidiExplorer.showJsonSchema",
+    (element: AffResourceTreeItem) => {
+      viewSchemaContent(
+        element.metadata.id,
+        element.metadata.jsonSchemaUrl
+      );
+    }
+  );
+
+  commands.registerCommand(
+    "affinidiExplorer.showJsonLdContext",
+    (element: AffResourceTreeItem) => {
+      viewSchemaContent(
+        element.metadata.id,
+        element.metadata.jsonLdContextUrl,
+        ".jsonld"
+      );
     }
   );
 }

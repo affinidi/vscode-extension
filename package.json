@@ -23,6 +23,8 @@
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.copyJsonLDURL",
     "onCommand:affinidiExplorer.viewProperties",
+    "onCommand:affinidiExplorer.showJsonSchema",
+    "onCommand:affinidiExplorer.showJsonLdContext",
     "onView:affinidiDevTools"
   ],
   "main": "./out/main",
@@ -68,17 +70,27 @@
       },
       {
         "command": "affinidi.copyJsonURL",
-        "title": "Copy JSON URL",
+        "title": "Copy JSON Schema URL",
         "category": "Affinidi Explorer"
       },
       {
         "command": "affinidi.copyJsonLDURL",
-        "title": "Copy JSON-LD URL",
+        "title": "Copy JSON-LD Context URL",
         "category": "Affinidi Explorer"
       },
       {
         "command": "affinidiExplorer.viewProperties",
         "title": "View Properties",
+        "category": "Affinidi Explorer"
+      },
+      {
+        "command": "affinidiExplorer.showJsonSchema",
+        "title": "Show JSON Schema",
+        "category": "Affinidi Explorer"
+      },
+      {
+        "command": "affinidiExplorer.showJsonLdContext",
+        "title": "Show JSON-LD Context",
         "category": "Affinidi Explorer"
       }
     ],
@@ -106,6 +118,14 @@
         },
         {
           "command": "affinidiExplorer.viewProperties",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.showJsonSchema",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.showJsonLdContext",
           "when": "never"
         }
       ],
@@ -145,6 +165,16 @@
         {
           "command": "affinidiExplorer.viewProperties",
           "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance || view == affinidiExplorer && viewItem == schema",
+          "group": "z_commands"
+        },
+        {
+          "command": "affinidiExplorer.showJsonSchema",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "z_commands"
+        },
+        {
+          "command": "affinidiExplorer.showJsonLdContext",
+          "when": "view == affinidiExplorer && viewItem == schema",
           "group": "z_commands"
         }
       ]
