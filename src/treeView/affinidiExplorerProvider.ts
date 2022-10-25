@@ -54,6 +54,8 @@ export class AffinidiExplorerProvider
   private authListener = async (
     event: AuthenticationProviderAuthenticationSessionsChangeEvent
   ) => {
+    // Some delay is necessary before refresh, otherwise getChildren is not executed if an error happens during the login process.
+    await new Promise((resolve) => setTimeout(resolve, 500));
     this.refresh();
   };
 
@@ -65,8 +67,9 @@ export class AffinidiExplorerProvider
     element?: AffResourceTreeItem
   ): Promise<AffResourceTreeItem[]> {
     const treeNodes: AffResourceTreeItem[] = [];
+    const signedIn = await isSignedIn();
 
-    if (!(await isSignedIn())) {
+    if (!signedIn) {
       await this._addLoginItem(treeNodes);
       return Promise.resolve(treeNodes);
     }
