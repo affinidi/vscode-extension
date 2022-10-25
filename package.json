@@ -19,7 +19,7 @@
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
     "onCommand:affinidiExplorer.refresh",
-    "onCommand:affinidi.openBulkIssuanceMarkDown",
+    "onCommand:affinidi.openMarkDown",
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.copyJsonLDURL",
     "onCommand:affinidiExplorer.viewProperties",
@@ -63,7 +63,7 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "affinidi.openBulkIssuanceMarkDown",
+        "command": "affinidi.openMarkDown",
         "title": "About Issuance",
         "category": "Affinidi Explorer",
         "icon": "$(info)"
@@ -101,7 +101,7 @@
           "when": "never"
         },
         {
-          "command": "affinidi.openBulkIssuanceMarkDown",
+          "command": "affinidi.openMarkDown",
           "when": "never"
         },
         {
@@ -143,8 +143,8 @@
           "group": "inline"
         },
         {
-          "command": "affinidi.openBulkIssuanceMarkDown",
-          "when": "view == affinidiExplorer && viewItem == rootIssuance",
+          "command": "affinidi.openMarkDown",
+          "when": "view == affinidiExplorer && viewItem == rootIssuance || view == affinidiExplorer && viewItem == rootSchemas",
           "group": "inline"
         },
         {
