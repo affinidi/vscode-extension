@@ -8,6 +8,7 @@ import {
   EventEmitter,
   ExtensionContext,
   SecretStorage,
+  window,
 } from "vscode";
 import { nanoid } from "nanoid";
 import { executeLoginProcess } from "./login-process";
@@ -56,23 +57,39 @@ export class AffinidiAuthenticationProvider
   // - `vscode.authentication.getSessions` was called with `forceNewSession: true`
   // - The end user initiates the "silent" auth flow via the Accounts menu
   async createSession(_scopes: string[]): Promise<AuthenticationSession> {
-    const { email, id, accessToken } = await executeLoginProcess();
-    const session: AuthenticationSession = {
-      id: nanoid(),
-      accessToken,
-      account: { label: email, id },
-      scopes: [],
-    };
+    try {
+      const { email, id, accessToken } = await executeLoginProcess();
+      const session: AuthenticationSession = {
+        id: nanoid(),
+        accessToken,
+        account: { label: email, id },
+        scopes: [],
+      };
 
-    await this._secretStorage.store(AUTH_SECRET_KEY, JSON.stringify([session]));
+      await this._secretStorage.store(
+        AUTH_SECRET_KEY,
+        JSON.stringify([session])
+      );
 
-    this._onDidChangeSessions.fire({
-      added: [session],
-      removed: [],
-      changed: [],
-    });
+      this._onDidChangeSessions.fire({
+        added: [session],
+        removed: [],
+        changed: [],
+      });
 
-    return session;
+      return session;
+    } catch (error) {
+      if (error instanceof Error) {
+        window.showErrorMessage(error.message);
+      }
+
+      this._onDidChangeSessions.fire({
+        added: [],
+        removed: [],
+        changed: [],
+      });
+      throw error;
+    }
   }
 
   // This function is called when the end user signs out of the account.
@@ -87,16 +104,16 @@ export class AffinidiAuthenticationProvider
 
       sessions.splice(idxToRemove, 1);
 
+      await this._secretStorage.store(
+        AUTH_SECRET_KEY,
+        JSON.stringify(sessions)
+      );
+
       this._onDidChangeSessions.fire({
         added: [],
         removed: [session],
         changed: [],
       });
-
-      await this._secretStorage.store(
-        AUTH_SECRET_KEY,
-        JSON.stringify(sessions)
-      );
     }
   }
 
