@@ -1,6 +1,7 @@
 export enum AffinidiVariantTypes {
   project,
   rootSchemas,
+  subRootSchemas,
   schema,
   rootIssuance,
   issuance,

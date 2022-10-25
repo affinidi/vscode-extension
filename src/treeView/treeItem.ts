@@ -1,7 +1,5 @@
 import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from "vscode";
 
-import { AffinidiVariantTypes } from "./affinidiVariant";
-
 class AffResourceTreeItem extends TreeItem {
   public resourceType;
   public metadata;
