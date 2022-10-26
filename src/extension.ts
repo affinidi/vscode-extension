@@ -19,6 +19,7 @@ import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
 import { initSnippets } from "./snippets/init-snippets";
 import { viewMarkdown } from "./services/markdownService";
+import { buildURL } from "./api-client/api-fetch";
 
 const CONSOLE_URL = "https://console.dev.affinidi.com";
 
@@ -147,19 +148,17 @@ export async function activateInternal(context: ExtensionContext) {
   );
 
   commands.registerCommand("affinidiExplorer.createSchema", () => {
-    commands.executeCommand(
-      "vscode.open",
-      `${CONSOLE_URL}/schema-manager/builder`
-    );
+    const createSchemaURL = buildURL(CONSOLE_URL, "/schema-manager/builder");
+    commands.executeCommand("vscode.open", createSchemaURL);
   });
 
   commands.registerCommand(
     "affinidiExplorer.createIssuance",
     (element: AffResourceTreeItem) => {
-      commands.executeCommand(
-        "vscode.open",
-        `${CONSOLE_URL}/bulk-issuance?schemaUrl=${element.metadata.jsonSchemaUrl}`
-      );
+      const createIssuanceURL = buildURL(CONSOLE_URL, "/bulk-issuance", {
+        schemaUrl: element.metadata.jsonSchemaUrl,
+      });
+      commands.executeCommand("vscode.open", createIssuanceURL);
     }
   );
 
@@ -175,7 +174,8 @@ export async function activateInternal(context: ExtensionContext) {
   );
 
   commands.registerCommand("affinidiDevTools.issueCredential", () => {
-    commands.executeCommand("vscode.open", `${CONSOLE_URL}/bulk-issuance`);
+    const issueCredentialURL = buildURL(CONSOLE_URL, "/bulk-issuance");
+    commands.executeCommand("vscode.open", issueCredentialURL);
   });
 }
 
