@@ -20,6 +20,8 @@ import { getWebviewContent } from "./ui/getWebviewContent";
 import { initSnippets } from "./snippets/init-snippets";
 import { viewMarkdown } from "./services/markdownService";
 
+const CONSOLE_URL = "https://console.dev.affinidi.com";
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activateInternal(context: ExtensionContext) {
@@ -140,9 +142,23 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand(
     "affinidiExplorer.showJsonSchema",
     (element: AffResourceTreeItem) => {
-      viewSchemaContent(
-        element.metadata.id,
-        element.metadata.jsonSchemaUrl
+      viewSchemaContent(element.metadata.id, element.metadata.jsonSchemaUrl);
+    }
+  );
+
+  commands.registerCommand("affinidiExplorer.createSchema", () => {
+    commands.executeCommand(
+      "vscode.open",
+      `${CONSOLE_URL}/schema-manager/builder`
+    );
+  });
+
+  commands.registerCommand(
+    "affinidiExplorer.createIssuance",
+    (element: AffResourceTreeItem) => {
+      commands.executeCommand(
+        "vscode.open",
+        `${CONSOLE_URL}/bulk-issuance?schemaUrl=${element.metadata.jsonSchemaUrl}`
       );
     }
   );
@@ -157,6 +173,10 @@ export async function activateInternal(context: ExtensionContext) {
       );
     }
   );
+
+  commands.registerCommand("affinidiDevTools.issueCredential", () => {
+    commands.executeCommand("vscode.open", `${CONSOLE_URL}/bulk-issuance`);
+  });
 }
 
 // This method is called when your extension is deactivated
