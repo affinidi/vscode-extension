@@ -26,7 +26,10 @@
     "onCommand:affinidiExplorer.viewProperties",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.showJsonLdContext",
-    "onView:affinidiDevTools"
+    "onCommand:affinidiExplorer.createSchema",
+    "onCommand:affinidiExplorer.createIssuance",
+    "onView:affinidiDevTools",
+    "onCommand:affinidiDevTools.issueCredential"
   ],
   "main": "./out/main",
   "contributes": {
@@ -93,6 +96,21 @@
         "command": "affinidiExplorer.showJsonLdContext",
         "title": "Show JSON-LD Context",
         "category": "Affinidi Explorer"
+      },
+      {
+        "command": "affinidiExplorer.createSchema",
+        "title": "Create Schema",
+        "category": "Affinidi Explorer"
+      },
+      {
+        "command": "affinidiExplorer.createIssuance",
+        "title": "Create Issuance",
+        "category": "Affinidi Explorer"
+      },
+      {
+        "command": "affinidiDevTools.issueCredential",
+        "title": "Issuance Credential",
+        "category": "Affinidi Dev Tool"
       }
     ],
     "menus": {
@@ -128,6 +146,18 @@
         {
           "command": "affinidiExplorer.showJsonLdContext",
           "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.createSchema",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.createIssuance",
+          "when": "never"
+        },
+        {
+          "command": "affinidiDevTools.issueCredential",
+          "when": "never"
         }
       ],
       "view/title": [
@@ -162,6 +192,16 @@
           "command": "affinidi.copyJsonLDURL",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "6_copypath"
+        },
+        {
+          "command": "affinidiExplorer.createSchema",
+          "when": "view == affinidiExplorer && viewItem == rootSchemas",
+          "group": "z_commands"
+        },
+        {
+          "command": "affinidiExplorer.createIssuance",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "z_commands"
         },
         {
           "command": "affinidiExplorer.viewProperties",
@@ -204,7 +244,7 @@
     "viewsWelcome": [
       {
         "view": "affinidiDevTools",
-        "contents": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiTools2)\nBuild a rule that checks validity of verifiable credentials against one or more schemas\n[Create Rule](command:affinidiTools3)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiTools4)"
+        "contents": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiExplorer.createSchema)\nBuild a rule that checks validity of verifiable credentials against one or more schemas\n[Create Rule](command:affinidiTools3)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiDevTools.issueCredential)"
       }
     ],
     "walkthroughs": [
