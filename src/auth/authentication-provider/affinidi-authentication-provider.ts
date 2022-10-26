@@ -82,12 +82,6 @@ export class AffinidiAuthenticationProvider
       if (error instanceof Error) {
         window.showErrorMessage(error.message);
       }
-
-      this._onDidChangeSessions.fire({
-        added: [],
-        removed: [],
-        changed: [],
-      });
       throw error;
     }
   }
@@ -119,7 +113,6 @@ export class AffinidiAuthenticationProvider
 
   private async _readSessionsFromStorage(): Promise<AuthenticationSession[]> {
     const storageValue = await this._secretStorage.get(AUTH_SECRET_KEY);
-
     return JSON.parse(storageValue || "[]") as AuthenticationSession[];
   }
 }
