@@ -22,7 +22,7 @@ export type ProjectSummary = {
   wallet: { didUrl: string; did: string };
 };
 
-export const getProjects = async (): Promise<ProjectList> => {
+const getProjects = async (): Promise<ProjectList> => {
   const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
     createIfNone: true,
   });
@@ -35,7 +35,7 @@ export const getProjects = async (): Promise<ProjectList> => {
   });
 };
 
-export const getProjectSummary = async (
+const getProjectSummary = async (
   projectId: string
 ): Promise<ProjectSummary> => {
   const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
@@ -50,7 +50,7 @@ export const getProjectSummary = async (
   });
 };
 
-export const createProject = async (projectName: string): Promise<void> => {
+const createProject = async (projectName: string): Promise<void> => {
   const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
     createIfNone: true,
   });
@@ -64,4 +64,10 @@ export const createProject = async (projectName: string): Promise<void> => {
       cookie: session.accessToken,
     },
   });
+};
+
+export const iamService = {
+  getProjects,
+  getProjectSummary,
+  createProject,
 };

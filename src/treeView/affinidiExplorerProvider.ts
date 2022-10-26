@@ -13,8 +13,7 @@ import {
   IssuanceList,
 } from "../services/issuancesService";
 import {
-  getProjects,
-  getProjectSummary,
+  iamService,
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
@@ -30,6 +29,8 @@ const isSignedIn = async () => {
   const sessions = await ext.authProvider.getSessions([]);
   return !!sessions.length;
 };
+
+const { getProjects, getProjectSummary } = iamService;
 
 export class AffinidiExplorerProvider
   implements TreeDataProvider<AffResourceTreeItem>

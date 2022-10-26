@@ -1,15 +1,11 @@
 import { window, SnippetString } from "vscode";
-import {
-  getProjects,
-  getProjectSummary,
-  Project,
-} from "../../services/iamService";
+import { iamService, Project } from "../../services/iamService";
 import { ISSUANCE_API_BASE } from "../../services/issuancesService";
 import {
   getPublicSchemas,
   SchemaEntity,
 } from "../../services/schemaManagerService";
-import { Schema } from '../../shared/types';
+import { Schema } from "../../shared/types";
 import { showQuickPick } from "../../utils/showQuickPick";
 import * as javascript from "./javascript";
 import * as typescript from "./typescript";
@@ -37,6 +33,8 @@ const SUPPORTED_LANGUAGE_IDS = [
 ] as const;
 type SupportedLanguageId = typeof SUPPORTED_LANGUAGE_IDS[number];
 
+const { getProjectSummary, getProjects } = iamService;
+
 export async function insertSendVcOfferToEmailSnippet(values?: {
   implementation?: SnippetImplementation;
   projectId?: string;
@@ -47,12 +45,14 @@ export async function insertSendVcOfferToEmailSnippet(values?: {
     if (!editor) {
       throw new Error("Open a file to insert a snippet");
     }
-  
+
     const { languageId } = editor.document;
     if (!isSupportedLanguageId(languageId)) {
-      throw new Error("Only JavaScript and TypeScript files are supported for this snippet");
+      throw new Error(
+        "Only JavaScript and TypeScript files are supported for this snippet"
+      );
     }
-  
+
     const projectId = values?.projectId ?? (await askForProjectId());
     const implementation =
       values?.implementation ?? (await askForImplementation());
@@ -60,12 +60,12 @@ export async function insertSendVcOfferToEmailSnippet(values?: {
     const email = await window.showInputBox({
       prompt: "Enter an email to send the VC offer to",
     });
-  
+
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
     } = await getProjectSummary(projectId);
-  
+
     editor.insertSnippet(
       generateSnippet(
         { languageId, implementation },

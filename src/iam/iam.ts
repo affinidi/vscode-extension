@@ -1,5 +1,5 @@
 import { window } from "vscode";
-import { createProject } from "../services/iamService";
+import { iamService } from "../services/iamService";
 
 export const createProjectProcess = async (): Promise<void> => {
   const projectName = await window.showInputBox({
@@ -14,7 +14,7 @@ export const createProjectProcess = async (): Promise<void> => {
   }
   
   try {
-    await createProject(projectName);
+    await iamService.createProject(projectName);
     window.showInformationMessage("Successfully created the project");
   } catch (err: any) {
     window.showErrorMessage(
