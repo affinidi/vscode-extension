@@ -49,3 +49,19 @@ export const getProjectSummary = async (
     },
   });
 };
+
+export const createProject = async (projectName: string): Promise<void> => {
+  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+    createIfNone: true,
+  });
+  await apiFetch<void>({
+    endpoint: `${IAM_API_BASE}/v1/projects`,
+    method: "POST",
+    requestBody: {
+      name: projectName,
+    },
+    headers: {
+      cookie: session.accessToken,
+    },
+  });
+};

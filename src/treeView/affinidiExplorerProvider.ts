@@ -73,6 +73,7 @@ export class AffinidiExplorerProvider
 
     switch (element?.resourceType) {
       case undefined:
+        await this._addCreateProjectItem(treeNodes);
         await this._addProjectItems(treeNodes);
         break;
 
@@ -114,7 +115,13 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const projectListResponse: ProjectList = await getProjects();
 
-    for (const project of projectListResponse.projects) {
+    // sort projects array in descending order on createdAt field
+    const sortedProjects = projectListResponse.projects.sort(
+      (projectA, projectB) =>
+        Date.parse(projectB.createdAt) - Date.parse(projectA.createdAt)
+    );
+
+    for (const project of sortedProjects) {
       const projectSummary = await getProjectSummary(project.projectId);
 
       this.addNewTreeItem(treeNodes, {
@@ -327,6 +334,19 @@ export class AffinidiExplorerProvider
       icon: new ThemeIcon("sign-in"),
       parent,
       command: { title: "Sign In", command: "affinidi.login" },
+    });
+  }
+
+  private async _addCreateProjectItem(
+    treeNodes: AffResourceTreeItem[],
+    parent?: AffResourceTreeItem
+  ): Promise<void> {
+    this.addNewTreeItem(treeNodes, {
+      type: AffinidiVariantTypes.project,
+      label: "Create Project",
+      icon: new ThemeIcon("file-directory-create"),
+      parent,
+      command: { title: "Create Project", command: "affinidi.createProject" },
     });
   }
 

@@ -16,6 +16,7 @@
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
+    "onCommand:affinidi.createProject",
     "onCommand:affinidi.codegen.schemaOffers",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
@@ -43,6 +44,11 @@
         "command": "affinidi.logout",
         "category": "Affinidi",
         "title": "Sign Out"
+      },
+      {
+        "command": "affinidi.createProject",
+        "category": "Affinidi",
+        "title": "Create Project"
       },
       {
         "command": "affinidi.me",
