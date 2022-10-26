@@ -1,6 +1,6 @@
 import { ProgressLocation, window } from "vscode";
 import { validateEmail, validateOTP } from "./validators";
-import * as UserManagementClient from "./user-management.client";
+import { userManagementClient } from "./user-management.client";
 
 type LoginProcessOutput = {
   id: string;
@@ -29,7 +29,7 @@ export const executeLoginProcess = async (): Promise<LoginProcessOutput> => {
       title: "Sending confirmation code",
     },
     async (progress, token) => {
-      return await UserManagementClient.login({ username: email });
+      return await userManagementClient.login({ username: email });
     }
   );
   window.showInformationMessage(`Confirmation code sent to ${email}`);
@@ -50,7 +50,7 @@ export const executeLoginProcess = async (): Promise<LoginProcessOutput> => {
       title: "Singing in to Affindi",
     },
     async (progress, token) => {
-      return await UserManagementClient.loginConfirm({
+      return await userManagementClient.loginConfirm({
         confirmationCode,
         token: loginToken,
       });
