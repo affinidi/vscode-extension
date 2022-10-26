@@ -20,6 +20,7 @@ import { getWebviewContent } from "./ui/getWebviewContent";
 import { initSnippets } from "./snippets/init-snippets";
 import { viewMarkdown } from "./services/markdownService";
 import { buildURL } from "./api-client/api-fetch";
+import { createProjectProcess } from "./iam/iam";
 
 const CONSOLE_URL = "https://console.dev.affinidi.com";
 
@@ -173,6 +174,12 @@ export async function activateInternal(context: ExtensionContext) {
     }
   );
 
+  context.subscriptions.push(
+    commands.registerCommand("affinidi.createProject", async () => {
+      await createProjectProcess();
+      affExplorerTreeProvider.refresh();
+    })
+  );
   commands.registerCommand("affinidiDevTools.issueCredential", () => {
     const issueCredentialURL = buildURL(CONSOLE_URL, "/bulk-issuance");
     commands.executeCommand("vscode.open", issueCredentialURL);
