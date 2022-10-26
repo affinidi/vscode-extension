@@ -1,5 +1,4 @@
 import {
-  authentication,
   AuthenticationProviderAuthenticationSessionsChangeEvent,
   Command,
   Event,
@@ -19,17 +18,17 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
-import { getMySchemas, SchemaScopeType } from "../services/schemaManagerService";
+import {
+  getMySchemas,
+  SchemaScopeType,
+} from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import AffResourceTreeItem from "./treeItem";
 import { ext } from "../extensionVariables";
-import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
 
 const isSignedIn = async () => {
-  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
-    createIfNone: false,
-  });
-  return !!session;
+  const sessions = await ext.authProvider.getSessions([]);
+  return !!sessions.length;
 };
 
 export class AffinidiExplorerProvider
@@ -54,8 +53,6 @@ export class AffinidiExplorerProvider
   private authListener = async (
     event: AuthenticationProviderAuthenticationSessionsChangeEvent
   ) => {
-    // Some delay is necessary before refresh, otherwise getChildren is not executed if an error happens during the login process.
-    await new Promise((resolve) => setTimeout(resolve, 500));
     this.refresh();
   };
 
@@ -199,7 +196,7 @@ export class AffinidiExplorerProvider
       type: AffinidiVariantTypes.subRootSchemas,
       label: "Public",
       metadata: {
-        scope: 'public' as SchemaScopeType
+        scope: "public" as SchemaScopeType,
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
@@ -210,7 +207,7 @@ export class AffinidiExplorerProvider
       type: AffinidiVariantTypes.subRootSchemas,
       label: "Unlisted",
       metadata: {
-        scope: 'unlisted' as SchemaScopeType
+        scope: "unlisted" as SchemaScopeType,
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
@@ -224,7 +221,10 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     const projectInfo: ProjectSummary = parent?.parent?.parent?.metadata;
 
-    const res = await getMySchemas({ did: projectInfo.wallet.did, scope: parent?.metadata?.scope });
+    const res = await getMySchemas({
+      did: projectInfo.wallet.did,
+      scope: parent?.metadata?.scope,
+    });
 
     res.schemas.map((schema) => {
       this.addNewTreeItem(treeNodes, {
@@ -237,7 +237,7 @@ export class AffinidiExplorerProvider
         command: {
           title: "Open schema details",
           command: "schema.showSchemaDetails",
-        }
+        },
       });
     });
   }
