@@ -5,7 +5,7 @@ import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
 } from "./authentication-provider/affinidi-authentication-provider";
-import { getUserDetails } from "./authentication-provider/user-management.client";
+import { userManagementClient } from "./authentication-provider/user-management.client";
 
 async function loginHandler(): Promise<void> {
   await authentication.getSession(AUTH_PROVIDER_ID, [], {
@@ -29,7 +29,7 @@ async function logoutHandler(): Promise<void> {
 }
 
 async function userDetailsHandler(): Promise<void> {
-  const userDetails = await getUserDetails();
+  const userDetails = await userManagementClient.getUserDetails();
   ext.outputChannel.appendLine(JSON.stringify(userDetails));
 }
 
