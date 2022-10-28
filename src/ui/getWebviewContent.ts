@@ -1,6 +1,6 @@
 import { Webview, Uri } from "vscode";
 // import { SchemaEntity } from "../services/schemaManagerService";
-import AffResourceTreeItem from '../treeView/treeItem';
+import { AffResourceTreeItem } from '../treeView/treeItem';
 import { getUri } from "./getUri";
 
 /**

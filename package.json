@@ -18,6 +18,7 @@
     "onCommand:affinidi.me",
     "onCommand:affinidi.createProject",
     "onCommand:affinidi.codegen.schemaOffers",
+    "onCommand:affinidi.codegen.sendVcOfferToEmail",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
     "onCommand:affinidiExplorer.refresh",
@@ -117,6 +118,11 @@
         "command": "affinidiDevTools.issueCredential",
         "title": "Issuance Credential",
         "category": "Affinidi Dev Tool"
+      },
+      {
+        "command": "affinidi.codegen.sendVcOfferToEmail",
+        "title": "Send VC Offer to Email",
+        "category": "Affinidi Snippets"
       }
     ],
     "menus": {
@@ -235,6 +241,10 @@
         {
           "id": "affinidiDevTools",
           "name": "Developer Tools"
+        },
+        {
+          "id": "affinidiSnippets",
+          "name": "Snippets"
         }
       ]
     },
