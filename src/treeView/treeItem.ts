@@ -1,6 +1,6 @@
 import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from "vscode";
 
-class AffResourceTreeItem extends TreeItem {
+export class AffResourceTreeItem extends TreeItem {
   public resourceType;
   public metadata;
   public parent;
@@ -8,15 +8,15 @@ class AffResourceTreeItem extends TreeItem {
 
   constructor(
     public readonly item: {
-      resourceType: string,
-      metadata: any,
-      label: string,
-      description?: string,
-      collapsibleState: TreeItemCollapsibleState,
-      icon: ThemeIcon,
-      parent?: AffResourceTreeItem,
-      command?: Command
-    },
+      resourceType: string;
+      metadata: any;
+      label: string;
+      description?: string;
+      collapsibleState: TreeItemCollapsibleState;
+      icon: ThemeIcon;
+      parent?: AffResourceTreeItem;
+      command?: Command;
+    }
   ) {
     super(item.label, item.collapsibleState);
     this.resourceType = item.resourceType;
@@ -30,4 +30,18 @@ class AffResourceTreeItem extends TreeItem {
   }
 }
 
-export default AffResourceTreeItem;
+
+export class AffSnippetTreeItem extends TreeItem {
+  public command;
+
+  constructor(
+    public readonly item: {
+      label: string;
+      collapsibleState: TreeItemCollapsibleState;
+      command?: Command;
+    }
+  ) {
+    super(item.label, item.collapsibleState);
+    this.command = item.command;
+  }
+}

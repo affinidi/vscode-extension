@@ -22,7 +22,7 @@ import {
   SchemaScopeType,
 } from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
-import AffResourceTreeItem from "./treeItem";
+import { AffResourceTreeItem } from "./treeItem";
 import { ext } from "../extensionVariables";
 
 const isSignedIn = async () => {

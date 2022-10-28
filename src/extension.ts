@@ -11,9 +11,10 @@ import {
   WebviewPanel,
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
+import { AffinidiSnippetProvider } from "./treeView/affinidiSnippetProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
-import AffResourceTreeItem from "./treeView/treeItem";
+import { AffResourceTreeItem } from "./treeView/treeItem";
 import { viewProperties, viewSchemaContent } from "./services/viewDataService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
@@ -38,9 +39,16 @@ export async function activateInternal(context: ExtensionContext) {
   initSnippets();
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider();
+  const affSnippetTreeProvider = new AffinidiSnippetProvider();
 
   const treeView = window.createTreeView("affinidiExplorer", {
     treeDataProvider: affExplorerTreeProvider,
+    canSelectMany: false,
+    showCollapseAll: true,
+  });
+
+  window.createTreeView("affinidiSnippets", {
+    treeDataProvider: affSnippetTreeProvider,
     canSelectMany: false,
     showCollapseAll: true,
   });
