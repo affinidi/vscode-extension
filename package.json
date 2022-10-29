@@ -13,6 +13,7 @@
   ],
   "activationEvents": [
     "onStartupFinished",
+    "onCommand:affinidi.signup",
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
@@ -36,6 +37,11 @@
   "main": "./out/main",
   "contributes": {
     "commands": [
+      {
+        "command": "affinidi.signup",
+        "category": "Affinidi",
+        "title": "Create an Account"
+      },
       {
         "command": "affinidi.login",
         "category": "Affinidi",

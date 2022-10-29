@@ -7,8 +7,37 @@ import {
 } from "./authentication-provider/affinidi-authentication-provider";
 import { userManagementClient } from "./authentication-provider/user-management.client";
 
+enum Consent {
+  'Accept',
+  'Reject',
+}
+
+async function signUpHandler(): Promise<void> {
+  const selection = await window.showWarningMessage(
+    "Please read and accept the [Terms of Use](https://console.affinidi.com/assets/legal/platform-tou.pdf) and [Privacy Policy](https://console.affinidi.com/assets/legal/privacy-policy.pdf)",
+    Consent[Consent.Accept],
+    Consent[Consent.Reject]
+  );
+
+  switch (selection) {
+    case Consent[Consent.Accept]:
+      window.showInformationMessage('You accepted terms and conditions');
+
+      await authentication.getSession(AUTH_PROVIDER_ID, ['signup'], {
+        forceNewSession: true,
+      });
+      await window.showInformationMessage("Signed In to Affinidi");
+      ext.outputChannel.appendLine("Signed In to Affinidi");
+      break;
+
+    case Consent[Consent.Reject]:
+      window.showInformationMessage('You rejected terms and conditions');
+      break;
+  }
+}
+
 async function loginHandler(): Promise<void> {
-  await authentication.getSession(AUTH_PROVIDER_ID, [], {
+  await authentication.getSession(AUTH_PROVIDER_ID, ['login'], {
     forceNewSession: true,
   });
   await window.showInformationMessage("Signed In to Affinidi");
@@ -34,6 +63,10 @@ async function userDetailsHandler(): Promise<void> {
 }
 
 export const initAuthentication = () => {
+  ext.context.subscriptions.push(
+    commands.registerCommand("affinidi.signup", signUpHandler)
+  );
+
   ext.context.subscriptions.push(
     commands.registerCommand("affinidi.login", loginHandler)
   );

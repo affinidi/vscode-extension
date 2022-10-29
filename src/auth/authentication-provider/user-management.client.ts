@@ -6,15 +6,15 @@ import { AUTH_PROVIDER_ID } from "./affinidi-authentication-provider";
 export const USER_MANAGEMENT_API_BASE =
   "https://console-user-management.dev.affinity-project.org/api";
 
-type LoginInput = {
+type AuthInput = {
   username: string;
 };
 
-type LoginOutput = {
+type AuthOutput = {
   token: string;
 };
 
-const login = async (input: LoginInput): Promise<LoginOutput> => {
+const login = async (input: AuthInput): Promise<AuthOutput> => {
   const token = await apiFetch<string>({
     endpoint: `${USER_MANAGEMENT_API_BASE}/v1/auth/login`,
     method: "POST",
@@ -26,20 +26,46 @@ const login = async (input: LoginInput): Promise<LoginOutput> => {
   return { token };
 };
 
-type LoginConfirmInput = {
+const signup = async (input: AuthInput): Promise<AuthOutput> => {
+  const token = await apiFetch<string>({
+    endpoint: `${USER_MANAGEMENT_API_BASE}/v1/auth/signup`,
+    method: "POST",
+    requestBody: {
+      username: input.username,
+    },
+  });
+
+  return { token };
+};
+
+type AuthConfirmInput = {
   confirmationCode: string;
   token: string;
 };
 
-type LoginConfirmOutput = {
+type AuthConfirmOutput = {
   cookie: string;
 };
 
 const loginConfirm = async (
-  input: LoginConfirmInput
-): Promise<LoginConfirmOutput> => {
+  input: AuthConfirmInput
+): Promise<AuthConfirmOutput> => {
   const cookie = await cookieFetch({
     endpoint: `${USER_MANAGEMENT_API_BASE}/v1/auth/login/confirm`,
+    requestBody: {
+      confirmationCode: input.confirmationCode,
+      token: input.token,
+    },
+  });
+
+  return { cookie };
+};
+
+const signupConfirm = async (
+  input: AuthConfirmInput
+): Promise<AuthConfirmOutput> => {
+  const cookie = await cookieFetch({
+    endpoint: `${USER_MANAGEMENT_API_BASE}/v1/auth/signup/confirm`,
     requestBody: {
       confirmationCode: input.confirmationCode,
       token: input.token,
@@ -73,5 +99,7 @@ const getUserDetails = async (): Promise<UserDetailsOutput> => {
 export const userManagementClient = {
   login,
   loginConfirm,
+  signup,
+  signupConfirm,
   getUserDetails,
 };

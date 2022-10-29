@@ -13,4 +13,5 @@ export enum AffinidiVariantTypes {
   empty,
   other,
   login,
+  signup,
 }

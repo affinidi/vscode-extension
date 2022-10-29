@@ -11,7 +11,7 @@ import {
   window,
 } from "vscode";
 import { nanoid } from "nanoid";
-import { executeLoginProcess } from "./login-process";
+import { executeAuthProcess } from "./auth-process";
 
 export const AUTH_PROVIDER_ID = "AffinidiAuth";
 const AUTH_NAME = "Affinidi Authentication";
@@ -58,7 +58,7 @@ export class AffinidiAuthenticationProvider
   // - The end user initiates the "silent" auth flow via the Accounts menu
   async createSession(_scopes: string[]): Promise<AuthenticationSession> {
     try {
-      const { email, id, accessToken } = await executeLoginProcess();
+      const { email, id, accessToken } = await executeAuthProcess({ isLogin: _scopes.includes('login') });
       const session: AuthenticationSession = {
         id: nanoid(),
         accessToken,
