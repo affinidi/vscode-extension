@@ -12,13 +12,39 @@ describe("initAuthentication()", () => {
     sandbox.stub(window, "showInformationMessage");
   });
 
+  describe("#affinidi.signup", () => {
+    it("should signup", async () => {
+      sandbox.stub(authentication, "getSession");
+
+      sandbox.stub(window, "showWarningMessage")
+        .resolves('Accept' as any);
+
+      await commands.executeCommand("affinidi.signup");
+
+      expect(authentication.getSession).calledWith(AUTH_PROVIDER_ID, ['signup'], {
+        forceNewSession: true,
+      });
+    });
+
+    it("should fail signup", async () => {
+      sandbox.stub(authentication, "getSession");
+
+      sandbox.stub(window, "showWarningMessage")
+        .resolves('Reject' as any);
+
+      await commands.executeCommand("affinidi.signup");
+
+      expect(authentication.getSession).not.called;
+    });
+  });
+
   describe("#affinidi.login", () => {
     it("should login", async () => {
       sandbox.stub(authentication, "getSession");
 
       await commands.executeCommand("affinidi.login");
 
-      expect(authentication.getSession).calledWith(AUTH_PROVIDER_ID, [], {
+      expect(authentication.getSession).calledWith(AUTH_PROVIDER_ID, ['login'], {
         forceNewSession: true,
       });
     });

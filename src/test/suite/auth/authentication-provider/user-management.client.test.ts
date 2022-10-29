@@ -41,6 +41,37 @@ describe("userManagementClient", () => {
     });
   });
 
+  describe("signup()", () => {
+    it("should return signup token", async () => {
+      const token = "fake-signup-token";
+      const username = "fake-username";
+
+      nock(USER_MANAGEMENT_API_BASE)
+        .post("/v1/auth/signup", { username })
+        .reply(200, JSON.stringify(token));
+
+      expect(await userManagementClient.signup({ username })).to.deep.eq({
+        token,
+      });
+    });
+  });
+
+  describe("signupConfirm()", () => {
+    it("should return cookie", async () => {
+      const token = "fake-signup-token";
+      const confirmationCode = "fake-confirmation-code";
+      const cookie = generateConsoleAuthCookie();
+
+      nock(USER_MANAGEMENT_API_BASE)
+        .post("/v1/auth/signup/confirm", { token, confirmationCode })
+        .reply(200, {}, { "set-cookie": cookie });
+
+      expect(
+        await userManagementClient.signupConfirm({ token, confirmationCode })
+      ).to.deep.eq({ cookie });
+    });
+  });
+
   describe("getUserDetails()", () => {
     it("should return user details", async () => {
       const userId = 'fake-user-id';

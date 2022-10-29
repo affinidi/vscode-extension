@@ -69,6 +69,8 @@ export class AffinidiExplorerProvider
 
     if (!signedIn) {
       await this._addLoginItem(treeNodes);
+      await this._addSignupItem(treeNodes);
+
       return Promise.resolve(treeNodes);
     }
 
@@ -322,6 +324,19 @@ export class AffinidiExplorerProvider
       label: "(empty)",
       icon: new ThemeIcon("dash"),
       parent,
+    });
+  }
+
+  private async _addSignupItem(
+    treeNodes: AffResourceTreeItem[],
+    parent?: AffResourceTreeItem
+  ): Promise<void> {
+    this.addNewTreeItem(treeNodes, {
+      type: AffinidiVariantTypes.signup,
+      label: "Create an Account with Affinidi",
+      icon: new ThemeIcon("sign-in"),
+      parent,
+      command: { title: "Create an Account", command: "affinidi.signup" },
     });
   }
 
