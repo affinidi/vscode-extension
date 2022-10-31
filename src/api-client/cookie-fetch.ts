@@ -37,10 +37,10 @@ export const cookieFetch = async ({
   } else if (!cookie) {
     throw new ApiOperationError(
       {
+        code: 'EXT-1',
         message: "No Cookie",
         httpStatusCode: statusCode,
-      },
-      context
+      }
     );
   }
 

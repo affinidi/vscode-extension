@@ -18,7 +18,7 @@ import { AffResourceTreeItem } from "./treeView/treeItem";
 import { viewProperties, viewSchemaContent } from "./services/viewDataService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
-import { initSnippets } from "./snippets/init-snippets";
+import { initSnippets } from "./snippets/initSnippets";
 import { viewMarkdown } from "./services/markdownService";
 import { buildURL } from "./api-client/api-fetch";
 import { createProjectProcess } from "./iam/iam";

@@ -68,6 +68,11 @@
         "title": "Generate a snippet for \"Send a VC offer to an email\""
       },
       {
+        "command": "affinidi.codegen.getIssuanceOffers",
+        "category": "Affinidi",
+        "title": "Generate a snippet for \"Get Issuance offers\""
+      },
+      {
         "command": "affinidi.codegen.schemaOffers",
         "title": "Build: Send VC offers with this schema",
         "category": "Affinidi Tools",
@@ -324,9 +329,11 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
+    "pretest": "npm run clean && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "clean": "rimraf ./out",
+    "dev": "nodemon --watch src/ -x 'npm run compile'"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",
@@ -352,6 +359,8 @@
     "jsonwebtoken": "^8.5.1",
     "mocha": "^10.0.0",
     "nock": "^13.2.9",
+    "nodemon": "^2.0.20",
+    "rimraf": "^3.0.2",
     "sinon": "^14.0.1",
     "sinon-chai": "^3.7.0",
     "source-map-support": "^0.5.21",

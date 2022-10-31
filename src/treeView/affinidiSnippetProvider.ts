@@ -24,11 +24,20 @@ export class AffinidiSnippetProvider
     treeNodes: AffSnippetTreeItem[]
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
-      label: "Send VC Offer to Email",
+      label: "Send a VC Offer to an email",
       state: TreeItemCollapsibleState.None,
       command: {
-        title: "Send VC Offer to Email",
+        title: "Send a VC Offer to an email",
         command: "affinidi.codegen.sendVcOfferToEmail",
+      },
+    });
+
+    this.addNewTreeItem(treeNodes, {
+      label: "Get Issuance offers",
+      state: TreeItemCollapsibleState.None,
+      command: {
+        title: "Get Issuance offers",
+        command: "affinidi.codegen.getIssuanceOffers",
       },
     });
   }

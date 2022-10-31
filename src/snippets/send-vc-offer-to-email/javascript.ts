@@ -1,12 +1,12 @@
-import { SendVcOfferToEmailOptions } from './snippet';
+import { SnippetInput } from './snippet';
 
-export function fetch(options: SendVcOfferToEmailOptions) {
+export function fetch(input: SnippetInput) {
   return `\
-const apiKeyHash = '${options.apiKeyHash}'
-const projectId = '${options.projectId}'
-const issuerDid = '${options.issuerDid}'
+const apiKeyHash = '${input.apiKeyHash}';
+const projectId = '${input.projectId}';
+const issuerDid = '${input.issuerDid}';
 
-const issuanceResponse = await fetch('${options.issuanceApiUrl}/v1/issuances', {
+const issuanceResponse = await fetch('${input.issuanceApiUrl}/v1/issuances', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -18,9 +18,9 @@ const issuanceResponse = await fetch('${options.issuanceApiUrl}/v1/issuances', {
       issuerDid,
       // use Schema Manager to find or create a schema for your VC
       schema: {
-        type: '${options.schema?.type ?? '${1:MySchema}'}',
-        jsonLdContextUrl: '${options.schema?.jsonLdContextUrl ?? 'https://schema.affinidi.com/$1V${2:1-0}.jsonld'}',
-        jsonSchemaUrl: '${options.schema?.jsonSchemaUrl ?? 'https://schema.affinidi.com/$1V${2:1-0}.json'}',
+        type: '${input.schema.type}',
+        jsonLdContextUrl: '${input.schema.jsonLdContextUrl}',
+        jsonSchemaUrl: '${input.schema.jsonSchemaUrl}',
       },
       verification: {
         // claim link will be sent by email
@@ -35,10 +35,10 @@ if (String(issuanceResponse.status).startsWith('2')) {
   console.log('Issuance ID:', issuanceData.id);
 } else {
   console.log('Could not create an issuance:', issuanceData.code, issuanceData.message);
-  throw new Error('Could not create an issuance')
+  throw new Error('Could not create an issuance');
 }
 
-const offerResponse = await fetch(\`${options.issuanceApiUrl}/v1/issuances/\${issuanceData.id}/offers\`, {
+const offerResponse = await fetch(\`${input.issuanceApiUrl}/v1/issuances/\${issuanceData.id}/offers\`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -47,16 +47,16 @@ const offerResponse = await fetch(\`${options.issuanceApiUrl}/v1/issuances/\${is
   body: JSON.stringify({
     // should match fields in VC Schema, specified in the Issuance template
     credentialSubject: {
-      ${options.schema ? '$3' : `\${3:name: {
+      \${2:name: {
         firstName: 'John',
         lastName: 'Doe'
       \\},
-      dateOfBirth: '1990-01-01'}`}
+      dateOfBirth: '1990-01-01'}
     },
     verification: {
       target: {
         // VC claim link will be sent here
-        email: '${options.email || '${4:email@example.com}'}'
+        email: '${input.email || '${1:email@example.com}'}'
       }
     }
   })
@@ -74,15 +74,15 @@ if (String(offerResponse.status).startsWith('2')) {
 }`;
 }
 
-export function axios(options: SendVcOfferToEmailOptions) {
+export function axios(input: SnippetInput) {
   return `\
-const apiKeyHash = '${options.apiKeyHash}'
-const projectId = '${options.projectId}'
-const issuerDid = '${options.issuerDid}'
+const apiKeyHash = '${input.apiKeyHash}';
+const projectId = '${input.projectId}';
+const issuerDid = '${input.issuerDid}';
 
 try {
   const { data: issuanceData } = await axios({
-    url: '${options.issuanceApiUrl}/v1/issuances',
+    url: '${input.issuanceApiUrl}/v1/issuances',
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -94,9 +94,9 @@ try {
         issuerDid,
         // use Schema Manager to find or create a schema for your VC
         schema: {
-          type: '${options.schema?.type ?? '${1:MySchema}'}',
-          jsonLdContextUrl: '${options.schema?.jsonLdContextUrl ?? 'https://schema.affinidi.com/$1V${2:1-0}.jsonld'}',
-          jsonSchemaUrl: '${options.schema?.jsonSchemaUrl ?? 'https://schema.affinidi.com/$1V${2:1-0}.json'}',
+          type: '${input.schema.type}',
+          jsonLdContextUrl: '${input.schema.jsonLdContextUrl}',
+          jsonSchemaUrl: '${input.schema.jsonSchemaUrl}',
         },
         verification: {
           // claim link will be sent by email
@@ -110,7 +110,7 @@ try {
 
   try {
     const { data: offerData } = await axios({
-      url: \`${options.issuanceApiUrl}/v1/issuances/\${issuanceData.id}/offers\`,
+      url: \`${input.issuanceApiUrl}/v1/issuances/\${issuanceData.id}/offers\`,
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -119,16 +119,16 @@ try {
       data: {
         // should match fields in VC Schema, specified in the Issuance template
         credentialSubject: {
-          ${options.schema ? '$3' : `\${3:name: {
+          \${2:name: {
             firstName: 'John',
             lastName: 'Doe'
           \\},
-          dateOfBirth: '1990-01-01'}`}
+          dateOfBirth: '1990-01-01'}
         },
         verification: {
           target: {
             // VC claim link will be sent here
-            email: '${options.email || '${4:email@example.com}'}'
+            email: '${input.email || '${1:email@example.com}'}'
           }
         }
       }
