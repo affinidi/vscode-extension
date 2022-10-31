@@ -21,7 +21,7 @@ export type SchemaEntity = {
   type: string;
 };
 
-export type SchemaScopeType = 'public' | 'unlisted';
+export type SchemaSearchScope = 'public' | 'unlisted' | 'default';
 
 export type ResponseType = {
   count: number
@@ -45,10 +45,10 @@ export const getPublicSchemas = async (): Promise<ResponseType> => {
 
 type GetMySchemasProps = {
   did: string
-  scope: SchemaScopeType
+  scope?: SchemaSearchScope
 };
 
-export const getMySchemas = async ({ did, scope }: GetMySchemasProps): Promise<ResponseType> => {
+export const getMySchemas = async ({ did, scope = 'default' }: GetMySchemasProps): Promise<ResponseType> => {
   const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
     createIfNone: true,
   });
@@ -56,7 +56,7 @@ export const getMySchemas = async ({ did, scope }: GetMySchemasProps): Promise<R
   const url = buildURL(SCHEMA_MANAGER_API_BASE, "/v1/schemas", {
     did,
     authorDid: did,
-    scope
+    scope,
   });
 
   return apiFetch({

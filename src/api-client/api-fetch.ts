@@ -64,7 +64,7 @@ export function generateApiKeyHeader(
 export function buildURL(
   baseUrl: string,
   path: string,
-  qs?: string[][] | Record<string, string> | string | URLSearchParams
+  qs?: string[][] | Record<string, string | undefined> | string | URLSearchParams
 ): string {
   //@ts-ignore
   const search = new URLSearchParams(qs).toString();

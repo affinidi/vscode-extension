@@ -17,10 +17,7 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
-import {
-  getMySchemas,
-  SchemaScopeType,
-} from "../services/schemaManagerService";
+import { getMySchemas, SchemaSearchScope } from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import { AffResourceTreeItem } from "./treeItem";
 import { ext } from "../extensionVariables";
@@ -206,7 +203,7 @@ export class AffinidiExplorerProvider
       type: AffinidiVariantTypes.subRootSchemas,
       label: "Public",
       metadata: {
-        scope: "public" as SchemaScopeType,
+        scope: 'public' as SchemaSearchScope
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
@@ -217,7 +214,7 @@ export class AffinidiExplorerProvider
       type: AffinidiVariantTypes.subRootSchemas,
       label: "Unlisted",
       metadata: {
-        scope: "unlisted" as SchemaScopeType,
+        scope: 'unlisted' as SchemaSearchScope
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
@@ -239,8 +236,8 @@ export class AffinidiExplorerProvider
     res.schemas.map((schema) => {
       this.addNewTreeItem(treeNodes, {
         type: AffinidiVariantTypes.schema,
-        label: schema.type,
-        description: schema.type,
+        label: `${schema.type}V${schema.version}-${schema.revision}`,
+        description: schema.description || '',
         metadata: schema,
         icon: new ThemeIcon("bracket"),
         parent,
