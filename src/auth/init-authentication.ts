@@ -1,5 +1,9 @@
 import { authentication, commands, window } from "vscode";
 import { ext } from "../extensionVariables";
+import {
+  sendEventToAnalytics,
+  EventNames,
+} from "../services/analyticsStreamApiService";
 
 import {
   AffinidiAuthenticationProvider,
@@ -8,8 +12,8 @@ import {
 import { userManagementClient } from "./authentication-provider/user-management.client";
 
 enum Consent {
-  'Accept',
-  'Reject',
+  "Accept",
+  "Reject",
 }
 
 async function signUpHandler(): Promise<void> {
@@ -21,25 +25,43 @@ async function signUpHandler(): Promise<void> {
 
   switch (selection) {
     case Consent[Consent.Accept]:
-      window.showInformationMessage('You accepted terms and conditions');
+      window.showInformationMessage("You accepted terms and conditions");
 
-      await authentication.getSession(AUTH_PROVIDER_ID, ['signup'], {
+      await authentication.getSession(AUTH_PROVIDER_ID, ["signup"], {
         forceNewSession: true,
       });
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "signup",
+        metadata: {
+          commandId: "affinidi.signup",
+        },
+      });
+
       await window.showInformationMessage("Signed In to Affinidi");
       ext.outputChannel.appendLine("Signed In to Affinidi");
       break;
 
     case Consent[Consent.Reject]:
-      window.showInformationMessage('You rejected terms and conditions');
+      window.showInformationMessage("You rejected terms and conditions");
       break;
   }
 }
 
 async function loginHandler(): Promise<void> {
-  await authentication.getSession(AUTH_PROVIDER_ID, ['login'], {
+  await authentication.getSession(AUTH_PROVIDER_ID, ["login"], {
     forceNewSession: true,
   });
+
+  sendEventToAnalytics({
+    name: EventNames.commandExecuted,
+    subCategory: "login",
+    metadata: {
+      commandId: "affinidi.login",
+    },
+  });
+
   await window.showInformationMessage("Signed In to Affinidi");
   ext.outputChannel.appendLine("Signed In to Affinidi");
 }
@@ -49,7 +71,16 @@ async function logoutHandler(): Promise<void> {
     createIfNone: false,
   });
   if (session) {
-    await ext.authProvider.removeSession(session.id);
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: "logout",
+      metadata: {
+        commandId: "affinidi.logout",
+      },
+    });
+
+    await ext.authProvider.handleRemoveSession(session.id);
+
     await window.showInformationMessage("Signed Out of Affinidi");
     ext.outputChannel.appendLine("Signed Out of Affinidi");
   } else {
@@ -60,6 +91,14 @@ async function logoutHandler(): Promise<void> {
 async function userDetailsHandler(): Promise<void> {
   const userDetails = await userManagementClient.getUserDetails();
   ext.outputChannel.appendLine(JSON.stringify(userDetails));
+
+  sendEventToAnalytics({
+    name: EventNames.commandExecuted,
+    subCategory: "userDetails",
+    metadata: {
+      commandId: "affinidi.me",
+    },
+  });
 }
 
 export const initAuthentication = () => {

@@ -41,7 +41,7 @@ const EXAMPLE_SCHEMA: Schema = {
 export const insertSendVcOfferToEmailSnippet = createSnippetCommand<
   SnippetInput,
   CommandInput
->(implementations, async (input) => {
+>("sendVcOfferToEmail", "vcOffer", implementations, async (input) => {
   const projectId = input?.projectId ?? (await askForProjectId());
   if (!projectId) {
     return;

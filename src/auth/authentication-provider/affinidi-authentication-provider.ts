@@ -12,6 +12,10 @@ import {
 } from "vscode";
 import { nanoid } from "nanoid";
 import { executeAuthProcess } from "./auth-process";
+import {
+  sendEventToAnalytics,
+  EventNames,
+} from "../../services/analyticsStreamApiService";
 
 export const AUTH_PROVIDER_ID = "AffinidiAuth";
 const AUTH_NAME = "Affinidi Authentication";
@@ -58,7 +62,9 @@ export class AffinidiAuthenticationProvider
   // - The end user initiates the "silent" auth flow via the Accounts menu
   async createSession(_scopes: string[]): Promise<AuthenticationSession> {
     try {
-      const { email, id, accessToken } = await executeAuthProcess({ isLogin: _scopes.includes('login') });
+      const { email, id, accessToken } = await executeAuthProcess({
+        isLogin: _scopes.includes("login"),
+      });
       const session: AuthenticationSession = {
         id: nanoid(),
         accessToken,
@@ -86,8 +92,24 @@ export class AffinidiAuthenticationProvider
     }
   }
 
-  // This function is called when the end user signs out of the account.
+  /**
+   * This function is called when the end indirectly user signs out of the account with VS Code UI or some other means.
+   * Do not use this method to manually remove the session.
+   * @deprecated Use `handleRemoveSession` instead
+   */
   async removeSession(_sessionId: string): Promise<void> {
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: "logout",
+      metadata: {
+        commandId: "affinidi.logout",
+      },
+    });
+
+    await this.handleRemoveSession(_sessionId);
+  }
+
+  async handleRemoveSession(_sessionId: string): Promise<void> {
     const sessions = await this._readSessionsFromStorage();
     const idxToRemove = sessions.findIndex(
       (session) => session.id === _sessionId
