@@ -14,7 +14,7 @@ function parseJwt(token: string) {
 
 type ExecuteAuthProcessProps = {
   isLogin: boolean
-}
+};
 
 export const executeAuthProcess = async ({ isLogin }: ExecuteAuthProcessProps): Promise<AuthProcessOutput> => {
   const email = await window.showInputBox({

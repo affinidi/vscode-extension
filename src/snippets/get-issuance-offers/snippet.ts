@@ -32,7 +32,7 @@ export const implementations: Implementations<SnippetInput> = {
 export const insertGetIssuanceOffersSnippet = createSnippetCommand<
   SnippetInput,
   CommandInput
->(implementations, async (input) => {
+>("getIssuanceOffers", "vcOffer", implementations, async (input) => {
   const projectId = input?.projectId ?? (await askForProjectId());
   if (!projectId) {
     return;

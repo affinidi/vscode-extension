@@ -22,6 +22,10 @@ import { initSnippets } from "./snippets/initSnippets";
 import { viewMarkdown } from "./services/markdownService";
 import { buildURL } from "./api-client/api-fetch";
 import { createProjectProcess } from "./iam/iam";
+import {
+  EventNames,
+  sendEventToAnalytics,
+} from "./services/analyticsStreamApiService";
 
 const CONSOLE_URL = "https://console.dev.affinidi.com";
 
@@ -55,6 +59,14 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand("affinidiExplorer.refresh", () => {
     affExplorerTreeProvider.refresh();
+
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: "refresh",
+      metadata: {
+        commandId: "affinidiExplorer.refresh",
+      },
+    });
   });
 
   let panel: WebviewPanel | undefined = undefined;
@@ -95,6 +107,14 @@ export async function activateInternal(context: ExtensionContext) {
         null,
         context.subscriptions
       );
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "schema",
+        metadata: {
+          commandId: "schema.showSchemaDetails",
+        },
+      });
     }
   );
 
@@ -112,6 +132,14 @@ export async function activateInternal(context: ExtensionContext) {
         );
 
         commands.executeCommand("markdown.showPreview", uri);
+
+        sendEventToAnalytics({
+          name: EventNames.commandExecuted,
+          subCategory: `about:${element.resourceType}`,
+          metadata: {
+            commandId: "affinidi.openMarkDown",
+          },
+        });
       }
     )
   );
@@ -119,6 +147,13 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand("affinidi.codegen.schemaOffers", () => {
       window.showErrorMessage("Code generation is still WIP");
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "schemaOffers",
+        metadata: {
+          commandId: "affinidi.codegen.schemaOffers",
+        },
+      });
     })
   );
 
@@ -128,16 +163,32 @@ export async function activateInternal(context: ExtensionContext) {
       async (treeItem: AffResourceTreeItem) => {
         const schema = await getSchema(treeItem.metadata.id as string);
         env.clipboard.writeText(schema.jsonSchemaUrl);
+
+        sendEventToAnalytics({
+          name: EventNames.commandExecuted,
+          subCategory: "schema",
+          metadata: {
+            commandId: "affinidi.copyJsonURL",
+          },
+        });
       }
     )
   );
 
   context.subscriptions.push(
     commands.registerCommand(
-      "affinidi.copyJsonLDURL",
+      "affinidi.copyJsonLdURL",
       async (treeItem: AffResourceTreeItem) => {
         const schema = await getSchema(treeItem.metadata.id as string);
         env.clipboard.writeText(schema.jsonLdContextUrl);
+
+        sendEventToAnalytics({
+          name: EventNames.commandExecuted,
+          subCategory: "schema",
+          metadata: {
+            commandId: "affinidi.copyJsonLdURL",
+          },
+        });
       }
     )
   );
@@ -146,6 +197,14 @@ export async function activateInternal(context: ExtensionContext) {
     "affinidiExplorer.viewProperties",
     (element: AffResourceTreeItem) => {
       viewProperties(element.resourceType, element.metadata);
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: `properties:${element.resourceType}`,
+        metadata: {
+          commandId: "affinidiExplorer.viewProperties",
+        },
+      });
     }
   );
 
@@ -153,11 +212,28 @@ export async function activateInternal(context: ExtensionContext) {
     "affinidiExplorer.showJsonSchema",
     (element: AffResourceTreeItem) => {
       viewSchemaContent(element.metadata.id, element.metadata.jsonSchemaUrl);
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "schema",
+        metadata: {
+          commandId: "affinidiExplorer.showJsonSchema",
+        },
+      });
     }
   );
 
   commands.registerCommand("affinidiExplorer.createSchema", () => {
     const createSchemaURL = buildURL(CONSOLE_URL, "/schema-manager/builder");
+
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: "schema",
+      metadata: {
+        commandId: "affinidiExplorer.createSchema",
+      },
+    });
+
     commands.executeCommand("vscode.open", createSchemaURL);
   });
 
@@ -167,6 +243,15 @@ export async function activateInternal(context: ExtensionContext) {
       const createIssuanceURL = buildURL(CONSOLE_URL, "/bulk-issuance", {
         schemaUrl: element.metadata.jsonSchemaUrl,
       });
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "vc",
+        metadata: {
+          commandId: "affinidiExplorer.createIssuance",
+        },
+      });
+
       commands.executeCommand("vscode.open", createIssuanceURL);
     }
   );
@@ -179,6 +264,14 @@ export async function activateInternal(context: ExtensionContext) {
         element.metadata.jsonLdContextUrl,
         ".jsonld"
       );
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "schema",
+        metadata: {
+          commandId: "affinidiExplorer.showJsonLdContext",
+        },
+      });
     }
   );
 
@@ -186,10 +279,27 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand("affinidi.createProject", async () => {
       await createProjectProcess();
       affExplorerTreeProvider.refresh();
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "project",
+        metadata: {
+          commandId: "affinidi.createProject",
+        },
+      });
     })
   );
   commands.registerCommand("affinidiDevTools.issueCredential", () => {
     const issueCredentialURL = buildURL(CONSOLE_URL, "/bulk-issuance");
+
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: "vc",
+      metadata: {
+        commandId: "affinidiDevTools.issueCredential",
+      },
+    });
+
     commands.executeCommand("vscode.open", issueCredentialURL);
   });
 }

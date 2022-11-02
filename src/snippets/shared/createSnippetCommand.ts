@@ -7,6 +7,7 @@ import {
 } from "./createSnippetTools";
 import * as javascript from "../boilerplates/javascript";
 import * as typescript from "../boilerplates/typescript";
+import { EventNames, sendEventToAnalytics } from "../../services/analyticsStreamApiService";
 
 export const languageIdLabels: Record<string, string> = {
   javascript: "JavaScript",
@@ -27,6 +28,8 @@ const boilerplates: {
 const SUPPORTED_BOILERPLATE_LANGUAGE_IDS = Object.keys(boilerplates);
 
 export function createSnippetCommand<SnippetInput, CommandInput>(
+  name: string,
+  snippetCategory: string,
   implementations: Implementations<SnippetInput>,
   getSnippetInput: (
     input?: CommandInput,
@@ -111,6 +114,14 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
       await editor.insertSnippet(
         generateSnippet(languageId, implementation, snippetInput)
       );
+
+      sendEventToAnalytics({
+        name: EventNames.snippetInserted,
+        subCategory: snippetCategory,
+        metadata: {
+          snippetName: name,
+        },
+      });
     } catch (error: any) {
       console.log(error);
       window.showErrorMessage(error.message);

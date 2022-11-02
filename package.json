@@ -25,7 +25,7 @@
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidi.openMarkDown",
     "onCommand:affinidi.copyJsonURL",
-    "onCommand:affinidi.copyJsonLDURL",
+    "onCommand:affinidi.copyJsonLdURL",
     "onCommand:affinidiExplorer.viewProperties",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.showJsonLdContext",
@@ -96,7 +96,7 @@
         "category": "Affinidi Explorer"
       },
       {
-        "command": "affinidi.copyJsonLDURL",
+        "command": "affinidi.copyJsonLdURL",
         "title": "Copy JSON-LD Context URL",
         "category": "Affinidi Explorer"
       },
@@ -151,7 +151,7 @@
           "when": "never"
         },
         {
-          "command": "affinidi.copyJsonLDURL",
+          "command": "affinidi.copyJsonLdURL",
           "when": "never"
         },
         {
@@ -212,7 +212,7 @@
           "group": "6_copypath"
         },
         {
-          "command": "affinidi.copyJsonLDURL",
+          "command": "affinidi.copyJsonLdURL",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "6_copypath"
         },

@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import { AffinidiVariantTypes } from "../treeView/affinidiVariant";
 
 export const viewMarkdown = async (resourceType: string) => {

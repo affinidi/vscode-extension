@@ -26,7 +26,7 @@ export const apiFetch = async <T = unknown>({
   });
   const { status: statusCode } = response;
 
-  if (statusCode === 204) {
+  if (statusCode === 204 || statusCode === 201) {
     // @ts-ignore
     return undefined;
   }
@@ -50,10 +50,6 @@ export const apiFetch = async <T = unknown>({
 
   return json;
 };
-
-// generateCookieHeader(): Record<string, string> {
-//   return { "Api-Key": this.apiKeyHash };
-// }
 
 export function generateApiKeyHeader(
   apiKeyHash: string
