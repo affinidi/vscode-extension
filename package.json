@@ -18,7 +18,6 @@
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
     "onCommand:affinidi.createProject",
-    "onCommand:affinidi.codegen.schemaOffers",
     "onCommand:affinidi.codegen.sendVcOfferToEmail",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
@@ -73,12 +72,6 @@
         "title": "Generate a snippet for \"Get Issuance offers\""
       },
       {
-        "command": "affinidi.codegen.schemaOffers",
-        "title": "Build: Send VC offers with this schema",
-        "category": "Affinidi Tools",
-        "icon": "$(rocket)"
-      },
-      {
         "command": "affinidiExplorer.refresh",
         "title": "Refresh",
         "category": "Affinidi Explorer",
@@ -131,8 +124,13 @@
         "category": "Affinidi Dev Tool"
       },
       {
-        "command": "affinidi.codegen.sendVcOfferToEmail",
-        "title": "Send VC Offer to Email",
+        "command": "affinidiExplorer.codegen.getIssuanceOffers",
+        "title": "Build: Get the issuance offers",
+        "category": "Affinidi Snippets"
+      },
+      {
+        "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
+        "title": "Build: Send VC offers to email",
         "category": "Affinidi Snippets"
       }
     ],
@@ -152,10 +150,6 @@
         },
         {
           "command": "affinidi.copyJsonLdURL",
-          "when": "never"
-        },
-        {
-          "command": "affinidi.codegen.schemaOffers",
           "when": "never"
         },
         {
@@ -181,6 +175,14 @@
         {
           "command": "affinidiDevTools.issueCredential",
           "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.codegen.getIssuanceOffers",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
+          "when": "never"
         }
       ],
       "view/title": [
@@ -200,11 +202,6 @@
           "command": "affinidi.openMarkDown",
           "when": "view == affinidiExplorer && viewItem == rootIssuance || view == affinidiExplorer && viewItem == rootSchemas",
           "group": "inline"
-        },
-        {
-          "command": "affinidi.codegen.schemaOffers",
-          "when": "view == affinidiExplorer && viewItem == schema",
-          "group": "1"
         },
         {
           "command": "affinidi.copyJsonURL",
@@ -240,6 +237,16 @@
           "command": "affinidiExplorer.showJsonLdContext",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "z_commands"
+        },
+        {
+          "command": "affinidiExplorer.codegen.getIssuanceOffers",
+          "when": "view == affinidiExplorer && viewItem == issuance",
+          "group": "1"
+        },
+        {
+          "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "1"
         }
       ]
     },

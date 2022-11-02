@@ -145,19 +145,6 @@ export async function activateInternal(context: ExtensionContext) {
   );
 
   context.subscriptions.push(
-    commands.registerCommand("affinidi.codegen.schemaOffers", () => {
-      window.showErrorMessage("Code generation is still WIP");
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: "schemaOffers",
-        metadata: {
-          commandId: "affinidi.codegen.schemaOffers",
-        },
-      });
-    })
-  );
-
-  context.subscriptions.push(
     commands.registerCommand(
       "affinidi.copyJsonURL",
       async (treeItem: AffResourceTreeItem) => {
