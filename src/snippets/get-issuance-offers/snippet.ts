@@ -17,7 +17,7 @@ export interface SnippetInput {
   issuanceId?: string;
 }
 
-interface CommandInput {
+export interface CommandInput {
   projectId?: string;
   issuanceId?: string;
 }

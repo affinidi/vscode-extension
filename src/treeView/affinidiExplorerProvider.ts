@@ -238,7 +238,10 @@ export class AffinidiExplorerProvider
         type: AffinidiVariantTypes.schema,
         label: `${schema.type}V${schema.version}-${schema.revision}`,
         description: schema.description || '',
-        metadata: schema,
+        metadata: {
+          projectId: projectInfo.project.projectId,
+          ...schema,
+        },
         icon: new ThemeIcon("bracket"),
         parent,
         command: {

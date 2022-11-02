@@ -19,7 +19,7 @@ export interface SnippetInput {
   email?: string;
 }
 
-interface CommandInput {
+export interface CommandInput {
   projectId?: string;
   schema?: Schema;
   email?: string;
