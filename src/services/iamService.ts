@@ -1,6 +1,7 @@
 import { authentication } from "vscode";
 import { apiFetch } from "../api-client/api-fetch";
 import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
+import { ext } from "../extensionVariables";
 
 const IAM_API_BASE = "https://affinidi-iam.dev.affinity-project.org/api";
 
@@ -22,10 +23,11 @@ export type ProjectSummary = {
   wallet: { didUrl: string; did: string };
 };
 
-const getProjects = async (): Promise<ProjectList> => {
-  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+export const getProjects = async (): Promise<ProjectList> => {
+  const session = await ext.authProvider.requireActiveSession({
     createIfNone: true,
   });
+
   return await apiFetch<ProjectList>({
     endpoint: `${IAM_API_BASE}/v1/projects`,
     method: "GET",
@@ -38,9 +40,10 @@ const getProjects = async (): Promise<ProjectList> => {
 const getProjectSummary = async (
   projectId: string
 ): Promise<ProjectSummary> => {
-  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+  const session = await ext.authProvider.requireActiveSession({
     createIfNone: true,
   });
+
   return await apiFetch<ProjectSummary>({
     endpoint: `${IAM_API_BASE}/v1/projects/${projectId}/summary`,
     method: "GET",
@@ -50,10 +53,11 @@ const getProjectSummary = async (
   });
 };
 
-const createProject = async (projectName: string): Promise<void> => {
-  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+export const createProject = async (projectName: string): Promise<void> => {
+  const session = await ext.authProvider.requireActiveSession({
     createIfNone: true,
   });
+
   await apiFetch<void>({
     endpoint: `${IAM_API_BASE}/v1/projects`,
     method: "POST",

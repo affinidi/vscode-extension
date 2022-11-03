@@ -55,7 +55,7 @@ describe("initAuthentication()", () => {
 
     beforeEach(() => {
       getSessionStub = sandbox.stub(authentication, "getSession");
-      sandbox.stub(ext.authProvider, "removeSession");
+      sandbox.stub(ext.authProvider, "handleRemoveSession");
     });
 
     it("should log out when session is present", async () => {
@@ -68,13 +68,13 @@ describe("initAuthentication()", () => {
         createIfNone: false,
       });
 
-      expect(ext.authProvider.removeSession).calledWith(sessionId);
+      expect(ext.authProvider.handleRemoveSession).calledWith(sessionId);
     });
 
     it("should ignore when no session", async () => {
       await commands.executeCommand("affinidi.logout");
 
-      expect(ext.authProvider.removeSession).not.called;
+      expect(ext.authProvider.handleRemoveSession).not.called;
     });
   });
 

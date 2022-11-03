@@ -1,17 +1,13 @@
 import { authentication } from "vscode";
-
-import {
-  apiFetch,
-  buildURL,
-} from "../api-client/api-fetch";
+import { apiFetch, buildURL } from "../api-client/api-fetch";
 import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
-
+import { ext } from "../extensionVariables";
 
 export type SchemaEntity = {
   id: string;
   authorDid: string;
   createdAt: Date;
-  description: string
+  description: string;
   jsonLdContextUrl: string;
   jsonSchemaUrl: string;
   namespace: string | null;
@@ -21,35 +17,38 @@ export type SchemaEntity = {
   type: string;
 };
 
-export type SchemaSearchScope = 'public' | 'unlisted' | 'default';
+export type SchemaSearchScope = "public" | "unlisted" | "default";
 
 export type ResponseType = {
-  count: number
+  count: number;
   schemas: SchemaEntity[];
 };
 
-export const SCHEMA_MANAGER_API_BASE = 'https://affinidi-schema-manager.dev.affinity-project.org/api';
+export const SCHEMA_MANAGER_API_BASE =
+  "https://affinidi-schema-manager.dev.affinity-project.org/api";
 
 export const getPublicSchemas = async (): Promise<ResponseType> => {
   const url = buildURL(SCHEMA_MANAGER_API_BASE, "/v1/schemas", {
-    scope: 'public',
-    limit: '10'
+    scope: "public",
+    limit: "10",
   });
-  
+
   return apiFetch({
     method: "GET",
     endpoint: url,
   });
 };
 
-
 type GetMySchemasProps = {
-  did: string
-  scope?: SchemaSearchScope
+  did: string;
+  scope?: SchemaSearchScope;
 };
 
-export const getMySchemas = async ({ did, scope = 'default' }: GetMySchemasProps): Promise<ResponseType> => {
-  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+export const getMySchemas = async ({
+  did,
+  scope = "default",
+}: GetMySchemasProps): Promise<ResponseType> => {
+  const session = await ext.authProvider.requireActiveSession({
     createIfNone: true,
   });
 
