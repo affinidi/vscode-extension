@@ -41,7 +41,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
   editor?: TextEditor
 ) => Promise<void> {
   const supportedLanguageIds = Object.keys(implementations);
-  const { askForImplementation, assertSupportedLanguage, generateSnippet } =
+  const { askForImplementation, isLanguageSupported, generateSnippet } =
     createSnippetTools<SnippetInput>(implementations);
 
   return async (
@@ -51,8 +51,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
   ) => {
     try {
       let languageId: string;
-      if (editor) {
-        assertSupportedLanguage(editor.document.languageId);
+      if (editor && isLanguageSupported(editor.document.languageId)) {
         languageId = editor.document.languageId;
       } else {
         const languageIds = SUPPORTED_BOILERPLATE_LANGUAGE_IDS.filter(

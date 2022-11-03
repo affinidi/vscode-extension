@@ -25,14 +25,8 @@ export function createSnippetTools<
   T extends Implementations<Input> = Implementations<Input>
 >(implementations: T) {
   return {
-    assertSupportedLanguage(languageId: string): void {
-      if (!(languageId in implementations)) {
-        throw new Error(
-          `Supported snippet languages: ${Object.keys(implementations)
-            .map((languageId) => languageIdLabels[languageId] ?? languageId)
-            .join(", ")}`
-        );
-      }
+    isLanguageSupported(languageId: string): boolean {
+      return languageId in implementations;
     },
 
     async askForImplementation(languageId: keyof T): Promise<SnippetImplementation | undefined> {

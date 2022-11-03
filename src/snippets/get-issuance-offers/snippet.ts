@@ -73,6 +73,10 @@ async function askForIssuanceId(input: {
     () => getProjectIssuances(input)
   );
 
+  if (issuances.length === 0) {
+    throw new Error("You don't have any issuances to choose from");
+  }
+
   return showQuickPick(
     [
       ...issuances.map<[string, string]>((issuance) => [
