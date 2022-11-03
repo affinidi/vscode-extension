@@ -1,7 +1,7 @@
 import { authentication } from "vscode";
 import { apiFetch } from "../../api-client/api-fetch";
 import { cookieFetch } from "../../api-client/cookie-fetch";
-import { AUTH_PROVIDER_ID } from "./affinidi-authentication-provider";
+import { ext } from "../../extensionVariables";
 
 export const USER_MANAGEMENT_API_BASE =
   "https://console-user-management.dev.affinity-project.org/api";
@@ -81,7 +81,7 @@ type UserDetailsOutput = {
 };
 
 const getUserDetails = async (): Promise<UserDetailsOutput> => {
-  const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
+  const session = await ext.authProvider.requireActiveSession({
     createIfNone: true,
   });
 

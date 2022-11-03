@@ -3,6 +3,7 @@ import {
   AuthenticationProvider,
   AuthenticationProviderAuthenticationSessionsChangeEvent,
   AuthenticationSession,
+  AuthenticationGetSessionOptions,
   Disposable,
   Event,
   EventEmitter,
@@ -11,7 +12,7 @@ import {
   window,
 } from "vscode";
 import { nanoid } from "nanoid";
-import { executeAuthProcess } from "./auth-process";
+import { executeAuthProcess, parseJwt } from "./auth-process";
 import {
   sendEventToAnalytics,
   EventNames,
@@ -47,6 +48,42 @@ export class AffinidiAuthenticationProvider
 
   dispose(): void {
     this._disposable.dispose();
+  }
+
+  async getActiveSession(
+    options: AuthenticationGetSessionOptions,
+    scopes: string[] = []
+  ): Promise<AuthenticationSession | undefined> {
+    const session = await authentication.getSession(
+      AUTH_PROVIDER_ID,
+      scopes,
+      options
+    );
+
+    if (session) {
+      const token = parseJwt(session.accessToken.slice(18));
+
+      // subtract 1 minute in case of lag
+      if (Date.now() / 1000 >= token.exp - 60) {
+        // TODO: we might want to log an analytics event here
+        await this.handleRemoveSession(session.id);
+        return this.getActiveSession(options, scopes); // try again
+      }
+    }
+
+    return session;
+  }
+
+  async requireActiveSession(
+    options: AuthenticationGetSessionOptions,
+    scopes: string[] = []
+  ): Promise<AuthenticationSession> {
+    const session = await this.getActiveSession(options, scopes);
+    if (!session) {
+      throw new Error("Authentication session is required, but not found");
+    }
+
+    return session;
   }
 
   // This function is called first when `vscode.authentication.getSessions` is called.

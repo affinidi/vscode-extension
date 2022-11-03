@@ -70,6 +70,7 @@ async function logoutHandler(): Promise<void> {
   const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
     createIfNone: false,
   });
+
   if (session) {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
