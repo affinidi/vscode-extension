@@ -40,6 +40,15 @@ export class AffinidiSnippetProvider
         command: "affinidi.codegen.getIssuanceOffers",
       },
     });
+
+    this.addNewTreeItem(treeNodes, {
+      label: "Sign a VC with Cloud Wallet",
+      state: TreeItemCollapsibleState.None,
+      command: {
+        title: "Sign a VC with Cloud Wallet",
+        command: "affinidi.codegen.signVcWithCloudWallet",
+      },
+    });
   }
 
   private addNewTreeItem(

@@ -7,6 +7,7 @@ import {
 import { AffResourceTreeItem } from "../treeView/treeItem";
 import { insertGetIssuanceOffersSnippet } from "./get-issuance-offers/snippet";
 import { insertSendVcOfferToEmailSnippet } from "./send-vc-offer-to-email/snippet";
+import { insertSignVcWithCloudWalletSnippet } from "./sign-vc-with-cloud-wallet/snippet";
 
 export const initSnippets = () => {
   ext.context.subscriptions.push(
@@ -38,6 +39,23 @@ export const initSnippets = () => {
         },
       });
     })
+  );
+
+  ext.context.subscriptions.push(
+    commands.registerCommand(
+      "affinidi.codegen.signVcWithCloudWallet",
+      async () => {
+        await insertSignVcWithCloudWalletSnippet();
+
+        sendEventToAnalytics({
+          name: EventNames.commandExecuted,
+          subCategory: "vc",
+          metadata: {
+            commandId: "affinidi.codegen.signVcWithCloudWallet",
+          },
+        });
+      }
+    )
   );
 
   ext.context.subscriptions.push(

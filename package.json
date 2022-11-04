@@ -19,6 +19,7 @@
     "onCommand:affinidi.me",
     "onCommand:affinidi.createProject",
     "onCommand:affinidi.codegen.sendVcOfferToEmail",
+    "onCommand:affinidi.codegen.signVcWithCloudWallet",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
     "onCommand:affinidiExplorer.refresh",
@@ -70,6 +71,11 @@
         "command": "affinidi.codegen.getIssuanceOffers",
         "category": "Affinidi",
         "title": "Generate a snippet for \"Get Issuance offers\""
+      },
+      {
+        "command": "affinidi.codegen.signVcWithCloudWallet",
+        "category": "Affinidi",
+        "title": "Generate a snippet for \"Sign a VC with Cloud Wallet\""
       },
       {
         "command": "affinidiExplorer.refresh",
