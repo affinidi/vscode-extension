@@ -4,7 +4,7 @@ import { cookieFetch } from "../../api-client/cookie-fetch";
 import { ext } from "../../extensionVariables";
 
 export const USER_MANAGEMENT_API_BASE =
-  "https://console-user-management.dev.affinity-project.org/api";
+  "https://console-user-management.apse1.affinidi.com/api";
 
 type AuthInput = {
   username: string;

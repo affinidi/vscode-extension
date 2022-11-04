@@ -25,10 +25,10 @@ export type ResponseType = {
 };
 
 export const SCHEMA_MANAGER_API_BASE =
-  "https://affinidi-schema-manager.dev.affinity-project.org/api";
+  "https://api.affinidi.com/schema-manager/v1";
 
 export const getPublicSchemas = async (): Promise<ResponseType> => {
-  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/v1/schemas", {
+  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/schemas", {
     scope: "public",
     limit: "10",
   });
@@ -52,7 +52,7 @@ export const getMySchemas = async ({
     createIfNone: true,
   });
 
-  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/v1/schemas", {
+  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/schemas", {
     did,
     authorDid: did,
     scope,
@@ -68,7 +68,7 @@ export const getMySchemas = async ({
 };
 
 export const getSchema = async (schemaId: string): Promise<SchemaEntity> => {
-  const url = buildURL(SCHEMA_MANAGER_API_BASE, `/v1/schemas/${schemaId}`);
+  const url = buildURL(SCHEMA_MANAGER_API_BASE, `/schemas/${schemaId}`);
   return apiFetch({
     method: "GET",
     endpoint: url,
