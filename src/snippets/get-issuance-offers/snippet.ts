@@ -4,6 +4,7 @@ import {
   getProjectIssuances,
   ISSUANCE_API_BASE,
 } from "../../services/issuancesService";
+import { formatIssuanceName } from '../../shared/formatIssuanceName';
 import { showQuickPick } from "../../utils/showQuickPick";
 import { askForProjectId } from "../shared/askForProjectId";
 import { createSnippetCommand } from "../shared/createSnippetCommand";
@@ -80,7 +81,7 @@ async function askForIssuanceId(input: {
   return showQuickPick(
     [
       ...issuances.map<[string, string]>((issuance) => [
-        issuance.id,
+        `${formatIssuanceName(issuance)} (${issuance.id})`,
         issuance.id,
       ]),
     ],

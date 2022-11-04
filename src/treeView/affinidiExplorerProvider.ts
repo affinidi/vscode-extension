@@ -17,10 +17,14 @@ import {
   ProjectList,
   ProjectSummary,
 } from "../services/iamService";
-import { getMySchemas, SchemaSearchScope } from "../services/schemaManagerService";
+import {
+  getMySchemas,
+  SchemaSearchScope,
+} from "../services/schemaManagerService";
 import { AffinidiVariantTypes } from "./affinidiVariant";
 import { AffResourceTreeItem } from "./treeItem";
 import { ext } from "../extensionVariables";
+import { formatIssuanceName } from '../shared/formatIssuanceName';
 
 const isSignedIn = async () => {
   const sessions = await ext.authProvider.getSessions([]);
@@ -203,7 +207,7 @@ export class AffinidiExplorerProvider
       type: AffinidiVariantTypes.subRootSchemas,
       label: "Public",
       metadata: {
-        scope: 'public' as SchemaSearchScope
+        scope: "public" as SchemaSearchScope,
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
@@ -214,7 +218,7 @@ export class AffinidiExplorerProvider
       type: AffinidiVariantTypes.subRootSchemas,
       label: "Unlisted",
       metadata: {
-        scope: 'unlisted' as SchemaSearchScope
+        scope: "unlisted" as SchemaSearchScope,
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
@@ -237,7 +241,7 @@ export class AffinidiExplorerProvider
       this.addNewTreeItem(treeNodes, {
         type: AffinidiVariantTypes.schema,
         label: `${schema.type}V${schema.version}-${schema.revision}`,
-        description: schema.description || '',
+        description: schema.description || "",
         metadata: {
           projectId: projectInfo.project.projectId,
           ...schema,
@@ -266,8 +270,9 @@ export class AffinidiExplorerProvider
     issuanceListResponse.issuances.map((issuance) => {
       this.addNewTreeItem(treeNodes, {
         type: AffinidiVariantTypes.issuance,
-        label: issuance.id,
         metadata: issuance,
+        label: formatIssuanceName(issuance),
+        description: issuance.id,
         icon: new ThemeIcon("output"),
         parent,
       });
