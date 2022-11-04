@@ -5,7 +5,7 @@ import {
 } from "../api-client/api-fetch";
 
 export const ISSUANCE_API_BASE =
-  "https://console-vc-issuance.apse1.affinidi.com";
+  "https://console-vc-issuance.apse1.affinidi.com/api";
 
 export type VerificationMethod = "email";
 
