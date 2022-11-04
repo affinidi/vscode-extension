@@ -6,7 +6,7 @@ import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authe
 const JWT_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxOTQ0MzY0ZS02NjcwLTQ4M2QtYjM3NC1hMDMyODQwYzliYjUiLCJ1c2VyTmFtZSI6ImFudXNoYS5rQGFmZmluaWRpLmNvbSIsImlhdCI6MTY2Njg4MjE4MywiZXhwIjoxNjgyNDM0MTgzfQ.dI3c9vy3xJu_SZVIUH9T2dbuuVXRuZv-qXs3lYXFrMU";
 const ANALYTICS_STREAM_API_URL =
-  "https://analytics-stream.dev.affinity-project.org";
+  "https://analytics-stream.prod.affinity-project.org";
 
 export const enum EventNames {
   commandExecuted = "COMMAND_EXECUTED",

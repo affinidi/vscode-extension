@@ -3,7 +3,7 @@ import { apiFetch } from "../api-client/api-fetch";
 import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
 import { ext } from "../extensionVariables";
 
-const IAM_API_BASE = "https://affinidi-iam.dev.affinity-project.org/api";
+const IAM_API_BASE = "https://affinidi-iam.apse1.affinidi.com/api";
 
 export type Project = {
   name: string;
