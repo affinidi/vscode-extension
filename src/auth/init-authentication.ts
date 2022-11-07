@@ -11,6 +11,8 @@ import {
 } from "./authentication-provider/affinidi-authentication-provider";
 import { userManagementClient } from "./authentication-provider/user-management.client";
 
+import { cliHelper }  from '../utils/cliHelper';
+
 enum Consent {
   "Accept",
   "Reject",
@@ -39,8 +41,9 @@ async function signUpHandler(): Promise<void> {
         },
       });
 
-      await window.showInformationMessage("Signed In to Affinidi");
+      window.showInformationMessage("Signed In to Affinidi");
       ext.outputChannel.appendLine("Signed In to Affinidi");
+      await cliHelper.isCliInstalledOrWarn({type: 'warning'});
       break;
 
     case Consent[Consent.Reject]:
@@ -61,9 +64,9 @@ async function loginHandler(): Promise<void> {
       commandId: "affinidi.login",
     },
   });
-
-  await window.showInformationMessage("Signed In to Affinidi");
+  window.showInformationMessage("Signed In to Affinidi");
   ext.outputChannel.appendLine("Signed In to Affinidi");
+  await cliHelper.isCliInstalledOrWarn({type: 'warning'});
 }
 
 async function logoutHandler(): Promise<void> {
