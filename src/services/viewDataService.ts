@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { AffinidiVariantTypes } from "../treeView/affinidiVariant";
+import { ExplorerResourceTypes } from "../treeView/treeTypes";
 import { openReadOnlyContent } from "../utils/openReadOnlyContent";
 
 export const viewProperties = async (
@@ -9,13 +9,13 @@ export const viewProperties = async (
   let label: string = "";
   let id: string = "";
   switch (resourceType) {
-    case AffinidiVariantTypes[AffinidiVariantTypes.project]:
+    case ExplorerResourceTypes[ExplorerResourceTypes.project]:
       label = resourceInfo.project.name;
       id = resourceInfo.project.projectId;
       break;
 
-    case AffinidiVariantTypes[AffinidiVariantTypes.issuance]:
-    case AffinidiVariantTypes[AffinidiVariantTypes.schema]:
+    case ExplorerResourceTypes[ExplorerResourceTypes.issuance]:
+    case ExplorerResourceTypes[ExplorerResourceTypes.schema]:
       label = resourceInfo.id;
       id = resourceInfo.id;
       break;

@@ -1,4 +1,4 @@
-export enum AffinidiVariantTypes {
+export enum ExplorerResourceTypes {
   project,
   rootSchemas,
   subRootSchemas,
@@ -14,4 +14,13 @@ export enum AffinidiVariantTypes {
   other,
   login,
   signup,
+}
+
+export enum CodeGenTypes {
+  rootSnippets,
+  snippets,
+  rootScripts,
+  scripts,
+  rootApps,
+  apps,
 }

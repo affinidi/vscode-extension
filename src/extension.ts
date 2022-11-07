@@ -11,7 +11,7 @@ import {
   WebviewPanel,
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
-import { AffinidiSnippetProvider } from "./treeView/affinidiSnippetProvider";
+import { AffinidiCodeGenProvider } from "./treeView/affinidiCodeGenProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 import { AffResourceTreeItem } from "./treeView/treeItem";
@@ -43,7 +43,7 @@ export async function activateInternal(context: ExtensionContext) {
   initSnippets();
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider();
-  const affSnippetTreeProvider = new AffinidiSnippetProvider();
+  const affCodeGenTreeProvider = new AffinidiCodeGenProvider();
 
   const treeView = window.createTreeView("affinidiExplorer", {
     treeDataProvider: affExplorerTreeProvider,
@@ -51,8 +51,8 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   });
 
-  window.createTreeView("affinidiSnippets", {
-    treeDataProvider: affSnippetTreeProvider,
+  window.createTreeView("affinidiCodeGeneration", {
+    treeDataProvider: affCodeGenTreeProvider,
     canSelectMany: false,
     showCollapseAll: true,
   });
@@ -119,6 +119,24 @@ export async function activateInternal(context: ExtensionContext) {
   );
 
   context.subscriptions.push(openSchema);
+
+  context.subscriptions.push(
+    commands.registerCommand("affinidi.docs.availableSnippets", async () => {
+      let uri: Uri = Uri.file(
+        path.join(context.extensionPath, "/document/snippets.md")
+      );
+
+      commands.executeCommand("markdown.showPreview", uri);
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "about:snippets",
+        metadata: {
+          commandId: "affinidi.docs.availableSnippets",
+        },
+      });
+    })
+  );
 
   context.subscriptions.push(
     commands.registerCommand(
