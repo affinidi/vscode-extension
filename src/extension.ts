@@ -9,6 +9,7 @@ import {
   env,
   ViewColumn,
   WebviewPanel,
+  languages,
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { AffinidiSnippetProvider } from "./treeView/affinidiSnippetProvider";
@@ -26,6 +27,7 @@ import {
   EventNames,
   sendEventToAnalytics,
 } from "./services/analyticsStreamApiService";
+import { VcSchemaDropProvider } from './treeView/vc-schema-drop-editor';
 
 const CONSOLE_URL = "https://console.prod.affinidi.com";
 
@@ -47,9 +49,13 @@ export async function activateInternal(context: ExtensionContext) {
 
   const treeView = window.createTreeView("affinidiExplorer", {
     treeDataProvider: affExplorerTreeProvider,
+    dragAndDropController: affExplorerTreeProvider,
     canSelectMany: false,
     showCollapseAll: true,
   });
+
+  // TODO: add javascript & typescript & javascriptreact & typescriptreact selectors instead of plaintext
+  context.subscriptions.push(languages.registerDocumentDropEditProvider({ language: 'plaintext' }, new VcSchemaDropProvider()));
 
   window.createTreeView("affinidiSnippets", {
     treeDataProvider: affSnippetTreeProvider,

@@ -1,12 +1,23 @@
+import * as os from 'os';
+import * as path from 'path';
+import * as fs from 'fs';
 import {
   AuthenticationProviderAuthenticationSessionsChangeEvent,
+  CancellationToken,
   Command,
+  DataTransfer,
+  DataTransferItem,
+  DocumentDropEdit,
+  DocumentDropEditProvider,
   Event,
   EventEmitter,
+  TextDocument,
   ThemeIcon,
   TreeDataProvider,
+  TreeDragAndDropController,
   TreeItem,
   TreeItemCollapsibleState,
+  Uri,
 } from "vscode";
 import {
   getProjectIssuances,
@@ -34,8 +45,18 @@ const isSignedIn = async () => {
 const { getProjects, getProjectSummary } = iamService;
 
 export class AffinidiExplorerProvider
-  implements TreeDataProvider<AffResourceTreeItem>
+  implements TreeDataProvider<AffResourceTreeItem>, TreeDragAndDropController<AffResourceTreeItem>
 {
+  dropMimeTypes = [
+    'application/vnd.code.tree.affTreeViewDragDrop',
+    'text/treeitems', 'text/uri-list',
+  ];
+	dragMimeTypes = ['text/uri-list', 'text/plain', 'text/treeitems'];
+
+  public async handleDrag(source: AffResourceTreeItem[], treeDataTransfer: DataTransfer): Promise<void> {
+    treeDataTransfer.set('text/plain', new DataTransferItem('my-schema-id'));
+	}
+
   private _onDidChangeTreeData: EventEmitter<
     AffResourceTreeItem | undefined | void
   > = new EventEmitter<AffResourceTreeItem | undefined | void>();
