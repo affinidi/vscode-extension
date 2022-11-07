@@ -381,6 +381,7 @@
   },
   "dependencies": {
     "@vscode/webview-ui-toolkit": "^1.1.0",
+    "execa": "^5.1.1",
     "date-fns": "^2.29.3",
     "nanoid": "^3.3.4",
     "node-fetch": "^2.6.7",
