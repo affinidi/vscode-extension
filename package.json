@@ -19,7 +19,9 @@
     "onCommand:affinidi.me",
     "onCommand:affinidi.createProject",
     "onCommand:affinidi.codegen.sendVcOfferToEmail",
+    "onCommand:affinidi.codegen.getIssuanceOffers",
     "onCommand:affinidi.codegen.signVcWithCloudWallet",
+    "onCommand:affinidi.docs.availableSnippets",
     "onAuthenticationRequest:AffinidiOTP",
     "onView:affinidiExplorer",
     "onCommand:affinidiExplorer.refresh",
@@ -65,17 +67,17 @@
       {
         "command": "affinidi.codegen.sendVcOfferToEmail",
         "category": "Affinidi",
-        "title": "Generate a snippet for \"Send a VC offer to an email\""
+        "title": "Generate a snippet to \"Send a VC offer to an email\""
       },
       {
         "command": "affinidi.codegen.getIssuanceOffers",
         "category": "Affinidi",
-        "title": "Generate a snippet for \"Get Issuance offers\""
+        "title": "Generate a snippet to \"Get Issuance offers\""
       },
       {
         "command": "affinidi.codegen.signVcWithCloudWallet",
         "category": "Affinidi",
-        "title": "Generate a snippet for \"Sign a VC with Cloud Wallet\""
+        "title": "Generate a snippet to \"Sign a VC with Cloud Wallet\""
       },
       {
         "command": "affinidiExplorer.refresh",
@@ -130,13 +132,23 @@
         "category": "Affinidi Dev Tool"
       },
       {
-        "command": "affinidiExplorer.codegen.getIssuanceOffers",
-        "title": "Build: Get the issuance offers",
-        "category": "Affinidi Snippets"
-      },
-      {
         "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
         "title": "Build: Send VC offers to email",
+        "category": "Affinidi Script Generators"
+      },
+      {
+        "command": "affinidiExplorer.codegen.getIssuanceOffers",
+        "title": "Build: Get the issuance offers",
+        "category": "Affinidi Script Generators"
+      },
+      {
+        "command": "affinidiExplorer.codegen.signVcWithCloudWallet",
+        "title": "Build: Sign a VC with Cloud Wallet",
+        "category": "Affinidi Script Generators"
+      },
+      {
+        "command": "affinidi.docs.availableSnippets",
+        "title": "View Available Snippets",
         "category": "Affinidi Snippets"
       }
     ],
@@ -263,12 +275,12 @@
           "name": "Resources"
         },
         {
-          "id": "affinidiDevTools",
-          "name": "Developer Tools"
+          "id": "affinidiCodeGeneration",
+          "name": "Snippets & Generators"
         },
         {
-          "id": "affinidiSnippets",
-          "name": "Snippets"
+          "id": "affinidiDevTools",
+          "name": "Developer Tools"
         }
       ]
     },

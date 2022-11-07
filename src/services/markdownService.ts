@@ -1,14 +1,14 @@
-import { AffinidiVariantTypes } from "../treeView/affinidiVariant";
+import { ExplorerResourceTypes } from "../treeView/treeTypes";
 
 export const viewMarkdown = async (resourceType: string) => {
   let uri: string = "";
 
   switch (resourceType) {
-    case AffinidiVariantTypes[AffinidiVariantTypes.rootIssuance]:
+    case ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]:
       uri = "/document/bulkIssuance.md";
       break;
 
-    case AffinidiVariantTypes[AffinidiVariantTypes.rootSchemas]:
+    case ExplorerResourceTypes[ExplorerResourceTypes.rootSchemas]:
       uri = "/document/schemaManager.md";
       break;
   }

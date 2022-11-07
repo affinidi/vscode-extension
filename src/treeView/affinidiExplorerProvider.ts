@@ -21,7 +21,7 @@ import {
   getMySchemas,
   SchemaSearchScope,
 } from "../services/schemaManagerService";
-import { AffinidiVariantTypes } from "./affinidiVariant";
+import { ExplorerResourceTypes } from "./treeTypes";
 import { AffResourceTreeItem } from "./treeItem";
 import { ext } from "../extensionVariables";
 import { formatIssuanceName } from '../shared/formatIssuanceName';
@@ -81,27 +81,27 @@ export class AffinidiExplorerProvider
         await this._addProjectItems(treeNodes);
         break;
 
-      case AffinidiVariantTypes[AffinidiVariantTypes.project]:
+      case ExplorerResourceTypes[ExplorerResourceTypes.project]:
         await this._addProductItems(treeNodes, element);
         break;
 
-      case AffinidiVariantTypes[AffinidiVariantTypes.rootDID]:
+      case ExplorerResourceTypes[ExplorerResourceTypes.rootDID]:
         await this._addDIDItems(treeNodes, element);
         break;
 
-      case AffinidiVariantTypes[AffinidiVariantTypes.rootSchemas]:
+      case ExplorerResourceTypes[ExplorerResourceTypes.rootSchemas]:
         await this._addSubRootSchemaItems(treeNodes, element);
         break;
 
-      case AffinidiVariantTypes[AffinidiVariantTypes.subRootSchemas]:
+      case ExplorerResourceTypes[ExplorerResourceTypes.subRootSchemas]:
         await this._addSchemaItems(treeNodes, element);
         break;
 
-      case AffinidiVariantTypes[AffinidiVariantTypes.rootIssuance]:
+      case ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]:
         await this._addIssuanceItems(treeNodes, element);
         break;
 
-      case AffinidiVariantTypes[AffinidiVariantTypes.rootRules]:
+      case ExplorerResourceTypes[ExplorerResourceTypes.rootRules]:
         await this._addRuleItems(treeNodes, element);
         break;
 
@@ -129,7 +129,7 @@ export class AffinidiExplorerProvider
       const projectSummary = await getProjectSummary(project.projectId);
 
       this.addNewTreeItem(treeNodes, {
-        type: AffinidiVariantTypes.project,
+        type: ExplorerResourceTypes.project,
         metadata: projectSummary,
         label: project.name,
         state: TreeItemCollapsibleState.Collapsed,
@@ -144,7 +144,7 @@ export class AffinidiExplorerProvider
     parent?: AffResourceTreeItem
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rootDID,
+      type: ExplorerResourceTypes.rootDID,
       label: "Digital Identities",
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("lock"),
@@ -152,7 +152,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rootIssuance,
+      type: ExplorerResourceTypes.rootIssuance,
       label: "Issuances",
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("output"),
@@ -160,7 +160,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rootSchemas,
+      type: ExplorerResourceTypes.rootSchemas,
       label: "VC Schemas",
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
@@ -168,7 +168,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rootRules,
+      type: ExplorerResourceTypes.rootRules,
       label: "Rules",
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("server-process"),
@@ -176,7 +176,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rootAnalytics,
+      type: ExplorerResourceTypes.rootAnalytics,
       label: "Analytics",
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("graph"),
@@ -191,7 +191,7 @@ export class AffinidiExplorerProvider
     const projectInfo: ProjectSummary = parent?.parent?.metadata;
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.did,
+      type: ExplorerResourceTypes.did,
       metadata: projectInfo.wallet,
       label: projectInfo.wallet.did,
       icon: new ThemeIcon("lock"),
@@ -204,7 +204,7 @@ export class AffinidiExplorerProvider
     parent?: AffResourceTreeItem
   ) {
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.subRootSchemas,
+      type: ExplorerResourceTypes.subRootSchemas,
       label: "Public",
       metadata: {
         scope: "public" as SchemaSearchScope,
@@ -215,7 +215,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.subRootSchemas,
+      type: ExplorerResourceTypes.subRootSchemas,
       label: "Unlisted",
       metadata: {
         scope: "unlisted" as SchemaSearchScope,
@@ -239,7 +239,7 @@ export class AffinidiExplorerProvider
 
     res.schemas.map((schema) => {
       this.addNewTreeItem(treeNodes, {
-        type: AffinidiVariantTypes.schema,
+        type: ExplorerResourceTypes.schema,
         label: `${schema.type}V${schema.version}-${schema.revision}`,
         description: schema.description || "",
         metadata: {
@@ -269,7 +269,7 @@ export class AffinidiExplorerProvider
 
     issuanceListResponse.issuances.map((issuance) => {
       this.addNewTreeItem(treeNodes, {
-        type: AffinidiVariantTypes.issuance,
+        type: ExplorerResourceTypes.issuance,
         metadata: issuance,
         label: formatIssuanceName(issuance),
         description: issuance.id,
@@ -284,7 +284,7 @@ export class AffinidiExplorerProvider
     parent?: AffResourceTreeItem
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rule,
+      type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:21835",
       label: "Education match",
       description: "MOCKED",
@@ -293,7 +293,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rule,
+      type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:54835",
       label: "Health skills check",
       description: "MOCKED",
@@ -302,7 +302,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rule,
+      type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:19805",
       label: "License compliance",
       description: "MOCKED",
@@ -311,7 +311,7 @@ export class AffinidiExplorerProvider
     });
 
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.rule,
+      type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:74802",
       label: "Email validator",
       description: "MOCKED",
@@ -325,7 +325,7 @@ export class AffinidiExplorerProvider
     parent?: AffResourceTreeItem
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.empty,
+      type: ExplorerResourceTypes.empty,
       label: "(empty)",
       icon: new ThemeIcon("dash"),
       parent,
@@ -337,7 +337,7 @@ export class AffinidiExplorerProvider
     parent?: AffResourceTreeItem
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.signup,
+      type: ExplorerResourceTypes.signup,
       label: "Create an Account with Affinidi",
       icon: new ThemeIcon("sign-in"),
       parent,
@@ -350,7 +350,7 @@ export class AffinidiExplorerProvider
     parent?: AffResourceTreeItem
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.login,
+      type: ExplorerResourceTypes.login,
       label: "Sign in to Affinidi",
       icon: new ThemeIcon("sign-in"),
       parent,
@@ -363,7 +363,7 @@ export class AffinidiExplorerProvider
     parent?: AffResourceTreeItem
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
-      type: AffinidiVariantTypes.project,
+      type: ExplorerResourceTypes.project,
       label: "Create Project",
       icon: new ThemeIcon("file-directory-create"),
       parent,
@@ -383,7 +383,7 @@ export class AffinidiExplorerProvider
       command,
       parent,
     }: {
-      type: AffinidiVariantTypes;
+      type: ExplorerResourceTypes;
       metadata?: any;
       label: string;
       description?: string;
@@ -395,7 +395,7 @@ export class AffinidiExplorerProvider
   ) {
     treeNodes.push(
       new AffResourceTreeItem({
-        resourceType: AffinidiVariantTypes[type],
+        resourceType: ExplorerResourceTypes[type],
         metadata,
         label,
         description,
