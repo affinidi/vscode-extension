@@ -13,6 +13,7 @@ import {
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { AffinidiSnippetProvider } from "./treeView/affinidiSnippetProvider";
+import { AffinidiDragAndDropProvider } from "./treeView/affinidiDragAndDropProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 import { AffResourceTreeItem } from "./treeView/treeItem";
@@ -27,16 +28,13 @@ import {
   EventNames,
   sendEventToAnalytics,
 } from "./services/analyticsStreamApiService";
-import { AffinidiDragAndDropProvider } from './treeView/affinidiDragAndDropProvider';
 
-const CONSOLE_URL = "https://console.prod.affinidi.com";
+const CONSOLE_URL = "https://console.affinidi.com";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activateInternal(context: ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log("Congratulations, your Affinidi extension is now active!");
+  console.log("Activating Affinidi extension...");
 
   ext.context = context;
   ext.outputChannel = window.createOutputChannel("Affinidi");
@@ -54,8 +52,6 @@ export async function activateInternal(context: ExtensionContext) {
     canSelectMany: false,
     showCollapseAll: true,
   });
-
-  context.subscriptions.push(languages.registerDocumentDropEditProvider({ language: '*' }, dragAndDropProvider));
 
   window.createTreeView("affinidiSnippets", {
     treeDataProvider: affSnippetTreeProvider,
@@ -81,7 +77,7 @@ export async function activateInternal(context: ExtensionContext) {
   const openSchema = commands.registerCommand(
     "schema.showSchemaDetails",
     () => {
-      const selectedTreeViewItem = treeView.selection[0];
+      const selectedTreeViewItem = treeView.selection[0] as AffResourceTreeItem;
 
       // If no panel is open, create a new one and update the HTML
       if (!panel) {
@@ -156,6 +152,10 @@ export async function activateInternal(context: ExtensionContext) {
       "affinidi.copyJsonURL",
       async (treeItem: AffResourceTreeItem) => {
         const schema = await getSchema(treeItem.metadata.id as string);
+        if (!schema) {
+          return;
+        }
+
         env.clipboard.writeText(schema.jsonSchemaUrl);
 
         sendEventToAnalytics({
@@ -174,6 +174,10 @@ export async function activateInternal(context: ExtensionContext) {
       "affinidi.copyJsonLdURL",
       async (treeItem: AffResourceTreeItem) => {
         const schema = await getSchema(treeItem.metadata.id as string);
+        if (!schema) {
+          return;
+        }
+
         env.clipboard.writeText(schema.jsonLdContextUrl);
 
         sendEventToAnalytics({
@@ -296,6 +300,15 @@ export async function activateInternal(context: ExtensionContext) {
 
     commands.executeCommand("vscode.open", issueCredentialURL);
   });
+
+  context.subscriptions.push(
+    languages.registerDocumentDropEditProvider(
+      { language: "*" },
+      dragAndDropProvider
+    )
+  );
+
+  console.log("Congratulations, your Affinidi extension is now active!");
 }
 
 // This method is called when your extension is deactivated

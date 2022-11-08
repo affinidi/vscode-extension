@@ -352,7 +352,7 @@
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
     "clean": "rimraf ./out",
-    "dev": "nodemon --watch src/ -x 'npm run compile'"
+    "dev": "nodemon -x 'npm run compile'"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",

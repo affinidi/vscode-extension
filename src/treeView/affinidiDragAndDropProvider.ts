@@ -30,10 +30,7 @@ const SNIPPET_COMMANDS: Record<string, SnippetCommand<any>> = {
 export class AffinidiDragAndDropProvider
   implements TreeDragAndDropController<TreeItem>, DocumentDropEditProvider
 {
-  dropMimeTypes = [
-    "application/vnd.code.tree.affinidiexplorer",
-    "application/vnd.code.tree.affinidisnippets",
-  ];
+  dropMimeTypes = [];
   dragMimeTypes = [];
 
   async handleDrag(
