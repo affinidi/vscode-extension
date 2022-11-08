@@ -1,4 +1,4 @@
-import { SnippetString, TextEditor, window, workspace } from "vscode";
+import { CancellationToken, Position, SnippetString, TextEditor, window, workspace } from "vscode";
 import { showQuickPick } from "../../utils/showQuickPick";
 import {
   createSnippetTools,
@@ -38,7 +38,9 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
 ): (
   input?: CommandInput,
   implementation?: SnippetImplementation,
-  editor?: TextEditor
+  editor?: TextEditor,
+  position?: Position,
+  token?: CancellationToken
 ) => Promise<void> {
   const supportedLanguageIds = Object.keys(implementations);
   const { askForImplementation, isLanguageSupported, generateSnippet } =
@@ -47,7 +49,9 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
   return async (
     commandInput,
     implementation,
-    editor = window.activeTextEditor
+    editor = window.activeTextEditor,
+    position,
+    token,
   ) => {
     try {
       let languageId: string;
@@ -90,7 +94,12 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         // interrupted (for example, by pressing "Escape")
         return;
       }
+      
+      if (token?.isCancellationRequested) {
+        return;
+      }
 
+      let wasBoilerplateGenerated = false
       if (!editor || editor.document.getText().trim().length === 0) {
         if (!editor) {
           editor = await window.showTextDocument(
@@ -107,11 +116,21 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
           );
         }
 
+        if (token?.isCancellationRequested) {
+          return;
+        }
+
         await editor.insertSnippet(new SnippetString(generateBoilerplate()));
+        wasBoilerplateGenerated = true;
+      }
+
+      if (token?.isCancellationRequested) {
+        return;
       }
 
       await editor.insertSnippet(
-        generateSnippet(languageId, implementation, snippetInput)
+        generateSnippet(languageId, implementation, snippetInput),
+        wasBoilerplateGenerated ? undefined : position,
       );
 
       sendEventToAnalytics({
