@@ -19,6 +19,7 @@ import { viewProperties, viewSchemaContent } from "./services/viewDataService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
 import { initSnippets } from "./snippets/initSnippets";
+import { initGenerators } from "./generators/initGenerators";
 import { viewMarkdown } from "./services/markdownService";
 import { buildURL } from "./api-client/api-fetch";
 import { createProjectProcess } from "./iam/iam";
@@ -41,6 +42,7 @@ export async function activateInternal(context: ExtensionContext) {
   ext.authProvider = initAuthentication();
 
   initSnippets();
+  initGenerators();
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider();
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider();
