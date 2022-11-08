@@ -67,10 +67,19 @@ export const getMySchemas = async ({
   });
 };
 
-export const getSchema = async (schemaId: string): Promise<SchemaEntity> => {
+export const getSchema = async (schemaId: string): Promise<SchemaEntity | undefined> => {
   const url = buildURL(SCHEMA_MANAGER_API_BASE, `/schemas/${schemaId}`);
-  return apiFetch({
-    method: "GET",
-    endpoint: url,
-  });
+
+  try {
+    return await apiFetch({
+      method: "GET",
+      endpoint: url,
+    });
+  } catch (error: any) {
+    if (error.code === 'SCH-9') {
+      return undefined;
+    }
+
+    throw error;
+  }
 };
