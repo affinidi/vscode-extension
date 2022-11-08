@@ -32,19 +32,24 @@ export class AffResourceTreeItem extends TreeItem {
 }
 
 
-export class AffSnippetTreeItem extends TreeItem {
+export class AffCodeGenTreeItem extends TreeItem {
+  public codeGenType;
   public command;
 
   constructor(
     public readonly item: {
       id: string;
+      codeGenType: string;
       label: string;
       collapsibleState: TreeItemCollapsibleState;
+      icon?: ThemeIcon;
       command?: Command;
     }
   ) {
     super(item.label, item.collapsibleState);
     this.id = JSON.stringify({ id: item.id });
+    this.codeGenType = item.codeGenType;
+    this.iconPath = item.icon;
     this.command = item.command;
   }
 }

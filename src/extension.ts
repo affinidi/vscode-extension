@@ -12,8 +12,8 @@ import {
   languages,
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
-import { AffinidiSnippetProvider } from "./treeView/affinidiSnippetProvider";
 import { AffinidiDragAndDropProvider } from "./treeView/affinidiDragAndDropProvider";
+import { AffinidiCodeGenProvider } from "./treeView/affinidiCodeGenProvider";
 import { ext } from "./extensionVariables";
 import { initAuthentication } from "./auth/init-authentication";
 import { AffResourceTreeItem } from "./treeView/treeItem";
@@ -21,6 +21,7 @@ import { viewProperties, viewSchemaContent } from "./services/viewDataService";
 import { getSchema } from "./services/schemaManagerService";
 import { getWebviewContent } from "./ui/getWebviewContent";
 import { initSnippets } from "./snippets/initSnippets";
+import { initGenerators } from "./generators/initGenerators";
 import { viewMarkdown } from "./services/markdownService";
 import { buildURL } from "./api-client/api-fetch";
 import { createProjectProcess } from "./iam/iam";
@@ -41,10 +42,11 @@ export async function activateInternal(context: ExtensionContext) {
   ext.authProvider = initAuthentication();
 
   initSnippets();
+  initGenerators();
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider();
-  const affSnippetTreeProvider = new AffinidiSnippetProvider();
   const dragAndDropProvider = new AffinidiDragAndDropProvider();
+  const affCodeGenTreeProvider = new AffinidiCodeGenProvider();
 
   const treeView = window.createTreeView("affinidiExplorer", {
     treeDataProvider: affExplorerTreeProvider,
@@ -53,8 +55,8 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   });
 
-  window.createTreeView("affinidiSnippets", {
-    treeDataProvider: affSnippetTreeProvider,
+  window.createTreeView("affinidiCodeGeneration", {
+    treeDataProvider: affCodeGenTreeProvider,
     dragAndDropController: dragAndDropProvider,
     canSelectMany: false,
     showCollapseAll: true,
@@ -122,6 +124,24 @@ export async function activateInternal(context: ExtensionContext) {
   );
 
   context.subscriptions.push(openSchema);
+
+  context.subscriptions.push(
+    commands.registerCommand("affinidi.docs.availableSnippets", async () => {
+      let uri: Uri = Uri.file(
+        path.join(context.extensionPath, "/document/snippets.md")
+      );
+
+      commands.executeCommand("markdown.showPreview", uri);
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: "about:snippets",
+        metadata: {
+          commandId: "affinidi.docs.availableSnippets",
+        },
+      });
+    })
+  );
 
   context.subscriptions.push(
     commands.registerCommand(

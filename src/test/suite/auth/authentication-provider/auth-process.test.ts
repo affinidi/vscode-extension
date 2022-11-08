@@ -33,7 +33,7 @@ describe("executeAuthProcess()", () => {
   });
 
   it("should execute a login flow", async () => {
-    expect(await executeAuthProcess({ isLogin: true })).to.deep.eq({
+    expect(await executeAuthProcess({ isSignUp: false })).to.deep.eq({
       email,
       id: userId,
       accessToken: cookie,
@@ -44,7 +44,7 @@ describe("executeAuthProcess()", () => {
   });
 
   it("should execute a signup flow", async () => {
-    expect(await executeAuthProcess({ isLogin: false })).to.deep.eq({
+    expect(await executeAuthProcess({ isSignUp: true })).to.deep.eq({
       email,
       id: userId,
       accessToken: cookie,
@@ -57,13 +57,13 @@ describe("executeAuthProcess()", () => {
   it("should fail when email is not provided", async () => {
     showInputBoxStub.onFirstCall().resolves(undefined);
 
-    expect(executeAuthProcess({ isLogin: true })).to.rejectedWith("Email is required");
+    expect(executeAuthProcess({ isSignUp: false })).to.rejectedWith("Email is required");
   });
 
   it("should fail when confirmation code is not provided", async () => {
     showInputBoxStub.onSecondCall().resolves(undefined);
 
-    expect(executeAuthProcess({ isLogin: true })).to.rejectedWith(
+    expect(executeAuthProcess({ isSignUp: false })).to.rejectedWith(
       "Confirmation code is required"
     );
   });
