@@ -38,7 +38,7 @@ export class AffCodeGenTreeItem extends TreeItem {
 
   constructor(
     public readonly item: {
-      id: string;
+      id?: string;
       codeGenType: string;
       label: string;
       collapsibleState: TreeItemCollapsibleState;
@@ -47,9 +47,12 @@ export class AffCodeGenTreeItem extends TreeItem {
     }
   ) {
     super(item.label, item.collapsibleState);
-    this.id = JSON.stringify({ id: item.id });
     this.codeGenType = item.codeGenType;
     this.iconPath = item.icon;
     this.command = item.command;
+
+    if (item.id) {
+      this.id = JSON.stringify({ id: item.id });
+    }
   }
 }

@@ -16,7 +16,7 @@ import { insertGetIssuanceOffersSnippet } from "../snippets/get-issuance-offers/
 import { insertSendVcOfferToEmailSnippet } from "../snippets/send-vc-offer-to-email/snippet";
 import { SnippetCommand } from "../snippets/shared/createSnippetCommand";
 import { insertSignVcWithCloudWalletSnippet } from "../snippets/sign-vc-with-cloud-wallet/snippet";
-import { AffResourceTreeItem, AffSnippetTreeItem } from "./treeItem";
+import { AffResourceTreeItem, AffCodeGenTreeItem } from "./treeItem";
 
 // 1/@did:elem:EiARLWJVMinRbZ2wr...wTOGAPUEWAo3rTq-AjJ1sKw/MySchemaV1-0
 const ITEM_ID_REGEX = /^\d+?\/(?<value>.*)$/;
@@ -50,9 +50,9 @@ export class AffinidiDragAndDropProvider
       return;
     }
 
-    if (selectedItem instanceof AffSnippetTreeItem) {
+    if (selectedItem instanceof AffCodeGenTreeItem) {
       treeDataTransfer.set(
-        "application/vnd.code.tree.affinidisnippets",
+        "application/vnd.code.tree.affinidicodegeneration",
         new DataTransferItem(source)
       );
       return;
@@ -81,7 +81,7 @@ export class AffinidiDragAndDropProvider
     }
 
     const snippetItem = dataTransfer.get(
-      "application/vnd.code.tree.affinidisnippets"
+      "application/vnd.code.tree.affinidicodegeneration"
     );
     if (snippetItem) {
       await this.handleSnippetDrop(

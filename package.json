@@ -41,8 +41,7 @@
     "onStartupFinished",
     "onView:affinidiDevTools",
     "onView:affinidiExplorer",
-    "onView:affinidiExplorer",
-    "onView:affinidiSnippets"
+    "onView:affinidiCodeGeneration"
   ],
   "main": "./out/main",
   "contributes": {
