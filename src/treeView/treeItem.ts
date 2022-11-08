@@ -19,6 +19,7 @@ export class AffResourceTreeItem extends TreeItem {
     }
   ) {
     super(item.label, item.collapsibleState);
+    this.id = JSON.stringify({ resourceType: item.resourceType, metadata: item.metadata });
     this.resourceType = item.resourceType;
     this.tooltip = `${this.item.label}`;
     this.description = this.item.description;
@@ -36,12 +37,14 @@ export class AffSnippetTreeItem extends TreeItem {
 
   constructor(
     public readonly item: {
+      id: string;
       label: string;
       collapsibleState: TreeItemCollapsibleState;
       command?: Command;
     }
   ) {
     super(item.label, item.collapsibleState);
+    this.id = JSON.stringify({ id: item.id });
     this.command = item.command;
   }
 }

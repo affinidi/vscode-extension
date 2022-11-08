@@ -24,6 +24,7 @@ export class AffinidiSnippetProvider
     treeNodes: AffSnippetTreeItem[]
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
+      id: 'sendVcOfferToEmail',
       label: "Send a VC Offer to an email",
       state: TreeItemCollapsibleState.None,
       command: {
@@ -33,6 +34,7 @@ export class AffinidiSnippetProvider
     });
 
     this.addNewTreeItem(treeNodes, {
+      id: 'getIssuanceOffers',
       label: "Get Issuance offers",
       state: TreeItemCollapsibleState.None,
       command: {
@@ -42,6 +44,7 @@ export class AffinidiSnippetProvider
     });
 
     this.addNewTreeItem(treeNodes, {
+      id: 'signVcWithCloudWallet',
       label: "Sign a VC with Cloud Wallet",
       state: TreeItemCollapsibleState.None,
       command: {
@@ -54,10 +57,12 @@ export class AffinidiSnippetProvider
   private addNewTreeItem(
     treeNodes: AffSnippetTreeItem[],
     {
+      id,
       label,
       state = TreeItemCollapsibleState.None,
       command,
     }: {
+      id: string;
       label: string;
       state?: TreeItemCollapsibleState;
       command: any;
@@ -65,6 +70,7 @@ export class AffinidiSnippetProvider
   ) {
     treeNodes.push(
       new AffSnippetTreeItem({
+        id,
         label,
         collapsibleState: state,
         command,
