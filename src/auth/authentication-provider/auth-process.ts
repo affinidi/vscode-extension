@@ -48,7 +48,7 @@ export const executeAuthProcess = async ({ isSignUp }: ExecuteAuthProcessProps):
     prompt: "Paste the code sent to your email",
     validateInput: validateOTP,
   });
-  
+
   if (!confirmationCode) {
     throw new Error("Confirmation code is required");
   }
@@ -71,8 +71,8 @@ export const executeAuthProcess = async ({ isSignUp }: ExecuteAuthProcessProps):
     }
   );
 
-  // Get userId from cookie. Slice removes `console_authtoken=` prefix from cookie.
-  const userId = parseJwt(cookie.slice(18)).userId;
+  // Get userId from cookie. Slice removes `console_authtoken=` prefix.
+  const { userId } = parseJwt(cookie.slice("console_authtoken=".length));
 
   return { email: email, id: userId, accessToken: cookie };
 };

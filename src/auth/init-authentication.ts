@@ -122,7 +122,7 @@ export const initAuthentication = () => {
     commands.registerCommand("affinidi.me", userDetailsHandler)
   );
 
-  let authProvider = new AffinidiAuthenticationProvider(ext.context);
+  let authProvider = new AffinidiAuthenticationProvider();
   ext.context.subscriptions.push(authProvider);
 
   return authProvider;
