@@ -68,6 +68,8 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
       if (editor && isLanguageSupported(editor.document.languageId)) {
         languageId = editor.document.languageId;
       } else {
+        editor = undefined;
+
         const languageIds = SUPPORTED_BOILERPLATE_LANGUAGE_IDS.filter(
           (languageId) => supportedLanguageIds.includes(languageId)
         );
