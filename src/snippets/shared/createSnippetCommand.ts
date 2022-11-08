@@ -1,4 +1,11 @@
-import { CancellationToken, Position, SnippetString, TextEditor, window, workspace } from "vscode";
+import {
+  CancellationToken,
+  Position,
+  SnippetString,
+  TextEditor,
+  window,
+  workspace,
+} from "vscode";
 import { showQuickPick } from "../../utils/showQuickPick";
 import {
   createSnippetTools,
@@ -7,7 +14,17 @@ import {
 } from "./createSnippetTools";
 import * as javascript from "../boilerplates/javascript";
 import * as typescript from "../boilerplates/typescript";
-import { EventNames, sendEventToAnalytics } from "../../services/analyticsStreamApiService";
+import {
+  EventNames,
+  sendEventToAnalytics,
+} from "../../services/analyticsStreamApiService";
+
+export type SnippetCommand<CommandInput = unknown> = (
+  input?: CommandInput,
+  implementation?: SnippetImplementation,
+  editor?: TextEditor,
+  position?: Position
+) => Promise<void>;
 
 export const languageIdLabels: Record<string, string> = {
   javascript: "JavaScript",
@@ -35,13 +52,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
     input?: CommandInput,
     implementation?: SnippetImplementation
   ) => Promise<SnippetInput | undefined>
-): (
-  input?: CommandInput,
-  implementation?: SnippetImplementation,
-  editor?: TextEditor,
-  position?: Position,
-  token?: CancellationToken
-) => Promise<void> {
+): SnippetCommand<CommandInput> {
   const supportedLanguageIds = Object.keys(implementations);
   const { askForImplementation, isLanguageSupported, generateSnippet } =
     createSnippetTools<SnippetInput>(implementations);
@@ -50,8 +61,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
     commandInput,
     implementation,
     editor = window.activeTextEditor,
-    position,
-    token,
+    position
   ) => {
     try {
       let languageId: string;
@@ -94,12 +104,8 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         // interrupted (for example, by pressing "Escape")
         return;
       }
-      
-      if (token?.isCancellationRequested) {
-        return;
-      }
 
-      let wasBoilerplateGenerated = false
+      let wasBoilerplateGenerated = false;
       if (!editor || editor.document.getText().trim().length === 0) {
         if (!editor) {
           editor = await window.showTextDocument(
@@ -116,21 +122,13 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
           );
         }
 
-        if (token?.isCancellationRequested) {
-          return;
-        }
-
         await editor.insertSnippet(new SnippetString(generateBoilerplate()));
         wasBoilerplateGenerated = true;
       }
 
-      if (token?.isCancellationRequested) {
-        return;
-      }
-
       await editor.insertSnippet(
         generateSnippet(languageId, implementation, snippetInput),
-        wasBoilerplateGenerated ? undefined : position,
+        wasBoilerplateGenerated ? undefined : position
       );
 
       sendEventToAnalytics({
