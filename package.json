@@ -32,8 +32,7 @@
     "onCommand:affinidiExplorer.createSchema",
     "onCommand:affinidiExplorer.createIssuance",
     "onView:affinidiDevTools",
-    "onCommand:affinidiDevTools.issueCredential",
-    "onLanguage:plaintext"
+    "onCommand:affinidiDevTools.issueCredential"
   ],
   "main": "./out/main",
   "contributes": {

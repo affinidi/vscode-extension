@@ -55,7 +55,6 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   });
 
-  // TODO: add javascript & typescript & javascriptreact & typescriptreact selectors instead of plaintext
   context.subscriptions.push(languages.registerDocumentDropEditProvider({ language: '*' }, dragAndDropProvider));
 
   window.createTreeView("affinidiSnippets", {
