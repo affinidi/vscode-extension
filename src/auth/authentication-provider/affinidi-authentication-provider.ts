@@ -7,8 +7,6 @@ import {
   Disposable,
   Event,
   EventEmitter,
-  ExtensionContext,
-  SecretStorage,
   window,
 } from "vscode";
 import { nanoid } from "nanoid";
@@ -17,21 +15,18 @@ import {
   sendEventToAnalytics,
   EventNames,
 } from "../../services/analyticsStreamApiService";
+import { SESSION_KEY_NAME, vaultService } from "./vault";
 
 export const AUTH_PROVIDER_ID = "AffinidiAuth";
-const AUTH_NAME = "Affinidi Authentication";
-const AUTH_SECRET_KEY = "AffinidiAuth";
+const AUTH_NAME = "Affinidi";
 
 export class AffinidiAuthenticationProvider
-  implements AuthenticationProvider, Disposable
-{
-  private readonly _secretStorage: SecretStorage;
+  implements AuthenticationProvider, Disposable {
   private readonly _disposable: Disposable;
   private _onDidChangeSessions =
     new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>();
 
-  constructor(context: ExtensionContext) {
-    this._secretStorage = context.secrets;
+  constructor() {
     this._disposable = Disposable.from(
       authentication.registerAuthenticationProvider(
         AUTH_PROVIDER_ID,
@@ -90,7 +85,8 @@ export class AffinidiAuthenticationProvider
   async getSessions(
     _scopes?: string[]
   ): Promise<readonly AuthenticationSession[]> {
-    return this._readSessionsFromStorage();
+    const session = this._readSessionFromStorage();
+    return session ? [session] : [];
   }
 
   // This function is called after `this.getSessions` is called and only when:
@@ -109,10 +105,7 @@ export class AffinidiAuthenticationProvider
         scopes: [],
       };
 
-      await this._secretStorage.store(
-        AUTH_SECRET_KEY,
-        JSON.stringify([session])
-      );
+      vaultService.set(SESSION_KEY_NAME, JSON.stringify(session));
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -143,25 +136,14 @@ export class AffinidiAuthenticationProvider
       },
     });
 
-    await this.handleRemoveSession(_sessionId);
+    this.handleRemoveSession(_sessionId);
   }
 
-  async handleRemoveSession(_sessionId: string): Promise<void> {
-    const sessions = await this._readSessionsFromStorage();
-    const idxToRemove = sessions.findIndex(
-      (session) => session.id === _sessionId
-    );
+  handleRemoveSession(_sessionId: string): void {
+    const session = this._readSessionFromStorage();
 
-    if (idxToRemove !== -1) {
-      const session = sessions[idxToRemove];
-
-      sessions.splice(idxToRemove, 1);
-
-      await this._secretStorage.store(
-        AUTH_SECRET_KEY,
-        JSON.stringify(sessions)
-      );
-
+    if (session) {
+      vaultService.delete(SESSION_KEY_NAME);
       this._onDidChangeSessions.fire({
         added: [],
         removed: [session],
@@ -170,8 +152,10 @@ export class AffinidiAuthenticationProvider
     }
   }
 
-  private async _readSessionsFromStorage(): Promise<AuthenticationSession[]> {
-    const storageValue = await this._secretStorage.get(AUTH_SECRET_KEY);
-    return JSON.parse(storageValue || "[]") as AuthenticationSession[];
+  private _readSessionFromStorage(): AuthenticationSession | undefined {
+    const storageValue = vaultService.get(SESSION_KEY_NAME);
+    return storageValue
+      ? (JSON.parse(storageValue) as AuthenticationSession)
+      : undefined;
   }
 }
