@@ -13,14 +13,14 @@ export function parseJwt(token: string) {
 }
 
 type ExecuteAuthProcessProps = {
-  isLogin: boolean
+  isSignUp: boolean
 };
 
-export const executeAuthProcess = async ({ isLogin }: ExecuteAuthProcessProps): Promise<AuthProcessOutput> => {
+export const executeAuthProcess = async ({ isSignUp }: ExecuteAuthProcessProps): Promise<AuthProcessOutput> => {
   const email = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: "email@domain.com",
-    prompt: isLogin ? "Enter the email of your Affinidi account" : "Enter email",
+    prompt: isSignUp ? "Enter email" : "Enter the email of your Affinidi account",
     validateInput: validateEmail,
   });
 
@@ -34,9 +34,9 @@ export const executeAuthProcess = async ({ isLogin }: ExecuteAuthProcessProps): 
       title: "Sending confirmation code",
     },
     async () => {
-      return isLogin
-        ? await userManagementClient.login({ username: email }) 
-        : await userManagementClient.signup({ username: email });
+      return isSignUp
+        ? await userManagementClient.signup({ username: email })
+        : await userManagementClient.login({ username: email });
     }
   );
 
@@ -59,12 +59,12 @@ export const executeAuthProcess = async ({ isLogin }: ExecuteAuthProcessProps): 
       title: "Singing in to Affindi",
     },
     async () => {
-      return isLogin  
-        ? await userManagementClient.loginConfirm({
+      return isSignUp  
+        ? await userManagementClient.signupConfirm({
             confirmationCode,
             token,
           })
-        : await userManagementClient.signupConfirm({
+        : await userManagementClient.loginConfirm({
             confirmationCode,
             token,
           });

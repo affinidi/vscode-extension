@@ -100,7 +100,7 @@ export class AffinidiAuthenticationProvider
   async createSession(_scopes: string[]): Promise<AuthenticationSession> {
     try {
       const { email, id, accessToken } = await executeAuthProcess({
-        isLogin: _scopes.includes("login"),
+        isSignUp: _scopes.includes("signup"),
       });
       const session: AuthenticationSession = {
         id: nanoid(),
