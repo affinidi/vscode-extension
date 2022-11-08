@@ -18,7 +18,7 @@ import { SnippetCommand } from "../snippets/shared/createSnippetCommand";
 import { insertSignVcWithCloudWalletSnippet } from "../snippets/sign-vc-with-cloud-wallet/snippet";
 import { AffResourceTreeItem, AffSnippetTreeItem } from "./treeItem";
 
-// { value: '{"id":"affinidiExplorer","itemHandles":["1/@did:elem:EiARLWJVMinRbZ2wr...wTOGAPUEWAo3rTq-AjJ1sKw/MySchemaV1-0"]}' }
+// 1/@did:elem:EiARLWJVMinRbZ2wr...wTOGAPUEWAo3rTq-AjJ1sKw/MySchemaV1-0
 const ITEM_ID_REGEX = /^\d+?\/(?<value>.*)$/;
 
 const SNIPPET_COMMANDS: Record<string, SnippetCommand<any>> = {
@@ -139,6 +139,7 @@ export class AffinidiDragAndDropProvider
     await snippetCommand(undefined, undefined, editor, position);
   }
 
+  // { value: '{"id":"affinidiExplorer","itemHandles":["1/@did:elem:EiARLWJVMinRbZ2wr...wTOGAPUEWAo3rTq-AjJ1sKw/MySchemaV1-0"]}' }
   private parseItem(item: DataTransferItem): any | undefined {
     const itemHandle: string = JSON.parse(item.value).itemHandles[0];
     const match = itemHandle.match(ITEM_ID_REGEX);
