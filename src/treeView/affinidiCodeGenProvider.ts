@@ -109,6 +109,10 @@ export class AffinidiCodeGenProvider
       type: CodeGenTypes.scripts,
       label: "Certification & Verification",
       state: TreeItemCollapsibleState.None,
+      command: {
+        title: "Certification & Verification",
+        command: "affinidi.codegen.referenceApp",
+      }
     });
   }
 

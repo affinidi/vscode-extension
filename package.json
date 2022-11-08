@@ -150,6 +150,11 @@
         "command": "affinidi.docs.availableSnippets",
         "title": "View Available Snippets",
         "category": "Affinidi Snippets"
+      },
+      {
+        "command": "affinidi.codegen.referenceApp",
+        "title": "Generate a Reference App",
+        "category": "Affinidi"
       }
     ],
     "menus": {
