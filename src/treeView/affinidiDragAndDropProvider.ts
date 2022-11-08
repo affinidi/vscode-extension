@@ -1,3 +1,4 @@
+import { getPriority } from "os";
 import {
   CancellationToken,
   DataTransfer,
@@ -11,6 +12,7 @@ import {
   TreeItem,
   window,
 } from "vscode";
+import { getProjectIssuances } from "../services/issuancesService";
 import { getSchema } from "../services/schemaManagerService";
 import { insertGetIssuanceOffersSnippet } from "../snippets/get-issuance-offers/snippet";
 import { insertSendVcOfferToEmailSnippet } from "../snippets/send-vc-offer-to-email/snippet";
@@ -42,6 +44,17 @@ export class AffinidiDragAndDropProvider
     if (
       selectedItem instanceof AffResourceTreeItem &&
       selectedItem.resourceType === "schema"
+    ) {
+      treeDataTransfer.set(
+        "application/vnd.code.tree.affinidiexplorer",
+        new DataTransferItem(source)
+      );
+      return;
+    }
+
+    if (
+      selectedItem instanceof AffResourceTreeItem &&
+      selectedItem.resourceType === "issuance"
     ) {
       treeDataTransfer.set(
         "application/vnd.code.tree.affinidiexplorer",
@@ -91,7 +104,7 @@ export class AffinidiDragAndDropProvider
       );
     }
 
-    return { insertText: '' };
+    return { insertText: "" };
   }
 
   private async handleResourceDrop(
@@ -114,6 +127,34 @@ export class AffinidiDragAndDropProvider
             type: schema.type,
             jsonLdContextUrl: schema.jsonLdContextUrl,
             jsonSchemaUrl: schema.jsonSchemaUrl,
+          },
+        },
+        undefined,
+        editor,
+        position
+      );
+    }
+
+    if (item.resourceType === "issuance") {
+      const { projectId, id } = item.metadata;
+      console.log("hitting issuance");
+
+      const issuance = await getProjectIssuances(id);
+      if (!issuance) {
+        return;
+      }
+
+      console.log("issuance with id", issuance);
+      console.log("----------", issuance.issuances[0]);
+
+      await insertSendVcOfferToEmailSnippet(
+        {
+          projectId,
+          schema: {
+            type: issuance.issuances[0].template.schema.type,
+            jsonLdContextUrl:
+              issuance.issuances[0].template.schema.jsonLdContextUrl,
+            jsonSchemaUrl: issuance.issuances[0].template.schema.jsonSchemaUrl,
           },
         },
         undefined,
