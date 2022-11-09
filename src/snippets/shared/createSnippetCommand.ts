@@ -1,4 +1,11 @@
-import { SnippetString, TextEditor, window, workspace } from "vscode";
+import {
+  CancellationToken,
+  Position,
+  SnippetString,
+  TextEditor,
+  window,
+  workspace,
+} from "vscode";
 import { showQuickPick } from "../../utils/showQuickPick";
 import {
   createSnippetTools,
@@ -7,7 +14,17 @@ import {
 } from "./createSnippetTools";
 import * as javascript from "../boilerplates/javascript";
 import * as typescript from "../boilerplates/typescript";
-import { EventNames, sendEventToAnalytics } from "../../services/analyticsStreamApiService";
+import {
+  EventNames,
+  sendEventToAnalytics,
+} from "../../services/analyticsStreamApiService";
+
+export type SnippetCommand<CommandInput = unknown> = (
+  input?: CommandInput,
+  implementation?: SnippetImplementation,
+  editor?: TextEditor,
+  position?: Position
+) => Promise<void>;
 
 export const languageIdLabels: Record<string, string> = {
   javascript: "JavaScript",
@@ -35,11 +52,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
     input?: CommandInput,
     implementation?: SnippetImplementation
   ) => Promise<SnippetInput | undefined>
-): (
-  input?: CommandInput,
-  implementation?: SnippetImplementation,
-  editor?: TextEditor
-) => Promise<void> {
+): SnippetCommand<CommandInput> {
   const supportedLanguageIds = Object.keys(implementations);
   const { askForImplementation, isLanguageSupported, generateSnippet } =
     createSnippetTools<SnippetInput>(implementations);
@@ -47,13 +60,16 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
   return async (
     commandInput,
     implementation,
-    editor = window.activeTextEditor
+    editor = window.activeTextEditor,
+    position
   ) => {
     try {
       let languageId: string;
       if (editor && isLanguageSupported(editor.document.languageId)) {
         languageId = editor.document.languageId;
       } else {
+        editor = undefined;
+
         const languageIds = SUPPORTED_BOILERPLATE_LANGUAGE_IDS.filter(
           (languageId) => supportedLanguageIds.includes(languageId)
         );
@@ -91,6 +107,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         return;
       }
 
+      let wasBoilerplateGenerated = false;
       if (!editor || editor.document.getText().trim().length === 0) {
         if (!editor) {
           editor = await window.showTextDocument(
@@ -108,10 +125,12 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         }
 
         await editor.insertSnippet(new SnippetString(generateBoilerplate()));
+        wasBoilerplateGenerated = true;
       }
 
       await editor.insertSnippet(
-        generateSnippet(languageId, implementation, snippetInput)
+        generateSnippet(languageId, implementation, snippetInput),
+        wasBoilerplateGenerated ? undefined : position
       );
 
       sendEventToAnalytics({
