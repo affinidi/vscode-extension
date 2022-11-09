@@ -33,9 +33,7 @@ const CONSOLE_URL = "https://console.prod.affinidi.com";
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activateInternal(context: ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log("Congratulations, your Affinidi extension is now active!");
+  console.log("Activating Affinidi extension...");
 
   ext.context = context;
   ext.outputChannel = window.createOutputChannel("Affinidi");
@@ -169,6 +167,10 @@ export async function activateInternal(context: ExtensionContext) {
       "affinidi.copyJsonURL",
       async (treeItem: AffResourceTreeItem) => {
         const schema = await getSchema(treeItem.metadata.id as string);
+        if (!schema) {
+          return;
+        }
+
         env.clipboard.writeText(schema.jsonSchemaUrl);
 
         sendEventToAnalytics({
@@ -187,6 +189,10 @@ export async function activateInternal(context: ExtensionContext) {
       "affinidi.copyJsonLdURL",
       async (treeItem: AffResourceTreeItem) => {
         const schema = await getSchema(treeItem.metadata.id as string);
+        if (!schema) {
+          return;
+        }
+
         env.clipboard.writeText(schema.jsonLdContextUrl);
 
         sendEventToAnalytics({
@@ -309,6 +315,8 @@ export async function activateInternal(context: ExtensionContext) {
 
     commands.executeCommand("vscode.open", issueCredentialURL);
   });
+
+  console.log("Affinidi extension is now active!");
 }
 
 // This method is called when your extension is deactivated

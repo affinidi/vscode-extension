@@ -235,6 +235,7 @@ export class AffinidiExplorerProvider
     const res = await getMySchemas({
       did: projectInfo.wallet.did,
       scope: parent?.metadata?.scope,
+      apiKeyHash: projectInfo.apiKey.apiKeyHash,
     });
 
     res.schemas.map((schema) => {

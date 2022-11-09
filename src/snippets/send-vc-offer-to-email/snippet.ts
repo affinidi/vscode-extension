@@ -1,14 +1,13 @@
 import { ProgressLocation, window } from "vscode";
 import { iamService } from "../../services/iamService";
 import { ISSUANCE_API_BASE } from "../../services/issuancesService";
-import { getMySchemas } from "../../services/schemaManagerService";
 import { Schema } from "../../shared/types";
-import { showQuickPick } from "../../utils/showQuickPick";
 import { Implementations } from "../shared/createSnippetTools";
 import { askForProjectId } from "../shared/askForProjectId";
 import * as javascript from "./javascript";
 import * as typescript from "./typescript";
 import { createSnippetCommand } from "../shared/createSnippetCommand";
+import { askForMySchema } from '../shared/askForMySchema';
 
 export interface SnippetInput {
   issuanceApiUrl: string;
@@ -32,12 +31,6 @@ export const implementations: Implementations<SnippetInput> = {
   typescriptreact: typescript,
 };
 
-const EXAMPLE_SCHEMA: Schema = {
-  type: "MySchema",
-  jsonLdContextUrl: "https://schema.affinidi.com/MySchemaV1-0.jsonld",
-  jsonSchemaUrl: "https://schema.affinidi.com/MySchemaV1-0.json",
-};
-
 export const insertSendVcOfferToEmailSnippet = createSnippetCommand<
   SnippetInput,
   CommandInput
@@ -58,7 +51,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<
     () => iamService.getProjectSummary(projectId)
   );
 
-  const schema = input?.schema ?? (await askForMySchema(did));
+  const schema = input?.schema ?? (await askForMySchema({ did, apiKeyHash }));
   if (!schema) {
     return;
   }
@@ -79,20 +72,3 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<
   };
 });
 
-async function askForMySchema(did: string): Promise<Schema | undefined> {
-  const { schemas } = await window.withProgress(
-    {
-      location: ProgressLocation.Notification,
-      title: "Fetching available schemas...",
-    },
-    () => getMySchemas({ did })
-  );
-
-  return showQuickPick(
-    [
-      ["Use an example schema", EXAMPLE_SCHEMA],
-      ...schemas.map<[string, Schema]>((schema) => [schema.id, schema]),
-    ],
-    { title: "Select a VC Schema" }
-  );
-}

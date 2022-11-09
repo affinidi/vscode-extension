@@ -1,8 +1,6 @@
 import { ProgressLocation, window } from "vscode";
 import { iamService, IAM_API_BASE } from "../../services/iamService";
-import { getMySchemas } from "../../services/schemaManagerService";
 import { Schema } from "../../shared/types";
-import { showQuickPick } from "../../utils/showQuickPick";
 import { Implementations } from "../shared/createSnippetTools";
 import { askForProjectId } from "../shared/askForProjectId";
 import * as javascript from "./javascript";
@@ -10,6 +8,7 @@ import * as typescript from "./typescript";
 import { createSnippetCommand } from "../shared/createSnippetCommand";
 import { nanoid } from "nanoid";
 import { ext } from "../../extensionVariables";
+import { askForMySchema } from '../shared/askForMySchema';
 
 export interface SnippetInput {
   iamUrl: string;
@@ -35,12 +34,6 @@ export const implementations: Implementations<SnippetInput> = {
 const CLOUD_WALLET_API_BASE =
   "https://cloud-wallet-api.prod.affinity-project.org/api";
 
-const EXAMPLE_SCHEMA: Schema = {
-  type: "MySchema",
-  jsonLdContextUrl: "https://schema.affinidi.com/MySchemaV1-0.jsonld",
-  jsonSchemaUrl: "https://schema.affinidi.com/MySchemaV1-0.json",
-};
-
 export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<
   SnippetInput,
   CommandInput
@@ -65,7 +58,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<
     () => iamService.getProjectSummary(projectId)
   );
 
-  const schema = input?.schema ?? (await askForMySchema(did));
+  const schema = input?.schema ?? (await askForMySchema({ did, apiKeyHash }));
   if (!schema) {
     return;
   }
@@ -81,22 +74,3 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<
     schema
   };
 });
-
-
-async function askForMySchema(did: string): Promise<Schema | undefined> {
-  const { schemas } = await window.withProgress(
-    {
-      location: ProgressLocation.Notification,
-      title: "Fetching available schemas...",
-    },
-    () => getMySchemas({ did })
-  );
-
-  return showQuickPick(
-    [
-      ["Use an example schema", EXAMPLE_SCHEMA],
-      ...schemas.map<[string, Schema]>((schema) => [schema.id, schema]),
-    ],
-    { title: "Select a VC Schema" }
-  );
-}

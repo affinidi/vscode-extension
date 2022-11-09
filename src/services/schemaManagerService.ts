@@ -1,7 +1,4 @@
-import { authentication } from "vscode";
-import { apiFetch, buildURL } from "../api-client/api-fetch";
-import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
-import { ext } from "../extensionVariables";
+import { apiFetch, buildURL, generateApiKeyHeader } from "../api-client/api-fetch";
 
 export type SchemaEntity = {
   id: string;
@@ -25,34 +22,20 @@ export type ResponseType = {
 };
 
 export const SCHEMA_MANAGER_API_BASE =
-  "https://api.affinidi.com/schema-manager/v1";
-
-export const getPublicSchemas = async (): Promise<ResponseType> => {
-  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/schemas", {
-    scope: "public",
-    limit: "10",
-  });
-
-  return apiFetch({
-    method: "GET",
-    endpoint: url,
-  });
-};
+  "https://affinidi-schema-manager.prod.affinity-project.org/api";
 
 type GetMySchemasProps = {
   did: string;
   scope?: SchemaSearchScope;
+  apiKeyHash: string;
 };
 
 export const getMySchemas = async ({
   did,
   scope = "default",
+  apiKeyHash,
 }: GetMySchemasProps): Promise<ResponseType> => {
-  const session = await ext.authProvider.requireActiveSession({
-    createIfNone: true,
-  });
-
-  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/schemas", {
+  const url = buildURL(SCHEMA_MANAGER_API_BASE, "/v1/schemas", {
     did,
     authorDid: did,
     scope,
@@ -61,16 +44,23 @@ export const getMySchemas = async ({
   return apiFetch({
     method: "GET",
     endpoint: url,
-    headers: {
-      cookie: session.accessToken,
-    },
+    headers: generateApiKeyHeader(apiKeyHash),
   });
 };
 
-export const getSchema = async (schemaId: string): Promise<SchemaEntity> => {
-  const url = buildURL(SCHEMA_MANAGER_API_BASE, `/schemas/${schemaId}`);
-  return apiFetch({
-    method: "GET",
-    endpoint: url,
-  });
+export const getSchema = async (schemaId: string): Promise<SchemaEntity | undefined> => {
+  const url = buildURL(SCHEMA_MANAGER_API_BASE, `/v1/schemas/${schemaId}`);
+
+  try {
+    return await apiFetch({
+      method: "GET",
+      endpoint: url,
+    });
+  } catch (error: any) {
+    if (error.code === 'SCH-9') {
+      return undefined;
+    }
+
+    throw error;
+  }
 };
