@@ -1,6 +1,7 @@
 import { authentication } from "vscode";
 import { apiFetch } from "../api-client/api-fetch";
 import { AUTH_PROVIDER_ID } from "../auth/authentication-provider/affinidi-authentication-provider";
+import { isTelemetryEnabled } from "../utils/telemetry";
 
 // TODO: This JWT_TOKEN is valid only for 180 days(until 24-04-2023). We need to re-generate the new token by this date.
 const JWT_TOKEN =
@@ -22,6 +23,10 @@ export const sendEventToAnalytics = async ({
   subCategory?: string;
   metadata?: any;
 }): Promise<void> => {
+  if (!isTelemetryEnabled()) {
+    return;
+  }
+
   const session = await authentication.getSession(AUTH_PROVIDER_ID, []);
   const uuid = session?.account?.id ?? "anonymous-user";
 

@@ -39,6 +39,23 @@
   ],
   "main": "./out/main",
   "contributes": {
+    "configuration": {
+      "title": "Affinidi",
+      "properties": {
+        "affinidi.telemetry.enabled": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "markdownDescription": "Send telemetry",
+          "scope": "window",
+          "tags": [
+            "telemetry"
+          ]
+        }
+      }
+    },
     "commands": [
       {
         "command": "affinidi.signup",

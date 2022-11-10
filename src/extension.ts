@@ -27,6 +27,7 @@ import {
   EventNames,
   sendEventToAnalytics,
 } from "./services/analyticsStreamApiService";
+import { askUserForTelemetryConsent } from "./utils/telemetry";
 
 const CONSOLE_URL = "https://console.prod.affinidi.com";
 
@@ -38,6 +39,8 @@ export async function activateInternal(context: ExtensionContext) {
   ext.context = context;
   ext.outputChannel = window.createOutputChannel("Affinidi");
   ext.authProvider = initAuthentication();
+
+  await askUserForTelemetryConsent();
 
   initSnippets();
   initGenerators();
@@ -127,7 +130,6 @@ export async function activateInternal(context: ExtensionContext) {
       );
 
       commands.executeCommand("markdown.showPreview", uri);
-
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
         subCategory: "about:snippets",
