@@ -12,6 +12,7 @@ const ANALYTICS_STREAM_API_URL =
 export const enum EventNames {
   commandExecuted = "COMMAND_EXECUTED",
   snippetInserted = "SNIPPET_INSERTED",
+  extensionInitialized = 'EXTENSION_INITIALIZED'
 }
 
 export const sendEventToAnalytics = async ({
