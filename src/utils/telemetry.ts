@@ -1,4 +1,8 @@
 import { window, workspace } from "vscode";
+import {
+  sendEventToAnalytics,
+  EventNames,
+} from "../services/analyticsStreamApiService";
 
 enum Consent {
   "Accept",
@@ -18,6 +22,11 @@ export async function askUserForTelemetryConsent() {
         await workspace
           .getConfiguration()
           .update("affinidi.telemetry.enabled", true, true);
+
+        sendEventToAnalytics({
+          name: EventNames.extensionInitialized,
+          subCategory: "affinidiExtension",
+        });
         break;
       case Consent[Consent.Deny]:
         await workspace

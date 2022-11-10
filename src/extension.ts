@@ -40,8 +40,6 @@ export async function activateInternal(context: ExtensionContext) {
   ext.outputChannel = window.createOutputChannel("Affinidi");
   ext.authProvider = initAuthentication();
 
-  await askUserForTelemetryConsent();
-
   initSnippets();
   initGenerators();
 
@@ -318,6 +316,8 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand("vscode.open", issueCredentialURL);
   });
 
+  await askUserForTelemetryConsent();
+  
   console.log("Affinidi extension is now active!");
 }
 
