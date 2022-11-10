@@ -1,11 +1,4 @@
-import {
-  CancellationToken,
-  Position,
-  SnippetString,
-  TextEditor,
-  window,
-  workspace,
-} from "vscode";
+import { Position, SnippetString, TextEditor, window, workspace } from "vscode";
 import { showQuickPick } from "../../utils/showQuickPick";
 import {
   createSnippetTools,

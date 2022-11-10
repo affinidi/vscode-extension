@@ -21,7 +21,8 @@ export const AUTH_PROVIDER_ID = "AffinidiAuth";
 const AUTH_NAME = "Affinidi";
 
 export class AffinidiAuthenticationProvider
-  implements AuthenticationProvider, Disposable {
+  implements AuthenticationProvider, Disposable
+{
   private readonly _disposable: Disposable;
   private _onDidChangeSessions =
     new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>();
