@@ -12,14 +12,14 @@ describe("initAuthentication()", () => {
     sandbox.stub(window, "showInformationMessage");
   });
 
-  describe("#affinidi.signup", () => {
+  describe("#affinidi.signUp", () => {
     it("should signup", async () => {
       sandbox.stub(authentication, "getSession");
 
       sandbox.stub(window, "showWarningMessage")
         .resolves('Accept' as any);
 
-      await commands.executeCommand("affinidi.signup");
+      await commands.executeCommand("affinidi.signUp");
 
       expect(authentication.getSession).calledWith(AUTH_PROVIDER_ID, ['signup'], {
         forceNewSession: true,
@@ -32,7 +32,7 @@ describe("initAuthentication()", () => {
       sandbox.stub(window, "showWarningMessage")
         .resolves('Reject' as any);
 
-      await commands.executeCommand("affinidi.signup");
+      await commands.executeCommand("affinidi.signUp");
 
       expect(authentication.getSession).not.called;
     });

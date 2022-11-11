@@ -24,7 +24,7 @@
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
     "onCommand:affinidi.openMarkDown",
-    "onCommand:affinidi.signup",
+    "onCommand:affinidi.signUp",
     "onCommand:affinidiDevTools.issueCredential",
     "onCommand:affinidiExplorer.createIssuance",
     "onCommand:affinidiExplorer.createSchema",
@@ -48,7 +48,7 @@
             "null"
           ],
           "default": null,
-          "markdownDescription": "Send telemetry",
+          "markdownDescription": "%contributes.configuration.markdownDescription%",
           "scope": "window",
           "tags": [
             "telemetry"
@@ -58,121 +58,121 @@
     },
     "commands": [
       {
-        "command": "affinidi.signup",
-        "category": "Affinidi",
-        "title": "Create an Account"
+        "command": "affinidi.signUp",
+        "title": "%affinidi.signUp%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidi.login",
-        "category": "Affinidi",
-        "title": "Sign In"
+        "title": "%affinidi.login%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidi.logout",
-        "category": "Affinidi",
-        "title": "Sign Out"
+        "title": "%affinidi.signOut%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidi.createProject",
-        "category": "Affinidi",
-        "title": "Create Project"
+        "title": "%affinidi.createProject%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidi.me",
-        "category": "Affinidi",
-        "title": "Account Details"
+        "title": "%affinidi.me%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidi.codegen.sendVcOfferToEmail",
-        "category": "Affinidi",
-        "title": "Generate a snippet to \"Send a VC offer to an email\""
+        "title": "%affinidi.codegen.sendVcOfferToEmail%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidi.codegen.getIssuanceOffers",
-        "category": "Affinidi",
-        "title": "Generate a snippet to \"Get Issuance offers\""
+        "title": "%affinidi.codegen.getIssuanceOffers%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidi.codegen.signVcWithCloudWallet",
-        "category": "Affinidi",
-        "title": "Generate a snippet to \"Sign a VC with Cloud Wallet\""
+        "title": "%affinidi.codegen.signVcWithCloudWallet%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidiExplorer.refresh",
-        "title": "Refresh",
-        "category": "Affinidi Explorer",
+        "title": "%affinidiExplorer.refresh%",
+        "category": "Affinidi %commands.category.explorer%",
         "icon": "$(refresh)"
       },
       {
         "command": "affinidi.openMarkDown",
-        "title": "About Issuance",
-        "category": "Affinidi Explorer",
+        "title": "%affinidi.openMarkDown%",
+        "category": "Affinidi %commands.category.explorer%",
         "icon": "$(info)"
       },
       {
         "command": "affinidi.copyJsonURL",
-        "title": "Copy JSON Schema URL",
-        "category": "Affinidi Explorer"
+        "title": "%affinidi.copyJsonURL%",
+        "category": "Affinidi %commands.category.explorer%"
       },
       {
         "command": "affinidi.copyJsonLdURL",
-        "title": "Copy JSON-LD Context URL",
-        "category": "Affinidi Explorer"
+        "title": "%affinidi.copyJsonLdURL%",
+        "category": "Affinidi %commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.viewProperties",
-        "title": "View Properties",
-        "category": "Affinidi Explorer"
+        "title": "%affinidiExplorer.viewProperties%",
+        "category": "Affinidi %commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.showJsonSchema",
-        "title": "Show JSON Schema",
-        "category": "Affinidi Explorer"
+        "title": "%affinidiExplorer.showJsonSchema%",
+        "category": "Affinidi %commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.showJsonLdContext",
-        "title": "Show JSON-LD Context",
-        "category": "Affinidi Explorer"
+        "title": "%affinidiExplorer.showJsonLdContext%",
+        "category": "Affinidi %commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.createSchema",
-        "title": "Create Schema",
-        "category": "Affinidi Explorer"
+        "title": "%affinidiExplorer.createSchema%",
+        "category": "Affinidi %commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.createIssuance",
-        "title": "Create Issuance",
-        "category": "Affinidi Explorer"
+        "title": "%affinidiExplorer.createIssuance%",
+        "category": "Affinidi %commands.category.explorer%"
       },
       {
         "command": "affinidiDevTools.issueCredential",
-        "title": "Issuance Credential",
-        "category": "Affinidi Dev Tool"
+        "title": "%affinidiDevTools.issueCredential%",
+        "category": "Affinidi %commands.category.devTool%"
       },
       {
         "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
-        "title": "Build: Send VC offers to email",
-        "category": "Affinidi Script Generators"
+        "title": "%affinidiExplorer.codegen.sendVcOfferToEmail%",
+        "category": "Affinidi  %commands.category.generators%"
       },
       {
         "command": "affinidiExplorer.codegen.getIssuanceOffers",
-        "title": "Build: Get the issuance offers",
-        "category": "Affinidi Script Generators"
+        "title": "%affinidiExplorer.codegen.getIssuanceOffers%",
+        "category": "Affinidi  %commands.category.generators%"
       },
       {
         "command": "affinidiExplorer.codegen.signVcWithCloudWallet",
-        "title": "Build: Sign a VC with Cloud Wallet",
-        "category": "Affinidi Script Generators"
+        "title": "%affinidiExplorer.codegen.signVcWithCloudWallet%",
+        "category": "Affinidi  %commands.category.generators%"
       },
       {
         "command": "affinidi.docs.availableSnippets",
-        "title": "View Available Snippets",
-        "category": "Affinidi Snippets"
+        "title": "%affinidi.docs.availableSnippets%",
+        "category": "Affinidi %commands.category.snippets%"
       },
       {
-        "command": "affinidi.codegen.referenceApp",
-        "title": "Generate a Reference App",
-        "category": "Affinidi"
+        "command": "affinidiExplorer.codegen.referenceApp",
+        "title": "%affinidiExplorer.codegen.referenceApp%",
+        "category": "Affinidi %commands.category.generators%"
       }
     ],
     "menus": {
@@ -295,15 +295,15 @@
       "affinidi": [
         {
           "id": "affinidiExplorer",
-          "name": "Resources"
+          "name": "%views.affinidi.affinidiExplorer%"
         },
         {
           "id": "affinidiCodeGeneration",
-          "name": "Snippets & Generators"
+          "name": "%views.affinidi.affinidiCodeGeneration%"
         },
         {
           "id": "affinidiDevTools",
-          "name": "Developer Tools"
+          "name": "%views.affinidi.affinidiDevTools%"
         }
       ]
     },
@@ -319,20 +319,20 @@
     "viewsWelcome": [
       {
         "view": "affinidiDevTools",
-        "contents": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiExplorer.createSchema)\nBuild a rule that checks validity of verifiable credentials against one or more schemas\n[Create Rule](command:affinidiTools3)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiDevTools.issueCredential)"
+        "contents": "%viewsWelcome.affinidiDevTools%"
       }
     ],
     "walkthroughs": [
       {
         "id": "affinidi-walkthrough",
-        "title": "Get started with Affinidi",
+        "title": "%walkthroughs.title%",
         "featuredFor": [],
-        "description": "Get to know the tools that will accelerate your journey into privacy-preserving application development",
+        "description": "%walkthroughs.description%",
         "steps": [
           {
             "id": "createSchema",
-            "title": "Create Schema",
-            "description": "Easily generate a schema for a verifiable credential.\n[Create Schema](command:getting-started.createSchema)",
+            "title": "%walkthroughs.steps.0.title%",
+            "description": "%walkthroughs.steps.0.description%",
             "media": {
               "image": "media/affinidi-logo.svg",
               "altText": "Affinidi"
@@ -343,8 +343,8 @@
           },
           {
             "id": "createRule",
-            "title": "Create Rules",
-            "description": "Create powerful rules that match verifiable credentials\n[Create Rule](command:getting-started.createRule)",
+            "title": "%walkthroughs.steps.1.title%",
+            "description": "walkthroughs.steps.1.description",
             "media": {
               "image": "media/affinidi-logo.svg",
               "altText": "Affinidi"
@@ -369,10 +369,11 @@
     "authentication": [
       {
         "id": "AffinidiOTP",
-        "label": "Affinidi OTP"
+        "label": "%authentication.title%"
       }
     ]
   },
+  "l10n": "./l10n",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -381,7 +382,8 @@
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
     "clean": "rimraf ./out",
-    "dev": "nodemon -x 'npm run compile'"
+    "dev": "nodemon -x 'npm run compile'",
+    "generate-translation": "npx @vscode/l10n-dev export -o ./l10n ./src"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",
@@ -398,6 +400,7 @@
     "@types/vscode": "^1.72.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
+    "@vscode/l10n-dev": "^0.0.18",
     "@vscode/test-electron": "^2.1.5",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
@@ -415,6 +418,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@vscode/l10n": "^0.0.6",
     "@vscode/webview-ui-toolkit": "^1.1.0",
     "conf": "^10.2.0",
     "date-fns": "^2.29.3",

@@ -1,4 +1,11 @@
-import { Position, SnippetString, TextEditor, window, workspace } from "vscode";
+import {
+  Position,
+  SnippetString,
+  TextEditor,
+  window,
+  workspace,
+  l10n,
+} from "vscode";
 import { showQuickPick } from "../../utils/showQuickPick";
 import {
   createSnippetTools,
@@ -72,7 +79,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
             languageIdLabels[languageId],
             languageId,
           ]),
-          { title: "Select a language" }
+          { title: l10n.t("Select a language") }
         );
 
         if (!selectedLanguageId) {
@@ -90,7 +97,10 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
 
       if (!implementations[languageId]?.[implementation]) {
         throw new Error(
-          `Snippet does not support "${implementation}" implementation for "${languageId}" language`
+          l10n.t(
+            "Snippet does not support {0} implementation for {1} language",
+            [implementation, languageId]
+          )
         );
       }
 
@@ -113,7 +123,10 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         const generateBoilerplate = boilerplates[languageId]?.[implementation];
         if (!generateBoilerplate) {
           throw new Error(
-            `Boilerplate is not available for "${languageId}" language and ${implementation} implementation`
+            l10n.t(
+              'Boilerplate is not available for "{0}" language and {1} implementation',
+              [languageId, implementation]
+            )
           );
         }
 

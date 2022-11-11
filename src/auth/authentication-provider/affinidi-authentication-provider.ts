@@ -8,6 +8,7 @@ import {
   Event,
   EventEmitter,
   window,
+  l10n,
 } from "vscode";
 import { nanoid } from "nanoid";
 import { executeAuthProcess, parseJwt } from "./auth-process";
@@ -76,7 +77,7 @@ export class AffinidiAuthenticationProvider
   ): Promise<AuthenticationSession> {
     const session = await this.getActiveSession(options, scopes);
     if (!session) {
-      throw new Error("Authentication session is required, but not found");
+      throw new Error(l10n.t("Authentication session is required, but not found"));
     }
 
     return session;

@@ -9,6 +9,7 @@ import {
   env,
   ViewColumn,
   WebviewPanel,
+  l10n
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { AffinidiCodeGenProvider } from "./treeView/affinidiCodeGenProvider";
@@ -323,5 +324,5 @@ export async function activateInternal(context: ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export async function deactivateInternal() {
-  window.showInformationMessage("Goodbye!!!");
+  window.showInformationMessage(l10n.t("Goodbye!!!"));
 }

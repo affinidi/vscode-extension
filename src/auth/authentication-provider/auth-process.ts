@@ -1,4 +1,4 @@
-import { ProgressLocation, window } from "vscode";
+import { ProgressLocation, window, l10n } from "vscode";
 import { validateEmail, validateOTP } from "./validators";
 import { userManagementClient } from "./user-management.client";
 
@@ -13,25 +13,29 @@ export function parseJwt(token: string) {
 }
 
 type ExecuteAuthProcessProps = {
-  isSignUp: boolean
+  isSignUp: boolean;
 };
 
-export const executeAuthProcess = async ({ isSignUp }: ExecuteAuthProcessProps): Promise<AuthProcessOutput> => {
+export const executeAuthProcess = async ({
+  isSignUp,
+}: ExecuteAuthProcessProps): Promise<AuthProcessOutput> => {
   const email = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: "email@domain.com",
-    prompt: isSignUp ? "Enter email" : "Enter the email of your Affinidi account",
+    prompt: isSignUp
+      ? l10n.t("Enter email")
+      : l10n.t("Enter the email of your Affinidi account"),
     validateInput: validateEmail,
   });
 
   if (!email) {
-    throw new Error("Email is required");
+    throw new Error(l10n.t("Email is required"));
   }
 
   const { token } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Sending confirmation code",
+      title: l10n.t("Sending confirmation code"),
     },
     async () => {
       return isSignUp
@@ -40,26 +44,28 @@ export const executeAuthProcess = async ({ isSignUp }: ExecuteAuthProcessProps):
     }
   );
 
-  window.showInformationMessage(`Confirmation code sent to ${email}`);
+  window.showInformationMessage(
+    `${l10n.t("Confirmation code sent to")} ${email}`
+  );
 
   const confirmationCode = await window.showInputBox({
     ignoreFocusOut: true,
-    placeHolder: "Confirmation Code",
-    prompt: "Paste the code sent to your email",
+    placeHolder: l10n.t("Confirmation Code"),
+    prompt: l10n.t("Paste the code sent to your email"),
     validateInput: validateOTP,
   });
 
   if (!confirmationCode) {
-    throw new Error("Confirmation code is required");
+    throw new Error(l10n.t("Confirmation code is required"));
   }
 
   const { cookie } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Singing in to Affindi",
+      title: `${l10n.t("Signing in to")} Affinidi`,
     },
     async () => {
-      return isSignUp  
+      return isSignUp
         ? await userManagementClient.signupConfirm({
             confirmationCode,
             token,

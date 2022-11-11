@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import { isNullOrUndefined } from "util";
 
 /**
@@ -23,7 +24,7 @@ export function nonNullValue<T>(
 ): T {
   if (isNullOrUndefined(value)) {
     throw new Error(
-      "Internal error: Expected value to be neither null nor undefined" +
+      l10n.t("Internal error: Expected value to be neither null nor undefined") +
         (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : "")
     );
   }
@@ -40,7 +41,7 @@ export function nonNullOrEmptyValue(
 ): string {
   if (!value) {
     throw new Error(
-      "Internal error: Expected value to be neither null, undefined, nor empty" +
+      l10n.t("Internal error: Expected value to be neither null, undefined, nor empty") +
         (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : "")
     );
   }

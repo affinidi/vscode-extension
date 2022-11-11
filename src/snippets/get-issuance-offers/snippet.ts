@@ -1,4 +1,4 @@
-import { ProgressLocation, window } from "vscode";
+import { ProgressLocation, window, l10n } from "vscode";
 import { iamService } from "../../services/iamService";
 import {
   getProjectIssuances,
@@ -44,7 +44,7 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<
   } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Fetching project information...",
+      title: l10n.t("Fetching project information..."),
     },
     () => iamService.getProjectSummary(projectId)
   );
@@ -69,13 +69,13 @@ async function askForIssuanceId(input: {
   const { issuances } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Fetching available issuances...",
+      title: l10n.t("Fetching available issuances..."),
     },
     () => getProjectIssuances(input)
   );
 
   if (issuances.length === 0) {
-    throw new Error("You don't have any issuances to choose from");
+    throw new Error(l10n.t("You don't have any issuances to choose from"));
   }
 
   return showQuickPick(
@@ -85,6 +85,6 @@ async function askForIssuanceId(input: {
         issuance.id,
       ]),
     ],
-    { title: "Select an Issuance" }
+    { title: l10n.t("Select an Issuance") }
   );
 }

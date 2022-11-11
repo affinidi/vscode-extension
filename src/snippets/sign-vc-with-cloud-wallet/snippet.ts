@@ -1,4 +1,4 @@
-import { ProgressLocation, window } from "vscode";
+import { ProgressLocation, window, l10n } from "vscode";
 import { iamService, IAM_API_BASE } from "../../services/iamService";
 import { Schema } from "../../shared/types";
 import { Implementations } from "../shared/createSnippetTools";
@@ -8,7 +8,7 @@ import * as typescript from "./typescript";
 import { createSnippetCommand } from "../shared/createSnippetCommand";
 import { nanoid } from "nanoid";
 import { ext } from "../../extensionVariables";
-import { askForMySchema } from '../shared/askForMySchema';
+import { askForMySchema } from "../shared/askForMySchema";
 
 export interface SnippetInput {
   iamUrl: string;
@@ -53,7 +53,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<
   } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Fetching project information...",
+      title: l10n.t("Fetching project information..."),
     },
     () => iamService.getProjectSummary(projectId)
   );
@@ -71,6 +71,6 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<
     projectId,
     cookie: session.accessToken,
     claimId: nanoid(),
-    schema
+    schema,
   };
 });

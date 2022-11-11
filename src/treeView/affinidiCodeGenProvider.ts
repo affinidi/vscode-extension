@@ -4,6 +4,7 @@ import {
   TreeDataProvider,
   TreeItem,
   TreeItemCollapsibleState,
+  l10n,
 } from "vscode";
 import { CodeGenTypes } from "./treeTypes";
 import { AffCodeGenTreeItem } from "./treeItem";
@@ -44,25 +45,25 @@ export class AffinidiCodeGenProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootSnippets,
-      label: "IntelliSense Snippets",
+      label: l10n.t("IntelliSense Snippets"),
       state: TreeItemCollapsibleState.None,
       icon: new ThemeIcon("symbol-snippet"),
       command: {
-        title: "View Available Snippets",
+        title: l10n.t("View Available Snippets"),
         command: "affinidi.docs.availableSnippets",
       },
     });
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootScripts,
-      label: "Script Generators",
+      label: l10n.t("Script Generators"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("file-code"),
     });
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootApps,
-      label: "App Generators",
+      label: l10n.t("App Generators"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("rocket"),
     });
@@ -73,30 +74,30 @@ export class AffinidiCodeGenProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: "Send a VC Offer to an email",
+      label: l10n.t("Send a VC Offer to an email"),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: "Send a VC Offer to an email",
+        title: l10n.t("Send a VC Offer to an email"),
         command: "affinidi.codegen.sendVcOfferToEmail",
       },
     });
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: "Get Issuance Offers",
+      label: l10n.t("Get Issuance Offers"),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: "Get Issuance Offers",
+        title: l10n.t("Get Issuance Offers"),
         command: "affinidi.codegen.getIssuanceOffers",
       },
     });
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: "Sign a VC with Cloud Wallet",
+      label: l10n.t("Sign a VC with Cloud Wallet"),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: "Sign a VC with Cloud Wallet",
+        title: l10n.t("Sign a VC with Cloud Wallet"),
         command: "affinidi.codegen.signVcWithCloudWallet",
       },
     });
@@ -107,11 +108,11 @@ export class AffinidiCodeGenProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: "Certification & Verification",
+      label: l10n.t("Certification & Verification"),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: "Certification & Verification",
-        command: "affinidi.codegen.referenceApp",
+        title: l10n.t("Certification & Verification"),
+        command: "affinidiExplorer.codegen.referenceApp",
       }
     });
   }

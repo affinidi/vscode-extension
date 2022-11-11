@@ -1,24 +1,26 @@
-import { window, workspace } from "vscode";
+import { window, workspace, l10n } from "vscode";
 import {
   sendEventToAnalytics,
   EventNames,
 } from "../services/analyticsStreamApiService";
 
-enum Consent {
-  "Accept",
-  "Deny",
-}
+const CONSENT = {
+  accept: l10n.t("Accept"),
+  deny: l10n.t("Deny"),
+};
 
 export async function askUserForTelemetryConsent() {
   if (isTelemetryEnabled() === null) {
     const consent = await window.showWarningMessage(
-      "By clicking here, I state that I have read and understood the terms and conditions",
-      Consent[Consent.Accept],
-      Consent[Consent.Deny]
+      l10n.t(
+        "By clicking here, I state that I have read and understood the terms and conditions"
+      ),
+      CONSENT.accept,
+      CONSENT.deny
     );
 
     switch (consent) {
-      case Consent[Consent.Accept]:
+      case CONSENT.accept:
         await workspace
           .getConfiguration()
           .update("affinidi.telemetry.enabled", true, true);
@@ -28,7 +30,7 @@ export async function askUserForTelemetryConsent() {
           subCategory: "affinidiExtension",
         });
         break;
-      case Consent[Consent.Deny]:
+      case CONSENT.deny:
         await workspace
           .getConfiguration()
           .update("affinidi.telemetry.enabled", false, true);

@@ -1,14 +1,14 @@
-import { ProgressLocation, window, commands, Uri } from "vscode";
+import { ProgressLocation, window, commands, Uri, l10n } from "vscode";
 import * as fs from "fs";
 import * as execa from "execa";
 import { ext } from "../extensionVariables";
 
 export const WARNING_MESSAGE =
-  "Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli";
+  l10n.t("Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli");
 export const ERROR_MESSAGE =
-  "Affinidi CLI needs to be installed to proceed with this action: npm i -g @affinidi/cli";
-export const DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE = "Directory with this name already exist.";
-export const APP_SUCCESSFULLY_CREATED_MESSAGE = "App successfully generated.";
+  l10n.t("Affinidi CLI needs to be installed to proceed with this action: npm i -g @affinidi/cli");
+export const DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE = l10n.t("Directory with this name already exist.");
+export const APP_SUCCESSFULLY_CREATED_MESSAGE = l10n.t("App successfully generated.");
 
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
@@ -62,7 +62,7 @@ export class CliHelper {
     await window.withProgress(
       {
         location: ProgressLocation.Notification,
-        title: "App is generating...",
+        title: l10n.t("App is generating..."),
       },
       async () => {
         return await this.exec.command(command);
