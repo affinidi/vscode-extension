@@ -1,0 +1,50 @@
+{
+  "affinidi.signUp": "",
+  "affinidi.login": "Acceso",
+  "affinidi.signOut": "",
+  "affinidi.createProject": "",
+  "affinidi.me": "",
+  "affinidi.codegen.sendVcOfferToEmail": "",
+  "affinidi.codegen.getIssuanceOffers": "",
+  "affinidi.codegen.signVcWithCloudWallet": "",
+  "affinidi.openMarkDown": "",
+  "affinidi.copyJsonURL": "",
+  "affinidi.copyJsonLdURL": "",
+
+  "affinidiExplorer.refresh": "",
+  "affinidiExplorer.viewProperties": "",
+  "affinidiExplorer.showJsonSchema": "",
+  "affinidiExplorer.showJsonLdContext": "",
+  "affinidiExplorer.createSchema": "",
+  "affinidiExplorer.createIssuance": "",
+  "affinidiExplorer.codegen.sendVcOfferToEmail": "",
+  "affinidiExplorer.codegen.getIssuanceOffers": "",
+  "affinidiExplorer.codegen.signVcWithCloudWallet": "",
+  "affinidiExplorer.codegen.referenceApp": "",
+
+  "affinidiDevTools.issueCredential": "",
+
+  "commands.category.explorer": "",
+  "commands.category.devTool": "",
+  "commands.category.snippets": "",
+  "commands.category.generators": "",
+
+  "affinidi.docs.availableSnippets": "",
+
+  "views.affinidi.affinidiExplorer": "",
+  "views.affinidi.affinidiCodeGeneration": "",
+  "views.affinidi.affinidiDevTools": "",
+
+  "viewsWelcome.affinidiDevTools": "",
+
+  "walkthroughs.title": "",
+  "walkthroughs.description": "",
+  "walkthroughs.steps.0.title": "",
+  "walkthroughs.steps.0.description": "",
+  "walkthroughs.steps.1.title": "",
+  "walkthroughs.steps.1.description": "",
+
+  "authentication.title": "",
+
+  "contributes.configuration.markdownDescription": ""
+}

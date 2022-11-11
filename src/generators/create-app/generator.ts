@@ -1,15 +1,19 @@
 import * as path from "path";
-import { ProgressLocation, window, Uri } from "vscode";
+import { ProgressLocation, window, Uri, l10n } from "vscode";
 import { cliHelper } from "../../utils/cliHelper";
 
-export const NO_DIRECTORY_SELECTED_MESSAGE = "Installation folder didn't select.";
-export const NO_APP_NAME_SELECTED_MESSAGE = "App name didn't specify.";
+export const NO_DIRECTORY_SELECTED_MESSAGE = l10n.t(
+  "Installation folder wasn't selected."
+);
+export const NO_APP_NAME_SELECTED_MESSAGE = l10n.t(
+  "App name wasn't specified."
+);
 
 export async function generateAffinidiAppWithCLI(): Promise<void> {
   const isCLIInstalled = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Checking CLI installation...",
+      title: l10n.t("Checking CLI installation..."),
     },
     async () => {
       return await cliHelper.isCliInstalledOrWarn({ type: "error" });
@@ -22,9 +26,9 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
 
   const selectedFolder = await window.showOpenDialog({
     canSelectMany: false,
-    openLabel: 'Select',
+    openLabel: l10n.t("Select"),
     canSelectFiles: false,
-    canSelectFolders: true
+    canSelectFolders: true,
   });
 
   if (!selectedFolder) {
@@ -35,7 +39,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
   const { path: folderPath } = Uri.parse(selectedFolder.toString());
 
   const appName = await window.showInputBox({
-    prompt: "Enter an app name",
+    prompt: l10n.t("Enter an app name"),
   });
 
   if (!appName) {

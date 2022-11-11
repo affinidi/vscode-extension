@@ -1,17 +1,16 @@
 # VSCode Extension for Affinidi
+## Translation
 
-## Prerequisites
+For the translation purpose we are using VSCode `l10n` [API](https://code.visualstudio.com/api/references/vscode-api#l10n). To generate translation into English run:
+1. Add translation wrapper:
+```ts
+import { l10n } from "vscode";
 
-1. `npm install`
-2. `npm run compile`
+...
 
-## Let's build an awesome extension!
-
-Create and update it in current project's build file:
-
-https://code.visualstudio.com/api/extension-guides/overview
-
-https://code.visualstudio.com/api/extension-capabilities/overview
-
-https://code.visualstudio.com/api/working-with-extensions/bundling-extension
-
+l10n.t("Example text");
+```
+2. Next run command:
+```sh
+npm run generate-translation
+```

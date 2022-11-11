@@ -7,6 +7,7 @@ import {
   TreeDataProvider,
   TreeItem,
   TreeItemCollapsibleState,
+  l10n
 } from "vscode";
 import {
   getProjectIssuances,
@@ -145,7 +146,7 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootDID,
-      label: "Digital Identities",
+      label:l10n.t( "Digital Identities"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("lock"),
       parent,
@@ -153,7 +154,7 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootIssuance,
-      label: "Issuances",
+      label:l10n.t( "Issuances"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("output"),
       parent,
@@ -161,7 +162,7 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootSchemas,
-      label: "VC Schemas",
+      label:l10n.t( "VC Schemas"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
       parent,
@@ -169,7 +170,7 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootRules,
-      label: "Rules",
+      label:l10n.t( "Rules"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("server-process"),
       parent,
@@ -177,7 +178,7 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootAnalytics,
-      label: "Analytics",
+      label:l10n.t( "Analytics"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("graph"),
       parent,
@@ -205,7 +206,7 @@ export class AffinidiExplorerProvider
   ) {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.subRootSchemas,
-      label: "Public",
+      label: l10n.t("Public"),
       metadata: {
         scope: "public" as SchemaSearchScope,
       },
@@ -216,7 +217,7 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.subRootSchemas,
-      label: "Unlisted",
+      label: l10n.t("Unlisted"),
       metadata: {
         scope: "unlisted" as SchemaSearchScope,
       },
@@ -250,7 +251,7 @@ export class AffinidiExplorerProvider
         icon: new ThemeIcon("bracket"),
         parent,
         command: {
-          title: "Open schema details",
+          title: l10n.t("Open schema details"),
           command: "schema.showSchemaDetails",
         },
       });
@@ -287,7 +288,7 @@ export class AffinidiExplorerProvider
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:21835",
-      label: "Education match",
+      label: l10n.t("Education match"),
       description: "MOCKED",
       icon: new ThemeIcon("server-process"),
       parent,
@@ -296,7 +297,7 @@ export class AffinidiExplorerProvider
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:54835",
-      label: "Health skills check",
+      label: l10n.t("Health skills check"),
       description: "MOCKED",
       icon: new ThemeIcon("server-process"),
       parent,
@@ -305,7 +306,7 @@ export class AffinidiExplorerProvider
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:19805",
-      label: "License compliance",
+      label: l10n.t("License compliance"),
       description: "MOCKED",
       icon: new ThemeIcon("server-process"),
       parent,
@@ -314,7 +315,7 @@ export class AffinidiExplorerProvider
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rule,
       metadata: "aff:default:rule:74802",
-      label: "Email validator",
+      label: l10n.t("Email validator"),
       description: "MOCKED",
       icon: new ThemeIcon("server-process"),
       parent,
@@ -327,7 +328,7 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.empty,
-      label: "(empty)",
+      label: l10n.t("(empty)"),
       icon: new ThemeIcon("dash"),
       parent,
     });
@@ -339,10 +340,10 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.signup,
-      label: "Create an Account with Affinidi",
+      label: l10n.t("Create an Account with Affinidi"),
       icon: new ThemeIcon("sign-in"),
       parent,
-      command: { title: "Create an Account", command: "affinidi.signup" },
+      command: { title: l10n.t("Create an Account"), command: "affinidi.signUp" },
     });
   }
 
@@ -352,10 +353,10 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.login,
-      label: "Sign in to Affinidi",
+      label: l10n.t("Sign in to Affinidi"),
       icon: new ThemeIcon("sign-in"),
       parent,
-      command: { title: "Sign In", command: "affinidi.login" },
+      command: { title: l10n.t("Sign In"), command: "affinidi.login" },
     });
   }
 
@@ -365,10 +366,10 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.project,
-      label: "Create Project",
+      label: l10n.t("Create Project"),
       icon: new ThemeIcon("file-directory-create"),
       parent,
-      command: { title: "Create Project", command: "affinidi.createProject" },
+      command: { title: l10n.t("Create Project"), command: "affinidi.createProject" },
     });
   }
 

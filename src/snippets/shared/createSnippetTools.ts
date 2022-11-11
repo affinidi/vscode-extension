@@ -1,6 +1,5 @@
-import { SnippetString } from "vscode";
+import { SnippetString, l10n } from "vscode";
 import { showQuickPick } from "../../utils/showQuickPick";
-import { languageIdLabels } from "./createSnippetCommand";
 
 export enum SnippetImplementation {
   sdk = "sdk",
@@ -15,9 +14,9 @@ export type Implementations<Input> = {
 };
 
 const implementationLabels = {
-  [SnippetImplementation.sdk]: "Use Affinidi SDK",
-  [SnippetImplementation.fetch]: "Use Fetch API",
-  [SnippetImplementation.axios]: "Use Axios",
+  [SnippetImplementation.sdk]: l10n.t("Use Affinidi SDK"),
+  [SnippetImplementation.fetch]: l10n.t("Use Fetch API"),
+  [SnippetImplementation.axios]: l10n.t("Use Axios"),
 };
 
 export function createSnippetTools<
@@ -40,7 +39,7 @@ export function createSnippetTools<
             implementationLabels[implementation],
             implementation,
           ]),
-          { title: "Select an implementation" }
+          { title: l10n.t("Select an implementation") }
         ));
 
       if (!selectedValue) {
@@ -58,7 +57,7 @@ export function createSnippetTools<
       const generate = implementations[languageId]?.[implementation];
       if (!generate) {
         throw new Error(
-          "Could not generate a snippet: unsupported language or implementation"
+          l10n.t("Could not generate a snippet: unsupported language or implementation")
         );
       }
 

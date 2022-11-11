@@ -1,0 +1,50 @@
+{
+  "affinidi.signUp": "Create an Account",
+  "affinidi.login": "Sign In",
+  "affinidi.signOut": "Sign Out",
+  "affinidi.createProject": "Create Project",
+  "affinidi.me": "Account Details",
+  "affinidi.codegen.sendVcOfferToEmail": "Generate a snippet to \"Send a VC offer to an email\"",
+  "affinidi.codegen.getIssuanceOffers": "Generate a snippet to \"Get Issuance offers\"",
+  "affinidi.codegen.signVcWithCloudWallet": "Generate a snippet to \"Sign a VC with Cloud Wallet\"",
+  "affinidi.openMarkDown": "About Issuance",
+  "affinidi.copyJsonURL": "Copy JSON Schema URL",
+  "affinidi.copyJsonLdURL": "Copy JSON-LD Context URL",
+
+  "affinidiExplorer.refresh": "Refresh",
+  "affinidiExplorer.viewProperties": "View Properties",
+  "affinidiExplorer.showJsonSchema": "Show JSON Schema",
+  "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
+  "affinidiExplorer.createSchema": "Create Schema",
+  "affinidiExplorer.createIssuance": "Create Issuance",
+  "affinidiExplorer.codegen.sendVcOfferToEmail": "Build: Send VC offers to email",
+  "affinidiExplorer.codegen.getIssuanceOffers": "Build: Get the issuance offers",
+  "affinidiExplorer.codegen.signVcWithCloudWallet": "Build: Sign a VC with Cloud Wallet",
+  "affinidiExplorer.codegen.referenceApp": "Generate a Reference App",
+
+  "affinidiDevTools.issueCredential": "Issuance Credential",
+
+  "commands.category.explorer": "Explorer",
+  "commands.category.devTool": "Dev Tool",
+  "commands.category.snippets": "Snippets",
+  "commands.category.generators": "Generators",
+
+  "affinidi.docs.availableSnippets": "View Available Snippets",
+
+  "views.affinidi.affinidiExplorer": "Resources",
+  "views.affinidi.affinidiCodeGeneration": "Snippets & Generators",
+  "views.affinidi.affinidiDevTools": "Developer Tools",
+
+  "viewsWelcome.affinidiDevTools": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiExplorer.createSchema)\nBuild a rule that checks validity of verifiable credentials against one or more schemas\n[Create Rule](command:affinidiTools3)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiDevTools.issueCredential)",
+
+  "walkthroughs.title": "Get started with Affinidi",
+  "walkthroughs.description": "Get to know the tools that will accelerate your journey into privacy-preserving application development",
+  "walkthroughs.steps.0.title": "Create Schema",
+  "walkthroughs.steps.0.description": "Easily generate a schema for a verifiable credential.\n[Create Schema](command:getting-started.createSchema)",
+  "walkthroughs.steps.1.title": "Create Rules",
+  "walkthroughs.steps.1.description": "Create powerful rules that match verifiable credentials\n[Create Rule](command:getting-started.createRule)",
+
+  "authentication.title": "Affinidi OTP",
+
+  "contributes.configuration.markdownDescription": "Send telemetry"
+}

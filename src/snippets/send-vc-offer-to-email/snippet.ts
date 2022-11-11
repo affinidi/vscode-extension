@@ -1,4 +1,4 @@
-import { ProgressLocation, window } from "vscode";
+import { ProgressLocation, window, l10n } from "vscode";
 import { iamService } from "../../services/iamService";
 import { ISSUANCE_API_BASE } from "../../services/issuancesService";
 import { Schema } from "../../shared/types";
@@ -7,7 +7,7 @@ import { askForProjectId } from "../shared/askForProjectId";
 import * as javascript from "./javascript";
 import * as typescript from "./typescript";
 import { createSnippetCommand } from "../shared/createSnippetCommand";
-import { askForMySchema } from '../shared/askForMySchema';
+import { askForMySchema } from "../shared/askForMySchema";
 
 export interface SnippetInput {
   issuanceApiUrl: string;
@@ -46,7 +46,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<
   } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Fetching project information...",
+      title: l10n.t("Fetching project information..."),
     },
     () => iamService.getProjectSummary(projectId)
   );
@@ -59,7 +59,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<
   const email =
     input?.email ??
     (await window.showInputBox({
-      prompt: "Enter an email to send the VC offer to",
+      prompt: l10n.t("Enter an email to send the VC offer to"),
     }));
 
   return {
@@ -71,4 +71,3 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<
     schema,
   };
 });
-
