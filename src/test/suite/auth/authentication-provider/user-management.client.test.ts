@@ -6,6 +6,7 @@ import {
   userManagementClient,
   USER_MANAGEMENT_API_BASE,
 } from "../../../../auth/authentication-provider/user-management.client";
+import { ext } from "../../../../extensionVariables";
 import { generateConsoleAuthCookie, generateSession } from "../../helpers";
 import { sandbox } from '../../setup';
 
@@ -78,7 +79,7 @@ describe("userManagementClient", () => {
       const username = 'fake-username';
       const cookie = generateConsoleAuthCookie();
 
-      sandbox.stub(authentication, 'getSession').resolves(generateSession({ accessToken: cookie }));
+      sandbox.stub(ext.authProvider, "requireActiveSession").resolves(generateSession({ accessToken: cookie }));
 
       nock(USER_MANAGEMENT_API_BASE, {
         reqheaders: {
@@ -89,7 +90,7 @@ describe("userManagementClient", () => {
         .reply(200, { userId, username, extra: 'fields' });
 
       expect(await userManagementClient.getUserDetails()).to.deep.eq({ userId, username });
-      expect(authentication.getSession).calledWith(AUTH_PROVIDER_ID, [], { createIfNone: true });
+      expect(ext.authProvider.requireActiveSession).calledWith({ createIfNone: true });
     });
   });
 });

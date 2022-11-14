@@ -40,13 +40,13 @@ describe("insertSendVcOfferToEmailSnippet()", () => {
           jsonLdContextUrl,
         },
       },
-      SnippetImplementation.axios,
+      SnippetImplementation.fetch,
       editor,
     );
 
     const text = editor.document.getText();
     for (const value of [
-      "axios",
+      "fetch",
       `'${ISSUANCE_API_BASE}/v1/issuances'`,
       `\`${ISSUANCE_API_BASE}/v1/issuances/\${issuanceData.id}/offers\``,
       projectId,

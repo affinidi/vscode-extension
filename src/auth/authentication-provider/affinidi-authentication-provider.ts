@@ -77,7 +77,9 @@ export class AffinidiAuthenticationProvider
   ): Promise<AuthenticationSession> {
     const session = await this.getActiveSession(options, scopes);
     if (!session) {
-      throw new Error(l10n.t("Authentication session is required, but not found"));
+      throw new Error(
+        l10n.t("Valid Affinidi authentication session not found")
+      );
     }
 
     return session;

@@ -80,22 +80,23 @@
       {
         "command": "affinidi.me",
         "title": "%affinidi.me%",
-        "category": "Affinidi"
+        "category": "Affinidi",
+        "icon": "$(account)"
       },
       {
         "command": "affinidi.codegen.sendVcOfferToEmail",
         "title": "%affinidi.codegen.sendVcOfferToEmail%",
-        "category": "Affinidi"
+        "category": "Affinidi %commands.category.generators%"
       },
       {
         "command": "affinidi.codegen.getIssuanceOffers",
         "title": "%affinidi.codegen.getIssuanceOffers%",
-        "category": "Affinidi"
+        "category": "Affinidi %commands.category.generators%"
       },
       {
         "command": "affinidi.codegen.signVcWithCloudWallet",
         "title": "%affinidi.codegen.signVcWithCloudWallet%",
-        "category": "Affinidi"
+        "category": "Affinidi %commands.category.generators%"
       },
       {
         "command": "affinidiExplorer.refresh",
@@ -150,28 +151,13 @@
         "category": "Affinidi %commands.category.devTool%"
       },
       {
-        "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
-        "title": "%affinidiExplorer.codegen.sendVcOfferToEmail%",
-        "category": "Affinidi  %commands.category.generators%"
-      },
-      {
-        "command": "affinidiExplorer.codegen.getIssuanceOffers",
-        "title": "%affinidiExplorer.codegen.getIssuanceOffers%",
-        "category": "Affinidi  %commands.category.generators%"
-      },
-      {
-        "command": "affinidiExplorer.codegen.signVcWithCloudWallet",
-        "title": "%affinidiExplorer.codegen.signVcWithCloudWallet%",
-        "category": "Affinidi  %commands.category.generators%"
-      },
-      {
         "command": "affinidi.docs.availableSnippets",
         "title": "%affinidi.docs.availableSnippets%",
-        "category": "Affinidi %commands.category.snippets%"
+        "category": "Affinidi"
       },
       {
-        "command": "affinidiExplorer.codegen.referenceApp",
-        "title": "%affinidiExplorer.codegen.referenceApp%",
+        "command": "affinidi.codegen.app",
+        "title": "%affinidi.codegen.app%",
         "category": "Affinidi %commands.category.generators%"
       }
     ],
@@ -216,19 +202,16 @@
         {
           "command": "affinidiDevTools.issueCredential",
           "when": "never"
-        },
-        {
-          "command": "affinidiExplorer.codegen.getIssuanceOffers",
-          "when": "never"
-        },
-        {
-          "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
-          "when": "never"
         }
       ],
       "view/title": [
         {
           "command": "affinidiExplorer.refresh",
+          "when": "view == affinidiExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "affinidi.me",
           "when": "view == affinidiExplorer",
           "group": "navigation"
         }
@@ -280,12 +263,12 @@
           "group": "z_commands"
         },
         {
-          "command": "affinidiExplorer.codegen.getIssuanceOffers",
+          "command": "affinidi.codegen.getIssuanceOffers",
           "when": "view == affinidiExplorer && viewItem == issuance",
           "group": "1"
         },
         {
-          "command": "affinidiExplorer.codegen.sendVcOfferToEmail",
+          "command": "affinidi.codegen.sendVcOfferToEmail",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "1"
         }

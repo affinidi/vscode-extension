@@ -7,7 +7,7 @@ import {
   TreeDataProvider,
   TreeItem,
   TreeItemCollapsibleState,
-  l10n
+  l10n,
 } from "vscode";
 import {
   getProjectIssuances,
@@ -25,7 +25,7 @@ import {
 import { ExplorerResourceTypes } from "./treeTypes";
 import { AffResourceTreeItem } from "./treeItem";
 import { ext } from "../extensionVariables";
-import { formatIssuanceName } from '../shared/formatIssuanceName';
+import { formatIssuanceName } from "../shared/formatIssuanceName";
 
 const isSignedIn = async () => {
   const sessions = await ext.authProvider.getSessions([]);
@@ -78,8 +78,8 @@ export class AffinidiExplorerProvider
 
     switch (element?.resourceType) {
       case undefined:
-        await this._addCreateProjectItem(treeNodes);
         await this._addProjectItems(treeNodes);
+        await this._addCreateProjectItem(treeNodes);
         break;
 
       case ExplorerResourceTypes[ExplorerResourceTypes.project]:
@@ -100,10 +100,6 @@ export class AffinidiExplorerProvider
 
       case ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]:
         await this._addIssuanceItems(treeNodes, element);
-        break;
-
-      case ExplorerResourceTypes[ExplorerResourceTypes.rootRules]:
-        await this._addRuleItems(treeNodes, element);
         break;
 
       default:
@@ -146,7 +142,7 @@ export class AffinidiExplorerProvider
   ): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootDID,
-      label:l10n.t( "Digital Identities"),
+      label: l10n.t("Digital Identities"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("lock"),
       parent,
@@ -154,7 +150,7 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootIssuance,
-      label:l10n.t( "Issuances"),
+      label: l10n.t("Issuances"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("output"),
       parent,
@@ -162,25 +158,9 @@ export class AffinidiExplorerProvider
 
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.rootSchemas,
-      label:l10n.t( "VC Schemas"),
+      label: l10n.t("VC Schemas"),
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon("bracket"),
-      parent,
-    });
-
-    this.addNewTreeItem(treeNodes, {
-      type: ExplorerResourceTypes.rootRules,
-      label:l10n.t( "Rules"),
-      state: TreeItemCollapsibleState.Collapsed,
-      icon: new ThemeIcon("server-process"),
-      parent,
-    });
-
-    this.addNewTreeItem(treeNodes, {
-      type: ExplorerResourceTypes.rootAnalytics,
-      label:l10n.t( "Analytics"),
-      state: TreeItemCollapsibleState.Collapsed,
-      icon: new ThemeIcon("graph"),
       parent,
     });
   }
@@ -343,7 +323,10 @@ export class AffinidiExplorerProvider
       label: l10n.t("Create an Account with Affinidi"),
       icon: new ThemeIcon("sign-in"),
       parent,
-      command: { title: l10n.t("Create an Account"), command: "affinidi.signUp" },
+      command: {
+        title: l10n.t("Create an Account"),
+        command: "affinidi.signUp",
+      },
     });
   }
 
@@ -369,7 +352,10 @@ export class AffinidiExplorerProvider
       label: l10n.t("Create Project"),
       icon: new ThemeIcon("file-directory-create"),
       parent,
-      command: { title: l10n.t("Create Project"), command: "affinidi.createProject" },
+      command: {
+        title: l10n.t("Create Project"),
+        command: "affinidi.createProject",
+      },
     });
   }
 

@@ -8,14 +8,14 @@ import { generateAffinidiAppWithCLI } from "./create-app/generator";
 
 export const initGenerators = () => {
   ext.context.subscriptions.push(
-    commands.registerCommand("affinidiExplorer.codegen.referenceApp", async () => {
+    commands.registerCommand("affinidi.codegen.app", async () => {
       await generateAffinidiAppWithCLI();
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
         subCategory: "CLI",
         metadata: {
-          commandId: "affinidiExplorer.codegen.referenceApp",
+          commandId: "affinidi.codegen.app",
         },
       });
     })

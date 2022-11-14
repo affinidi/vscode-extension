@@ -1,5 +1,5 @@
 {
-  "Authentication session is required, but not found": "Authentication session is required, but not found",
+  "Valid Affinidi authentication session not found": "Valid Affinidi authentication session not found",
   "Enter email": "Enter email",
   "Enter the email of your Affinidi account": "Enter the email of your Affinidi account",
   "Email is required": "Email is required",
@@ -28,7 +28,8 @@
   "Project Name": "Project Name",
   "Enter the project name": "Enter the project name",
   "Project name is required": "Project name is required",
-  "Successfully created the project": "Successfully created the project",
+  "Creating Project...": "Creating Project...",
+  "Project created successfully": "Project created successfully",
   "Project could not be created, please try again later.": "Project could not be created, please try again later.",
   "Fetching project information...": "Fetching project information...",
   "Fetching available issuances...": "Fetching available issuances...",
@@ -45,13 +46,12 @@
   "Boilerplate is not available for \"{0}\" language and {1} implementation": "Boilerplate is not available for \"{0}\" language and {1} implementation",
   "Use Affinidi SDK": "Use Affinidi SDK",
   "Use Fetch API": "Use Fetch API",
-  "Use Axios": "Use Axios",
   "Select an implementation": "Select an implementation",
   "Could not generate a snippet: unsupported language or implementation": "Could not generate a snippet: unsupported language or implementation",
+  "App Generators": "App Generators",
+  "Script Generators": "Script Generators",
   "IntelliSense Snippets": "IntelliSense Snippets",
   "View Available Snippets": "View Available Snippets",
-  "Script Generators": "Script Generators",
-  "App Generators": "App Generators",
   "Send a VC Offer to an email": "Send a VC Offer to an email",
   "Get Issuance Offers": "Get Issuance Offers",
   "Sign a VC with Cloud Wallet": "Sign a VC with Cloud Wallet",
@@ -59,8 +59,6 @@
   "Digital Identities": "Digital Identities",
   "Issuances": "Issuances",
   "VC Schemas": "VC Schemas",
-  "Rules": "Rules",
-  "Analytics": "Analytics",
   "Public": "Public",
   "Unlisted": "Unlisted",
   "Open schema details": "Open schema details",
@@ -82,5 +80,5 @@
   "Internal error: Expected value to be neither null nor undefined": "Internal error: Expected value to be neither null nor undefined",
   "Internal error: Expected value to be neither null, undefined, nor empty": "Internal error: Expected value to be neither null, undefined, nor empty",
   "Deny": "Deny",
-  "By clicking here, I state that I have read and understood the terms and conditions": "By clicking here, I state that I have read and understood the terms and conditions"
+  "Help us make Affinidi better! Do you accept to send anonymous usage data?": "Help us make Affinidi better! Do you accept to send anonymous usage data?"
 }
