@@ -4,7 +4,6 @@ import { showQuickPick } from "../../utils/showQuickPick";
 export enum SnippetImplementation {
   sdk = "sdk",
   fetch = "fetch",
-  axios = "axios",
 }
 
 export type Implementations<Input> = {
@@ -16,7 +15,6 @@ export type Implementations<Input> = {
 const implementationLabels = {
   [SnippetImplementation.sdk]: l10n.t("Use Affinidi SDK"),
   [SnippetImplementation.fetch]: l10n.t("Use Fetch API"),
-  [SnippetImplementation.axios]: l10n.t("Use Axios"),
 };
 
 export function createSnippetTools<

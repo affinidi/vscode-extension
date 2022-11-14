@@ -31,12 +31,12 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
     canSelectFolders: true,
   });
 
-  if (!selectedFolder) {
+  if (!selectedFolder || selectedFolder && !selectedFolder.length) {
     window.showErrorMessage(NO_DIRECTORY_SELECTED_MESSAGE);
     return;
   }
 
-  const { path: folderPath } = Uri.parse(selectedFolder.toString());
+  const { fsPath: folderPath } = Uri.parse(selectedFolder[0].toString());
 
   const appName = await window.showInputBox({
     prompt: l10n.t("Enter an app name"),

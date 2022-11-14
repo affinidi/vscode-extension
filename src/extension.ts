@@ -9,7 +9,7 @@ import {
   env,
   ViewColumn,
   WebviewPanel,
-  l10n
+  l10n,
 } from "vscode";
 import { AffinidiExplorerProvider } from "./treeView/affinidiExplorerProvider";
 import { AffinidiCodeGenProvider } from "./treeView/affinidiCodeGenProvider";
@@ -317,8 +317,8 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand("vscode.open", issueCredentialURL);
   });
 
-  await askUserForTelemetryConsent();
-  
+  askUserForTelemetryConsent();
+
   console.log("Affinidi extension is now active!");
 }
 

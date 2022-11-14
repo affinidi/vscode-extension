@@ -5,6 +5,7 @@ import {
   EventNames,
 } from "../services/analyticsStreamApiService";
 import { cliHelper } from "../utils/cliHelper";
+import { openReadOnlyContent } from "../utils/openReadOnlyContent";
 
 import {
   AffinidiAuthenticationProvider,
@@ -101,6 +102,10 @@ async function logoutHandler(): Promise<void> {
 async function userDetailsHandler(): Promise<void> {
   const userDetails = await userManagementClient.getUserDetails();
   ext.outputChannel.appendLine(JSON.stringify(userDetails));
+  openReadOnlyContent({
+    node: { label: "AccountDetails", id: userDetails.userId },
+    content: userDetails,
+  });
 
   sendEventToAnalytics({
     name: EventNames.commandExecuted,

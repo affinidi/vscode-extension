@@ -11,9 +11,9 @@ const CONSENT = {
 
 export async function askUserForTelemetryConsent() {
   if (isTelemetryEnabled() === null) {
-    const consent = await window.showWarningMessage(
+    const consent = await window.showInformationMessage(
       l10n.t(
-        "By clicking here, I state that I have read and understood the terms and conditions"
+        "Help us make Affinidi better! Do you accept to send anonymous usage data?"
       ),
       CONSENT.accept,
       CONSENT.deny

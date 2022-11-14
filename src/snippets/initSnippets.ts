@@ -13,8 +13,15 @@ export const initSnippets = () => {
   ext.context.subscriptions.push(
     commands.registerCommand(
       "affinidi.codegen.sendVcOfferToEmail",
-      async () => {
-        await insertSendVcOfferToEmailSnippet();
+      async (element?: AffResourceTreeItem) => {
+        await insertSendVcOfferToEmailSnippet(
+          element
+            ? {
+                projectId: element.metadata.projectId,
+                schema: element.metadata,
+              }
+            : {}
+        );
 
         sendEventToAnalytics({
           name: EventNames.commandExecuted,
@@ -28,17 +35,27 @@ export const initSnippets = () => {
   );
 
   ext.context.subscriptions.push(
-    commands.registerCommand("affinidi.codegen.getIssuanceOffers", async () => {
-      await insertGetIssuanceOffersSnippet();
+    commands.registerCommand(
+      "affinidi.codegen.getIssuanceOffers",
+      async (element?: AffResourceTreeItem) => {
+        await insertGetIssuanceOffersSnippet(
+          element
+            ? {
+                projectId: element.metadata.projectId,
+                issuanceId: element.metadata.id,
+              }
+            : {}
+        );
 
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: "vcOffer",
-        metadata: {
-          commandId: "affinidi.codegen.getIssuanceOffers",
-        },
-      });
-    })
+        sendEventToAnalytics({
+          name: EventNames.commandExecuted,
+          subCategory: "vcOffer",
+          metadata: {
+            commandId: "affinidi.codegen.getIssuanceOffers",
+          },
+        });
+      }
+    )
   );
 
   ext.context.subscriptions.push(
@@ -52,46 +69,6 @@ export const initSnippets = () => {
           subCategory: "vc",
           metadata: {
             commandId: "affinidi.codegen.signVcWithCloudWallet",
-          },
-        });
-      }
-    )
-  );
-
-  ext.context.subscriptions.push(
-    commands.registerCommand(
-      "affinidiExplorer.codegen.getIssuanceOffers",
-      async (element: AffResourceTreeItem) => {
-        await insertGetIssuanceOffersSnippet({
-          projectId: element.metadata.projectId,
-          issuanceId: element.metadata.id,
-        });
-
-        sendEventToAnalytics({
-          name: EventNames.commandExecuted,
-          subCategory: "vcOffer",
-          metadata: {
-            commandId: "affinidiExplorer.codegen.getIssuanceOffers",
-          },
-        });
-      }
-    )
-  );
-
-  ext.context.subscriptions.push(
-    commands.registerCommand(
-      "affinidiExplorer.codegen.sendVcOfferToEmail",
-      async (element: AffResourceTreeItem) => {
-        await insertSendVcOfferToEmailSnippet({
-          projectId: element.metadata.projectId,
-          schema: element.metadata,
-        });
-
-        sendEventToAnalytics({
-          name: EventNames.commandExecuted,
-          subCategory: "vcOffer",
-          metadata: {
-            commandId: "affinidiExplorer.codegen.sendVcOfferToEmail",
           },
         });
       }

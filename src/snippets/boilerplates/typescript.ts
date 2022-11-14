@@ -1,14 +1,9 @@
 export function fetch(): string {
   return `\
-// uncomment for a Node app
-// import fetch from 'node-fetch';
-
-${common()}`;
-}
-
-export function axios(): string {
-  return `\
-import axios from 'axios';
+// To run this script directly use node 18+ and ts-node:
+// npx ts-node name-of-script.ts
+  
+/// <reference lib="dom" />
 
 ${common()}`;
 }
