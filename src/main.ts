@@ -1,6 +1,7 @@
 /*!
  * Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
+ * Modifications copyright (C) 2022 Affinidi.com
  */
 
 import * as extension from './extension';

@@ -1,15 +1,27 @@
 {
-  "name": "affinidi-vscode",
-  "publisher": "affinidi",
+  "name": "affinidi",
+  "publisher": "Affinidi",
   "displayName": "Affinidi",
   "description": "Fast-track your Web 2.0 to Web 3.0 journey with Affinidi",
-  "version": "0.0.1",
+  "author": "affinidi.com",
+  "license": "Apache-2.0",
+  "icon": "media/affinidi-icon-large.png",
+  "preview": true,
+  "repository": "https://gitlab.com/affinidi/foundational/genesis/vscode-extension",
+  "version": "0.0.5",
   "engines": {
-    "vscode": "^1.70.0"
+    "vscode": "^1.73.0"
   },
   "categories": [
     "Snippets",
     "Other"
+  ],
+  "keywords": [
+    "Affinidi",
+    "snippet",
+    "web3",
+    "did",
+    "credential"
   ],
   "activationEvents": [
     "onAuthenticationRequest:AffinidiOTP",
@@ -295,7 +307,7 @@
         {
           "id": "affinidi",
           "title": "Affinidi",
-          "icon": "media/affinidi-logo.svg"
+          "icon": "media/affinidi-icon.png"
         }
       ]
     },
@@ -317,7 +329,7 @@
             "title": "%walkthroughs.steps.0.title%",
             "description": "%walkthroughs.steps.0.description%",
             "media": {
-              "image": "media/affinidi-logo.svg",
+              "image": "media/affinidi-logo.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
@@ -329,7 +341,7 @@
             "title": "%walkthroughs.steps.1.title%",
             "description": "walkthroughs.steps.1.description",
             "media": {
-              "image": "media/affinidi-logo.svg",
+              "image": "media/affinidi-logo.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
@@ -358,7 +370,10 @@
   },
   "l10n": "./l10n",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run clean && npm run compile && npm run lint",
@@ -380,7 +395,7 @@
     "@types/sinon": "^10.0.13",
     "@types/sinon-chai": "^3.2.8",
     "@types/source-map-support": "^0.5.6",
-    "@types/vscode": "^1.72.0",
+    "@types/vscode": "^1.73.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "@vscode/l10n-dev": "^0.0.18",
@@ -388,6 +403,7 @@
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "deep-equal-in-any-order": "^2.0.0",
+    "esbuild": "^0.15.13",
     "eslint": "^8.24.0",
     "glob": "^8.0.3",
     "jsonwebtoken": "^8.5.1",
@@ -401,7 +417,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@vscode/l10n": "^0.0.6",
+    "@vscode/l10n": "^0.0.10",
     "@vscode/webview-ui-toolkit": "^1.1.0",
     "conf": "^10.2.0",
     "date-fns": "^2.29.3",
