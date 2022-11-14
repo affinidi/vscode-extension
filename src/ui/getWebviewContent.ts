@@ -1,6 +1,6 @@
 import { Webview, Uri } from "vscode";
 // import { SchemaEntity } from "../services/schemaManagerService";
-import { AffResourceTreeItem } from '../treeView/treeItem';
+import { AffResourceTreeItem } from "../treeView/treeItem";
 import { getUri } from "./getUri";
 
 /**
@@ -15,7 +15,11 @@ import { getUri } from "./getUri";
  * @returns A template string literal containing the HTML that should be
  * rendered within the webview panel
  */
-export function getWebviewContent(webview: Webview, extensionUri: Uri, item: AffResourceTreeItem) {
+export function getWebviewContent(
+  webview: Webview,
+  extensionUri: Uri,
+  item: AffResourceTreeItem
+) {
   const toolkitUri = getUri(webview, extensionUri, [
     "node_modules",
     "@vscode",
@@ -24,6 +28,7 @@ export function getWebviewContent(webview: Webview, extensionUri: Uri, item: Aff
     "toolkit.js",
   ]);
   const styleUri = getUri(webview, extensionUri, ["media", "style.css"]);
+  const schema = item.metadata;
 
   return /*html*/ `
     <!DOCTYPE html>
@@ -45,17 +50,17 @@ export function getWebviewContent(webview: Webview, extensionUri: Uri, item: Aff
 
             <div class="box">
               <div class="title">VERSION</div>
-              <div class="description">${item.metadata?.version}</div>
+              <div class="description">${schema?.version}</div>
             </div>
 
             <div class="box">
               <div class="title">REVISION</div>
-              <div class="description">${item.metadata?.revision}</div>
+              <div class="description">${schema?.revision}</div>
             </div>
 
             <div class="box">
               <div class="title">DESCRIPTION</div>
-              <div class="description">${item.metadata?.description}</div>
+              <div class="description">${schema?.description}</div>
             </div>
           </div>
 
@@ -64,14 +69,14 @@ export function getWebviewContent(webview: Webview, extensionUri: Uri, item: Aff
           <div class="box">
             <div class="title">JSON SCHEMA</div>
             <div class="description">
-              <vscode-link href="${item.metadata?.jsonSchemaUrl}">${item.metadata?.jsonSchemaUrl}</vscode-link>
+              <vscode-link href="${schema?.jsonSchemaUrl}">${schema?.jsonSchemaUrl}</vscode-link>
             </div>
           </div>
 
           <div class="box">
             <div class="title">JSON-LD CONTEXT</div>
             <div class="description">
-              <vscode-link href="${item.metadata?.jsonLdContextUrl}">${item.metadata?.jsonLdContextUrl}</vscode-link>
+              <vscode-link href="${schema?.jsonLdContextUrl}">${schema?.jsonLdContextUrl}</vscode-link>
             </div>
           </div>
         </section>

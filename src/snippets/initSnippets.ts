@@ -17,7 +17,7 @@ export const initSnippets = () => {
         await insertSendVcOfferToEmailSnippet(
           element
             ? {
-                projectId: element.metadata.projectId,
+                projectId: element.projectId,
                 schema: element.metadata,
               }
             : {}
@@ -41,7 +41,7 @@ export const initSnippets = () => {
         await insertGetIssuanceOffersSnippet(
           element
             ? {
-                projectId: element.metadata.projectId,
+                projectId: element.projectId,
                 issuanceId: element.metadata.id,
               }
             : {}

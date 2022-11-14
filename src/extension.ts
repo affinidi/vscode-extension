@@ -30,7 +30,7 @@ import {
 } from "./services/analyticsStreamApiService";
 import { askUserForTelemetryConsent } from "./utils/telemetry";
 
-const CONSOLE_URL = "https://console.prod.affinidi.com";
+const CONSOLE_URL = "https://console.affinidi.com";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -80,7 +80,6 @@ export async function activateInternal(context: ExtensionContext) {
 
       // If no panel is open, create a new one and update the HTML
       if (!panel) {
-        // @ts-ignore
         panel = window.createWebviewPanel(
           "schemaDetailView",
           selectedTreeViewItem?.label as string,
@@ -92,8 +91,7 @@ export async function activateInternal(context: ExtensionContext) {
       }
 
       // If a panel is open, update the HTML with the selected item's content
-      // @ts-ignore
-      panel.title = selectedTreeViewItem.label;
+      panel.title = selectedTreeViewItem.label as string;
 
       panel.webview.html = getWebviewContent(
         panel.webview,

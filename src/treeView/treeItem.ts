@@ -3,8 +3,8 @@ import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from "vscode";
 export class AffResourceTreeItem extends TreeItem {
   public resourceType;
   public metadata;
-  public parent;
   public command;
+  public projectId;
 
   constructor(
     public readonly item: {
@@ -14,7 +14,7 @@ export class AffResourceTreeItem extends TreeItem {
       description?: string;
       collapsibleState: TreeItemCollapsibleState;
       icon: ThemeIcon;
-      parent?: AffResourceTreeItem;
+      projectId?: string;
       command?: Command;
     }
   ) {
@@ -25,11 +25,10 @@ export class AffResourceTreeItem extends TreeItem {
     this.metadata = item.metadata;
     this.iconPath = item.icon;
     this.contextValue = item.resourceType;
-    this.parent = item.parent;
+    this.projectId = item.projectId;
     this.command = item.command;
   }
 }
-
 
 export class AffCodeGenTreeItem extends TreeItem {
   public codeGenType;
