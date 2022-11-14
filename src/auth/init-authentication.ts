@@ -21,7 +21,7 @@ const CONSENT = {
 async function signUpHandler(): Promise<void> {
   const selection = await window.showWarningMessage(
     l10n.t(
-      "Please read and accept the [Terms of Use](https://console.affinidi.com/assets/legal/platform-tou.pdf) and [Privacy Policy](https://console.affinidi.com/assets/legal/privacy-policy.pdf)"
+      "Please read and accept the [Terms of Use](https://build.affinidi.com/dev-tools/terms-of-use.pdf) and [Privacy Policy](https://build.affinidi.com/dev-tools/privacy-policy.pdf)"
     ),
     CONSENT.accept,
     CONSENT.reject

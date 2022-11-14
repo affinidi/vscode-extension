@@ -13,7 +13,7 @@
   "Confirmation code should be 6 digits": "Confirmation code should be 6 digits",
   "Accept": "Accept",
   "Reject": "Reject",
-  "Please read and accept the [Terms of Use](https://console.affinidi.com/assets/legal/platform-tou.pdf) and [Privacy Policy](https://console.affinidi.com/assets/legal/privacy-policy.pdf)": "Please read and accept the [Terms of Use](https://console.affinidi.com/assets/legal/platform-tou.pdf) and [Privacy Policy](https://console.affinidi.com/assets/legal/privacy-policy.pdf)",
+  "Please read and accept the [Terms of Use](https://build.affinidi.com/dev-tools/terms-of-use.pdf) and [Privacy Policy](https://build.affinidi.com/dev-tools/privacy-policy.pdf)": "Please read and accept the [Terms of Use](https://build.affinidi.com/dev-tools/terms-of-use.pdf) and [Privacy Policy](https://build.affinidi.com/dev-tools/privacy-policy.pdf)",
   "You accepted terms and conditions": "You accepted terms and conditions",
   "Signed In to Affinidi": "Signed In to Affinidi",
   "You rejected terms and conditions": "You rejected terms and conditions",

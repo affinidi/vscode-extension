@@ -7,7 +7,7 @@ export async function run(): Promise<void> {
   // wait for extension to be activate
   await new Promise<void>((resolve) => {
     setInterval(() => {
-      if (extensions.getExtension("affinidi.affinidi-vscode")?.isActive) {
+      if (extensions.getExtension("affinidi.affinidi")?.isActive) {
         resolve();
       }
     }, 50);
