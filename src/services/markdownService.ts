@@ -1,17 +1,17 @@
-import { ExplorerResourceTypes } from "../treeView/treeTypes";
+import { ExplorerResourceTypes } from '../treeView/treeTypes'
 
 export const viewMarkdown = async (resourceType: string) => {
-  let uri: string = "";
+  let uri: string = ''
 
   switch (resourceType) {
     case ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]:
-      uri = "/document/bulkIssuance.md";
-      break;
+      uri = '/document/bulkIssuance.md'
+      break
 
     case ExplorerResourceTypes[ExplorerResourceTypes.rootSchemas]:
-      uri = "/document/schemaManager.md";
-      break;
+      uri = '/document/schemaManager.md'
+      break
   }
 
-  return uri;
-};
+  return uri
+}

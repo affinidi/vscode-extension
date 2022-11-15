@@ -9,88 +9,73 @@ import {
   EventEmitter,
   window,
   l10n,
-} from "vscode";
-import { nanoid } from "nanoid";
-import { executeAuthProcess, parseJwt } from "./auth-process";
-import {
-  sendEventToAnalytics,
-  EventNames,
-} from "../../services/analyticsStreamApiService";
-import { SESSION_KEY_NAME, vaultService } from "./vault";
+} from 'vscode'
+import { nanoid } from 'nanoid'
+import { executeAuthProcess, parseJwt } from './auth-process'
+import { sendEventToAnalytics, EventNames } from '../../services/analyticsStreamApiService'
+import { SESSION_KEY_NAME, vaultService } from './vault'
 
-export const AUTH_PROVIDER_ID = "AffinidiAuth";
-const AUTH_NAME = "Affinidi";
+export const AUTH_PROVIDER_ID = 'AffinidiAuth'
+const AUTH_NAME = 'Affinidi'
 
-export class AffinidiAuthenticationProvider
-  implements AuthenticationProvider, Disposable
-{
-  private readonly _disposable: Disposable;
-  private _onDidChangeSessions =
-    new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>();
+export class AffinidiAuthenticationProvider implements AuthenticationProvider, Disposable {
+  private readonly _disposable: Disposable
+
+  private readonly _onDidChangeSessions =
+    new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>()
 
   constructor() {
     this._disposable = Disposable.from(
-      authentication.registerAuthenticationProvider(
-        AUTH_PROVIDER_ID,
-        AUTH_NAME,
-        this,
-        { supportsMultipleAccounts: false }
-      )
-    );
+      authentication.registerAuthenticationProvider(AUTH_PROVIDER_ID, AUTH_NAME, this, {
+        supportsMultipleAccounts: false,
+      }),
+    )
   }
 
   get onDidChangeSessions(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
-    return this._onDidChangeSessions.event;
+    return this._onDidChangeSessions.event
   }
 
   dispose(): void {
-    this._disposable.dispose();
+    this._disposable.dispose()
   }
 
   async getActiveSession(
     options: AuthenticationGetSessionOptions,
-    scopes: string[] = []
+    scopes: string[] = [],
   ): Promise<AuthenticationSession | undefined> {
-    const session = await authentication.getSession(
-      AUTH_PROVIDER_ID,
-      scopes,
-      options
-    );
+    const session = await authentication.getSession(AUTH_PROVIDER_ID, scopes, options)
 
     if (session) {
-      const token = parseJwt(session.accessToken.slice(18));
+      const token = parseJwt(session.accessToken.slice(18))
 
       // subtract 1 minute in case of lag
       if (Date.now() / 1000 >= token.exp - 60) {
         // TODO: we might want to log an analytics event here
-        await this.handleRemoveSession(session.id);
-        return this.getActiveSession(options, scopes); // try again
+        await this.handleRemoveSession(session.id)
+        return this.getActiveSession(options, scopes) // try again
       }
     }
 
-    return session;
+    return session
   }
 
   async requireActiveSession(
     options: AuthenticationGetSessionOptions,
-    scopes: string[] = []
+    scopes: string[] = [],
   ): Promise<AuthenticationSession> {
-    const session = await this.getActiveSession(options, scopes);
+    const session = await this.getActiveSession(options, scopes)
     if (!session) {
-      throw new Error(
-        l10n.t("Valid Affinidi authentication session not found")
-      );
+      throw new Error(l10n.t('Valid Affinidi authentication session not found'))
     }
 
-    return session;
+    return session
   }
 
   // This function is called first when `vscode.authentication.getSessions` is called.
-  async getSessions(
-    _scopes?: string[]
-  ): Promise<readonly AuthenticationSession[]> {
-    const session = this._readSessionFromStorage();
-    return session ? [session] : [];
+  async getSessions(_scopes?: string[]): Promise<readonly AuthenticationSession[]> {
+    const session = this._readSessionFromStorage()
+    return session ? [session] : []
   }
 
   // This function is called after `this.getSessions` is called and only when:
@@ -100,29 +85,29 @@ export class AffinidiAuthenticationProvider
   async createSession(_scopes: string[]): Promise<AuthenticationSession> {
     try {
       const { email, id, accessToken } = await executeAuthProcess({
-        isSignUp: _scopes.includes("signup"),
-      });
+        isSignUp: _scopes.includes('signup'),
+      })
       const session: AuthenticationSession = {
         id: nanoid(),
         accessToken,
         account: { label: email, id },
         scopes: [],
-      };
+      }
 
-      vaultService.set(SESSION_KEY_NAME, JSON.stringify(session));
+      vaultService.set(SESSION_KEY_NAME, JSON.stringify(session))
 
       this._onDidChangeSessions.fire({
         added: [session],
         removed: [],
         changed: [],
-      });
+      })
 
-      return session;
+      return session
     } catch (error) {
       if (error instanceof Error) {
-        window.showErrorMessage(error.message);
+        window.showErrorMessage(error.message)
       }
-      throw error;
+      throw error
     }
   }
 
@@ -134,32 +119,30 @@ export class AffinidiAuthenticationProvider
   async removeSession(_sessionId: string): Promise<void> {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: "logout",
+      subCategory: 'logout',
       metadata: {
-        commandId: "affinidi.logout",
+        commandId: 'affinidi.logout',
       },
-    });
+    })
 
-    this.handleRemoveSession(_sessionId);
+    this.handleRemoveSession(_sessionId)
   }
 
   handleRemoveSession(_sessionId: string): void {
-    const session = this._readSessionFromStorage();
+    const session = this._readSessionFromStorage()
 
     if (session) {
-      vaultService.delete(SESSION_KEY_NAME);
+      vaultService.delete(SESSION_KEY_NAME)
       this._onDidChangeSessions.fire({
         added: [],
         removed: [session],
         changed: [],
-      });
+      })
     }
   }
 
   private _readSessionFromStorage(): AuthenticationSession | undefined {
-    const storageValue = vaultService.get(SESSION_KEY_NAME);
-    return storageValue
-      ? (JSON.parse(storageValue) as AuthenticationSession)
-      : undefined;
+    const storageValue = vaultService.get(SESSION_KEY_NAME)
+    return storageValue ? (JSON.parse(storageValue) as AuthenticationSession) : undefined
   }
 }

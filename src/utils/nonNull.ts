@@ -1,5 +1,5 @@
-import { l10n } from "vscode";
-import { isNullOrUndefined } from "util";
+import { l10n } from 'vscode'
+import { isNullOrUndefined } from 'util'
 
 /**
  * Retrieves a property by name from an object and checks that it's not null and not undefined.  It is strongly typed
@@ -7,29 +7,24 @@ import { isNullOrUndefined } from "util";
  */
 export function nonNullProp<TSource, TKey extends keyof TSource>(
   source: TSource,
-  name: TKey
+  name: TKey,
 ): NonNullable<TSource[TKey]> {
-  const value: NonNullable<TSource[TKey]> = <NonNullable<TSource[TKey]>>(
-    source[name]
-  );
-  return nonNullValue(value, <string>name);
+  const value: NonNullable<TSource[TKey]> = <NonNullable<TSource[TKey]>>source[name]
+  return nonNullValue(value, <string>name)
 }
 
 /**
  * Validates that a given value is not null and not undefined.
  */
-export function nonNullValue<T>(
-  value: T | undefined,
-  propertyNameOrMessage?: string
-): T {
+export function nonNullValue<T>(value: T | undefined, propertyNameOrMessage?: string): T {
   if (isNullOrUndefined(value)) {
     throw new Error(
-      l10n.t("Internal error: Expected value to be neither null nor undefined") +
-        (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : "")
-    );
+      l10n.t('Internal error: Expected value to be neither null nor undefined') +
+        (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : ''),
+    )
   }
 
-  return value;
+  return value
 }
 
 /**
@@ -37,14 +32,14 @@ export function nonNullValue<T>(
  */
 export function nonNullOrEmptyValue(
   value: string | undefined,
-  propertyNameOrMessage?: string
+  propertyNameOrMessage?: string,
 ): string {
   if (!value) {
     throw new Error(
-      l10n.t("Internal error: Expected value to be neither null, undefined, nor empty") +
-        (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : "")
-    );
+      l10n.t('Internal error: Expected value to be neither null, undefined, nor empty') +
+        (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : ''),
+    )
   }
 
-  return value;
+  return value
 }

@@ -5,114 +5,106 @@ import {
   TreeItem,
   TreeItemCollapsibleState,
   l10n,
-} from "vscode";
-import { CodeGenTypes } from "./treeTypes";
-import { AffCodeGenTreeItem } from "./treeItem";
+} from 'vscode'
+import { CodeGenTypes } from './treeTypes'
+import { AffCodeGenTreeItem } from './treeItem'
 
-export class AffinidiCodeGenProvider
-  implements TreeDataProvider<AffCodeGenTreeItem>
-{
+export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeItem> {
   constructor() {}
 
   public getTreeItem(element: AffCodeGenTreeItem): TreeItem {
-    return element;
+    return element
   }
 
-  public async getChildren(
-    element?: AffCodeGenTreeItem
-  ): Promise<AffCodeGenTreeItem[]> {
-    const treeNodes: AffCodeGenTreeItem[] = [];
+  public async getChildren(element?: AffCodeGenTreeItem): Promise<AffCodeGenTreeItem[]> {
+    const treeNodes: AffCodeGenTreeItem[] = []
 
     switch (element?.codeGenType) {
       case undefined:
-        this._addCodeGenItems(treeNodes);
-        break;
+        this._addCodeGenItems(treeNodes)
+        break
 
       case CodeGenTypes[CodeGenTypes.rootScripts]:
-        await this._addScriptItems(treeNodes);
-        break;
+        await this._addScriptItems(treeNodes)
+        break
 
       case CodeGenTypes[CodeGenTypes.rootApps]:
-        await this._addAppItems(treeNodes);
-        break;
+        await this._addAppItems(treeNodes)
+        break
     }
 
-    return Promise.resolve(treeNodes);
+    return Promise.resolve(treeNodes)
   }
 
-  private async _addCodeGenItems(
-    treeNodes: AffCodeGenTreeItem[]
-  ): Promise<void> {
+  private async _addCodeGenItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootApps,
-      label: l10n.t("App Generators"),
+      label: l10n.t('App Generators'),
       state: TreeItemCollapsibleState.Collapsed,
-      icon: new ThemeIcon("rocket"),
-    });
+      icon: new ThemeIcon('rocket'),
+    })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootScripts,
-      label: l10n.t("Script Generators"),
+      label: l10n.t('Script Generators'),
       state: TreeItemCollapsibleState.Collapsed,
-      icon: new ThemeIcon("file-code"),
-    });
+      icon: new ThemeIcon('file-code'),
+    })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootSnippets,
-      label: l10n.t("IntelliSense Snippets"),
+      label: l10n.t('IntelliSense Snippets'),
       state: TreeItemCollapsibleState.None,
-      icon: new ThemeIcon("symbol-snippet"),
+      icon: new ThemeIcon('symbol-snippet'),
       command: {
-        title: l10n.t("View Available Snippets"),
-        command: "affinidi.docs.availableSnippets",
+        title: l10n.t('View Available Snippets'),
+        command: 'affinidi.docs.availableSnippets',
       },
-    });
+    })
   }
 
-  private async _addScriptItems(
-    treeNodes: AffCodeGenTreeItem[]
-  ): Promise<void> {
+  private async _addScriptItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t("Send a VC Offer to an email"),
+      label: l10n.t('Send a VC Offer to an email'),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t("Send a VC Offer to an email"),
-        command: "affinidi.codegen.sendVcOfferToEmail",
+        title: l10n.t('Send a VC Offer to an email'),
+        command: 'affinidi.codegen.sendVcOfferToEmail',
       },
-    });
+    })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t("Get Issuance Offers"),
+      label: l10n.t('Get Issuance Offers'),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t("Get Issuance Offers"),
-        command: "affinidi.codegen.getIssuanceOffers",
+        title: l10n.t('Get Issuance Offers'),
+        command: 'affinidi.codegen.getIssuanceOffers',
       },
-    });
+    })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t("Sign a VC with Cloud Wallet"),
+      label: l10n.t('Sign a VC with Cloud Wallet'),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t("Sign a VC with Cloud Wallet"),
-        command: "affinidi.codegen.signVcWithCloudWallet",
+        title: l10n.t('Sign a VC with Cloud Wallet'),
+        command: 'affinidi.codegen.signVcWithCloudWallet',
       },
-    });
+    })
   }
 
   private async _addAppItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t("Certification & Verification"),
+      label: l10n.t('Certification & Verification'),
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t("Certification & Verification"),
-        command: "affinidi.codegen.app",
+        title: l10n.t('Certification & Verification'),
+        command: 'affinidi.codegen.app',
       },
-    });
+    })
   }
 
   private addNewTreeItem(
@@ -124,12 +116,12 @@ export class AffinidiCodeGenProvider
       icon,
       command,
     }: {
-      type: CodeGenTypes;
-      label: string;
-      state?: TreeItemCollapsibleState;
-      icon?: ThemeIcon;
-      command?: Command;
-    }
+      type: CodeGenTypes
+      label: string
+      state?: TreeItemCollapsibleState
+      icon?: ThemeIcon
+      command?: Command
+    },
   ) {
     treeNodes.push(
       new AffCodeGenTreeItem({
@@ -138,7 +130,7 @@ export class AffinidiCodeGenProvider
         collapsibleState: state,
         icon,
         command,
-      })
-    );
+      }),
+    )
   }
 }

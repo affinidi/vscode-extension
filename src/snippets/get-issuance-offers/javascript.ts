@@ -1,4 +1,4 @@
-import { SnippetInput } from './snippet';
+import { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -23,5 +23,5 @@ if (String(response.status).startsWith('2')) {
   }
 } else {
   console.log('Could not get issuance offers:', data.code, data.message);
-}`;
+}`
 }

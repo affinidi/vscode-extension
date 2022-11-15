@@ -5,7 +5,7 @@ export function fetch(): string {
 // Then save this script as .mjs and uncomment the following line
 // import fetch from 'node-fetch';
 
-${common()}`;
+${common()}`
 }
 
 function common(): string {
@@ -16,5 +16,5 @@ async function run() {
 
 run()
   .then(() => console.log('Success!'))
-  .catch((error) => console.error(error));`;
+  .catch((error) => console.error(error));`
 }

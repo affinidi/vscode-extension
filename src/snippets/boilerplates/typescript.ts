@@ -5,7 +5,7 @@ export function fetch(): string {
   
 /// <reference lib="dom" />
 
-${common()}`;
+${common()}`
 }
 
 function common(): string {
@@ -16,5 +16,5 @@ async function run() {
 
 run()
   .then(() => console.log('Success!'))
-  .catch((error) => console.error(error));`;
+  .catch((error) => console.error(error));`
 }
