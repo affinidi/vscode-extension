@@ -1,4 +1,4 @@
-import { SnippetInput } from "./snippet";
+import { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -76,5 +76,5 @@ if (String(signCredentialResponse.status).startsWith('2')) {
 } else {
   console.log('Could not sign credential:', signedCredentialData.code, signedCredentialData.message);
 }
-`;
+`
 }

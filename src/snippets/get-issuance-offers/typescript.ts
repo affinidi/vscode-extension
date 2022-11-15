@@ -1,4 +1,4 @@
-import { SnippetInput } from './snippet';
+import { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -46,5 +46,5 @@ if ('offers' in data) {
   }
 } else {
   console.log('Could not get issuance offers:', data.code, data.message);
-}`;
+}`
 }

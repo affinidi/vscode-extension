@@ -1,4 +1,4 @@
-import { SnippetInput } from './snippet';
+import { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -48,7 +48,9 @@ if ('id' in issuanceData) {
   throw new Error('Could not create an issuance');
 }
 
-const offerResponse = await fetch(\`${input.issuanceApiUrl}/v1/issuances/\${issuanceData.id}/offers\`, {
+const offerResponse = await fetch(\`${
+    input.issuanceApiUrl
+  }/v1/issuances/\${issuanceData.id}/offers\`, {
   method: 'POST',
   headers: {
     'Api-Key': apiKeyHash,
@@ -83,5 +85,5 @@ if ('id' in offerData) {
   console.log('Credential subject is invalid, validation errors:', offerData.context?.errors);
 } else {
   console.log('Could not create an offer:', offerData.code, offerData.message);
-}`;
+}`
 }

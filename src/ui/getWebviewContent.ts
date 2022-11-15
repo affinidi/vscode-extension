@@ -1,7 +1,7 @@
-import { Webview, Uri } from "vscode";
+import { Webview, Uri } from 'vscode'
 // import { SchemaEntity } from "../services/schemaManagerService";
-import { AffResourceTreeItem } from "../treeView/treeItem";
-import { getUri } from "./getUri";
+import { AffResourceTreeItem } from '../treeView/treeItem'
+import { getUri } from './getUri'
 
 /**
  * Defines and returns the HTML that should be rendered within the notepad webview panel.
@@ -15,22 +15,18 @@ import { getUri } from "./getUri";
  * @returns A template string literal containing the HTML that should be
  * rendered within the webview panel
  */
-export function getWebviewContent(
-  webview: Webview,
-  extensionUri: Uri,
-  item: AffResourceTreeItem
-) {
+export function getWebviewContent(webview: Webview, extensionUri: Uri, item: AffResourceTreeItem) {
   const toolkitUri = getUri(webview, extensionUri, [
-    "node_modules",
-    "@vscode",
-    "webview-ui-toolkit",
-    "dist",
-    "toolkit.js",
-  ]);
-  const styleUri = getUri(webview, extensionUri, ["media", "style.css"]);
-  const schema = item.metadata;
+    'node_modules',
+    '@vscode',
+    'webview-ui-toolkit',
+    'dist',
+    'toolkit.js',
+  ])
+  const styleUri = getUri(webview, extensionUri, ['media', 'style.css'])
+  const schema = item.metadata
 
-  return /*html*/ `
+  return /* html */ `
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -82,5 +78,5 @@ export function getWebviewContent(
         </section>
       </body>
     </html>
-  `;
+  `
 }

@@ -1,4 +1,4 @@
-import { SnippetInput } from "./snippet";
+import { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -80,5 +80,5 @@ if ('signedCredential' in signedCredentialData) {
   console.log('Credential subject is invalid, validation errors:', signedCredentialData.context?.message);
 } else {
   console.log('Could not sign credential:', signedCredentialData.code, signedCredentialData.message);
-}`;
+}`
 }
