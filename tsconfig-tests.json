@@ -1,32 +1,32 @@
 {
-    "compilerOptions": {
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "resolveJsonModule": true,
-      "module": "commonjs",
-      "esModuleInterop": true,
-      "target": "ES2021",
-      "lib": ["ES2021"],
-      "noImplicitAny": true,
-      "moduleResolution": "node",
-      "sourceMap": true,
-      "skipLibCheck": true,
-      "outDir": "dist",
-      "baseUrl": ".",
-      "paths": {
-        "*": [
-          "node_modules/*"
-        ]
-      },
-      "typeRoots": [
-        "./node_modules/@types",
-        "./typings"
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "ES2021",
+    "lib": ["ES2021"],
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*"
       ]
     },
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "node_modules"
+    "typeRoots": [
+      "./node_modules/@types",
+      "./typings"
     ]
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

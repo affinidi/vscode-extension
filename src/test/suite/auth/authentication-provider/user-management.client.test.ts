@@ -1,7 +1,5 @@
 import { expect } from 'chai'
 import * as nock from 'nock'
-import { authentication } from 'vscode'
-import { AUTH_PROVIDER_ID } from '../../../../auth/authentication-provider/affinidi-authentication-provider'
 import {
   userManagementClient,
   USER_MANAGEMENT_API_BASE,

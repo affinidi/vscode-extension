@@ -26,7 +26,7 @@ export const getProjects = async (): Promise<ProjectList> => {
     createIfNone: true,
   })
 
-  return await apiFetch<ProjectList>({
+  return apiFetch<ProjectList>({
     endpoint: `${IAM_API_BASE}/v1/projects`,
     method: 'GET',
     headers: {
@@ -40,7 +40,7 @@ const getProjectSummary = async (projectId: string): Promise<ProjectSummary> => 
     createIfNone: true,
   })
 
-  return await apiFetch<ProjectSummary>({
+  return apiFetch<ProjectSummary>({
     endpoint: `${IAM_API_BASE}/v1/projects/${projectId}/summary`,
     method: 'GET',
     headers: {

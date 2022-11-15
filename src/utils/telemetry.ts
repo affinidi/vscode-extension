@@ -5,6 +5,9 @@ const CONSENT = {
   accept: l10n.t('Accept'),
   deny: l10n.t('Deny'),
 }
+export function isTelemetryEnabled() {
+  return workspace.getConfiguration().get('affinidi.telemetry.enabled')
+}
 
 export async function askUserForTelemetryConsent() {
   if (isTelemetryEnabled() === null) {
@@ -26,10 +29,8 @@ export async function askUserForTelemetryConsent() {
       case CONSENT.deny:
         await workspace.getConfiguration().update('affinidi.telemetry.enabled', false, true)
         break
+      default:
+        throw new Error(`unknown consent type: ${consent}`)
     }
   }
-}
-
-export function isTelemetryEnabled() {
-  return workspace.getConfiguration().get('affinidi.telemetry.enabled')
 }

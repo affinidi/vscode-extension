@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file, no-underscore-dangle */
 import {
   CancellationToken,
   Event,
@@ -12,49 +13,13 @@ import { ext } from '../extensionVariables'
 import { nonNullValue } from './nonNull'
 import { randomUtils } from './randomUtils'
 
-let _cachedScheme: string | undefined
+let cachedScheme: string | undefined
 function getScheme(): string {
-  if (!_cachedScheme) {
+  if (!cachedScheme) {
     // Generate a unique scheme so that multiple extensions using this same code don't conflict with each other
-    _cachedScheme = `affinidi${randomUtils.getRandomHexString(6)}`
+    cachedScheme = `affinidi${randomUtils.getRandomHexString(6)}`
   }
-  return _cachedScheme
-}
-
-let _cachedContentProvider: ReadOnlyContentProvider | undefined
-function getContentProvider(): ReadOnlyContentProvider {
-  if (!_cachedContentProvider) {
-    _cachedContentProvider = new ReadOnlyContentProvider()
-    ext.context.subscriptions.push(
-      workspace.registerTextDocumentContentProvider(getScheme(), _cachedContentProvider),
-    )
-  }
-  return _cachedContentProvider
-}
-
-interface Item {
-  label: string
-  id: string
-}
-
-export async function openReadOnlyContent({
-  node,
-  content,
-  fileExtension = '.json',
-  options,
-}: {
-  node: Item
-  content: any
-  fileExtension?: string
-  options?: TextDocumentShowOptions
-}): Promise<ReadOnlyContent> {
-  const contentProvider = getContentProvider()
-  return await contentProvider.openReadOnlyContent(
-    node,
-    JSON.stringify(content, null, 2),
-    fileExtension,
-    options,
-  )
+  return cachedScheme
 }
 
 export class ReadOnlyContent {
@@ -103,6 +68,7 @@ class ReadOnlyContentProvider implements TextDocumentContentProvider {
     const scheme = getScheme()
     const idHash: string = randomUtils.getPseudononymousStringHash(node.id, 'hex')
     // Remove special characters which may prove troublesome when parsing the uri. We'll allow the same set as `encodeUriComponent`
+    // eslint-disable-next-line no-useless-escape
     const fileName = node.label.replace(/[^a-z0-9\-\_\.\!\~\*\'\(\)]/gi, '_')
     const uri: Uri = Uri.parse(`${scheme}:///${idHash}/${fileName}${fileExtension}`)
     const readOnlyContent: ReadOnlyContent = new ReadOnlyContent(
@@ -123,4 +89,41 @@ class ReadOnlyContentProvider implements TextDocumentContentProvider {
     )
     return readOnlyContent.content
   }
+}
+
+let cachedContentProvider: ReadOnlyContentProvider | undefined
+function getContentProvider(): ReadOnlyContentProvider {
+  if (!cachedContentProvider) {
+    cachedContentProvider = new ReadOnlyContentProvider()
+    ext.context.subscriptions.push(
+      workspace.registerTextDocumentContentProvider(getScheme(), cachedContentProvider),
+    )
+  }
+  return cachedContentProvider
+}
+
+interface Item {
+  label: string
+  id: string
+}
+
+export async function openReadOnlyContent({
+  node,
+  content,
+  fileExtension = '.json',
+  options,
+}: {
+  node: Item
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  content: any
+  fileExtension?: string
+  options?: TextDocumentShowOptions
+}): Promise<ReadOnlyContent> {
+  const contentProvider = getContentProvider()
+  return contentProvider.openReadOnlyContent(
+    node,
+    JSON.stringify(content, null, 2),
+    fileExtension,
+    options,
+  )
 }
