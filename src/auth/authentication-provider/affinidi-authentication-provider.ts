@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import {
   authentication,
   AuthenticationProvider,
@@ -52,7 +53,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       // subtract 1 minute in case of lag
       if (Date.now() / 1000 >= token.exp - 60) {
         // TODO: we might want to log an analytics event here
-        await this.handleRemoveSession(session.id)
+        await this.handleRemoveSession()
         return this.getActiveSession(options, scopes) // try again
       }
     }
@@ -73,8 +74,8 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   }
 
   // This function is called first when `vscode.authentication.getSessions` is called.
-  async getSessions(_scopes?: string[]): Promise<readonly AuthenticationSession[]> {
-    const session = this._readSessionFromStorage()
+  async getSessions(): Promise<readonly AuthenticationSession[]> {
+    const session = this.readSessionFromStorage()
     return session ? [session] : []
   }
 
@@ -116,7 +117,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
    * Do not use this method to manually remove the session.
    * @deprecated Use `handleRemoveSession` instead
    */
-  async removeSession(_sessionId: string): Promise<void> {
+  async removeSession(): Promise<void> {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
       subCategory: 'logout',
@@ -125,11 +126,11 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       },
     })
 
-    this.handleRemoveSession(_sessionId)
+    this.handleRemoveSession()
   }
 
-  handleRemoveSession(_sessionId: string): void {
-    const session = this._readSessionFromStorage()
+  handleRemoveSession(): void {
+    const session = this.readSessionFromStorage()
 
     if (session) {
       vaultService.delete(SESSION_KEY_NAME)
@@ -141,7 +142,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     }
   }
 
-  private _readSessionFromStorage(): AuthenticationSession | undefined {
+  private readSessionFromStorage(): AuthenticationSession | undefined {
     const storageValue = vaultService.get(SESSION_KEY_NAME)
     return storageValue ? (JSON.parse(storageValue) as AuthenticationSession) : undefined
   }

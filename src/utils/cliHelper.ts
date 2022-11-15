@@ -70,7 +70,7 @@ export class CliHelper {
           title: l10n.t('App is generating...'),
         },
         async () => {
-          return await this.exec.command(command)
+          return this.exec.command(command)
         },
       )
 

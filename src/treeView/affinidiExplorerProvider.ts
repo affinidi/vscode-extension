@@ -1,5 +1,5 @@
+/* eslint-disable no-underscore-dangle */
 import {
-  AuthenticationProviderAuthenticationSessionsChangeEvent,
   Command,
   Event,
   EventEmitter,
@@ -18,7 +18,7 @@ import { ext } from '../extensionVariables'
 import { formatIssuanceName } from '../shared/formatIssuanceName'
 
 const isSignedIn = async () => {
-  const sessions = await ext.authProvider.getSessions([])
+  const sessions = await ext.authProvider.getSessions()
   return !!sessions.length
 }
 
@@ -41,9 +41,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     this._onDidChangeTreeData.fire()
   }
 
-  private readonly authListener = async (
-    event: AuthenticationProviderAuthenticationSessionsChangeEvent,
-  ) => {
+  private readonly authListener = async () => {
     this.refresh()
   }
 
@@ -56,40 +54,40 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     const signedIn = await isSignedIn()
 
     if (!signedIn) {
-      await this._addLoginItem(treeNodes)
-      await this._addSignupItem(treeNodes)
+      await this.addLoginItem(treeNodes)
+      await this.addSignupItem(treeNodes)
 
       return Promise.resolve(treeNodes)
     }
 
     switch (element?.resourceType) {
       case undefined:
-        await this._addProjectItems(treeNodes)
-        await this._addCreateProjectItem(treeNodes)
+        await this.addProjectItems(treeNodes)
+        await this.addCreateProjectItem(treeNodes)
         break
 
       case ExplorerResourceTypes[ExplorerResourceTypes.project]:
-        await this._addProductItems(treeNodes, element)
+        await this.addProductItems(treeNodes, element)
         break
 
       case ExplorerResourceTypes[ExplorerResourceTypes.rootDID]:
-        await this._addDIDItems(treeNodes, element)
+        await this.addDIDItems(treeNodes, element)
         break
 
       case ExplorerResourceTypes[ExplorerResourceTypes.rootSchemas]:
-        this._addSubRootSchemaItems(treeNodes, element)
+        this.addSubRootSchemaItems(treeNodes, element)
         break
 
       case ExplorerResourceTypes[ExplorerResourceTypes.subRootSchemas]:
-        await this._addSchemaItems(treeNodes, element)
+        await this.addSchemaItems(treeNodes, element)
         break
 
       case ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]:
-        await this._addIssuanceItems(treeNodes, element)
+        await this.addIssuanceItems(treeNodes, element)
         break
 
       default:
-        await this._addEmptyItem(treeNodes)
+        await this.addEmptyItem(treeNodes)
         break
     }
 
@@ -100,7 +98,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     return this.projects[projectId]
   }
 
-  private async _addProjectItems(treeNodes: AffResourceTreeItem[]): Promise<void> {
+  private async addProjectItems(treeNodes: AffResourceTreeItem[]): Promise<void> {
     const projectListResponse: ProjectList = await getProjects()
 
     // sort projects array in descending order on createdAt field
@@ -124,7 +122,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     }
   }
 
-  private async _addProductItems(
+  private async addProductItems(
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
@@ -153,7 +151,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private async _addDIDItems(
+  private async addDIDItems(
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
@@ -168,7 +166,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private _addSubRootSchemaItems(treeNodes: AffResourceTreeItem[], parent?: AffResourceTreeItem) {
+  private addSubRootSchemaItems(treeNodes: AffResourceTreeItem[], parent?: AffResourceTreeItem) {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.subRootSchemas,
       label: l10n.t('Public'),
@@ -192,7 +190,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private async _addSchemaItems(
+  private async addSchemaItems(
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
@@ -220,7 +218,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private async _addIssuanceItems(
+  private async addIssuanceItems(
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
@@ -243,7 +241,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private async _addEmptyItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
+  private async addEmptyItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.empty,
       label: l10n.t('(empty)'),
@@ -251,7 +249,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private async _addSignupItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
+  private async addSignupItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.signup,
       label: l10n.t('Create an Account with Affinidi'),
@@ -263,7 +261,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private async _addLoginItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
+  private async addLoginItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.login,
       label: l10n.t('Sign in to Affinidi'),
@@ -272,7 +270,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     })
   }
 
-  private async _addCreateProjectItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
+  private async addCreateProjectItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: ExplorerResourceTypes.project,
       label: l10n.t('Create Project'),

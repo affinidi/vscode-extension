@@ -48,6 +48,8 @@ async function signUpHandler(): Promise<void> {
     case CONSENT.reject:
       window.showInformationMessage(l10n.t('You rejected terms and conditions'))
       break
+    default:
+      throw new Error(`unknown selection: ${selection}`)
   }
 }
 
@@ -83,7 +85,7 @@ async function logoutHandler(): Promise<void> {
       },
     })
 
-    await ext.authProvider.handleRemoveSession(session.id)
+    await ext.authProvider.handleRemoveSession()
 
     await window.showInformationMessage(l10n.t('Signed Out of Affinidi'))
     ext.outputChannel.appendLine(l10n.t('Signed Out of Affinidi'))

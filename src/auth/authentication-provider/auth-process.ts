@@ -37,8 +37,8 @@ export const executeAuthProcess = async ({
     },
     async () => {
       return isSignUp
-        ? await userManagementClient.signup({ username: email })
-        : await userManagementClient.login({ username: email })
+        ? userManagementClient.signup({ username: email })
+        : userManagementClient.login({ username: email })
     },
   )
 
@@ -62,11 +62,11 @@ export const executeAuthProcess = async ({
     },
     async () => {
       return isSignUp
-        ? await userManagementClient.signupConfirm({
+        ? userManagementClient.signupConfirm({
             confirmationCode,
             token,
           })
-        : await userManagementClient.loginConfirm({
+        : userManagementClient.loginConfirm({
             confirmationCode,
             token,
           })

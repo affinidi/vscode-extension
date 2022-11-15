@@ -10,8 +10,6 @@ import { CodeGenTypes } from './treeTypes'
 import { AffCodeGenTreeItem } from './treeItem'
 
 export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeItem> {
-  constructor() {}
-
   public getTreeItem(element: AffCodeGenTreeItem): TreeItem {
     return element
   }
@@ -21,22 +19,25 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
 
     switch (element?.codeGenType) {
       case undefined:
-        this._addCodeGenItems(treeNodes)
+        this.addCodeGenItems(treeNodes)
         break
 
       case CodeGenTypes[CodeGenTypes.rootScripts]:
-        await this._addScriptItems(treeNodes)
+        await this.addScriptItems(treeNodes)
         break
 
       case CodeGenTypes[CodeGenTypes.rootApps]:
-        await this._addAppItems(treeNodes)
+        await this.addAppItems(treeNodes)
         break
+
+      default:
+        throw new Error(`unknown codeGenType: ${element?.codeGenType}`)
     }
 
     return Promise.resolve(treeNodes)
   }
 
-  private async _addCodeGenItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
+  private async addCodeGenItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootApps,
       label: l10n.t('App Generators'),
@@ -63,7 +64,7 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
     })
   }
 
-  private async _addScriptItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
+  private async addScriptItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
       label: l10n.t('Send a VC Offer to an email'),
@@ -95,7 +96,7 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
     })
   }
 
-  private async _addAppItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
+  private async addAppItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
       label: l10n.t('Certification & Verification'),

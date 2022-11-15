@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from 'vscode'
 
 export class AffResourceTreeItem extends TreeItem {

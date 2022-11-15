@@ -1,4 +1,3 @@
-import { authentication } from 'vscode'
 import { apiFetch } from '../../api-client/api-fetch'
 import { cookieFetch } from '../../api-client/cookie-fetch'
 import { ext } from '../../extensionVariables'
