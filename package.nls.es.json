@@ -13,6 +13,7 @@
 
   "affinidiExplorer.refresh": "",
   "affinidiExplorer.viewProperties": "",
+  "affinidiExplorer.initiateIssuanceCsvFlow": "",
   "affinidiExplorer.showJsonSchema": "",
   "affinidiExplorer.showJsonLdContext": "",
   "affinidiExplorer.createSchema": "",
