@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file, no-underscore-dangle */
 import {
-  CancellationToken,
   Event,
   EventEmitter,
   TextDocumentContentProvider,
@@ -82,7 +81,7 @@ class ReadOnlyContentProvider implements TextDocumentContentProvider {
     return readOnlyContent
   }
 
-  public async provideTextDocumentContent(uri: Uri, _token: CancellationToken): Promise<string> {
+  public async provideTextDocumentContent(uri: Uri): Promise<string> {
     const readOnlyContent: ReadOnlyContent = nonNullValue(
       this._contentMap.get(uri.toString()),
       'ReadOnlyContentProvider._contentMap.get',

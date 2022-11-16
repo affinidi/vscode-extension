@@ -3,7 +3,11 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { createSnippetTools, Implementations, SnippetImplementation } from './createSnippetTools'
 import * as javascript from '../boilerplates/javascript'
 import * as typescript from '../boilerplates/typescript'
-import { EventNames, sendEventToAnalytics } from '../../services/analyticsStreamApiService'
+import {
+  EventNames,
+  EventSubCategory,
+  sendEventToAnalytics,
+} from '../../services/analyticsStreamApiService'
 
 export type SnippetCommand<CommandInput = unknown> = (
   input?: CommandInput,
@@ -32,12 +36,11 @@ const SUPPORTED_BOILERPLATE_LANGUAGE_IDS = Object.keys(boilerplates)
 
 export function createSnippetCommand<SnippetInput, CommandInput>(
   name: string,
-  snippetCategory: string,
   implementations: Implementations<SnippetInput>,
   getSnippetInput: (
     input?: CommandInput,
     implementation?: SnippetImplementation,
-  ) => Promise<SnippetInput | undefined>,
+  ) => Promise<(SnippetInput & { projectId?: string }) | undefined>,
 ): SnippetCommand<CommandInput> {
   const supportedLanguageIds = Object.keys(implementations)
   const { askForImplementation, isLanguageSupported, generateSnippet } =
@@ -118,9 +121,12 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
 
       sendEventToAnalytics({
         name: EventNames.snippetInserted,
-        subCategory: snippetCategory,
+        subCategory: EventSubCategory.snippet,
         metadata: {
           snippetName: name,
+          language: languageId,
+          implementation,
+          projectId: snippetInput.projectId,
         },
       })
     } catch (error: any) {

@@ -1,5 +1,9 @@
 import { window, workspace, l10n } from 'vscode'
-import { sendEventToAnalytics, EventNames } from '../services/analyticsStreamApiService'
+import {
+  sendEventToAnalytics,
+  EventNames,
+  EventSubCategory,
+} from '../services/analyticsStreamApiService'
 
 const CONSENT = {
   accept: l10n.t('Accept'),
@@ -23,7 +27,7 @@ export async function askUserForTelemetryConsent() {
 
         sendEventToAnalytics({
           name: EventNames.extensionInitialized,
-          subCategory: 'affinidiExtension',
+          subCategory: EventSubCategory.affinidiExtension,
         })
         break
       case CONSENT.deny:

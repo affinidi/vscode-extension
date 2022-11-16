@@ -13,7 +13,11 @@ import {
 } from 'vscode'
 import { nanoid } from 'nanoid'
 import { executeAuthProcess, parseJwt } from './auth-process'
-import { sendEventToAnalytics, EventNames } from '../../services/analyticsStreamApiService'
+import {
+  sendEventToAnalytics,
+  EventNames,
+  EventSubCategory,
+} from '../../services/analyticsStreamApiService'
 import { SESSION_KEY_NAME, vaultService } from './vault'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
@@ -120,7 +124,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   async removeSession(): Promise<void> {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'logout',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidi.logout',
       },

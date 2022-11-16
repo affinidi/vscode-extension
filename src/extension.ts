@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
@@ -24,8 +25,13 @@ import { initGenerators } from './generators/initGenerators'
 import { viewMarkdown } from './services/markdownService'
 import { buildURL } from './api-client/api-fetch'
 import { createProjectProcess } from './iam/iam'
-import { EventNames, sendEventToAnalytics } from './services/analyticsStreamApiService'
+import {
+  EventNames,
+  EventSubCategory,
+  sendEventToAnalytics,
+} from './services/analyticsStreamApiService'
 import { askUserForTelemetryConsent } from './utils/telemetry'
+import { ExplorerResourceTypes } from './treeView/treeTypes'
 import { initiateIssuanceCsvFlow } from './services/csvCreationService'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
@@ -57,14 +63,24 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  commands.registerCommand('affinidiExplorer.refresh', () => {
+  commands.registerCommand('affinidiExplorer.refresh', (element: AffResourceTreeItem) => {
     affExplorerTreeProvider.refresh()
+
+    let resourceType = ExplorerResourceTypes[ExplorerResourceTypes.project]
+    if (
+      element?.resourceType === ExplorerResourceTypes[ExplorerResourceTypes.rootSchemas] ||
+      element?.resourceType === ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]
+    ) {
+      resourceType = `${element?.resourceType}`
+    }
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'refresh',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidiExplorer.refresh',
+        resourceType,
+        projectId: element?.projectId,
       },
     })
   })
@@ -106,9 +122,10 @@ export async function activateInternal(context: ExtensionContext) {
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'schema',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'schema.showSchemaDetails',
+        projectId: selectedTreeViewItem.projectId,
       },
     })
   })
@@ -122,7 +139,7 @@ export async function activateInternal(context: ExtensionContext) {
       commands.executeCommand('markdown.showPreview', uri)
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: 'about:snippets',
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.docs.availableSnippets',
         },
@@ -138,19 +155,22 @@ export async function activateInternal(context: ExtensionContext) {
 
       commands.executeCommand('markdown.showPreview', uri)
 
+      // TODO: get projectId
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: `about:${element.resourceType}`,
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.openMarkDown',
+          projectId: element.projectId,
+          resourceType: `${element.resourceType}`,
         },
       })
     }),
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.copyJsonURL', async (treeItem: AffResourceTreeItem) => {
-      const schema = await getSchema(treeItem.metadata.id as string)
+    commands.registerCommand('affinidi.copyJsonURL', async (element: AffResourceTreeItem) => {
+      const schema = await getSchema(element.metadata.id as string)
       if (!schema) {
         return
       }
@@ -159,17 +179,18 @@ export async function activateInternal(context: ExtensionContext) {
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: 'schema',
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.copyJsonURL',
+          projectId: element.projectId,
         },
       })
     }),
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.copyJsonLdURL', async (treeItem: AffResourceTreeItem) => {
-      const schema = await getSchema(treeItem.metadata.id as string)
+    commands.registerCommand('affinidi.copyJsonLdURL', async (element: AffResourceTreeItem) => {
+      const schema = await getSchema(element.metadata.id as string)
       if (!schema) {
         return
       }
@@ -178,9 +199,10 @@ export async function activateInternal(context: ExtensionContext) {
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: 'schema',
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.copyJsonLdURL',
+          projectId: element.projectId,
         },
       })
     }),
@@ -191,9 +213,11 @@ export async function activateInternal(context: ExtensionContext) {
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: `properties:${element.resourceType}`,
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidiExplorer.viewProperties',
+        projectId: element.projectId,
+        resource: `${element.resourceType}`,
       },
     })
   })
@@ -223,21 +247,23 @@ export async function activateInternal(context: ExtensionContext) {
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'schema',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidiExplorer.showJsonSchema',
+        projectId: element.projectId,
       },
     })
   })
 
-  commands.registerCommand('affinidiExplorer.createSchema', () => {
+  commands.registerCommand('affinidiExplorer.createSchema', (element: AffResourceTreeItem) => {
     const createSchemaURL = buildURL(CONSOLE_URL, '/schema-manager/builder')
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'schema',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidiExplorer.createSchema',
+        projectId: element?.projectId,
       },
     })
 
@@ -251,9 +277,10 @@ export async function activateInternal(context: ExtensionContext) {
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'vc',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidiExplorer.createIssuance',
+        projectId: element.projectId,
       },
     })
 
@@ -265,23 +292,26 @@ export async function activateInternal(context: ExtensionContext) {
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'schema',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidiExplorer.showJsonLdContext',
+        projectId: element.projectId,
       },
     })
   })
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.createProject', async () => {
-      await createProjectProcess()
+      const result = await createProjectProcess()
+
       affExplorerTreeProvider.refresh()
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: 'project',
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.createProject',
+          projectId: result?.projectId,
         },
       })
     }),
@@ -291,7 +321,7 @@ export async function activateInternal(context: ExtensionContext) {
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'vc',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidiDevTools.issueCredential',
       },

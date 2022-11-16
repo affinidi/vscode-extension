@@ -1,6 +1,10 @@
 import { authentication, commands, window, l10n } from 'vscode'
 import { ext } from '../extensionVariables'
-import { sendEventToAnalytics, EventNames } from '../services/analyticsStreamApiService'
+import {
+  sendEventToAnalytics,
+  EventNames,
+  EventSubCategory,
+} from '../services/analyticsStreamApiService'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
@@ -34,7 +38,7 @@ async function signUpHandler(): Promise<void> {
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: 'signup',
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.signUp',
         },
@@ -60,7 +64,7 @@ async function loginHandler(): Promise<void> {
 
   sendEventToAnalytics({
     name: EventNames.commandExecuted,
-    subCategory: 'login',
+    subCategory: EventSubCategory.command,
     metadata: {
       commandId: 'affinidi.login',
     },
@@ -79,7 +83,7 @@ async function logoutHandler(): Promise<void> {
   if (session) {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
-      subCategory: 'logout',
+      subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'affinidi.logout',
       },
@@ -104,7 +108,7 @@ async function userDetailsHandler(): Promise<void> {
 
   sendEventToAnalytics({
     name: EventNames.commandExecuted,
-    subCategory: 'userDetails',
+    subCategory: EventSubCategory.command,
     metadata: {
       commandId: 'affinidi.me',
     },
