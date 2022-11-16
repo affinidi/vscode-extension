@@ -8,7 +8,6 @@ import {
   Disposable,
   Event,
   EventEmitter,
-  window,
   l10n,
 } from 'vscode'
 import { nanoid } from 'nanoid'
@@ -19,6 +18,8 @@ import {
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
 import { SESSION_KEY_NAME, vaultService } from './vault'
+import { logger } from '../../utils/logger'
+import { notifyError } from '../../utils/notifyError'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
@@ -49,20 +50,26 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     options: AuthenticationGetSessionOptions,
     scopes: string[] = [],
   ): Promise<AuthenticationSession | undefined> {
-    const session = await authentication.getSession(AUTH_PROVIDER_ID, scopes, options)
+    try {
+      const session = await authentication.getSession(AUTH_PROVIDER_ID, scopes, options)
 
-    if (session) {
-      const token = parseJwt(session.accessToken.slice(18))
+      if (session) {
+        const token = parseJwt(session.accessToken.slice(18))
 
-      // subtract 1 minute in case of lag
-      if (Date.now() / 1000 >= token.exp - 60) {
-        // TODO: we might want to log an analytics event here
-        await this.handleRemoveSession()
-        return this.getActiveSession(options, scopes) // try again
+        // subtract 1 minute in case of lag
+        if (Date.now() / 1000 >= token.exp - 60) {
+          // TODO: we might want to log an analytics event here
+          await this.handleRemoveSession()
+          return this.getActiveSession(options, scopes) // try again
+        }
       }
-    }
 
-    return session
+      return session
+    } catch (error) {
+      logger.error(error, 'Failed to get active session')
+      this.handleRemoveSession()
+      return undefined
+    }
   }
 
   async requireActiveSession(
@@ -108,10 +115,9 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       })
 
       return session
-    } catch (error) {
-      if (error instanceof Error) {
-        window.showErrorMessage(error.message)
-      }
+    } catch (error: unknown) {
+      logger.error(error, 'Failed to create a session')
+      notifyError(error)
       throw error
     }
   }

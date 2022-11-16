@@ -41,14 +41,14 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootApps,
       label: l10n.t('App Generators'),
-      state: TreeItemCollapsibleState.Collapsed,
+      state: TreeItemCollapsibleState.Expanded,
       icon: new ThemeIcon('rocket'),
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootScripts,
       label: l10n.t('Script Generators'),
-      state: TreeItemCollapsibleState.Collapsed,
+      state: TreeItemCollapsibleState.Expanded,
       icon: new ThemeIcon('file-code'),
     })
 

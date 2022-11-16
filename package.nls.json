@@ -14,7 +14,7 @@
 
   "affinidiExplorer.refresh": "Refresh",
   "affinidiExplorer.viewProperties": "View Properties",
-  "affinidiExplorer.initiateIssuanceCsvFlow": "Gnerate: CSV Issuance",
+  "affinidiExplorer.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidiExplorer.showJsonSchema": "Show JSON Schema",
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
   "affinidiExplorer.createSchema": "Create Schema",

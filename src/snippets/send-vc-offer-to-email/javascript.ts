@@ -1,4 +1,4 @@
-import { SnippetInput } from './snippet'
+import type { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -13,7 +13,7 @@ const schema = {
 };
 const email = '${input.email || '${1:email@example.com}'}'; // VC claim link will be sent here
 
-const issuanceResponse = await fetch('${input.issuanceApiUrl}/v1/issuances', {
+const issuanceResponse = await fetch('${input.issuanceApiUrl}/issuances', {
   method: 'POST',
   headers: {
     'Api-Key': apiKeyHash,
@@ -46,7 +46,7 @@ if (String(issuanceResponse.status).startsWith('2')) {
 
 const offerResponse = await fetch(\`${
     input.issuanceApiUrl
-  }/v1/issuances/\${issuanceData.id}/offers\`, {
+  }/issuances/\${issuanceData.id}/offers\`, {
   method: 'POST',
   headers: {
     'Api-Key': apiKeyHash,

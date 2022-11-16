@@ -1,6 +1,6 @@
 import { ProgressLocation, window, l10n } from 'vscode'
+import { userManagementClient } from '../../features/user-management/userManagementClient'
 import { validateEmail, validateOTP } from './validators'
-import { userManagementClient } from './user-management.client'
 
 type AuthProcessOutput = {
   id: string
@@ -55,26 +55,25 @@ export const executeAuthProcess = async ({
     throw new Error(l10n.t('Confirmation code is required'))
   }
 
-  const { cookie } = await window.withProgress(
+  const { consoleAuthToken } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: `${l10n.t('Signing in to')} Affinidi`,
     },
     async () => {
       return isSignUp
-        ? userManagementClient.signupConfirm({
+        ? userManagementClient.confirmSignup({
             confirmationCode,
             token,
           })
-        : userManagementClient.loginConfirm({
+        : userManagementClient.confirmLogin({
             confirmationCode,
             token,
           })
     },
   )
 
-  // Get userId from cookie. Slice removes `console_authtoken=` prefix.
-  const { userId } = parseJwt(cookie.slice('console_authtoken='.length))
+  const { userId } = parseJwt(consoleAuthToken)
 
-  return { email, id: userId, accessToken: cookie }
+  return { email, id: userId, accessToken: `console_authtoken=${consoleAuthToken}` }
 }

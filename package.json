@@ -391,7 +391,7 @@
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run clean && npm run compile && npm run lint",
+    "pretest": "npm run clean && npm run compile",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
     "test": "node ./out/test/runTest.js",
@@ -437,6 +437,10 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@affinidi/client-iam": "^0.3.1",
+    "@affinidi/client-issuance": "^0.4.0",
+    "@affinidi/client-schema-manager": "^0.3.1",
+    "@affinidi/client-user-management": "^0.3.2",
     "@vscode/l10n": "^0.0.10",
     "@vscode/test-electron": "^2.1.5",
     "@vscode/webview-ui-toolkit": "^1.1.0",

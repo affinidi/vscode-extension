@@ -1,27 +1,22 @@
 import { expect } from 'chai'
-import { TextEditor, window, workspace } from 'vscode'
 import { sandbox } from '../../setup'
-import { insertGetIssuanceOffersSnippet } from '../../../../snippets/get-issuance-offers/snippet'
-import { SnippetImplementation } from '../../../../snippets/shared/createSnippetTools'
-import { iamService } from '../../../../services/iamService'
-import { ISSUANCE_API_BASE } from '../../../../services/issuancesService'
+import {
+  implementations,
+  insertGetIssuanceOffersSnippet,
+} from '../../../../snippets/get-issuance-offers/snippet'
+import { iamClient } from '../../../../features/iam/iamClient'
+import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
+import { testSnippet } from '../helpers'
+import { authHelper } from '../../../../auth/authHelper'
 
 describe('insertGetIssuanceOffersSnippet()', () => {
-  let editor: TextEditor
-  beforeEach(async () => {
-    editor = await window.showTextDocument(
-      await workspace.openTextDocument({
-        language: 'javascript',
-      }),
-    )
-  })
-
-  it('should insert a snippet', async () => {
+  testSnippet(implementations, async ({ editor, implementation }) => {
     const projectId = 'fake-project-id'
     const issuanceId = 'fake-issuance-id'
     const apiKeyHash = 'fake-api-key-hash'
 
-    sandbox.stub(iamService, 'getProjectSummary').resolves({
+    sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
+    sandbox.stub(iamClient, 'getProjectSummary').resolves({
       apiKey: { apiKeyHash },
     } as any)
 
@@ -30,14 +25,13 @@ describe('insertGetIssuanceOffersSnippet()', () => {
         projectId,
         issuanceId,
       },
-      SnippetImplementation.fetch,
+      implementation,
       editor,
     )
 
     const text = editor.document.getText()
     for (const value of [
-      'fetch',
-      `\`${ISSUANCE_API_BASE}/v1/issuances/\${issuanceId}/offers\``,
+      `\`${ISSUANCE_API_URL}/issuances/\${issuanceId}/offers\``,
       issuanceId,
       apiKeyHash,
     ]) {

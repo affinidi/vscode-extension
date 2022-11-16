@@ -1,18 +1,19 @@
 /* eslint-disable max-classes-per-file */
 import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from 'vscode'
+import { ExplorerResourceTypes } from './treeTypes'
 
 export class AffResourceTreeItem extends TreeItem {
-  public resourceType
+  public resourceType: ExplorerResourceTypes
 
-  public metadata
+  public metadata: any
 
-  public command
+  public command: Command | undefined
 
-  public projectId
+  public projectId: string | undefined
 
   constructor(
     public readonly item: {
-      resourceType: string
+      resourceType: ExplorerResourceTypes
       metadata: any
       label: string
       description?: string
@@ -28,7 +29,7 @@ export class AffResourceTreeItem extends TreeItem {
     this.description = this.item.description
     this.metadata = item.metadata
     this.iconPath = item.icon
-    this.contextValue = item.resourceType
+    this.contextValue = ExplorerResourceTypes[item.resourceType]
     this.projectId = item.projectId
     this.command = item.command
   }

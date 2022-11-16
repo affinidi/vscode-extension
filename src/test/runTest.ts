@@ -12,9 +12,13 @@ async function main() {
     const extensionTestsPath = path.resolve(__dirname, './mocha')
 
     // Download VS Code, unzip it and run the integration test
-    await runTests({ extensionDevelopmentPath, extensionTestsPath })
-  } catch (err) {
-    console.error('Failed to run tests')
+    await runTests({
+      extensionDevelopmentPath,
+      extensionTestsPath,
+      extensionTestsEnv: { NODE_ENV: 'test' },
+    })
+  } catch (error) {
+    console.error('Failed to run tests', error)
     process.exit(1)
   }
 }

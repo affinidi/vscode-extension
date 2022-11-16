@@ -3,25 +3,25 @@ import * as sinon from 'sinon'
 import { window } from 'vscode'
 import { sandbox } from '../../setup'
 import { executeAuthProcess } from '../../../../auth/authentication-provider/auth-process'
-import { generateConsoleAuthCookie } from '../../helpers'
-import { userManagementClient } from '../../../../auth/authentication-provider/user-management.client'
+import { generateConsoleAuthToken } from '../../helpers'
+import { userManagementClient } from '../../../../features/user-management/userManagementClient'
 
 describe('executeAuthProcess()', () => {
   const userId = 'fake-user-id'
   const username = 'fake-username'
   const email = 'fake@example.com'
   const loginToken = 'fake-login-token'
-  const singupToken = 'fake-singup-token'
+  const signupToken = 'fake-singup-token'
   const confirmationCode = 'fake-confirmation-code'
-  const cookie = generateConsoleAuthCookie({ userId, username })
+  const consoleAuthToken = generateConsoleAuthToken({ userId, username })
 
   let showInputBoxStub: sinon.SinonStub
 
   beforeEach(() => {
     sandbox.stub(userManagementClient, 'login').resolves({ token: loginToken })
-    sandbox.stub(userManagementClient, 'loginConfirm').resolves({ cookie })
-    sandbox.stub(userManagementClient, 'signup').resolves({ token: singupToken })
-    sandbox.stub(userManagementClient, 'signupConfirm').resolves({ cookie })
+    sandbox.stub(userManagementClient, 'confirmLogin').resolves({ consoleAuthToken })
+    sandbox.stub(userManagementClient, 'signup').resolves({ token: signupToken })
+    sandbox.stub(userManagementClient, 'confirmSignup').resolves({ consoleAuthToken })
 
     sandbox.stub(window, 'showInformationMessage')
     showInputBoxStub = sandbox
@@ -36,22 +36,22 @@ describe('executeAuthProcess()', () => {
     expect(await executeAuthProcess({ isSignUp: false })).to.deep.eq({
       email,
       id: userId,
-      accessToken: cookie,
+      accessToken: `console_authtoken=${consoleAuthToken}`,
     })
 
     expect(userManagementClient.login).calledWith({ username: email })
-    expect(userManagementClient.loginConfirm).calledWith({ confirmationCode, token: loginToken })
+    expect(userManagementClient.confirmLogin).calledWith({ confirmationCode, token: loginToken })
   })
 
   it('should execute a signup flow', async () => {
     expect(await executeAuthProcess({ isSignUp: true })).to.deep.eq({
       email,
       id: userId,
-      accessToken: cookie,
+      accessToken: `console_authtoken=${consoleAuthToken}`,
     })
 
     expect(userManagementClient.signup).calledWith({ username: email })
-    expect(userManagementClient.signupConfirm).calledWith({ confirmationCode, token: singupToken })
+    expect(userManagementClient.confirmSignup).calledWith({ confirmationCode, token: signupToken })
   })
 
   it('should fail when email is not provided', async () => {

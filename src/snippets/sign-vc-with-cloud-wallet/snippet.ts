@@ -1,14 +1,14 @@
-import { ProgressLocation, window, l10n } from 'vscode'
 import { nanoid } from 'nanoid'
-import { iamService, IAM_API_BASE } from '../../services/iamService'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { askForProjectId } from '../shared/askForProjectId'
+import { askForProjectId } from '../../features/iam/askForProjectId'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { ext } from '../../extensionVariables'
-import { askForMySchema } from '../shared/askForMySchema'
+import { askForMySchema } from '../../features/schema-manager/askForMySchema'
+import { authHelper } from '../../auth/authHelper'
+import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
+import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 
 export interface SnippetInput {
   iamUrl: string
@@ -31,44 +31,36 @@ export const implementations: Implementations<SnippetInput> = {
   typescriptreact: typescript,
 }
 
-const CLOUD_WALLET_API_BASE = 'https://cloud-wallet-api.prod.affinity-project.org/api'
+export const CLOUD_WALLET_API_URL = 'https://cloud-wallet-api.prod.affinity-project.org/api/v1'
 
 export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetInput, CommandInput>(
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const session = await ext.authProvider.requireActiveSession({
-      createIfNone: true,
-    })
+    const consoleAuthToken = await authHelper.getConsoleAuthToken()
 
-    const projectId = input?.projectId ?? (await askForProjectId())
+    const projectId = input?.projectId ?? (await askForProjectId({ consoleAuthToken }))
     if (!projectId) {
-      return
+      return undefined
     }
 
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await window.withProgress(
-      {
-        location: ProgressLocation.Notification,
-        title: l10n.t('Fetching project information...'),
-      },
-      () => iamService.getProjectSummary(projectId),
-    )
+    } = await requireProjectSummary(projectId, { consoleAuthToken })
 
-    const schema = input?.schema ?? (await askForMySchema({ did, apiKeyHash }))
+    const schema =
+      input?.schema ?? (await askForMySchema({ includeExample: true, did }, { apiKeyHash }))
     if (!schema) {
-      return
+      return undefined
     }
 
     return {
-      iamUrl: IAM_API_BASE,
-      cloudWalletApiUrl: CLOUD_WALLET_API_BASE,
+      iamUrl: AFFINIDI_IAM_API_URL,
+      cloudWalletApiUrl: CLOUD_WALLET_API_URL,
       issuerDid: did,
       apiKeyHash,
       projectId,
-      cookie: session.accessToken,
       claimId: nanoid(),
       schema,
     }

@@ -8,7 +8,7 @@ Bulk Issuance is used to issue digital credentials in a batch based on a CSV fil
 >    * _Tip: if you have selected a schema from Schema Manager by clicking “Issue VC with schema”, the schema URL is automatically pre-filled here_
 > 3. Confirm that your are aware that emails with digital credentials are actually going to be sent out to the email addresses listed in the CSV file, as soon as you click “Issue credentials” button and thus check “I confirm to send an email to all the recipients in the CSV”
 > 4. Upload a CSV file with credential data
->    * _Tip: you can also download a CSV file template, based on the selected schema, by clicking “Download CSV Template” and filling it out_
+>    * _Tip: you can also open a CSV file template, based on the selected schema, by clicking “Open CSV Template” and filling it out_
 > 5. Click “Issue credentials”, wait until the batch is fully processed and review the results
 
 # How Does Bulk Issuance Work
@@ -27,7 +27,7 @@ Bulk Issuance works best with the schemas hosted in [Affinidi Schema Manager](ht
 
 In general, a CSV file structure matches a schema structure when there is a column in the CSV file for each required schema attribute, and their names match. Moreover, there should exist a column named \`@target.email\`, which contains the emails of VC recipients.
 
-_Tip: you can also download a CSV file template, based on the selected schema, by clicking “Download CSV Template” and filling it out._
+_Tip: you can also open a CSV file template, based on the selected schema, by clicking “Open CSV Template” and filling it out._
 
 # How to Avoid Validation Errors?
 
