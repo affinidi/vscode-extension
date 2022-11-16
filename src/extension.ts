@@ -26,6 +26,7 @@ import { buildURL } from './api-client/api-fetch'
 import { createProjectProcess } from './iam/iam'
 import { EventNames, sendEventToAnalytics } from './services/analyticsStreamApiService'
 import { askUserForTelemetryConsent } from './utils/telemetry'
+import { initiateIssuanceCsvFlow } from './services/csvCreationService'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -196,6 +197,26 @@ export async function activateInternal(context: ExtensionContext) {
       },
     })
   })
+
+  context.subscriptions.push(
+    commands.registerCommand(
+      'affinidiExplorer.initiateIssuanceCsvFlow',
+      async (element: AffResourceTreeItem) => {
+        await initiateIssuanceCsvFlow(
+          { projectId: element.projectId as string, schema: element.metadata },
+          element.resourceType,
+        )
+
+        sendEventToAnalytics({
+          name: EventNames.commandExecuted,
+          subCategory: 'schema',
+          metadata: {
+            commandId: 'affinidiExplorer.initiateIssuanceCsvFlow',
+          },
+        })
+      },
+    ),
+  )
 
   commands.registerCommand('affinidiExplorer.showJsonSchema', (element: AffResourceTreeItem) => {
     viewSchemaContent(element.metadata.id, element.metadata.jsonSchemaUrl)

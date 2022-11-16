@@ -44,6 +44,7 @@
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
+    "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
     "onStartupFinished",
     "onView:affinidiCodeGeneration",
     "onView:affinidiDevTools",
@@ -171,6 +172,11 @@
         "command": "affinidi.codegen.app",
         "title": "%affinidi.codegen.app%",
         "category": "Affinidi %commands.category.generators%"
+      },
+      {
+        "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+        "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
+        "category": "Affinidi %commands.category.explorer%"
       }
     ],
     "menus": {
@@ -189,6 +195,10 @@
         },
         {
           "command": "affinidi.copyJsonLdURL",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
           "when": "never"
         },
         {
@@ -258,6 +268,11 @@
           "command": "affinidiExplorer.createIssuance",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "z_commands"
+        },
+        {
+          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "view == affinidiExplorer && viewItem == schema || view == affinidiExplorer && viewItem == issuance",
+          "group": "1"
         },
         {
           "command": "affinidiExplorer.viewProperties",
@@ -428,6 +443,7 @@
     "conf": "^10.2.0",
     "date-fns": "^2.29.3",
     "execa": "^5.1.1",
+    "form-data": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "nanoid": "^3.3.4",
     "node-fetch": "^2.6.7",
