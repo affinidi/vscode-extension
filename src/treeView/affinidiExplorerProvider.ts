@@ -10,12 +10,13 @@ import {
   l10n,
 } from 'vscode'
 import { getProjectIssuances, IssuanceList } from '../services/issuancesService'
-import { iamService, ProjectList, ProjectSummary } from '../services/iamService'
+import { iamService, ProjectList } from '../services/iamService'
 import { getMySchemas, SchemaSearchScope } from '../services/schemaManagerService'
 import { ExplorerResourceTypes } from './treeTypes'
 import { AffResourceTreeItem } from './treeItem'
 import { ext } from '../extensionVariables'
 import { formatIssuanceName } from '../shared/formatIssuanceName'
+import { projectsState } from '../states/projectsState'
 
 const isSignedIn = async () => {
   const sessions = await ext.authProvider.getSessions()
@@ -30,8 +31,6 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
 
   readonly onDidChangeTreeData: Event<AffResourceTreeItem | undefined | void> =
     this._onDidChangeTreeData.event
-
-  private projects: Record<string, ProjectSummary> = {}
 
   constructor() {
     ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(this.authListener))
@@ -94,11 +93,8 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     return Promise.resolve(treeNodes)
   }
 
-  private getProject(projectId: string = '') {
-    return this.projects[projectId]
-  }
-
   private async addProjectItems(treeNodes: AffResourceTreeItem[]): Promise<void> {
+    const { setProject } = projectsState()
     const projectListResponse: ProjectList = await getProjects()
 
     // sort projects array in descending order on createdAt field
@@ -109,7 +105,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     for (const project of sortedProjects) {
       const projectSummary = await getProjectSummary(project.projectId)
 
-      this.projects[projectSummary.project.projectId] = projectSummary
+      setProject(projectSummary.project.projectId, projectSummary)
 
       this.addNewTreeItem(treeNodes, {
         type: ExplorerResourceTypes.project,
@@ -155,15 +151,19 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
-    const projectInfo = this.getProject(parent?.projectId)
+    const { getProjectById } = projectsState()
 
-    this.addNewTreeItem(treeNodes, {
-      type: ExplorerResourceTypes.did,
-      metadata: projectInfo.wallet,
-      label: projectInfo.wallet.did,
-      icon: new ThemeIcon('lock'),
-      projectId: parent?.projectId,
-    })
+    if (parent?.projectId) {
+      const projectInfo = getProjectById(parent?.projectId)
+
+      this.addNewTreeItem(treeNodes, {
+        type: ExplorerResourceTypes.did,
+        metadata: projectInfo.wallet,
+        label: projectInfo.wallet.did,
+        icon: new ThemeIcon('lock'),
+        projectId: parent?.projectId,
+      })
+    }
   }
 
   private addSubRootSchemaItems(treeNodes: AffResourceTreeItem[], parent?: AffResourceTreeItem) {
@@ -194,51 +194,59 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
-    const projectInfo = this.getProject(parent?.projectId)
+    const { getProjectById } = projectsState()
 
-    const res = await getMySchemas({
-      did: projectInfo.wallet.did,
-      scope: parent?.metadata?.scope,
-      apiKeyHash: projectInfo.apiKey.apiKeyHash,
-    })
+    if (parent?.projectId) {
+      const projectInfo = getProjectById(parent?.projectId)
 
-    res.schemas.map((schema) => {
-      this.addNewTreeItem(treeNodes, {
-        type: ExplorerResourceTypes.schema,
-        label: `${schema.type}V${schema.version}-${schema.revision}`,
-        description: schema.description || '',
-        metadata: schema,
-        icon: new ThemeIcon('bracket'),
-        projectId: parent?.projectId,
-        command: {
-          title: l10n.t('Open schema details'),
-          command: 'schema.showSchemaDetails',
-        },
+      const res = await getMySchemas({
+        did: projectInfo.wallet.did,
+        scope: parent?.metadata?.scope,
+        apiKeyHash: projectInfo.apiKey.apiKeyHash,
       })
-    })
+
+      res.schemas.forEach((schema) => {
+        this.addNewTreeItem(treeNodes, {
+          type: ExplorerResourceTypes.schema,
+          label: `${schema.type}V${schema.version}-${schema.revision}`,
+          description: schema.description || '',
+          metadata: schema,
+          icon: new ThemeIcon('bracket'),
+          projectId: parent?.projectId,
+          command: {
+            title: l10n.t('Open schema details'),
+            command: 'schema.showSchemaDetails',
+          },
+        })
+      })
+    }
   }
 
   private async addIssuanceItems(
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
-    const projectInfo = this.getProject(parent?.projectId)
+    const { getProjectById } = projectsState()
 
-    const issuanceListResponse: IssuanceList = await getProjectIssuances({
-      apiKeyHash: projectInfo.apiKey.apiKeyHash,
-      projectId: projectInfo.project.projectId,
-    })
+    if (parent?.projectId) {
+      const projectInfo = getProjectById(parent?.projectId)
 
-    issuanceListResponse.issuances.map((issuance) => {
-      this.addNewTreeItem(treeNodes, {
-        type: ExplorerResourceTypes.issuance,
-        metadata: issuance,
-        label: formatIssuanceName(issuance),
-        description: issuance.id,
-        icon: new ThemeIcon('output'),
-        projectId: parent?.projectId,
+      const issuanceListResponse: IssuanceList = await getProjectIssuances({
+        apiKeyHash: projectInfo.apiKey.apiKeyHash,
+        projectId: projectInfo.project.projectId,
       })
-    })
+
+      issuanceListResponse.issuances.forEach((issuance) => {
+        this.addNewTreeItem(treeNodes, {
+          type: ExplorerResourceTypes.issuance,
+          metadata: issuance,
+          label: formatIssuanceName(issuance),
+          description: issuance.id,
+          icon: new ThemeIcon('output'),
+          projectId: parent?.projectId,
+        })
+      })
+    }
   }
 
   private async addEmptyItem(treeNodes: AffResourceTreeItem[]): Promise<void> {
