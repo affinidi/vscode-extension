@@ -1,6 +1,10 @@
 import { commands } from 'vscode'
 import { ext } from '../extensionVariables'
-import { EventNames, sendEventToAnalytics } from '../services/analyticsStreamApiService'
+import {
+  EventNames,
+  EventSubCategory,
+  sendEventToAnalytics,
+} from '../services/analyticsStreamApiService'
 import { AffResourceTreeItem } from '../treeView/treeItem'
 import { insertGetIssuanceOffersSnippet } from './get-issuance-offers/snippet'
 import { insertSendVcOfferToEmailSnippet } from './send-vc-offer-to-email/snippet'
@@ -11,20 +15,18 @@ export const initSnippets = () => {
     commands.registerCommand(
       'affinidi.codegen.sendVcOfferToEmail',
       async (element?: AffResourceTreeItem) => {
-        await insertSendVcOfferToEmailSnippet(
-          element
-            ? {
-                projectId: element.projectId,
-                schema: element.metadata,
-              }
-            : {},
-        )
+        await insertSendVcOfferToEmailSnippet({
+          projectId: element?.projectId,
+          schema: element?.metadata,
+        })
 
         sendEventToAnalytics({
           name: EventNames.commandExecuted,
-          subCategory: 'vcOffer',
+          subCategory: EventSubCategory.command,
           metadata: {
             commandId: 'affinidi.codegen.sendVcOfferToEmail',
+            projectId: element?.projectId,
+            schemaId: element?.metadata.id,
           },
         })
       },
@@ -35,20 +37,18 @@ export const initSnippets = () => {
     commands.registerCommand(
       'affinidi.codegen.getIssuanceOffers',
       async (element?: AffResourceTreeItem) => {
-        await insertGetIssuanceOffersSnippet(
-          element
-            ? {
-                projectId: element.projectId,
-                issuanceId: element.metadata.id,
-              }
-            : {},
-        )
+        await insertGetIssuanceOffersSnippet({
+          projectId: element?.projectId,
+          issuanceId: element?.metadata.id,
+        })
 
         sendEventToAnalytics({
           name: EventNames.commandExecuted,
-          subCategory: 'vcOffer',
+          subCategory: EventSubCategory.command,
           metadata: {
             commandId: 'affinidi.codegen.getIssuanceOffers',
+            projectId: element?.projectId,
+            issuanceId: element?.metadata.id,
           },
         })
       },
@@ -61,7 +61,7 @@ export const initSnippets = () => {
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: 'vc',
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.codegen.signVcWithCloudWallet',
         },

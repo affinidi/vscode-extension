@@ -1,6 +1,10 @@
 import { commands } from 'vscode'
 import { ext } from '../extensionVariables'
-import { EventNames, sendEventToAnalytics } from '../services/analyticsStreamApiService'
+import {
+  EventNames,
+  EventSubCategory,
+  sendEventToAnalytics,
+} from '../services/analyticsStreamApiService'
 import { generateAffinidiAppWithCLI } from './create-app/generator'
 
 export const initGenerators = () => {
@@ -10,7 +14,7 @@ export const initGenerators = () => {
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
-        subCategory: 'CLI',
+        subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.codegen.app',
         },

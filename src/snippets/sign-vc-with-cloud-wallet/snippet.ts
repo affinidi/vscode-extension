@@ -35,7 +35,6 @@ const CLOUD_WALLET_API_BASE = 'https://cloud-wallet-api.prod.affinity-project.or
 
 export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetInput, CommandInput>(
   'signVcWithCloudWallet',
-  'vc',
   implementations,
   async (input) => {
     const session = await ext.authProvider.requireActiveSession({

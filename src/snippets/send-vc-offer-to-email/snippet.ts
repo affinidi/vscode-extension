@@ -33,7 +33,6 @@ export const implementations: Implementations<SnippetInput> = {
 
 export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput, CommandInput>(
   'sendVcOfferToEmail',
-  'vcOffer',
   implementations,
   async (input) => {
     const projectId = input?.projectId ?? (await askForProjectId())

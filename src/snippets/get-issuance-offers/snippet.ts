@@ -29,7 +29,6 @@ export const implementations: Implementations<SnippetInput> = {
 
 export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput, CommandInput>(
   'getIssuanceOffers',
-  'vcOffer',
   implementations,
   async (input) => {
     const projectId = input?.projectId ?? (await askForProjectId())
@@ -56,6 +55,7 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
       issuanceApiUrl: ISSUANCE_API_BASE,
       apiKeyHash,
       issuanceId,
+      projectId,
     }
   },
 )

@@ -1,7 +1,7 @@
 import { ProgressLocation, window, l10n } from 'vscode'
-import { iamService } from '../services/iamService'
+import { iamService, Project } from '../services/iamService'
 
-export const createProjectProcess = async (): Promise<void> => {
+export const createProjectProcess = async (): Promise<Project | undefined> => {
   const projectName = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: l10n.t('Project Name'),
@@ -14,7 +14,7 @@ export const createProjectProcess = async (): Promise<void> => {
   }
 
   try {
-    await window.withProgress(
+    const result = await window.withProgress(
       {
         location: ProgressLocation.Notification,
         title: l10n.t('Creating Project...'),
@@ -25,6 +25,7 @@ export const createProjectProcess = async (): Promise<void> => {
     )
 
     window.showInformationMessage(l10n.t('Project created successfully'))
+    return result
   } catch (err: any) {
     window.showErrorMessage(
       `${l10n.t('Project could not be created, please try again later.')} ${err.message}`,

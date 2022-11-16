@@ -49,12 +49,12 @@ const getProjectSummary = async (projectId: string): Promise<ProjectSummary> => 
   })
 }
 
-export const createProject = async (projectName: string): Promise<void> => {
+export const createProject = async (projectName: string): Promise<Project> => {
   const session = await ext.authProvider.requireActiveSession({
     createIfNone: true,
   })
 
-  await apiFetch<void>({
+  return await apiFetch<Project>({
     endpoint: `${IAM_API_BASE}/v1/projects`,
     method: 'POST',
     requestBody: {
