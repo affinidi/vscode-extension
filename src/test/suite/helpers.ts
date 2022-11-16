@@ -16,13 +16,13 @@ export function generateSession(values?: {
   }
 }
 
-export function generateConsoleAuthCookie(values?: { userId?: string; username?: string }): string {
-  return `console_authtoken=${jwt.sign(
+export function generateConsoleAuthToken(values?: { userId?: string; username?: string }): string {
+  return jwt.sign(
     {
       userId: values?.userId ?? 'fake-user-id',
       username: values?.username ?? 'fake-username',
       extra: 'fields',
     },
     Buffer.from('does-not-matter'),
-  )}`
+  )
 }

@@ -1,13 +1,14 @@
-import { ProgressLocation, window, l10n } from 'vscode'
-import { iamService } from '../../services/iamService'
-import { ISSUANCE_API_BASE } from '../../services/issuancesService'
+import { window, l10n } from 'vscode'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { askForProjectId } from '../shared/askForProjectId'
+import { askForProjectId } from '../../features/iam/askForProjectId'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { askForMySchema } from '../shared/askForMySchema'
+import { askForMySchema } from '../../features/schema-manager/askForMySchema'
+import { authHelper } from '../../auth/authHelper'
+import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
+import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -35,25 +36,22 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
   'sendVcOfferToEmail',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await askForProjectId())
+    const consoleAuthToken = await authHelper.getConsoleAuthToken()
+
+    const projectId = input?.projectId ?? (await askForProjectId({ consoleAuthToken }))
     if (!projectId) {
-      return
+      return undefined
     }
 
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await window.withProgress(
-      {
-        location: ProgressLocation.Notification,
-        title: l10n.t('Fetching project information...'),
-      },
-      () => iamService.getProjectSummary(projectId),
-    )
+    } = await requireProjectSummary(projectId, { consoleAuthToken })
 
-    const schema = input?.schema ?? (await askForMySchema({ did, apiKeyHash }))
+    const schema =
+      input?.schema ?? (await askForMySchema({ includeExample: true, did }, { apiKeyHash }))
     if (!schema) {
-      return
+      return undefined
     }
 
     const email =
@@ -63,7 +61,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
       }))
 
     return {
-      issuanceApiUrl: ISSUANCE_API_BASE,
+      issuanceApiUrl: ISSUANCE_API_URL,
       issuerDid: did,
       apiKeyHash,
       projectId,

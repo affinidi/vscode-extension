@@ -1,20 +1,19 @@
 import { expect } from 'chai'
 import { sandbox } from '../../setup'
 import {
+  CLOUD_WALLET_API_URL,
   implementations,
-  insertSendVcOfferToEmailSnippet,
-} from '../../../../snippets/send-vc-offer-to-email/snippet'
-import { iamClient } from '../../../../features/iam/iamClient'
-import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
+  insertSignVcWithCloudWalletSnippet,
+} from '../../../../snippets/sign-vc-with-cloud-wallet/snippet'
+import { AFFINIDI_IAM_API_URL, iamClient } from '../../../../features/iam/iamClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
 
-describe('insertSendVcOfferToEmailSnippet()', () => {
+describe('insertSignVcWithCloudWalletSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
     const projectId = 'fake-project-id'
     const apiKeyHash = 'fake-api-key-hash'
     const did = 'fake-did'
-    const email = 'fake@example.com'
     const type = 'MySchema'
     const jsonSchemaUrl = 'http://example.com/MySchema.json'
     const jsonLdContextUrl = 'http://example.com/MySchema.jsonld'
@@ -25,10 +24,9 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
       wallet: { did },
     } as any)
 
-    await insertSendVcOfferToEmailSnippet(
+    await insertSignVcWithCloudWalletSnippet(
       {
         projectId,
-        email,
         schema: {
           type,
           jsonSchemaUrl,
@@ -41,12 +39,10 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
 
     const text = editor.document.getText()
     for (const value of [
-      `'${ISSUANCE_API_URL}/issuances'`,
-      `\`${ISSUANCE_API_URL}/issuances/\${issuanceData.id}/offers\``,
-      projectId,
+      `'${CLOUD_WALLET_API_URL}/wallet/sign-credential'`,
+      `\`${AFFINIDI_IAM_API_URL}/cloud-wallet/\${issuerDid}/authenticate\``,
       apiKeyHash,
       did,
-      email,
       type,
       jsonSchemaUrl,
       jsonLdContextUrl,

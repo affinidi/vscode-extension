@@ -1,13 +1,13 @@
-import { ProgressLocation, window, l10n } from 'vscode'
-import { iamService } from '../../services/iamService'
-import { getProjectIssuances, ISSUANCE_API_BASE } from '../../services/issuancesService'
-import { formatIssuanceName } from '../../shared/formatIssuanceName'
-import { showQuickPick } from '../../utils/showQuickPick'
-import { askForProjectId } from '../shared/askForProjectId'
+import { askForProjectId } from '../../features/iam/askForProjectId'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { Implementations } from '../shared/createSnippetTools'
+import { askForIssuanceId } from '../../features/issuance/askForIssuanceId'
+import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
+
 import * as javascript from './javascript'
 import * as typescript from './typescript'
+import { authHelper } from '../../auth/authHelper'
+import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -31,58 +31,27 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
   'getIssuanceOffers',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await askForProjectId())
+    const consoleAuthToken = await authHelper.getConsoleAuthToken()
+
+    const projectId = input?.projectId ?? (await askForProjectId({ consoleAuthToken }))
     if (!projectId) {
-      return
+      return undefined
     }
 
     const {
       apiKey: { apiKeyHash },
-    } = await window.withProgress(
-      {
-        location: ProgressLocation.Notification,
-        title: l10n.t('Fetching project information...'),
-      },
-      () => iamService.getProjectSummary(projectId),
-    )
+    } = await requireProjectSummary(projectId, { consoleAuthToken })
 
-    const issuanceId = input?.issuanceId ?? (await askForIssuanceId({ apiKeyHash, projectId }))
+    const issuanceId = input?.issuanceId ?? (await askForIssuanceId({ projectId }, { apiKeyHash }))
     if (!issuanceId) {
-      return
+      return undefined
     }
 
     return {
-      issuanceApiUrl: ISSUANCE_API_BASE,
+      issuanceApiUrl: ISSUANCE_API_URL,
       apiKeyHash,
       issuanceId,
       projectId,
     }
   },
 )
-
-async function askForIssuanceId(input: {
-  apiKeyHash: string
-  projectId: string
-}): Promise<string | undefined> {
-  const { issuances } = await window.withProgress(
-    {
-      location: ProgressLocation.Notification,
-      title: l10n.t('Fetching available issuances...'),
-    },
-    () => getProjectIssuances(input),
-  )
-
-  if (issuances.length === 0) {
-    throw new Error(l10n.t("You don't have any issuances to choose from"))
-  }
-
-  return showQuickPick(
-    [
-      ...issuances.map<[string, string]>((issuance) => [
-        `${formatIssuanceName(issuance)} (${issuance.id})`,
-        issuance.id,
-      ]),
-    ],
-    { title: l10n.t('Select an Issuance') },
-  )
-}

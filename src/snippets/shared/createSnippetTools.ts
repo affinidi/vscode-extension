@@ -13,7 +13,7 @@ export type Implementations<Input> = {
 }
 
 const implementationLabels = {
-  [SnippetImplementation.sdk]: l10n.t('Use Affinidi SDK'),
+  [SnippetImplementation.sdk]: l10n.t('Use Affinidi Client SDK'),
   [SnippetImplementation.fetch]: l10n.t('Use Fetch API'),
 }
 
@@ -31,13 +31,21 @@ export function createSnippetTools<
         implementations[languageId],
       ) as (keyof typeof SnippetImplementation)[]
 
+      if (supported.length === 0) {
+        return undefined
+      }
+
+      if (supported.length === 1) {
+        return SnippetImplementation[supported[0]]
+      }
+
       const selectedValue = await showQuickPick(
         supported.map((implementation) => [implementationLabels[implementation], implementation]),
         { title: l10n.t('Select an implementation') },
       )
 
       if (!selectedValue) {
-        return
+        return undefined
       }
 
       return SnippetImplementation[selectedValue]

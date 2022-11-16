@@ -1,5 +1,6 @@
 import { authentication, commands, window, l10n } from 'vscode'
 import { ext } from '../extensionVariables'
+import { userManagementClient } from '../features/user-management/userManagementClient'
 import {
   sendEventToAnalytics,
   EventNames,
@@ -7,12 +8,11 @@ import {
 } from '../services/analyticsStreamApiService'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
-
 import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
 } from './authentication-provider/affinidi-authentication-provider'
-import { userManagementClient } from './authentication-provider/user-management.client'
+import { authHelper } from './authHelper'
 
 const CONSENT = {
   accept: l10n.t('Accept'),
@@ -99,7 +99,10 @@ async function logoutHandler(): Promise<void> {
 }
 
 async function userDetailsHandler(): Promise<void> {
-  const userDetails = await userManagementClient.getUserDetails()
+  const userDetails = await userManagementClient.me({
+    consoleAuthToken: await authHelper.getConsoleAuthToken(),
+  })
+
   ext.outputChannel.appendLine(JSON.stringify(userDetails))
   openReadOnlyContent({
     node: { label: 'AccountDetails', id: userDetails.userId },

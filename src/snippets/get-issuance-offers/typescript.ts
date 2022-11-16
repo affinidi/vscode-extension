@@ -1,4 +1,4 @@
-import { SnippetInput } from './snippet'
+import type { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -28,7 +28,7 @@ type GetOfferIssuancesResponse = {
 const apiKeyHash = '${input.apiKeyHash}';
 const issuanceId = '${input.issuanceId}';
 
-const response = await fetch(\`${input.issuanceApiUrl}/v1/issuances/\${issuanceId\\}/offers\`, {
+const response = await fetch(\`${input.issuanceApiUrl}/issuances/\${issuanceId\\}/offers\`, {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',

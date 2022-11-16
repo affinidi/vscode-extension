@@ -3,8 +3,9 @@ import { expect } from 'chai'
 import { AUTH_PROVIDER_ID } from '../../../auth/authentication-provider/affinidi-authentication-provider'
 import { ext } from '../../../extensionVariables'
 import { sandbox } from '../setup'
-import { userManagementClient } from '../../../auth/authentication-provider/user-management.client'
 import { generateSession } from '../helpers'
+import { userManagementClient } from '../../../features/user-management/userManagementClient'
+import { authHelper } from '../../../auth/authHelper'
 
 describe('initAuthentication()', () => {
   beforeEach(() => {
@@ -66,7 +67,7 @@ describe('initAuthentication()', () => {
         createIfNone: false,
       })
 
-      expect(ext.authProvider.handleRemoveSession).calledWith(sessionId)
+      expect(ext.authProvider.handleRemoveSession).called
     })
 
     it('should ignore when no session', async () => {
@@ -80,11 +81,14 @@ describe('initAuthentication()', () => {
     it('should get user details', async () => {
       const userId = 'fake-user-id'
       const username = 'fake-username'
+      const consoleAuthToken = 'fake-console-auth-token'
 
-      sandbox.stub(userManagementClient, 'getUserDetails').resolves({ userId, username })
+      sandbox.stub(authHelper, 'getConsoleAuthToken').resolves(consoleAuthToken)
+      sandbox.stub(userManagementClient, 'me').resolves({ userId, username })
 
       await commands.executeCommand('affinidi.me')
 
+      expect(userManagementClient.me).calledWith({ consoleAuthToken })
       expect(ext.outputChannel.appendLine).calledWith(JSON.stringify({ userId, username }))
     })
   })

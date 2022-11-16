@@ -1,4 +1,4 @@
-import { SnippetInput } from './snippet'
+import type { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
   return `\
@@ -16,7 +16,7 @@ const schema = {
   jsonLdContextUrl: '${input.schema.jsonLdContextUrl}',
 };
 
-const cloudWalletResponse = await fetch(\`${input.iamUrl}/v1/cloud-wallet/\${issuerDid\\}/authenticate\`, {
+const cloudWalletResponse = await fetch(\`${input.iamUrl}/cloud-wallet/\${issuerDid\\}/authenticate\`, {
   method: 'POST',
   headers: {
     'Api-Key': apiKeyHash,
@@ -34,7 +34,7 @@ if ('wallet' in cloudWalletData) {
   throw new Error('Could not authenticate');
 }
 
-const signCredentialResponse = await fetch('${input.cloudWalletApiUrl}/v1/wallet/sign-credential', {
+const signCredentialResponse = await fetch('${input.cloudWalletApiUrl}/wallet/sign-credential', {
   method: 'POST',
   headers: {
     'Authorization': cloudWalletData.wallet.accessToken,
@@ -62,7 +62,6 @@ const signCredentialResponse = await fetch('${input.cloudWalletApiUrl}/v1/wallet
           lastName: 'Doe'
         \\},
         dateOfBirth: '1990-01-01'}
-        
       },
       credentialSchema: {
         id: schema.jsonSchemaUrl,

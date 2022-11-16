@@ -2,7 +2,7 @@ module.exports = {
   extends: ['@affinidi/eslint-config'],
   parserOptions: { project: ['tsconfig-tests.json'] },
   rules: {
-    'no-restricted-syntax': 'off'
+    'no-restricted-syntax': 'off',
   },
   overrides: [
     {
@@ -11,6 +11,9 @@ module.exports = {
       files: ['src/test/**/**/*.ts'],
       env: { jest: true },
       plugins: ['security'],
+      rules: {
+        'no-restricted-syntax': 'off',
+      },
     },
   ],
 }

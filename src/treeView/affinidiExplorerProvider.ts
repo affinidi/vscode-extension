@@ -9,21 +9,21 @@ import {
   TreeItemCollapsibleState,
   l10n,
 } from 'vscode'
-import { getProjectIssuances, IssuanceList } from '../services/issuancesService'
-import { iamService, ProjectList } from '../services/iamService'
-import { getMySchemas, SchemaSearchScope } from '../services/schemaManagerService'
 import { ExplorerResourceTypes } from './treeTypes'
 import { AffResourceTreeItem } from './treeItem'
 import { ext } from '../extensionVariables'
-import { formatIssuanceName } from '../shared/formatIssuanceName'
+import { formatIssuanceName } from '../features/issuance/formatIssuanceName'
 import { projectsState } from '../states/projectsState'
+import { authHelper } from '../auth/authHelper'
+import { iamClient } from '../features/iam/iamClient'
+import { requireProjectSummary } from '../features/iam/requireProjectSummary'
+import { issuanceClient } from '../features/issuance/issuanceClient'
+import { schemaManagerClient } from '../features/schema-manager/schemaManagerClient'
 
 const isSignedIn = async () => {
   const sessions = await ext.authProvider.getSessions()
   return !!sessions.length
 }
-
-const { getProjects, getProjectSummary } = iamService
 
 export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTreeItem> {
   private readonly _onDidChangeTreeData: EventEmitter<AffResourceTreeItem | undefined | void> =
@@ -65,23 +65,23 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
         await this.addCreateProjectItem(treeNodes)
         break
 
-      case ExplorerResourceTypes[ExplorerResourceTypes.project]:
+      case ExplorerResourceTypes.project:
         await this.addProductItems(treeNodes, element)
         break
 
-      case ExplorerResourceTypes[ExplorerResourceTypes.rootDID]:
+      case ExplorerResourceTypes.rootDID:
         await this.addDIDItems(treeNodes, element)
         break
 
-      case ExplorerResourceTypes[ExplorerResourceTypes.rootSchemas]:
+      case ExplorerResourceTypes.rootSchemas:
         this.addSubRootSchemaItems(treeNodes, element)
         break
 
-      case ExplorerResourceTypes[ExplorerResourceTypes.subRootSchemas]:
+      case ExplorerResourceTypes.subRootSchemas:
         await this.addSchemaItems(treeNodes, element)
         break
 
-      case ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]:
+      case ExplorerResourceTypes.rootIssuance:
         await this.addIssuanceItems(treeNodes, element)
         break
 
@@ -94,18 +94,18 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
   }
 
   private async addProjectItems(treeNodes: AffResourceTreeItem[]): Promise<void> {
-    const { setProject } = projectsState()
-    const projectListResponse: ProjectList = await getProjects()
+    const consoleAuthToken = await authHelper.getConsoleAuthToken()
+    const { projects } = await iamClient.listProjects({ consoleAuthToken })
 
     // sort projects array in descending order on createdAt field
-    const sortedProjects = projectListResponse.projects.sort(
-      (projectA, projectB) => Date.parse(projectB.createdAt) - Date.parse(projectA.createdAt),
+    const sortedProjects = projects.sort(
+      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
     )
 
     for (const project of sortedProjects) {
-      const projectSummary = await getProjectSummary(project.projectId)
+      const projectSummary = await requireProjectSummary(project.projectId, { consoleAuthToken })
 
-      setProject(projectSummary.project.projectId, projectSummary)
+      projectsState.setProject(projectSummary.project.projectId, projectSummary)
 
       this.addNewTreeItem(treeNodes, {
         type: ExplorerResourceTypes.project,
@@ -151,19 +151,15 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
-    const { getProjectById } = projectsState()
+    const projectSummary = projectsState.getProjectById(parent?.projectId)
 
-    if (parent?.projectId) {
-      const projectInfo = getProjectById(parent?.projectId)
-
-      this.addNewTreeItem(treeNodes, {
-        type: ExplorerResourceTypes.did,
-        metadata: projectInfo.wallet,
-        label: projectInfo.wallet.did,
-        icon: new ThemeIcon('lock'),
-        projectId: parent?.projectId,
-      })
-    }
+    this.addNewTreeItem(treeNodes, {
+      type: ExplorerResourceTypes.did,
+      metadata: projectSummary.wallet,
+      label: projectSummary.wallet.did,
+      icon: new ThemeIcon('lock'),
+      projectId: parent?.projectId,
+    })
   }
 
   private addSubRootSchemaItems(treeNodes: AffResourceTreeItem[], parent?: AffResourceTreeItem) {
@@ -171,7 +167,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
       type: ExplorerResourceTypes.subRootSchemas,
       label: l10n.t('Public'),
       metadata: {
-        scope: 'public' as SchemaSearchScope,
+        scope: 'public',
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon('bracket'),
@@ -182,7 +178,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
       type: ExplorerResourceTypes.subRootSchemas,
       label: l10n.t('Unlisted'),
       metadata: {
-        scope: 'unlisted' as SchemaSearchScope,
+        scope: 'unlisted',
       },
       state: TreeItemCollapsibleState.Collapsed,
       icon: new ThemeIcon('bracket'),
@@ -194,30 +190,32 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
-    const { getProjectById } = projectsState()
+    const {
+      wallet: { did },
+      apiKey: { apiKeyHash },
+    } = projectsState.getProjectById(parent?.projectId)
 
-    if (parent?.projectId) {
-      const projectInfo = getProjectById(parent?.projectId)
-
-      const res = await getMySchemas({
-        did: projectInfo.wallet.did,
+    const { schemas } = await schemaManagerClient.searchSchemas(
+      {
+        did,
+        authorDid: did,
         scope: parent?.metadata?.scope,
-        apiKeyHash: projectInfo.apiKey.apiKeyHash,
-      })
+      },
+      { apiKeyHash },
+    )
 
-      res.schemas.forEach((schema) => {
-        this.addNewTreeItem(treeNodes, {
-          type: ExplorerResourceTypes.schema,
-          label: `${schema.type}V${schema.version}-${schema.revision}`,
-          description: schema.description || '',
-          metadata: schema,
-          icon: new ThemeIcon('bracket'),
-          projectId: parent?.projectId,
-          command: {
-            title: l10n.t('Open schema details'),
-            command: 'schema.showSchemaDetails',
-          },
-        })
+    for (const schema of schemas) {
+      this.addNewTreeItem(treeNodes, {
+        type: ExplorerResourceTypes.schema,
+        label: `${schema.type}V${schema.version}-${schema.revision}`,
+        description: schema.description || '',
+        metadata: schema,
+        icon: new ThemeIcon('bracket'),
+        projectId: parent?.projectId,
+        command: {
+          title: l10n.t('Open schema details'),
+          command: 'schema.showSchemaDetails',
+        },
       })
     }
   }
@@ -226,25 +224,21 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     treeNodes: AffResourceTreeItem[],
     parent?: AffResourceTreeItem,
   ): Promise<void> {
-    const { getProjectById } = projectsState()
+    const {
+      project: { projectId },
+      apiKey: { apiKeyHash },
+    } = projectsState.getProjectById(parent?.projectId)
 
-    if (parent?.projectId) {
-      const projectInfo = getProjectById(parent?.projectId)
+    const { issuances } = await issuanceClient.searchIssuances({ projectId }, { apiKeyHash })
 
-      const issuanceListResponse: IssuanceList = await getProjectIssuances({
-        apiKeyHash: projectInfo.apiKey.apiKeyHash,
-        projectId: projectInfo.project.projectId,
-      })
-
-      issuanceListResponse.issuances.forEach((issuance) => {
-        this.addNewTreeItem(treeNodes, {
-          type: ExplorerResourceTypes.issuance,
-          metadata: issuance,
-          label: formatIssuanceName(issuance),
-          description: issuance.id,
-          icon: new ThemeIcon('output'),
-          projectId: parent?.projectId,
-        })
+    for (const issuance of issuances) {
+      this.addNewTreeItem(treeNodes, {
+        type: ExplorerResourceTypes.issuance,
+        metadata: issuance,
+        label: formatIssuanceName(issuance),
+        description: issuance.id,
+        icon: new ThemeIcon('output'),
+        projectId: parent?.projectId,
       })
     }
   }
@@ -314,7 +308,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
   ) {
     treeNodes.push(
       new AffResourceTreeItem({
-        resourceType: ExplorerResourceTypes[type],
+        resourceType: type,
         metadata,
         label,
         description,

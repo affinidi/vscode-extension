@@ -12,19 +12,19 @@ import {
   WebviewPanel,
   l10n,
 } from 'vscode'
+import { IssuanceDto } from '@affinidi/client-issuance'
+import { SchemaDto } from '@affinidi/client-schema-manager'
 import { AffinidiExplorerProvider } from './treeView/affinidiExplorerProvider'
 import { AffinidiCodeGenProvider } from './treeView/affinidiCodeGenProvider'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { AffResourceTreeItem } from './treeView/treeItem'
 import { viewProperties, viewSchemaContent } from './services/viewDataService'
-import { getSchema } from './services/schemaManagerService'
 import { getWebviewContent } from './ui/getWebviewContent'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { viewMarkdown } from './services/markdownService'
 import { buildURL } from './api-client/api-fetch'
-import { createProjectProcess } from './iam/iam'
 import {
   EventNames,
   EventSubCategory,
@@ -32,14 +32,17 @@ import {
 } from './services/analyticsStreamApiService'
 import { askUserForTelemetryConsent } from './utils/telemetry'
 import { ExplorerResourceTypes } from './treeView/treeTypes'
-import { initiateIssuanceCsvFlow } from './services/csvCreationService'
+import { createProjectProcess } from './features/iam/createProjectProcess'
+import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
+import { schemaManagerClient } from './features/schema-manager/schemaManagerClient'
+import { logger } from './utils/logger'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activateInternal(context: ExtensionContext) {
-  console.log('Activating Affinidi extension...')
+  logger.info({}, 'Activating Affinidi extension...')
 
   ext.context = context
   ext.outputChannel = window.createOutputChannel('Affinidi')
@@ -68,8 +71,8 @@ export async function activateInternal(context: ExtensionContext) {
 
     let resourceType = ExplorerResourceTypes[ExplorerResourceTypes.project]
     if (
-      element?.resourceType === ExplorerResourceTypes[ExplorerResourceTypes.rootSchemas] ||
-      element?.resourceType === ExplorerResourceTypes[ExplorerResourceTypes.rootIssuance]
+      element?.resourceType === ExplorerResourceTypes.rootSchemas ||
+      element?.resourceType === ExplorerResourceTypes.rootIssuance
     ) {
       resourceType = `${element?.resourceType}`
     }
@@ -170,7 +173,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.copyJsonURL', async (element: AffResourceTreeItem) => {
-      const schema = await getSchema(element.metadata.id as string)
+      const schema = await schemaManagerClient.getSchema(element.metadata.id as string)
       if (!schema) {
         return
       }
@@ -190,7 +193,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.copyJsonLdURL', async (element: AffResourceTreeItem) => {
-      const schema = await getSchema(element.metadata.id as string)
+      const schema = await schemaManagerClient.getSchema(element.metadata.id as string)
       if (!schema) {
         return
       }
@@ -226,14 +229,20 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand(
       'affinidiExplorer.initiateIssuanceCsvFlow',
       async (element: AffResourceTreeItem) => {
-        await initiateIssuanceCsvFlow(
-          { projectId: element.projectId as string, schema: element.metadata },
-          element.resourceType,
-        )
+        const { projectId } = element
+        if (!projectId) return
+
+        if (element.resourceType === ExplorerResourceTypes.schema) {
+          const schema: SchemaDto = element.metadata
+          await initiateIssuanceCsvFlow({ projectId, schema })
+        } else if (element.resourceType === ExplorerResourceTypes.issuance) {
+          const issuance: IssuanceDto = element.metadata
+          await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+        }
 
         sendEventToAnalytics({
           name: EventNames.commandExecuted,
-          subCategory: 'schema',
+          subCategory: EventSubCategory.command,
           metadata: {
             commandId: 'affinidiExplorer.initiateIssuanceCsvFlow',
           },
@@ -332,7 +341,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   askUserForTelemetryConsent()
 
-  console.log('Affinidi extension is now active!')
+  logger.info({}, 'Affinidi extension is now active!')
 }
 
 // This method is called when your extension is deactivated
