@@ -2,8 +2,8 @@ import { ProgressLocation, window, commands, Uri, l10n } from 'vscode'
 import * as fs from 'fs'
 import * as execa from 'execa'
 import { ext } from '../extensionVariables'
-import { askForProjectId } from '../features/iam/askForProjectId'
 import { authHelper } from '../auth/authHelper'
+import { quickPick } from '../shared/quickPick'
 
 export const WARNING_MESSAGE = l10n.t(
   'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
@@ -15,6 +15,7 @@ export const DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE = l10n.t(
   'Directory with this name already exist.',
 )
 export const APP_SUCCESSFULLY_CREATED_MESSAGE = l10n.t('App successfully generated.')
+export const PROJECT_REQUIRED_WARNING_MESSAGE = l10n.t('Project is required to generate app.')
 
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
@@ -69,8 +70,9 @@ export class CliHelper {
 
     try {
       const consoleAuthToken = await authHelper.getConsoleAuthToken()
-      const projectId = await askForProjectId({ consoleAuthToken })
+      const projectId = await quickPick.askForProjectId({ consoleAuthToken })
       if (!projectId) {
+        window.showWarningMessage(PROJECT_REQUIRED_WARNING_MESSAGE)
         return
       }
 
