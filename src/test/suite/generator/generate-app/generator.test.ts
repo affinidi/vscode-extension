@@ -36,7 +36,6 @@ describe('generateAffinidiAppWithCLI()', () => {
     showErrorMessage = sandbox.stub(window, 'showErrorMessage')
     showInformationMessage = sandbox.stub(window, 'showInformationMessage')
     showWarningMessage = sandbox.stub(window, 'showWarningMessage')
-
     dialog = sandbox.stub(window, 'showOpenDialog').resolves([Uri.file(DIRECTORY_NAME)])
     existsSync = sandbox.stub(fs, 'existsSync').resolves(true)
     progressWindow = sandbox.stub(window, 'withProgress').resolves(true)
