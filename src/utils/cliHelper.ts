@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as execa from 'execa'
 import { ext } from '../extensionVariables'
 import { authHelper } from '../auth/authHelper'
-import { quickPick } from '../shared/quickPick'
+import { iamHelper } from '../features/iam/iamHelper'
 
 export const WARNING_MESSAGE = l10n.t(
   'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
@@ -70,7 +70,7 @@ export class CliHelper {
 
     try {
       const consoleAuthToken = await authHelper.getConsoleAuthToken()
-      const projectId = await quickPick.askForProjectId({ consoleAuthToken })
+      const projectId = await iamHelper.askForProjectId({ consoleAuthToken })
       if (!projectId) {
         window.showWarningMessage(PROJECT_REQUIRED_WARNING_MESSAGE)
         return

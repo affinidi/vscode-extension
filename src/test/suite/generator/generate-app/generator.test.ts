@@ -18,7 +18,7 @@ import {
   NO_APP_NAME_SELECTED_MESSAGE,
 } from '../../../../generators/create-app/generator'
 import { authHelper } from '../../../../auth/authHelper'
-import { quickPick } from '../../../../shared/quickPick'
+import { iamHelper } from '../../../../features/iam/iamHelper'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
@@ -79,7 +79,7 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should show warning message when project is not provided', async () => {
-    sandbox.stub(quickPick, 'askForProjectId').resolves('')
+    sandbox.stub(iamHelper, 'askForProjectId').resolves('')
 
     existsSync.restore()
     existsSync.resolves(false)
@@ -91,7 +91,7 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should render app with specified params', async () => {
-    sandbox.stub(quickPick, 'askForProjectId').resolves('fake-projectId')
+    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
 
     existsSync.restore()
     existsSync.resolves(false)

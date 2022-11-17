@@ -10,7 +10,7 @@ export const EXAMPLE_SCHEMA: Schema = {
   jsonSchemaUrl: 'https://schema.affinidi.com/MySchemaV1-0.json',
 }
 
-export async function askForMySchema(
+async function askForMySchema(
   input: {
     includeExample?: boolean
     did: string
@@ -36,4 +36,8 @@ export async function askForMySchema(
   }
 
   return showQuickPick(pickOptions, { title: l10n.t('Select a VC Schema') })
+}
+
+export const schemaManagerHelper = {
+  askForMySchema,
 }

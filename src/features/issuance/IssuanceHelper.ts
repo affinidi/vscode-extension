@@ -6,10 +6,7 @@ import { issuanceClient } from './issuanceClient'
 
 type Input = { projectId: string }
 
-export async function askForIssuanceId(
-  input: Input,
-  options: Options,
-): Promise<string | undefined> {
+async function askForIssuanceId(input: Input, options: Options): Promise<string | undefined> {
   const { issuances } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
@@ -31,4 +28,8 @@ export async function askForIssuanceId(
     ],
     { title: l10n.t('Select an Issuance') },
   )
+}
+
+export const issuanceHelper = {
+  askForIssuanceId,
 }
