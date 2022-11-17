@@ -31,6 +31,7 @@
     "onCommand:affinidi.copyJsonLdURL",
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.createProject",
+    "onCommand:affinidi.feedback",
     "onCommand:affinidi.docs.availableSnippets",
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
@@ -48,7 +49,8 @@
     "onStartupFinished",
     "onView:affinidiCodeGeneration",
     "onView:affinidiDevTools",
-    "onView:affinidiExplorer"
+    "onView:affinidiExplorer",
+    "onView:affinidiFeedback"
   ],
   "main": "./out/main",
   "contributes": {
@@ -88,6 +90,11 @@
       {
         "command": "affinidi.createProject",
         "title": "%affinidi.createProject%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidi.feedback",
+        "title": "%affinidi.feedback%",
         "category": "Affinidi"
       },
       {
@@ -314,6 +321,10 @@
         {
           "id": "affinidiDevTools",
           "name": "%views.affinidi.affinidiDevTools%"
+        },
+        {
+          "id": "affinidiFeedback",
+          "name": "%views.affinidi.affinidiFeedback%"
         }
       ]
     },

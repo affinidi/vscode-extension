@@ -3,6 +3,7 @@
   "affinidi.login": "Acceso",
   "affinidi.signOut": "",
   "affinidi.createProject": "",
+  "affinidi.feedback": "",
   "affinidi.me": "",
   "affinidi.codegen.sendVcOfferToEmail": "",
   "affinidi.codegen.getIssuanceOffers": "",
@@ -32,6 +33,7 @@
   "views.affinidi.affinidiExplorer": "",
   "views.affinidi.affinidiCodeGeneration": "",
   "views.affinidi.affinidiDevTools": "",
+  "views.affinidi.affinidiFeedback": "",
 
   "viewsWelcome.affinidiDevTools": "",
 

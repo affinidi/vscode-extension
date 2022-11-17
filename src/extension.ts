@@ -36,6 +36,7 @@ import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { schemaManagerClient } from './features/schema-manager/schemaManagerClient'
 import { logger } from './utils/logger'
+import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -53,6 +54,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   const affExplorerTreeProvider = new AffinidiExplorerProvider()
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
+  const affFeedbackProvider = new AffinidiFeedbackProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {
     treeDataProvider: affExplorerTreeProvider,
@@ -62,6 +64,12 @@ export async function activateInternal(context: ExtensionContext) {
 
   window.createTreeView('affinidiCodeGeneration', {
     treeDataProvider: affCodeGenTreeProvider,
+    canSelectMany: false,
+    showCollapseAll: true,
+  })
+
+  window.createTreeView('affinidiFeedback', {
+    treeDataProvider: affFeedbackProvider,
     canSelectMany: false,
     showCollapseAll: true,
   })
@@ -325,6 +333,15 @@ export async function activateInternal(context: ExtensionContext) {
       })
     }),
   )
+
+  context.subscriptions.push(
+    commands.registerCommand('affinidi.feedback', () => {
+      const githubUrl = 'https://github.com/affinityproject/vscode-extension/issues'
+
+      commands.executeCommand('vscode.open', githubUrl)
+    }),
+  )
+
   commands.registerCommand('affinidiDevTools.issueCredential', () => {
     const issueCredentialURL = buildURL(CONSOLE_URL, '/bulk-issuance')
 
