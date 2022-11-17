@@ -2,6 +2,8 @@ import { ProgressLocation, window, commands, Uri, l10n } from 'vscode'
 import * as fs from 'fs'
 import * as execa from 'execa'
 import { ext } from '../extensionVariables'
+import { askForProjectId } from '../features/iam/askForProjectId'
+import { authHelper } from '../auth/authHelper'
 
 export const WARNING_MESSAGE = l10n.t(
   'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
@@ -23,6 +25,8 @@ export const buildAppGenerateCommand = (path: string) =>
     ' ',
     '\\ ',
   )}`
+
+const setActiveProjectCommand = (projectId: string) => `affinidi use project ${projectId}`
 
 export class CliHelper {
   constructor(private readonly exec: ExecInterface) {}
@@ -64,6 +68,14 @@ export class CliHelper {
     ext.outputChannel.appendLine(command)
 
     try {
+      const consoleAuthToken = await authHelper.getConsoleAuthToken()
+      const projectId = await askForProjectId({ consoleAuthToken })
+      if (!projectId) {
+        return
+      }
+
+      await this.exec.command(setActiveProjectCommand(projectId))
+
       const { stdout } = await window.withProgress(
         {
           location: ProgressLocation.Notification,
