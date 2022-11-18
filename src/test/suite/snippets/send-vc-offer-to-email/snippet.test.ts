@@ -8,6 +8,7 @@ import { iamClient } from '../../../../features/iam/iamClient'
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
+import { projectsState } from '../../../../states/projectsState'
 
 describe('insertSendVcOfferToEmailSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
@@ -18,12 +19,26 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
     const type = 'MySchema'
     const jsonSchemaUrl = 'http://example.com/MySchema.json'
     const jsonLdContextUrl = 'http://example.com/MySchema.jsonld'
+    const projectSummary = {
+      wallet: {
+        didUrl: '',
+        did,
+      },
+      apiKey: {
+        apiKeyHash,
+        apiKeyName: '',
+      },
+      project: {
+        projectId,
+        name: '',
+        createdAt: '',
+      },
+    }
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
-    sandbox.stub(iamClient, 'getProjectSummary').resolves({
-      apiKey: { apiKeyHash },
-      wallet: { did },
-    } as any)
+    sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
+
+    projectsState.setProject(projectId, projectSummary)
 
     await insertSendVcOfferToEmailSnippet(
       {
@@ -53,5 +68,7 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
     ]) {
       expect(text).contains(value)
     }
+
+    projectsState.clear()
   })
 })

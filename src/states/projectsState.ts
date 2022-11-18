@@ -12,6 +12,12 @@ const setProjects = (projects: ProjectSummary[]) => {
   ext.context.globalState.update(STORAGE_KEY, projectsObject)
 }
 
+const getProjectsArr = (): ProjectSummary[] | undefined => {
+  const projects: Projects | undefined = ext.context.globalState.get(STORAGE_KEY)
+
+  return projects ? Object.values(projects) : undefined
+}
+
 const getProjects = (): Projects | undefined => {
   return ext.context.globalState.get(STORAGE_KEY)
 }
@@ -40,9 +46,15 @@ const setProject = (projectId: string, project: ProjectSummary) => {
   })
 }
 
+const clear = () => {
+  ext.context.globalState.update(STORAGE_KEY, undefined)
+}
+
 export const projectsState = {
   setProject,
   setProjects,
+  getProjectsArr,
   getProjects,
   getProjectById,
+  clear,
 }

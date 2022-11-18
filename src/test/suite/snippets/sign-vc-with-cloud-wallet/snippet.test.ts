@@ -8,6 +8,7 @@ import {
 import { AFFINIDI_IAM_API_URL, iamClient } from '../../../../features/iam/iamClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
+import { projectsState } from '../../../../states/projectsState'
 
 describe('insertSignVcWithCloudWalletSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
@@ -17,12 +18,26 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     const type = 'MySchema'
     const jsonSchemaUrl = 'http://example.com/MySchema.json'
     const jsonLdContextUrl = 'http://example.com/MySchema.jsonld'
+    const projectSummary = {
+      wallet: {
+        didUrl: '',
+        did,
+      },
+      apiKey: {
+        apiKeyHash,
+        apiKeyName: '',
+      },
+      project: {
+        projectId,
+        name: '',
+        createdAt: '',
+      },
+    }
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
-    sandbox.stub(iamClient, 'getProjectSummary').resolves({
-      apiKey: { apiKeyHash },
-      wallet: { did },
-    } as any)
+    sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
+
+    projectsState.setProject(projectId, projectSummary)
 
     await insertSignVcWithCloudWalletSnippet(
       {
@@ -49,5 +64,7 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     ]) {
       expect(text).contains(value)
     }
+
+    projectsState.clear()
   })
 })

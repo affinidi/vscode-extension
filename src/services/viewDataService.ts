@@ -1,18 +1,34 @@
 import fetch from 'node-fetch'
+import { projectsState } from '../states/projectsState'
 import { ExplorerResourceTypes } from '../treeView/treeTypes'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
-export const viewProperties = async (resourceType: ExplorerResourceTypes, resourceInfo: any) => {
+type ViewPropertiesProps = {
+  resourceType: ExplorerResourceTypes
+  resourceInfo: any
+  projectId?: string
+}
+
+export const viewProperties = async ({
+  resourceType,
+  resourceInfo,
+  projectId,
+}: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
+  let content: any
   switch (resourceType) {
-    case ExplorerResourceTypes.project:
-      label = resourceInfo.project.name
-      id = resourceInfo.project.projectId
+    case ExplorerResourceTypes.project: {
+      const projectSummary = projectsState.getProjectById(projectId)
+      content = projectSummary
+      label = projectSummary.project.name
+      id = projectSummary.project.projectId
       break
+    }
 
     case ExplorerResourceTypes.issuance:
     case ExplorerResourceTypes.schema:
+      content = resourceInfo
       label = resourceInfo.id
       id = resourceInfo.id
       break
@@ -21,7 +37,7 @@ export const viewProperties = async (resourceType: ExplorerResourceTypes, resour
       throw new Error(`Unexpected resource type: ${resourceType}`)
   }
 
-  await openReadOnlyContent({ node: { label, id }, content: resourceInfo })
+  await openReadOnlyContent({ node: { label, id }, content })
 }
 
 export const viewSchemaContent = async (

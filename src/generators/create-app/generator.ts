@@ -17,7 +17,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
         title: l10n.t('Checking CLI installation...'),
       },
       async () => {
-        return await cliHelper.isCliInstalledOrWarn({ type: 'error' })
+        return cliHelper.isCliInstalledOrWarn({ type: 'error' })
       },
     )
 

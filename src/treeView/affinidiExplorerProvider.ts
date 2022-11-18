@@ -14,11 +14,9 @@ import { AffResourceTreeItem } from './treeItem'
 import { ext } from '../extensionVariables'
 import { formatIssuanceName } from '../features/issuance/formatIssuanceName'
 import { projectsState } from '../states/projectsState'
-import { authHelper } from '../auth/authHelper'
-import { iamClient } from '../features/iam/iamClient'
-import { requireProjectSummary } from '../features/iam/requireProjectSummary'
 import { issuanceClient } from '../features/issuance/issuanceClient'
 import { schemaManagerClient } from '../features/schema-manager/schemaManagerClient'
+import { getProjectsSummaryList } from '../features/iam/getProjectsSummaryList'
 
 const isSignedIn = async () => {
   const session = await ext.authProvider.getActiveSession({
@@ -100,27 +98,19 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
   }
 
   private async addProjectItems(treeNodes: AffResourceTreeItem[]): Promise<void> {
-    const consoleAuthToken = await authHelper.getConsoleAuthToken()
-    const { projects } = await iamClient.listProjects({ consoleAuthToken })
+    await getProjectsSummaryList()
+    const projects = projectsState.getProjectsArr()
 
-    // sort projects array in descending order on createdAt field
-    const sortedProjects = projects.sort(
-      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
-    )
-
-    for (const project of sortedProjects) {
-      const projectSummary = await requireProjectSummary(project.projectId, { consoleAuthToken })
-
-      projectsState.setProject(projectSummary.project.projectId, projectSummary)
-
-      this.addNewTreeItem(treeNodes, {
-        type: ExplorerResourceTypes.project,
-        metadata: projectSummary,
-        label: project.name,
-        state: TreeItemCollapsibleState.Collapsed,
-        icon: new ThemeIcon('project'),
-        projectId: projectSummary.project.projectId,
-      })
+    if (projects?.length) {
+      for (const project of projects) {
+        this.addNewTreeItem(treeNodes, {
+          type: ExplorerResourceTypes.project,
+          label: project.project.name,
+          state: TreeItemCollapsibleState.Collapsed,
+          icon: new ThemeIcon('project'),
+          projectId: project.project.projectId,
+        })
+      }
     }
   }
 

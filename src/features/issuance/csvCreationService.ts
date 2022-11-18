@@ -1,11 +1,10 @@
 import * as fs from 'fs'
 import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
 import { Schema } from '../../shared/types'
-import { iamHelper } from '../iam/iamHelper'
+import { askForProjectId } from '../../utils/askForProjectId'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
-import { requireProjectSummary } from '../iam/requireProjectSummary'
-import { authHelper } from '../../auth/authHelper'
+import { requireProjectSummary } from '../../utils/requireProjectSummary'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
 
@@ -25,15 +24,14 @@ const implementationLabels = {
 }
 
 export const openCsvTemplate = async (input: TemplateInput) => {
-  const consoleAuthToken = await authHelper.getConsoleAuthToken()
-  const projectId = input?.projectId ?? (await iamHelper.askForProjectId({ consoleAuthToken }))
+  const projectId = input?.projectId ?? (await askForProjectId())
   if (!projectId) {
     return
   }
 
   const {
     apiKey: { apiKeyHash },
-  } = await requireProjectSummary(projectId, { consoleAuthToken })
+  } = requireProjectSummary(projectId)
 
   const template = await issuanceClient.getCsvTemplate(
     {
@@ -59,15 +57,13 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     canSelectFolders: false,
   }
 
-  const selectedFiles = await await window.showOpenDialog(options)
+  const selectedFiles = await window.showOpenDialog(options)
   const selectedFilePath = selectedFiles?.[0]?.fsPath
   if (!selectedFilePath) {
     return
   }
 
-  const projectSummary = await requireProjectSummary(input.projectId, {
-    consoleAuthToken: await authHelper.getConsoleAuthToken(),
-  })
+  const projectSummary = requireProjectSummary(input.projectId)
 
   try {
     const { issuance } = await issuanceClient.createFromCsv(
