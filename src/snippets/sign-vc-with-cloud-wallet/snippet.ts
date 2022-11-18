@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { askForProjectId } from '../../features/iam/askForProjectId'
+import { iamHelper } from '../../features/iam/iamHelper'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { askForMySchema } from '../../features/schema-manager/askForMySchema'
+import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
 import { authHelper } from '../../auth/authHelper'
 import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
@@ -39,7 +39,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   async (input) => {
     const consoleAuthToken = await authHelper.getConsoleAuthToken()
 
-    const projectId = input?.projectId ?? (await askForProjectId({ consoleAuthToken }))
+    const projectId = input?.projectId ?? (await iamHelper.askForProjectId({ consoleAuthToken }))
     if (!projectId) {
       return undefined
     }
@@ -50,7 +50,8 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
     } = await requireProjectSummary(projectId, { consoleAuthToken })
 
     const schema =
-      input?.schema ?? (await askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+      input?.schema ??
+      (await schemaManagerHelper.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
     if (!schema) {
       return undefined
     }
