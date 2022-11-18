@@ -21,8 +21,10 @@ import { issuanceClient } from '../features/issuance/issuanceClient'
 import { schemaManagerClient } from '../features/schema-manager/schemaManagerClient'
 
 const isSignedIn = async () => {
-  const sessions = await ext.authProvider.getSessions()
-  return !!sessions.length
+  const session = await ext.authProvider.getActiveSession({
+    createIfNone: false,
+  })
+  return !!session
 }
 
 export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTreeItem> {
@@ -53,10 +55,16 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
     const signedIn = await isSignedIn()
 
     if (!signedIn) {
-      await this.addLoginItem(treeNodes)
-      await this.addSignupItem(treeNodes)
-
-      return Promise.resolve(treeNodes)
+      switch (element?.resourceType) {
+        case undefined:
+          await this.addLoginItem(treeNodes)
+          await this.addSignupItem(treeNodes)
+          return Promise.resolve(treeNodes)
+        default:
+          // If a tree item is expanded and there is no active session we need to refresh the tree from the top.
+          this._onDidChangeTreeData.fire()
+          return Promise.resolve(treeNodes)
+      }
     }
 
     switch (element?.resourceType) {
