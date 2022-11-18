@@ -99,69 +99,69 @@
       {
         "command": "affinidi.codegen.sendVcOfferToEmail",
         "title": "%affinidi.codegen.sendVcOfferToEmail%",
-        "category": "Affinidi %commands.category.generators%"
+        "category": "%commands.category.generators%"
       },
       {
         "command": "affinidi.codegen.getIssuanceOffers",
         "title": "%affinidi.codegen.getIssuanceOffers%",
-        "category": "Affinidi %commands.category.generators%"
+        "category": "%commands.category.generators%"
       },
       {
         "command": "affinidi.codegen.signVcWithCloudWallet",
         "title": "%affinidi.codegen.signVcWithCloudWallet%",
-        "category": "Affinidi %commands.category.generators%"
+        "category": "%commands.category.generators%"
       },
       {
         "command": "affinidiExplorer.refresh",
         "title": "%affinidiExplorer.refresh%",
-        "category": "Affinidi %commands.category.explorer%",
+        "category": "%commands.category.explorer%",
         "icon": "$(refresh)"
       },
       {
         "command": "affinidi.openMarkDown",
         "title": "%affinidi.openMarkDown%",
-        "category": "Affinidi %commands.category.explorer%",
+        "category": "%commands.category.explorer%",
         "icon": "$(info)"
       },
       {
         "command": "affinidi.copyJsonURL",
         "title": "%affinidi.copyJsonURL%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidi.copyJsonLdURL",
         "title": "%affinidi.copyJsonLdURL%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.viewProperties",
         "title": "%affinidiExplorer.viewProperties%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.showJsonSchema",
         "title": "%affinidiExplorer.showJsonSchema%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.showJsonLdContext",
         "title": "%affinidiExplorer.showJsonLdContext%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.createSchema",
         "title": "%affinidiExplorer.createSchema%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.createIssuance",
         "title": "%affinidiExplorer.createIssuance%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiDevTools.issueCredential",
         "title": "%affinidiDevTools.issueCredential%",
-        "category": "Affinidi %commands.category.devTool%"
+        "category": "%commands.category.devTool%"
       },
       {
         "command": "affinidi.docs.availableSnippets",
@@ -171,12 +171,12 @@
       {
         "command": "affinidi.codegen.app",
         "title": "%affinidi.codegen.app%",
-        "category": "Affinidi %commands.category.generators%"
+        "category": "%commands.category.generators%"
       },
       {
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       }
     ],
     "menus": {

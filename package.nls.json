@@ -22,9 +22,9 @@
 
   "affinidiDevTools.issueCredential": "Issuance Credential",
 
-  "commands.category.explorer": "Explorer",
-  "commands.category.devTool": "Dev Tool",
-  "commands.category.generators": "Generators",
+  "commands.category.explorer": "Affinidi Explorer",
+  "commands.category.devTool": "Affinidi Dev Tool",
+  "commands.category.generators": "Affinidi Generators",
 
   "affinidi.docs.availableSnippets": "View Available Snippets",
 
