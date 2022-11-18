@@ -54,12 +54,7 @@ export class CliHelper {
   }
 
   async setActiveProject(projectId: string) {
-    try {
-      const { stdout } = await this.exec.command(`affinidi use project ${projectId}`)
-      ext.outputChannel.append(stdout)
-    } catch (error) {
-      ext.outputChannel.append(`${error}`)
-    }
+    await this.exec.command(`affinidi use project ${projectId}`)
   }
 
   async generateApp({ path }: { path: string }): Promise<void> {
