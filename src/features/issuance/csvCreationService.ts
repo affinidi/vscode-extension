@@ -7,6 +7,7 @@ import { parseUploadError } from './csvUploadError'
 import { requireProjectSummary } from '../iam/requireProjectSummary'
 import { authHelper } from '../../auth/authHelper'
 import { issuanceClient } from './issuanceClient'
+import { ext } from '../../extensionVariables'
 
 export interface TemplateInput {
   projectId: string
@@ -85,16 +86,14 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      const outputChannel = window.createOutputChannel(l10n.t('Show CSV Output'))
-      outputChannel.append(l10n.t('Issuance ID: {0}', issuance.id))
-      outputChannel.show()
+      ext.outputChannel.append(l10n.t(`${'\n'}${'Issuance ID: {0}'}`, issuance.id))
+      ext.outputChannel.show()
     }
   } catch (error: unknown) {
     const parsedCsvUploadError = parseUploadError(error)
     if (parsedCsvUploadError) {
-      const outputChannel = window.createOutputChannel(l10n.t('Show CSV Output'))
-      outputChannel.append(JSON.stringify(parsedCsvUploadError, null, '\t'))
-      outputChannel.show()
+      ext.outputChannel.append(`${'\n'}${JSON.stringify(parsedCsvUploadError, null, '\t')}`)
+      ext.outputChannel.show()
     }
   }
 }
