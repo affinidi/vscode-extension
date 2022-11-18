@@ -59,12 +59,12 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
         case undefined:
           await this.addLoginItem(treeNodes)
           await this.addSignupItem(treeNodes)
-          return Promise.resolve(treeNodes)
+          break
         default:
           // If a tree item is expanded and there is no active session we need to refresh the tree from the top.
           this._onDidChangeTreeData.fire()
-          return Promise.resolve(treeNodes)
       }
+      return Promise.resolve(treeNodes)
     }
 
     switch (element?.resourceType) {
