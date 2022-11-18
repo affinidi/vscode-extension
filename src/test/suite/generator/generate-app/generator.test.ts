@@ -10,12 +10,12 @@ import {
   buildAppGenerateCommand,
   DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE,
   APP_SUCCESSFULLY_CREATED_MESSAGE,
-  PROJECT_REQUIRED_WARNING_MESSAGE,
 } from '../../../../utils/cliHelper'
 import {
   generateAffinidiAppWithCLI,
   NO_DIRECTORY_SELECTED_MESSAGE,
   NO_APP_NAME_SELECTED_MESSAGE,
+  PROJECT_REQUIRED_WARNING_MESSAGE,
 } from '../../../../generators/create-app/generator'
 import { authHelper } from '../../../../auth/authHelper'
 import { iamHelper } from '../../../../features/iam/iamHelper'
@@ -46,6 +46,8 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should show error message when CLI is not installed', async () => {
+    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
+
     progressWindow.resolves(false)
 
     await generateAffinidiAppWithCLI()
@@ -54,6 +56,8 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it("should show error message if user didn't specify directory", async () => {
+    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
+
     dialog.resolves()
 
     await generateAffinidiAppWithCLI()
@@ -63,6 +67,8 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it("should show error message if user didn't specify app name", async () => {
+    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
+
     inputBox.resolves()
 
     await generateAffinidiAppWithCLI()
@@ -72,6 +78,8 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should show error message if app with same name already exist in selected path', async () => {
+    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
+
     await generateAffinidiAppWithCLI()
 
     expect(dialog).called
@@ -81,12 +89,8 @@ describe('generateAffinidiAppWithCLI()', () => {
   it('should show warning message when project is not provided', async () => {
     sandbox.stub(iamHelper, 'askForProjectId').resolves('')
 
-    existsSync.restore()
-    existsSync.resolves(false)
     await generateAffinidiAppWithCLI()
-    expect(ext.outputChannel.appendLine).calledWith(
-      buildAppGenerateCommand(path.join(DIRECTORY_NAME, APP_NAME)),
-    )
+
     expect(showWarningMessage).calledWith(PROJECT_REQUIRED_WARNING_MESSAGE)
   })
 

@@ -2,8 +2,6 @@ import { ProgressLocation, window, commands, Uri, l10n } from 'vscode'
 import * as fs from 'fs'
 import * as execa from 'execa'
 import { ext } from '../extensionVariables'
-import { authHelper } from '../auth/authHelper'
-import { iamHelper } from '../features/iam/iamHelper'
 
 export const WARNING_MESSAGE = l10n.t(
   'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
@@ -15,8 +13,6 @@ export const DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE = l10n.t(
   'Directory with this name already exist.',
 )
 export const APP_SUCCESSFULLY_CREATED_MESSAGE = l10n.t('App successfully generated.')
-export const PROJECT_REQUIRED_WARNING_MESSAGE = l10n.t('Project is required to generate app.')
-
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
 }
@@ -26,8 +22,6 @@ export const buildAppGenerateCommand = (path: string) =>
     ' ',
     '\\ ',
   )}`
-
-const setActiveProjectCommand = (projectId: string) => `affinidi use project ${projectId}`
 
 export class CliHelper {
   constructor(private readonly exec: ExecInterface) {}
@@ -59,6 +53,15 @@ export class CliHelper {
     return isInstalled
   }
 
+  async setActiveProject(projectId: string) {
+    try {
+      const { stdout } = await this.exec.command(`affinidi use project ${projectId}`)
+      ext.outputChannel.append(stdout)
+    } catch (error) {
+      ext.outputChannel.append(`${error}`)
+    }
+  }
+
   async generateApp({ path }: { path: string }): Promise<void> {
     if (fs.existsSync(path)) {
       window.showErrorMessage(DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE)
@@ -69,15 +72,6 @@ export class CliHelper {
     ext.outputChannel.appendLine(command)
 
     try {
-      const consoleAuthToken = await authHelper.getConsoleAuthToken()
-      const projectId = await iamHelper.askForProjectId({ consoleAuthToken })
-      if (!projectId) {
-        window.showWarningMessage(PROJECT_REQUIRED_WARNING_MESSAGE)
-        return
-      }
-
-      await this.exec.command(setActiveProjectCommand(projectId))
-
       const { stdout } = await window.withProgress(
         {
           location: ProgressLocation.Notification,
