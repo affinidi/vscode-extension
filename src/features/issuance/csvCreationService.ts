@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
 import { Schema } from '../../shared/types'
-import { askForProjectId } from '../iam/askForProjectId'
+import { iamHelper } from '../iam/iamHelper'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { requireProjectSummary } from '../iam/requireProjectSummary'
@@ -26,7 +26,7 @@ const implementationLabels = {
 
 export const openCsvTemplate = async (input: TemplateInput) => {
   const consoleAuthToken = await authHelper.getConsoleAuthToken()
-  const projectId = input?.projectId ?? (await askForProjectId({ consoleAuthToken }))
+  const projectId = input?.projectId ?? (await iamHelper.askForProjectId({ consoleAuthToken }))
   if (!projectId) {
     return
   }
