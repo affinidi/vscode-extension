@@ -8,11 +8,13 @@ module.exports = {
     {
       extends: ['@affinidi/eslint-config'],
       parserOptions: { project: ['tsconfig-tests.json'] },
-      files: ['src/test/**/**/*.ts'],
+      files: ['src/test/**/*.ts'],
       env: { jest: true },
       plugins: ['security'],
       rules: {
         'no-restricted-syntax': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unused-expressions': 'off'
       },
     },
   ],

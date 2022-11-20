@@ -13,10 +13,10 @@ import {
 import { nanoid } from 'nanoid'
 import { executeAuthProcess, parseJwt } from './auth-process'
 import {
-  sendEventToAnalytics,
+  telemetryClient,
   EventNames,
   EventSubCategory,
-} from '../../services/analyticsStreamApiService'
+} from '../../features/telemetry/telemetryClient'
 import { SESSION_KEY_NAME, vaultService } from './vault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
@@ -47,7 +47,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   }
 
   async getActiveSession(
-    options: AuthenticationGetSessionOptions,
+    options?: AuthenticationGetSessionOptions,
     scopes: string[] = [],
   ): Promise<AuthenticationSession | undefined> {
     try {
@@ -128,7 +128,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
    * @deprecated Use `handleRemoveSession` instead
    */
   async removeSession(): Promise<void> {
-    sendEventToAnalytics({
+    telemetryClient.sendEvent({
       name: EventNames.commandExecuted,
       subCategory: EventSubCategory.command,
       metadata: {
@@ -154,6 +154,6 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
   private readSessionFromStorage(): AuthenticationSession | undefined {
     const storageValue = vaultService.get(SESSION_KEY_NAME)
-    return storageValue ? (JSON.parse(storageValue) as AuthenticationSession) : undefined
+    return storageValue ? JSON.parse(storageValue) : undefined
   }
 }

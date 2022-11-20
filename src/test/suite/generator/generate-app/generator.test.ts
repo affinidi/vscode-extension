@@ -10,20 +10,20 @@ import {
   buildAppGenerateCommand,
   DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE,
   APP_SUCCESSFULLY_CREATED_MESSAGE,
-} from '../../../../utils/cliHelper'
+} from '../../../../cli/cliHelper'
 import {
-  generateAffinidiAppWithCLI,
+  generateAffinidiAppWithCli,
   NO_DIRECTORY_SELECTED_MESSAGE,
   NO_APP_NAME_SELECTED_MESSAGE,
   PROJECT_REQUIRED_WARNING_MESSAGE,
-} from '../../../../generators/create-app/generator'
-import { authHelper } from '../../../../auth/authHelper'
+} from '../../../../codegen/apps/generateAffinidiAppWithCli'
 import { iamHelper } from '../../../../features/iam/iamHelper'
+import { authHelper } from '../../../../auth/authHelper'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
 
-describe('generateAffinidiAppWithCLI()', () => {
+describe('generateAffinidiAppWithCli()', () => {
   let showErrorMessage: sinon.SinonStub
   let showInformationMessage: sinon.SinonStub
   let showWarningMessage: sinon.SinonStub
@@ -50,7 +50,7 @@ describe('generateAffinidiAppWithCLI()', () => {
 
     progressWindow.resolves(false)
 
-    await generateAffinidiAppWithCLI()
+    await generateAffinidiAppWithCli()
 
     expect(dialog).not.called
   })
@@ -60,7 +60,7 @@ describe('generateAffinidiAppWithCLI()', () => {
 
     dialog.resolves()
 
-    await generateAffinidiAppWithCLI()
+    await generateAffinidiAppWithCli()
 
     expect(dialog).called
     expect(showErrorMessage).calledWith(NO_DIRECTORY_SELECTED_MESSAGE)
@@ -71,7 +71,7 @@ describe('generateAffinidiAppWithCLI()', () => {
 
     inputBox.resolves()
 
-    await generateAffinidiAppWithCLI()
+    await generateAffinidiAppWithCli()
 
     expect(dialog).called
     expect(showErrorMessage).calledWith(NO_APP_NAME_SELECTED_MESSAGE)
@@ -80,7 +80,7 @@ describe('generateAffinidiAppWithCLI()', () => {
   it('should show error message if app with same name already exist in selected path', async () => {
     sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
 
-    await generateAffinidiAppWithCLI()
+    await generateAffinidiAppWithCli()
 
     expect(dialog).called
     expect(showErrorMessage).calledWith(DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE)
@@ -89,7 +89,7 @@ describe('generateAffinidiAppWithCLI()', () => {
   it('should show warning message when project is not provided', async () => {
     sandbox.stub(iamHelper, 'askForProjectId').resolves('')
 
-    await generateAffinidiAppWithCLI()
+    await generateAffinidiAppWithCli()
 
     expect(showWarningMessage).calledWith(PROJECT_REQUIRED_WARNING_MESSAGE)
   })
@@ -100,7 +100,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     existsSync.restore()
     existsSync.resolves(false)
 
-    await generateAffinidiAppWithCLI()
+    await generateAffinidiAppWithCli()
 
     expect(dialog).called
     expect(ext.outputChannel.appendLine).calledWith(

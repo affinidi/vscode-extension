@@ -1,13 +1,13 @@
-import { iamHelper } from '../../features/iam/iamHelper'
-import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { Implementations } from '../shared/createSnippetTools'
-import { issuanceHelper } from '../../features/issuance/IssuanceHelper'
-import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
+import { createSnippetCommand } from '../_shared/createSnippetCommand'
+import { Implementations } from '../_shared/createSnippetTools'
+import { ISSUANCE_API_URL } from '../../../features/issuance/issuanceClient'
 
 import * as javascript from './javascript'
 import * as typescript from './typescript'
-import { authHelper } from '../../auth/authHelper'
-import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
+import { authHelper } from '../../../auth/authHelper'
+import { requireProjectSummary } from '../../../features/iam/requireProjectSummary'
+import { iamHelper } from '../../../features/iam/iamHelper'
+import { issuanceHelper } from '../../../features/issuance/IssuanceHelper'
 
 export interface SnippetInput {
   issuanceApiUrl: string

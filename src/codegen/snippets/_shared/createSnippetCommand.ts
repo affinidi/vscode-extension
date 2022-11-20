@@ -1,15 +1,15 @@
 import { Position, SnippetString, TextEditor, window, workspace, l10n } from 'vscode'
-import { showQuickPick } from '../../utils/showQuickPick'
+import { showQuickPick } from '../../../utils/showQuickPick'
 import { createSnippetTools, Implementations, SnippetImplementation } from './createSnippetTools'
-import * as javascript from '../boilerplates/javascript'
-import * as typescript from '../boilerplates/typescript'
-import { logger } from '../../utils/logger'
-import { notifyError } from '../../utils/notifyError'
+import * as javascript from '../_boilerplates/javascript'
+import * as typescript from '../_boilerplates/typescript'
+import { logger } from '../../../utils/logger'
+import { notifyError } from '../../../utils/notifyError'
 import {
   EventNames,
   EventSubCategory,
-  sendEventToAnalytics,
-} from '../../services/analyticsStreamApiService'
+  telemetryClient,
+} from '../../../features/telemetry/telemetryClient'
 
 export type SnippetCommand<CommandInput = unknown> = (
   input?: CommandInput,
@@ -120,7 +120,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         wasBoilerplateGenerated ? undefined : position,
       )
 
-      sendEventToAnalytics({
+      telemetryClient.sendEvent({
         name: EventNames.snippetInserted,
         subCategory: EventSubCategory.snippet,
         metadata: {

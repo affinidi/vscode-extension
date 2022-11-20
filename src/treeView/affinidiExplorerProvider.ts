@@ -13,7 +13,7 @@ import { ExplorerResourceTypes } from './treeTypes'
 import { AffResourceTreeItem } from './treeItem'
 import { ext } from '../extensionVariables'
 import { formatIssuanceName } from '../features/issuance/formatIssuanceName'
-import { projectsState } from '../states/projectsState'
+import { projectsState } from '../features/iam/projectsState'
 import { authHelper } from '../auth/authHelper'
 import { iamClient } from '../features/iam/iamClient'
 import { requireProjectSummary } from '../features/iam/requireProjectSummary'
@@ -220,7 +220,7 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
         projectId: parent?.projectId,
         command: {
           title: l10n.t('Open schema details'),
-          command: 'schema.showSchemaDetails',
+          command: 'schema.viewSchemaDetails',
         },
       })
     }

@@ -4,7 +4,7 @@ import {
   CLOUD_WALLET_API_URL,
   implementations,
   insertSignVcWithCloudWalletSnippet,
-} from '../../../../snippets/sign-vc-with-cloud-wallet/snippet'
+} from '../../../../codegen/snippets/sign-vc-with-cloud-wallet/snippet'
 import { AFFINIDI_IAM_API_URL, iamClient } from '../../../../features/iam/iamClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'

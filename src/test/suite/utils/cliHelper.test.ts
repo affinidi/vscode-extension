@@ -4,7 +4,7 @@ import * as sinon from 'sinon'
 import { ext } from '../../../extensionVariables'
 
 import { sandbox } from '../setup'
-import { CliHelper, ERROR_MESSAGE, WARNING_MESSAGE } from '../../../utils/cliHelper'
+import { CliHelper, ERROR_MESSAGE, WARNING_MESSAGE } from '../../../cli/cliHelper'
 
 let showWarningMessage: sinon.SinonStub
 let showErrorMessage: sinon.SinonStub

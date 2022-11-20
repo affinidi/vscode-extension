@@ -1,6 +1,6 @@
 import { ProjectSummary } from '@affinidi/client-iam'
 import { l10n } from 'vscode'
-import { ext } from '../extensionVariables'
+import { ext } from '../../extensionVariables'
 
 const STORAGE_KEY = 'projects'
 

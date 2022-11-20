@@ -2,11 +2,11 @@ import { authentication, commands, window, l10n } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
 import {
-  sendEventToAnalytics,
   EventNames,
   EventSubCategory,
-} from '../services/analyticsStreamApiService'
-import { cliHelper } from '../utils/cliHelper'
+  telemetryClient,
+} from '../features/telemetry/telemetryClient'
+import { cliHelper } from '../cli/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 import {
   AffinidiAuthenticationProvider,
@@ -36,7 +36,7 @@ async function signUpHandler(): Promise<void> {
         forceNewSession: true,
       })
 
-      sendEventToAnalytics({
+      telemetryClient.sendEvent({
         name: EventNames.commandExecuted,
         subCategory: EventSubCategory.command,
         metadata: {
@@ -62,7 +62,7 @@ async function loginHandler(): Promise<void> {
     forceNewSession: true,
   })
 
-  sendEventToAnalytics({
+  telemetryClient.sendEvent({
     name: EventNames.commandExecuted,
     subCategory: EventSubCategory.command,
     metadata: {
@@ -81,7 +81,7 @@ async function logoutHandler(): Promise<void> {
   })
 
   if (session) {
-    sendEventToAnalytics({
+    telemetryClient.sendEvent({
       name: EventNames.commandExecuted,
       subCategory: EventSubCategory.command,
       metadata: {
@@ -109,7 +109,7 @@ async function userDetailsHandler(): Promise<void> {
     content: userDetails,
   })
 
-  sendEventToAnalytics({
+  telemetryClient.sendEvent({
     name: EventNames.commandExecuted,
     subCategory: EventSubCategory.command,
     metadata: {

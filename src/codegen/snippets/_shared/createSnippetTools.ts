@@ -1,5 +1,5 @@
 import { SnippetString, l10n } from 'vscode'
-import { showQuickPick } from '../../utils/showQuickPick'
+import { showQuickPick } from '../../../utils/showQuickPick'
 
 export enum SnippetImplementation {
   sdk = 'sdk',

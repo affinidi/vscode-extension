@@ -1,16 +1,10 @@
-import { window, workspace, l10n } from 'vscode'
-import {
-  sendEventToAnalytics,
-  EventNames,
-  EventSubCategory,
-} from '../services/analyticsStreamApiService'
+import { l10n, window, workspace } from 'vscode'
+import { EventNames, EventSubCategory, telemetryClient } from './telemetryClient'
+import { isTelemetryEnabled } from './isTelemetryEnabled'
 
 const CONSENT = {
   accept: l10n.t('Accept'),
   deny: l10n.t('Deny'),
-}
-export function isTelemetryEnabled() {
-  return workspace.getConfiguration().get('affinidi.telemetry.enabled')
 }
 
 export async function askUserForTelemetryConsent() {
@@ -25,7 +19,7 @@ export async function askUserForTelemetryConsent() {
       case CONSENT.accept:
         await workspace.getConfiguration().update('affinidi.telemetry.enabled', true, true)
 
-        sendEventToAnalytics({
+        telemetryClient.sendEvent({
           name: EventNames.extensionInitialized,
           subCategory: EventSubCategory.affinidiExtension,
         })

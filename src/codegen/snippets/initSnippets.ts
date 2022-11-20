@@ -1,11 +1,11 @@
 import { commands } from 'vscode'
-import { ext } from '../extensionVariables'
+import { ext } from '../../extensionVariables'
 import {
   EventNames,
   EventSubCategory,
-  sendEventToAnalytics,
-} from '../services/analyticsStreamApiService'
-import { AffResourceTreeItem } from '../treeView/treeItem'
+  telemetryClient,
+} from '../../features/telemetry/telemetryClient'
+import { AffResourceTreeItem } from '../../treeView/treeItem'
 import { insertGetIssuanceOffersSnippet } from './get-issuance-offers/snippet'
 import { insertSendVcOfferToEmailSnippet } from './send-vc-offer-to-email/snippet'
 import { insertSignVcWithCloudWalletSnippet } from './sign-vc-with-cloud-wallet/snippet'
@@ -20,7 +20,7 @@ export const initSnippets = () => {
           schema: element?.metadata,
         })
 
-        sendEventToAnalytics({
+        telemetryClient.sendEvent({
           name: EventNames.commandExecuted,
           subCategory: EventSubCategory.command,
           metadata: {
@@ -42,7 +42,7 @@ export const initSnippets = () => {
           issuanceId: element?.metadata.id,
         })
 
-        sendEventToAnalytics({
+        telemetryClient.sendEvent({
           name: EventNames.commandExecuted,
           subCategory: EventSubCategory.command,
           metadata: {
@@ -59,7 +59,7 @@ export const initSnippets = () => {
     commands.registerCommand('affinidi.codegen.signVcWithCloudWallet', async () => {
       await insertSignVcWithCloudWalletSnippet()
 
-      sendEventToAnalytics({
+      telemetryClient.sendEvent({
         name: EventNames.commandExecuted,
         subCategory: EventSubCategory.command,
         metadata: {

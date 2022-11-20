@@ -1,14 +1,14 @@
 import { window, l10n } from 'vscode'
-import { Schema } from '../../shared/types'
-import { Implementations } from '../shared/createSnippetTools'
-import { iamHelper } from '../../features/iam/iamHelper'
+import { Schema } from '../../../shared/types'
+import { Implementations } from '../_shared/createSnippetTools'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
-import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
-import { authHelper } from '../../auth/authHelper'
-import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
-import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
+import { createSnippetCommand } from '../_shared/createSnippetCommand'
+import { authHelper } from '../../../auth/authHelper'
+import { ISSUANCE_API_URL } from '../../../features/issuance/issuanceClient'
+import { requireProjectSummary } from '../../../features/iam/requireProjectSummary'
+import { iamHelper } from '../../../features/iam/iamHelper'
+import { schemaManagerHelper } from '../../../features/schema-manager/schemaManagerHelper'
 
 export interface SnippetInput {
   issuanceApiUrl: string

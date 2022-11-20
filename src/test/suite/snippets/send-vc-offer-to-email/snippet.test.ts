@@ -3,7 +3,7 @@ import { sandbox } from '../../setup'
 import {
   implementations,
   insertSendVcOfferToEmailSnippet,
-} from '../../../../snippets/send-vc-offer-to-email/snippet'
+} from '../../../../codegen/snippets/send-vc-offer-to-email/snippet'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'

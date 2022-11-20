@@ -5,6 +5,7 @@ export function validateEmail(value: string) {
   if (!re.test(value)) {
     return l10n.t('Enter a valid email address')
   }
+  return undefined
 }
 
 export function validateOTP(value: string) {
@@ -12,4 +13,5 @@ export function validateOTP(value: string) {
   if (!re.test(value)) {
     return l10n.t('Confirmation code should be 6 digits')
   }
+  return undefined
 }

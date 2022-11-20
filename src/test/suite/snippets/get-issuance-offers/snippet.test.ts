@@ -3,7 +3,7 @@ import { sandbox } from '../../setup'
 import {
   implementations,
   insertGetIssuanceOffersSnippet,
-} from '../../../../snippets/get-issuance-offers/snippet'
+} from '../../../../codegen/snippets/get-issuance-offers/snippet'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'

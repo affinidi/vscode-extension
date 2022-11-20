@@ -1,5 +1,5 @@
 import { TextEditor, window, workspace } from 'vscode'
-import { Implementations, SnippetImplementation } from '../../../snippets/shared/createSnippetTools'
+import { Implementations, SnippetImplementation } from '../../../codegen/snippets/_shared/createSnippetTools'
 
 type TestHandler = (input: {
   editor: TextEditor

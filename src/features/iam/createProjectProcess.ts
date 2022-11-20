@@ -36,4 +36,6 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
     logger.error(error, 'Could not create project')
     window.showErrorMessage(l10n.t('Project could not be created, please try again later.'))
   }
+
+  return undefined
 }

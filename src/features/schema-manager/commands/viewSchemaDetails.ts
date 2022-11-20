@@ -1,21 +1,10 @@
-import { Webview, Uri } from 'vscode'
-// import { SchemaEntity } from "../services/schemaManagerService";
-import { AffResourceTreeItem } from '../treeView/treeItem'
-import { getUri } from './getUri'
+import { TreeView, Uri, ViewColumn, Webview, window } from 'vscode'
+import { ext } from '../../../extensionVariables'
+import { AffResourceTreeItem } from '../../../treeView/treeItem'
+import { getUri } from '../../../utils/getUri'
+import { telemetryClient, EventNames, EventSubCategory } from '../../telemetry/telemetryClient'
 
-/**
- * Defines and returns the HTML that should be rendered within the notepad webview panel.
- *
- * @remarks This is also the place where references to CSS and JavaScript files/packages
- * (such as the Webview UI Toolkit) are created and inserted into the webview HTML.
- *
- * @param webview A reference to the extension webview
- * @param extensionUri The URI of the directory containing the extension
- * @param item An object representing an object
- * @returns A template string literal containing the HTML that should be
- * rendered within the webview panel
- */
-export function getWebviewContent(webview: Webview, extensionUri: Uri, item: AffResourceTreeItem) {
+function generateHtml(webview: Webview, extensionUri: Uri, item: AffResourceTreeItem) {
   const toolkitUri = getUri(webview, extensionUri, [
     'node_modules',
     '@vscode',
@@ -79,4 +68,27 @@ export function getWebviewContent(webview: Webview, extensionUri: Uri, item: Aff
       </body>
     </html>
   `
+}
+
+export async function viewSchemaDetails(input: { treeView: TreeView<unknown> }) {
+  const selectedTreeViewItem = input.treeView.selection[0]
+  if (!(selectedTreeViewItem instanceof AffResourceTreeItem)) return
+
+  const label = selectedTreeViewItem.label?.toString() ?? 'Schema Details'
+
+  const panel = window.createWebviewPanel('schemaDetails', label, ViewColumn.One, {
+    enableScripts: true,
+  })
+
+  panel.title = label
+  panel.webview.html = generateHtml(panel.webview, ext.context.extensionUri, selectedTreeViewItem)
+
+  telemetryClient.sendEvent({
+    name: EventNames.commandExecuted,
+    subCategory: EventSubCategory.command,
+    metadata: {
+      commandId: 'schema.viewSchemaDetails',
+      projectId: selectedTreeViewItem.projectId,
+    },
+  })
 }
