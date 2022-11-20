@@ -20,6 +20,10 @@ import { logger } from './utils/logger'
 import { buildUrl } from './utils/buildUrl'
 import { askUserForTelemetryConsent } from './features/telemetry/askUserForTelemetryConsent'
 import { viewSchemaDetails } from './features/schema-manager/commands/viewSchemaDetails'
+import { IamExplorerTreeProvider } from './features/iam/iamExplorerTreeProvider'
+import { AuthExplorerTreeProvider } from './auth/authExplorerTreeProvider'
+import { SchemaManagerExplorerTreeProvider } from './features/schema-manager/schemaManagerExplorerTreeProvider'
+import { IssuanceExplorerTreeProvider } from './features/issuance/issuanceExplorerTreeProvider'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -33,7 +37,13 @@ export async function activateInternal(context: ExtensionContext) {
   initSnippets()
   initGenerators()
 
-  const affExplorerTreeProvider = new AffinidiExplorerProvider()
+  const affExplorerTreeProvider = new AffinidiExplorerProvider([
+    new IamExplorerTreeProvider(),
+    new AuthExplorerTreeProvider(),
+    new IssuanceExplorerTreeProvider(),
+    new SchemaManagerExplorerTreeProvider(),
+  ])
+
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {

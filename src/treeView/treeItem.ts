@@ -14,21 +14,21 @@ export class AffResourceTreeItem extends TreeItem {
   constructor(
     public readonly item: {
       resourceType: ExplorerResourceTypes
-      metadata: any
+      metadata?: any
       label: string
       description?: string
-      collapsibleState: TreeItemCollapsibleState
-      icon: ThemeIcon
+      collapsibleState?: TreeItemCollapsibleState
+      icon?: ThemeIcon
       projectId?: string
       command?: Command
     },
   ) {
-    super(item.label, item.collapsibleState)
+    super(item.label, item.collapsibleState ?? TreeItemCollapsibleState.None)
     this.resourceType = item.resourceType
-    this.tooltip = `${this.item.label}`
+    this.tooltip = String(this.item.label)
     this.description = this.item.description
     this.metadata = item.metadata
-    this.iconPath = item.icon
+    this.iconPath = item.icon ?? ThemeIcon.Folder
     this.contextValue = ExplorerResourceTypes[item.resourceType]
     this.projectId = item.projectId
     this.command = item.command
