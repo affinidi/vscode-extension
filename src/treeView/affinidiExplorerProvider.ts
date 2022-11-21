@@ -16,7 +16,7 @@ import { formatIssuanceName } from '../features/issuance/formatIssuanceName'
 import { projectsState } from '../states/projectsState'
 import { issuanceClient } from '../features/issuance/issuanceClient'
 import { schemaManagerClient } from '../features/schema-manager/schemaManagerClient'
-import { getProjectsSummaryList } from '../features/iam/getProjectsSummaryList'
+import { fetchProjectsSummaryList } from '../features/iam/fetchProjectsSummaryList'
 
 const isSignedIn = async () => {
   const session = await ext.authProvider.getActiveSession({
@@ -98,8 +98,8 @@ export class AffinidiExplorerProvider implements TreeDataProvider<AffResourceTre
   }
 
   private async addProjectItems(treeNodes: AffResourceTreeItem[]): Promise<void> {
-    await getProjectsSummaryList()
-    const projects = projectsState.getProjectsArr()
+    await fetchProjectsSummaryList()
+    const projects = projectsState.getProjects()
 
     if (projects?.length) {
       for (const project of projects) {

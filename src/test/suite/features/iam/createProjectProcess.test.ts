@@ -22,7 +22,7 @@ describe('createProjectProcess()', () => {
       apiKeyName: '',
     },
     project: {
-      projectId: '',
+      projectId,
       name: projectName,
       createdAt: '',
     },

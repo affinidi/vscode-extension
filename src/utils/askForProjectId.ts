@@ -5,7 +5,7 @@ import { showQuickPick } from './showQuickPick'
 import { projectsState } from '../states/projectsState'
 
 export async function askForProjectId(): Promise<string | undefined> {
-  const projects = projectsState.getProjectsArr() ?? []
+  const projects = projectsState.getProjects() ?? []
 
   if (projects.length === 0) {
     throw new Error(l10n.t('You need to have a project to generate this snippet'))

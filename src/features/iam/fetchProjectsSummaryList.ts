@@ -3,7 +3,7 @@ import { projectsState } from '../../states/projectsState'
 import { fetchProjectSummary } from './fetchProjectSummary'
 import { iamClient } from './iamClient'
 
-export async function getProjectsSummaryList(): Promise<void> {
+export async function fetchProjectsSummaryList(): Promise<void> {
   const consoleAuthToken = await authHelper.getConsoleAuthToken()
   const { projects } = await iamClient.listProjects({ consoleAuthToken })
 
@@ -13,6 +13,6 @@ export async function getProjectsSummaryList(): Promise<void> {
   for await (const project of sortedProjects) {
     const projectSummary = await fetchProjectSummary(project.projectId)
 
-    projectsState.setProject(projectSummary.project.projectId, projectSummary)
+    projectsState.setProject(projectSummary)
   }
 }

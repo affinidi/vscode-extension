@@ -58,7 +58,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
     sandbox.stub(cliHelper, 'setActiveProject')
-    projectsState.setProject(PROJECT_ID, PROJECT_SUMMARY)
+    projectsState.setProject(PROJECT_SUMMARY)
   })
 
   afterEach(() => {

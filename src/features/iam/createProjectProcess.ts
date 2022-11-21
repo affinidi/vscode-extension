@@ -33,7 +33,7 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
 
     const projectSummary = await fetchProjectSummary(result.projectId)
 
-    projectsState.setProject(result.projectId, projectSummary)
+    projectsState.setProject(projectSummary)
 
     return result
   } catch (error) {

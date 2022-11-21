@@ -34,7 +34,7 @@ describe('insertGetIssuanceOffersSnippet()', () => {
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
     sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
 
-    projectsState.setProject(projectId, projectSummary)
+    projectsState.setProject(projectSummary)
 
     await insertGetIssuanceOffersSnippet(
       {
