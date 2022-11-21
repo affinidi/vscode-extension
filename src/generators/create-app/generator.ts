@@ -59,7 +59,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
     await cliHelper.setActiveProject(projectId)
     await cliHelper.generateApp({ path: fullPath })
   } catch (error: any) {
-    ext.outputChannel.appendLine(l10n.t('Filed to generate app'))
+    ext.outputChannel.appendLine(l10n.t('Failed to generate app'))
     notifyError(error)
   }
 }
