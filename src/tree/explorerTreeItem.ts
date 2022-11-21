@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { TreeItem, Command, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
 import { ExplorerResourceTypes } from '../treeView/treeTypes'
 
@@ -12,11 +12,17 @@ export class ExplorerTreeItem extends TreeItem {
 
   public readonly projectId: string | undefined
 
+  public readonly schemaId: string | undefined
+
+  public readonly schemaScope: SchemaSearchScope | undefined
+
   constructor(
     public readonly item: {
       resourceType: ExplorerResourceTypes
       label: string
       metadata?: any
+      schemaId?: string
+      schemaScope?: SchemaSearchScope
       description?: string
       collapsibleState?: TreeItemCollapsibleState
       icon?: ThemeIcon
@@ -30,6 +36,8 @@ export class ExplorerTreeItem extends TreeItem {
     this.tooltip = this.item.label.toString()
     this.description = this.item.description
     this.metadata = item.metadata
+    this.schemaId = item.schemaId
+    this.schemaScope = item.schemaScope
     this.iconPath = item.icon ?? ThemeIcon.Folder
     this.contextValue = ExplorerResourceTypes[item.resourceType]
     this.projectId = item.projectId

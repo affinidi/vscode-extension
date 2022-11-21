@@ -23,6 +23,10 @@ const getProjectById = (projectId?: string) => {
   return selectedProject
 }
 
+const setProjects = (projects: ProjectSummary[]) => {
+  ext.context.globalState.update(STORAGE_KEY, projects)
+}
+
 const setProject = (projectSummary: ProjectSummary) => {
   const projects = getProjects() ?? []
 
@@ -45,6 +49,7 @@ const clear = () => {
 
 export const projectsState = {
   setProject,
+  setProjects,
   getProjects,
   getProjectById,
   clear,

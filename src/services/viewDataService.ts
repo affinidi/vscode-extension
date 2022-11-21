@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import { projectsState } from '../states/projectsState'
+import { schemasState } from '../states/schemasState'
 import { ExplorerResourceTypes } from '../treeView/treeTypes'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
@@ -7,12 +8,14 @@ type ViewPropertiesProps = {
   resourceType: ExplorerResourceTypes
   resourceInfo: any
   projectId?: string
+  schemaId?: string
 }
 
 export const viewProperties = async ({
   resourceType,
   resourceInfo,
   projectId,
+  schemaId,
 }: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
@@ -26,8 +29,15 @@ export const viewProperties = async ({
       break
     }
 
+    case ExplorerResourceTypes.schema: {
+      const schema = schemasState.getSchemaById(schemaId)
+      content = schema
+      label = schema.id
+      id = schema.id
+      break
+    }
+
     case ExplorerResourceTypes.issuance:
-    case ExplorerResourceTypes.schema:
       content = resourceInfo
       label = resourceInfo.id
       id = resourceInfo.id

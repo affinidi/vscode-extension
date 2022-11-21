@@ -75,7 +75,6 @@ export class IamExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.did,
-        metadata: projectSummary.wallet,
         label: projectSummary.wallet.did,
         icon: new ThemeIcon('lock'),
         projectId: parent?.projectId,
