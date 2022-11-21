@@ -15,10 +15,10 @@ import {
   generateAffinidiAppWithCLI,
   NO_DIRECTORY_SELECTED_MESSAGE,
   NO_APP_NAME_SELECTED_MESSAGE,
-  PROJECT_REQUIRED_WARNING_MESSAGE,
 } from '../../../../generators/create-app/generator'
 import { authHelper } from '../../../../auth/authHelper'
-import { iamHelper } from '../../../../features/iam/iamHelper'
+import { iamHelper, PROJECT_REQUIRED_ERROR_MESSAGE } from '../../../../features/iam/iamHelper'
+import { iamClient } from '../../../../features/iam/iamClient'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
@@ -86,12 +86,12 @@ describe('generateAffinidiAppWithCLI()', () => {
     expect(showErrorMessage).calledWith(DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE)
   })
 
-  it('should show warning message when project is not provided', async () => {
-    sandbox.stub(iamHelper, 'askForProjectId').resolves('')
+  it('should show error message when user has no projects', async () => {
+    sandbox.stub(iamClient, 'listProjects').resolves({ projects: [] })
 
     await generateAffinidiAppWithCLI()
 
-    expect(showWarningMessage).calledWith(PROJECT_REQUIRED_WARNING_MESSAGE)
+    expect(showErrorMessage).calledWith(PROJECT_REQUIRED_ERROR_MESSAGE)
   })
 
   it('should render app with specified params', async () => {
