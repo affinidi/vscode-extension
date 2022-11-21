@@ -40,6 +40,7 @@ import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
 import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerProvider'
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
+import { projectsState } from './states/projectsState'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -51,6 +52,8 @@ export async function activateInternal(context: ExtensionContext) {
   ext.context = context
   ext.outputChannel = window.createOutputChannel('Affinidi')
   ext.authProvider = initAuthentication()
+
+  projectsState.clear()
 
   initSnippets()
   initGenerators()
