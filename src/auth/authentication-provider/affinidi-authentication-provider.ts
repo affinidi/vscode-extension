@@ -46,8 +46,12 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     this._disposable.dispose()
   }
 
+  async isLoggedIn(): Promise<boolean> {
+    return Boolean(await this.getActiveSession())
+  }
+
   async getActiveSession(
-    options: AuthenticationGetSessionOptions,
+    options?: AuthenticationGetSessionOptions,
     scopes: string[] = [],
   ): Promise<AuthenticationSession | undefined> {
     try {
