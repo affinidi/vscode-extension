@@ -86,9 +86,9 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      ext.outputChannel.append(
+      ext.outputChannel.appendLine(
         l10n.t(
-          `${'\n'}${'Issuance has been created and the offers were sent. Issuance ID: {0}'}`,
+          `${'Issuance has been created and the offers were sent. Issuance ID: {0}'}`,
           issuance.id,
         ),
       )
@@ -97,8 +97,8 @@ export const uploadCsvFile = async (input: TemplateInput) => {
   } catch (error: unknown) {
     const parsedCsvUploadError = parseUploadError(error)
     if (parsedCsvUploadError) {
-      ext.outputChannel.append(
-        `${'\n'}${'Could not create issuance due to validation errors in the CSV file: '}${JSON.stringify(
+      ext.outputChannel.appendLine(
+        `${'Could not create issuance due to validation errors in the CSV file: '}${JSON.stringify(
           parsedCsvUploadError,
           null,
           '\t',
