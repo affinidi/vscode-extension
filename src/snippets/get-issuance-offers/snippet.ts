@@ -1,4 +1,4 @@
-import { askForProjectId } from '../../utils/askForProjectId'
+import { iamHelpers } from '../../features/iam/iamHelpers'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { Implementations } from '../shared/createSnippetTools'
 import { issuanceHelper } from '../../features/issuance/IssuanceHelper'
@@ -6,7 +6,6 @@ import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
 
 import * as javascript from './javascript'
 import * as typescript from './typescript'
-import { requireProjectSummary } from '../../utils/requireProjectSummary'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -30,14 +29,14 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
   'getIssuanceOffers',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await askForProjectId())
+    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
     if (!projectId) {
       return undefined
     }
 
     const {
       apiKey: { apiKeyHash },
-    } = requireProjectSummary(projectId)
+    } = iamHelpers.requireProjectSummary(projectId)
 
     const issuanceId =
       input?.issuanceId ?? (await issuanceHelper.askForIssuanceId({ projectId }, { apiKeyHash }))

@@ -1,8 +1,7 @@
 import * as path from 'path'
 import { ProgressLocation, window, Uri, l10n } from 'vscode'
-import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
-import { iamHelper } from '../../features/iam/iamHelper'
+import { iamHelpers } from '../../features/iam/iamHelpers'
 import { cliHelper } from '../../utils/cliHelper'
 import { notifyError } from '../../utils/notifyError'
 
@@ -25,8 +24,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
       return
     }
 
-    const consoleAuthToken = await authHelper.getConsoleAuthToken()
-    const projectId = await iamHelper.askForProjectId({ consoleAuthToken })
+    const projectId = await iamHelpers.askForProjectId()
     if (!projectId) {
       return
     }

@@ -1,13 +1,12 @@
 import { window, l10n } from 'vscode'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { askForProjectId } from '../../utils/askForProjectId'
+import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
 import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
-import { requireProjectSummary } from '../../utils/requireProjectSummary'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -35,7 +34,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
   'sendVcOfferToEmail',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await askForProjectId())
+    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
     if (!projectId) {
       return undefined
     }
@@ -43,7 +42,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = requireProjectSummary(projectId)
+    } = iamHelpers.requireProjectSummary(projectId)
 
     const schema =
       input?.schema ??

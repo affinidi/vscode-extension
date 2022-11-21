@@ -1,10 +1,9 @@
 import * as fs from 'fs'
 import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
 import { Schema } from '../../shared/types'
-import { askForProjectId } from '../../utils/askForProjectId'
+import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
-import { requireProjectSummary } from '../../utils/requireProjectSummary'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
 
@@ -24,14 +23,14 @@ const implementationLabels = {
 }
 
 export const openCsvTemplate = async (input: TemplateInput) => {
-  const projectId = input?.projectId ?? (await askForProjectId())
+  const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
   if (!projectId) {
     return
   }
 
   const {
     apiKey: { apiKeyHash },
-  } = requireProjectSummary(projectId)
+  } = iamHelpers.requireProjectSummary(projectId)
 
   const template = await issuanceClient.getCsvTemplate(
     {
@@ -63,7 +62,7 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     return
   }
 
-  const projectSummary = requireProjectSummary(input.projectId)
+  const projectSummary = iamHelpers.requireProjectSummary(input.projectId)
 
   try {
     const { issuance } = await issuanceClient.createFromCsv(
