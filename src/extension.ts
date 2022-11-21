@@ -335,7 +335,7 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.feedback', () => {
+    commands.registerCommand('affinidiFeedback.redirectToGithub', () => {
       const githubUrl = 'https://github.com/affinityproject/vscode-extension/issues'
 
       commands.executeCommand('vscode.open', githubUrl)

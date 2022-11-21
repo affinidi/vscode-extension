@@ -11,7 +11,6 @@
   "affinidi.openMarkDown": "About Issuance",
   "affinidi.copyJsonURL": "Copy JSON Schema URL",
   "affinidi.copyJsonLdURL": "Copy JSON-LD Context URL",
-  "affinidi.feedback": "Give Feedback",
 
   "affinidiExplorer.refresh": "Refresh",
   "affinidiExplorer.viewProperties": "View Properties",
@@ -22,6 +21,8 @@
   "affinidiExplorer.createIssuance": "Create Issuance",
 
   "affinidiDevTools.issueCredential": "Issuance Credential",
+
+  "affinidiFeedback.redirectToGithub": "Give Feedback",
 
   "commands.category.explorer": "Explorer",
   "commands.category.devTool": "Dev Tool",
