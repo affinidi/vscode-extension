@@ -178,7 +178,7 @@
       {
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
-        "category": "Affinidi %commands.category.explorer%"
+        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiFeedback.redirectToGithub",

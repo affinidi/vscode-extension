@@ -3,7 +3,6 @@
   "affinidi.login": "Acceso",
   "affinidi.signOut": "",
   "affinidi.createProject": "",
-  "affinidi.feedback": "",
   "affinidi.me": "",
   "affinidi.codegen.sendVcOfferToEmail": "",
   "affinidi.codegen.getIssuanceOffers": "",
@@ -22,6 +21,8 @@
   "affinidiExplorer.codegen.referenceApp": "",
 
   "affinidiDevTools.issueCredential": "",
+
+  "affinidiFeedback.redirectToGithub": "",
 
   "commands.category.explorer": "",
   "commands.category.devTool": "",
