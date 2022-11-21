@@ -182,7 +182,7 @@
       },
       {
         "command": "affinidiFeedback.redirectToGithub",
-        "title": "%affinidi.redirectToGithub%",
+        "title": "%affinidiFeedback.redirectToGithub%",
         "category": "Affinidi"
       }
     ],

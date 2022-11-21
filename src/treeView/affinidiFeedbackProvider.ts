@@ -28,7 +28,7 @@ export class AffinidiFeedbackProvider implements TreeDataProvider<AffFeedbackTre
       icon: new ThemeIcon('github-inverted'),
       command: {
         title: l10n.t('Give Feedback'),
-        command: 'affinidi.redirectToGithub',
+        command: 'affinidiFeedback.redirectToGithub',
       },
     })
   }
