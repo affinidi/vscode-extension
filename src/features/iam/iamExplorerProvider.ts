@@ -1,12 +1,10 @@
 import { TreeItemCollapsibleState, ThemeIcon, l10n } from 'vscode'
-import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
 import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../treeView/treeTypes'
-import { iamClient } from './iamClient'
-import { requireProjectSummary } from './requireProjectSummary'
+import { fetchProjectsSummaryList } from './fetchProjectsSummaryList'
 
 export class IamExplorerProvider implements ExplorerProvider {
   public async getChildren(
@@ -30,29 +28,18 @@ export class IamExplorerProvider implements ExplorerProvider {
   }
 
   private async getProjectItems() {
-    const consoleAuthToken = await authHelper.getConsoleAuthToken()
-    const { projects } = await iamClient.listProjects({ consoleAuthToken })
+    await fetchProjectsSummaryList()
+    const projects = projectsState.getProjects()
 
-    // sort projects array in descending order on createdAt field
-    const sortedProjects = projects.sort(
-      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
-    )
-
-    return Promise.all(
-      sortedProjects.map(async (project) => {
-        const projectSummary = await requireProjectSummary(project.projectId, { consoleAuthToken })
-
-        projectsState.setProject(projectSummary.project.projectId, projectSummary)
-
-        return new ExplorerTreeItem({
+    return (projects ?? []).map(
+      (project) =>
+        new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.project,
-          metadata: projectSummary,
-          label: project.name,
+          label: project.project.name,
           collapsibleState: TreeItemCollapsibleState.Collapsed,
           icon: new ThemeIcon('project'),
-          projectId: projectSummary.project.projectId,
-        })
-      }),
+          projectId: project.project.projectId,
+        }),
     )
   }
 
