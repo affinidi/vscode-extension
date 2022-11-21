@@ -45,6 +45,7 @@
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
     "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
+    "onCommand:affinidi.createSchemaInVsCode",
     "onStartupFinished",
     "onView:affinidiCodeGeneration",
     "onView:affinidiDevTools",
@@ -177,6 +178,11 @@
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
         "category": "%commands.category.explorer%"
+      },
+      {
+        "command": "affinidi.createSchemaInVsCode",
+        "title": "Create schema in vs code",
+        "category": "Affinidi"
       }
     ],
     "menus": {

@@ -36,6 +36,7 @@ import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { schemaManagerClient } from './features/schema-manager/schemaManagerClient'
 import { logger } from './utils/logger'
+import { getCreateSchemaViewContent } from './ui/getCreateSchemaViewContent'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -329,6 +330,7 @@ export async function activateInternal(context: ExtensionContext) {
       })
     }),
   )
+
   commands.registerCommand('affinidiDevTools.issueCredential', () => {
     const issueCredentialURL = buildURL(CONSOLE_URL, '/bulk-issuance')
 
@@ -341,6 +343,52 @@ export async function activateInternal(context: ExtensionContext) {
     })
 
     commands.executeCommand('vscode.open', issueCredentialURL)
+  })
+
+  commands.registerCommand('affinidi.createSchemaInVsCode', () => {
+    let schemaBuilderPanel: WebviewPanel | undefined
+    if (!schemaBuilderPanel) {
+      schemaBuilderPanel = window.createWebviewPanel(
+        'schemaBuilderView',
+        'Create Schema',
+        ViewColumn.One,
+        {
+          enableScripts: true,
+        },
+      )
+    }
+
+    const attributes: { id: number }[] = [{ id: 1 }]
+
+    schemaBuilderPanel.webview.html = getCreateSchemaViewContent(
+      schemaBuilderPanel.webview,
+      context.extensionUri,
+      attributes,
+    )
+
+    schemaBuilderPanel.webview.onDidReceiveMessage(
+      (message) => {
+        if (schemaBuilderPanel && message.command === 'addAttribute') {
+          attributes.push({ id: message.id })
+          schemaBuilderPanel.webview.html = getCreateSchemaViewContent(
+            schemaBuilderPanel.webview,
+            context.extensionUri,
+            attributes,
+          )
+        }
+      },
+      undefined,
+      context.subscriptions,
+    )
+
+    schemaBuilderPanel?.onDidDispose(
+      () => {
+        // When the panel is closed, cancel any future updates to the webview content
+        panel = undefined
+      },
+      null,
+      context.subscriptions,
+    )
   })
 
   askUserForTelemetryConsent()
