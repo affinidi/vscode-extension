@@ -1,13 +1,11 @@
 import { nanoid } from 'nanoid'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { iamHelper } from '../../features/iam/iamHelper'
+import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
-import { authHelper } from '../../auth/authHelper'
-import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 
 export interface SnippetInput {
@@ -37,9 +35,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const consoleAuthToken = await authHelper.getConsoleAuthToken()
-
-    const projectId = input?.projectId ?? (await iamHelper.askForProjectId({ consoleAuthToken }))
+    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
     if (!projectId) {
       return undefined
     }
@@ -47,7 +43,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await requireProjectSummary(projectId, { consoleAuthToken })
+    } = iamHelpers.requireProjectSummary(projectId)
 
     const schema =
       input?.schema ??

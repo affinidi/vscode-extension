@@ -7,6 +7,7 @@ import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
 
 import {
+  cliHelper,
   buildAppGenerateCommand,
   DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE,
   APP_SUCCESSFULLY_CREATED_MESSAGE,
@@ -15,18 +16,33 @@ import {
   generateAffinidiAppWithCLI,
   NO_DIRECTORY_SELECTED_MESSAGE,
   NO_APP_NAME_SELECTED_MESSAGE,
-  PROJECT_REQUIRED_WARNING_MESSAGE,
 } from '../../../../generators/create-app/generator'
-import { authHelper } from '../../../../auth/authHelper'
-import { iamHelper } from '../../../../features/iam/iamHelper'
+import { PROJECT_REQUIRED_ERROR_MESSAGE } from '../../../../features/iam/iamHelpers'
+import { iamClient } from '../../../../features/iam/iamClient'
+import { projectsState } from '../../../../states/projectsState'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
+const PROJECT_ID = 'fake-project-id'
+const PROJECT_SUMMARY = {
+  wallet: {
+    didUrl: '',
+    did: '',
+  },
+  apiKey: {
+    apiKeyHash: '',
+    apiKeyName: '',
+  },
+  project: {
+    projectId: PROJECT_ID,
+    name: '',
+    createdAt: '',
+  },
+}
 
 describe('generateAffinidiAppWithCLI()', () => {
   let showErrorMessage: sinon.SinonStub
   let showInformationMessage: sinon.SinonStub
-  let showWarningMessage: sinon.SinonStub
   let dialog: any
   let existsSync: any
   let progressWindow: any
@@ -35,19 +51,21 @@ describe('generateAffinidiAppWithCLI()', () => {
   beforeEach(async () => {
     showErrorMessage = sandbox.stub(window, 'showErrorMessage')
     showInformationMessage = sandbox.stub(window, 'showInformationMessage')
-    showWarningMessage = sandbox.stub(window, 'showWarningMessage')
     dialog = sandbox.stub(window, 'showOpenDialog').resolves([Uri.file(DIRECTORY_NAME)])
     existsSync = sandbox.stub(fs, 'existsSync').resolves(true)
     progressWindow = sandbox.stub(window, 'withProgress').resolves(true)
     inputBox = sandbox.stub(window, 'showInputBox').resolves(APP_NAME)
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
-    sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-token')
+    sandbox.stub(cliHelper, 'setActiveProject')
+    projectsState.setProject(PROJECT_SUMMARY)
+  })
+
+  afterEach(() => {
+    projectsState.clear()
   })
 
   it('should show error message when CLI is not installed', async () => {
-    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
-
     progressWindow.resolves(false)
 
     await generateAffinidiAppWithCLI()
@@ -56,8 +74,6 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it("should show error message if user didn't specify directory", async () => {
-    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
-
     dialog.resolves()
 
     await generateAffinidiAppWithCLI()
@@ -67,8 +83,6 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it("should show error message if user didn't specify app name", async () => {
-    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
-
     inputBox.resolves()
 
     await generateAffinidiAppWithCLI()
@@ -78,25 +92,21 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should show error message if app with same name already exist in selected path', async () => {
-    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
-
     await generateAffinidiAppWithCLI()
 
     expect(dialog).called
     expect(showErrorMessage).calledWith(DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE)
   })
 
-  it('should show warning message when project is not provided', async () => {
-    sandbox.stub(iamHelper, 'askForProjectId').resolves('')
+  it.skip('should show error message when user has no projects', async () => {
+    sandbox.stub(iamClient, 'listProjects').resolves({ projects: [] })
 
     await generateAffinidiAppWithCLI()
 
-    expect(showWarningMessage).calledWith(PROJECT_REQUIRED_WARNING_MESSAGE)
+    expect(showErrorMessage).calledWith(PROJECT_REQUIRED_ERROR_MESSAGE)
   })
 
   it('should render app with specified params', async () => {
-    sandbox.stub(iamHelper, 'askForProjectId').resolves('fake-projectId')
-
     existsSync.restore()
     existsSync.resolves(false)
 

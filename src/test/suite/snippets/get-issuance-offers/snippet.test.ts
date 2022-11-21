@@ -8,17 +8,33 @@ import { iamClient } from '../../../../features/iam/iamClient'
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
+import { projectsState } from '../../../../states/projectsState'
 
 describe('insertGetIssuanceOffersSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
     const projectId = 'fake-project-id'
     const issuanceId = 'fake-issuance-id'
     const apiKeyHash = 'fake-api-key-hash'
+    const projectSummary = {
+      wallet: {
+        didUrl: '',
+        did: '',
+      },
+      apiKey: {
+        apiKeyHash,
+        apiKeyName: '',
+      },
+      project: {
+        projectId,
+        name: '',
+        createdAt: '',
+      },
+    }
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
-    sandbox.stub(iamClient, 'getProjectSummary').resolves({
-      apiKey: { apiKeyHash },
-    } as any)
+    sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
+
+    projectsState.setProject(projectSummary)
 
     await insertGetIssuanceOffersSnippet(
       {
@@ -37,5 +53,6 @@ describe('insertGetIssuanceOffersSnippet()', () => {
     ]) {
       expect(text).contains(value)
     }
+    projectsState.clear()
   })
 })

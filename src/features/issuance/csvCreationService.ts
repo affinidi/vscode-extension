@@ -1,11 +1,9 @@
 import * as fs from 'fs'
 import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
 import { Schema } from '../../shared/types'
-import { iamHelper } from '../iam/iamHelper'
+import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
-import { requireProjectSummary } from '../iam/requireProjectSummary'
-import { authHelper } from '../../auth/authHelper'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
 
@@ -25,15 +23,14 @@ const implementationLabels = {
 }
 
 export const openCsvTemplate = async (input: TemplateInput) => {
-  const consoleAuthToken = await authHelper.getConsoleAuthToken()
-  const projectId = input?.projectId ?? (await iamHelper.askForProjectId({ consoleAuthToken }))
+  const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
   if (!projectId) {
     return
   }
 
   const {
     apiKey: { apiKeyHash },
-  } = await requireProjectSummary(projectId, { consoleAuthToken })
+  } = iamHelpers.requireProjectSummary(projectId)
 
   const template = await issuanceClient.getCsvTemplate(
     {
@@ -59,15 +56,13 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     canSelectFolders: false,
   }
 
-  const selectedFiles = await await window.showOpenDialog(options)
+  const selectedFiles = await window.showOpenDialog(options)
   const selectedFilePath = selectedFiles?.[0]?.fsPath
   if (!selectedFilePath) {
     return
   }
 
-  const projectSummary = await requireProjectSummary(input.projectId, {
-    consoleAuthToken: await authHelper.getConsoleAuthToken(),
-  })
+  const projectSummary = iamHelpers.requireProjectSummary(input.projectId)
 
   try {
     const { issuance } = await issuanceClient.createFromCsv(
@@ -86,13 +81,20 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      ext.outputChannel.append(l10n.t(`${'\n'}${'Issuance ID: {0}'}`, issuance.id))
+      ext.outputChannel.appendLine(
+        l10n.t('Issuance has been created and the offers were sent. Issuance ID: {0}', issuance.id),
+      )
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
     const parsedCsvUploadError = parseUploadError(error)
     if (parsedCsvUploadError) {
-      ext.outputChannel.append(`${'\n'}${JSON.stringify(parsedCsvUploadError, null, '\t')}`)
+      ext.outputChannel.appendLine(
+        l10n.t(
+          'Could not create issuance due to validation errors in the CSV file: {0}',
+          JSON.stringify(parsedCsvUploadError, null, 2),
+        ),
+      )
       ext.outputChannel.show()
     }
   }
