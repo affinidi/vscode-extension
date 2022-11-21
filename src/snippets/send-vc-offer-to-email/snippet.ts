@@ -1,14 +1,12 @@
 import { window, l10n } from 'vscode'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { iamHelper } from '../../features/iam/iamHelper'
+import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
-import { authHelper } from '../../auth/authHelper'
 import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
-import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -36,9 +34,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
   'sendVcOfferToEmail',
   implementations,
   async (input) => {
-    const consoleAuthToken = await authHelper.getConsoleAuthToken()
-
-    const projectId = input?.projectId ?? (await iamHelper.askForProjectId({ consoleAuthToken }))
+    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
     if (!projectId) {
       return undefined
     }
@@ -46,7 +42,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await requireProjectSummary(projectId, { consoleAuthToken })
+    } = iamHelpers.requireProjectSummary(projectId)
 
     const schema =
       input?.schema ??

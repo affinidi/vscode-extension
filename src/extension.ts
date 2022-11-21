@@ -212,7 +212,11 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   commands.registerCommand('affinidiExplorer.viewProperties', (element: AffResourceTreeItem) => {
-    viewProperties(element.resourceType, element.metadata)
+    viewProperties({
+      resourceType: element.resourceType,
+      resourceInfo: element.metadata,
+      projectId: element.projectId,
+    })
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
