@@ -3,7 +3,7 @@ import { l10n } from 'vscode'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { iamClient } from './iamClient'
 
-export async function askForProjectId(options: Options): Promise<string | undefined> {
+async function askForProjectId(options: Options): Promise<string | undefined> {
   const { projects } = await iamClient.listProjects(options)
 
   if (projects.length === 0) {
@@ -19,4 +19,8 @@ export async function askForProjectId(options: Options): Promise<string | undefi
   }
 
   return project?.projectId
+}
+
+export const iamHelper = {
+  askForProjectId,
 }

@@ -13,7 +13,6 @@ export const DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE = l10n.t(
   'Directory with this name already exist.',
 )
 export const APP_SUCCESSFULLY_CREATED_MESSAGE = l10n.t('App successfully generated.')
-
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
 }
@@ -52,6 +51,10 @@ export class CliHelper {
     }
 
     return isInstalled
+  }
+
+  async setActiveProject(projectId: string) {
+    await this.exec.command(`affinidi use project ${projectId}`)
   }
 
   async generateApp({ path }: { path: string }): Promise<void> {
