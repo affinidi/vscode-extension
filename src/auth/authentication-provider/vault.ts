@@ -1,76 +1,48 @@
 import Conf from 'conf'
+import { Unsubscribe, OnDidChangeCallback, OnDidAnyChangeCallback } from 'conf/dist/source/types'
 import * as os from 'os'
 import * as path from 'path'
 
 export const SESSION_KEY_NAME = 'session'
 
-const doNothing = () => {}
-
-interface IVaultSetterGetter {
-  clear: () => void
-  delete: (key: string) => void
-  get(key: string): string | null
-  set(key: string, value: string): void
-}
-
 class VaultService {
-  private readonly storer: IVaultSetterGetter
+  private readonly store: Conf
 
-  constructor(storer: IVaultSetterGetter) {
-    this.storer = storer
+  constructor(store: Conf) {
+    this.store = store
   }
 
   public clear = (): void => {
-    this.storer.clear()
+    this.store.clear()
   }
 
   public delete = (key: string): void => {
-    this.storer.delete(key)
+    this.store.delete(key)
   }
 
   public get = (key: string): string | null => {
-    const value = this.storer.get(key)
+    const value = this.store.get(key)
     return typeof value === 'string' ? value : null
   }
 
   public set = (key: string, value: string): void => {
-    this.storer.set(key, value)
+    this.store.set(key, value)
   }
-}
 
-const testStore = new Map()
-const testStorer: IVaultSetterGetter = {
-  clear: doNothing,
-  delete: (key: string): void => {
-    testStore.delete(key)
-  },
-  get: (key: string): string | null => {
-    const value = testStore.get(key)
-    return typeof value === 'string' ? value : null
-  },
-  set: (key: string, value: string): void => {
-    testStore.set(key, value)
-  },
+  public onDidChange = (key: string, callback: OnDidChangeCallback<unknown>): Unsubscribe => {
+    return this.store.onDidChange(key, callback)
+  }
+
+  public onDidAnyChange = (
+    callback: OnDidAnyChangeCallback<Record<string, unknown>>,
+  ): Unsubscribe => {
+    return this.store.onDidAnyChange(callback)
+  }
 }
 
 const credentialConf = new Conf({
   cwd: path.join(os.homedir(), '.affinidi', 'credentials'),
+  watch: true,
 })
 
-const storer: IVaultSetterGetter = {
-  clear: (): void => {
-    credentialConf.clear()
-  },
-  delete: (key: string): void => {
-    credentialConf.delete(key)
-  },
-  get: (key: string): string | null => {
-    const value = credentialConf.get(key)
-    return typeof value === 'string' ? value : null
-  },
-  set: (key: string, value: string): void => {
-    credentialConf.set(key, value)
-  },
-}
-
-export const vaultService = new VaultService(process.env.NODE_ENV === 'test' ? testStorer : storer)
+export const vaultService = new VaultService(credentialConf)
