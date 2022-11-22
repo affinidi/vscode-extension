@@ -1,85 +1,9 @@
-// // import { VcJsonSchema } from './vc-json-schema'
-// import { JsonSchema } from './json-schema.dto'
-
-// function assertUnreachableVerificationMethod(val: never): never {
-//   throw new Error(`unexpected verification method: '${val}'`)
-// }
-
-// export type VerificationMethod = 'email'
-
-// export type EmptyJson = {
-//   path: string[]
-//   type: 'string' | 'number' | 'integer' | 'boolean'
-//   format?: string
-//   required: boolean
-// }
-
-// export type FileColumns = {
-//   verificationTargetColumn: EmptyJson
-//   credentialSubjectColumns: EmptyJson[]
-// }
-
-// export function columnsToObject(initial: EmptyJson): EmptyJson[] {
-//   const columns: EmptyJson[] = []
-//   const work: { schema: EmptyJson; path: string[]; requiredFromParent: boolean }[] = [
-//     { schema: initial, path: [], requiredFromParent: false },
-//   ]
-
-//   // TODO: add limitation on how long this for loop can go. maybe open to ddos.
-//   while (work.length > 0) {
-//     const { schema, path, requiredFromParent } = work.shift()
-
-//     switch (schema.type) {
-//       case 'object':
-//         Object.entries(schema.properties).forEach(([key, value]) => {
-//           work.push({
-//             schema: value,
-//             path: [...path, key],
-//             requiredFromParent: Array.isArray(schema.required) && schema.required.includes(key),
-//           })
-//         })
-//         break
-//       case 'string':
-//       case 'number':
-//       case 'integer':
-//       case 'boolean':
-//       case 'unknown':
-//         columns.push({
-//           path,
-//           type: schema.type,
-//           format: schema.format,
-//           required: requiredFromParent || schema.required === true,
-//         })
-//         break
-//       default:
-//     }
-//   }
-
-//   return columns
-// }
-
-// function offerVerificationMethodColumnsToObjectSpec(method: VerificationMethod): EmptyJson {
-//   switch (method) {
-//     case 'email':
-//       return { path: ['@target', 'email'], type: 'string', format: 'email', required: true }
-//     default:
-//       return assertUnreachableVerificationMethod(method)
-//   }
-// }
-
-// export function generateColumnsToObjectSpecs(
-//   offerVerificationMethod: VerificationMethod,
-//   schema: EmptyJson,
-// ): FileColumns {
-//   return {
-//     verificationTargetColumn: offerVerificationMethodColumnsToObjectSpec(offerVerificationMethod),
-//     credentialSubjectColumns: columnsToObject(schema),
-//   }
-// }
-
 import { JsonSchema } from './json-schema.dto'
+import { VcJsonSchema } from './vc-json-schema'
 
-export type VerificationMethod = 'email'
+function assertUnreachableVerificationMethod(val: never): never {
+  throw new Error(`unexpected verification method: '${val}'`)
+}
 
 export type EmptyJson = {
   path: string[]
@@ -88,12 +12,23 @@ export type EmptyJson = {
   required: boolean
 }
 
-export function columnsToObject(initial: JsonSchema): EmptyJson[] {
-  const work: { schema: JsonSchema; path: string[] }[] = [{ schema: initial, path: [] }]
+export type FileColumns = {
+  verificationTargetColumn: EmptyJson
+  credentialSubjectColumns: EmptyJson[]
+}
+
+type VerificationMethod = 'email'
+
+function jsonSchemaToEmptyJsonColumnSpecs(initial: JsonSchema): EmptyJson[] {
+  const CSV_NESTED_OBJ_DELIMITER = '.'
+  const columns: EmptyJson[] = []
+  const work: { schema: JsonSchema; path: string[]; requiredFromParent: boolean }[] = [
+    { schema: initial, path: [], requiredFromParent: false },
+  ]
 
   // TODO: add limitation on how long this for loop can go. maybe open to ddos.
   while (work.length > 0) {
-    const { schema, path } = work.shift()
+    const { schema, path, requiredFromParent } = work.shift()
 
     switch (schema.type) {
       case 'object':
@@ -105,10 +40,45 @@ export function columnsToObject(initial: JsonSchema): EmptyJson[] {
           })
         })
         break
-
+      case 'string':
+      case 'number':
+      case 'integer':
+      case 'boolean':
+        columns.push({
+          path,
+          type: schema.type,
+          format: schema.format,
+          required: requiredFromParent || schema.required === true,
+        })
+        break
       default:
+        throw new Error(
+          `type '${schema.type}' not supported for CSV path at path: '${[
+            'credentialSubject',
+            ...path,
+          ].join(CSV_NESTED_OBJ_DELIMITER)}'`,
+        )
     }
   }
 
-  return work
+  return columns
+}
+
+function offerVerificationMethodToJsonColumnSpec(method: VerificationMethod): EmptyJson {
+  switch (method) {
+    case 'email':
+      return { path: ['@target', 'email'], type: 'string', format: 'email', required: true }
+    default:
+      return assertUnreachableVerificationMethod(method)
+  }
+}
+
+export function generateEmptyJsonColumnSpecs(
+  offerVerificationMethod: VerificationMethod,
+  schema: VcJsonSchema,
+): FileColumns {
+  return {
+    verificationTargetColumn: offerVerificationMethodToJsonColumnSpec(offerVerificationMethod),
+    credentialSubjectColumns: jsonSchemaToEmptyJsonColumnSpecs(schema.getCredentialSubjectSchema()),
+  }
 }
