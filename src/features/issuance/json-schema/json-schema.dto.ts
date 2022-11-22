@@ -1,10 +1,7 @@
 import { Schema } from 'jsonschema'
+import { AnyObject } from '../../../shared/shared.dto'
 
 export type JsonSchema = Schema
-
-interface AnyObject {
-  [key: string]: unknown
-}
 
 export type ValidationResult =
   | { valid: true; instance: AnyObject }

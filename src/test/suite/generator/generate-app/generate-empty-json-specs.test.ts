@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { generateEmptyJsonColumnSpecs } from '../../../../features/issuance/json-schema/generate-empty-json-specs'
+import { generateSampleFromJsonSchema } from '../../../../features/issuance/json-schema/columnsToObject'
 
 describe('generate Empty JSON object', () => {
   const credentialSubject = [
@@ -10,7 +10,7 @@ describe('generate Empty JSON object', () => {
   ]
 
   it.only('should convert columns to object', () => {
-    return expect(generateEmptyJsonColumnSpecs(credentialSubject)).to.eq({
+    return expect(generateSampleFromJsonSchema(credentialSubject)).to.eq({
       name: {
         firstName: '',
         lastName: '',

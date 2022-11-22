@@ -3,6 +3,7 @@ import { window, workspace } from 'vscode'
 import fetch from 'node-fetch'
 import { iamHelpers } from '../../iam/iamHelpers'
 import { schemaManagerHelper } from '../../schema-manager/schemaManagerHelper'
+import { generateSampleFromJsonSchema } from './columnsToObject'
 
 const getSummary = async () => {
   const projectId = await iamHelpers.askForProjectId()
@@ -30,13 +31,13 @@ export const downloadSchemaFile = async (options: Options) => {
 
   const schema = await schemaManagerHelper.askForMySchema({ did: summary?.did }, options)
 
-  const downloadableSchemaObject = await fetch(`${schema?.jsonSchemaUrl}`)
-    .then((res) => res.json())
-    .then((out) => {
-      const { credentialSubject } = out.properties
-      return credentialSubject
-    })
-    .catch((err) => console.error(err))
+  const downloadableSchemaObject = generateSampleFromJsonSchema(schema?.jsonSchemaUrl)
+
+  // const downloadableSchemaObject = await fetch(`${schema?.jsonSchemaUrl}`)
+  //   .then((res) => {
+  //     return res.json()
+  //   })
+  //   .catch((err) => console.error(err))
 
   return window.showTextDocument(
     await workspace.openTextDocument({
