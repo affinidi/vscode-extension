@@ -23,6 +23,7 @@ jobs:
         run: npm install
         env:
           NODE_AUTH_TOKEN: ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
+          NPM_TOKEN: ${{ secrets.PUBLIC_NPM_NODE_AUTH_TOKEN }}
       - run: xvfb-run -a npm test
         if: runner.os == 'Linux'
       - run: npm test
