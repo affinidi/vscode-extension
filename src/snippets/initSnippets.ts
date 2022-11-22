@@ -5,7 +5,7 @@ import {
   EventSubCategory,
   sendEventToAnalytics,
 } from '../services/analyticsStreamApiService'
-import { AffResourceTreeItem } from '../treeView/treeItem'
+import { ExplorerTreeItem } from '../tree/explorerTreeItem'
 import { insertGetIssuanceOffersSnippet } from './get-issuance-offers/snippet'
 import { insertSendVcOfferToEmailSnippet } from './send-vc-offer-to-email/snippet'
 import { insertSignVcWithCloudWalletSnippet } from './sign-vc-with-cloud-wallet/snippet'
@@ -14,7 +14,7 @@ export const initSnippets = () => {
   ext.context.subscriptions.push(
     commands.registerCommand(
       'affinidi.codegen.sendVcOfferToEmail',
-      async (element?: AffResourceTreeItem) => {
+      async (element?: ExplorerTreeItem) => {
         await insertSendVcOfferToEmailSnippet({
           projectId: element?.projectId,
           schema: element?.metadata,
@@ -36,7 +36,7 @@ export const initSnippets = () => {
   ext.context.subscriptions.push(
     commands.registerCommand(
       'affinidi.codegen.getIssuanceOffers',
-      async (element?: AffResourceTreeItem) => {
+      async (element?: ExplorerTreeItem) => {
         await insertGetIssuanceOffersSnippet({
           projectId: element?.projectId,
           issuanceId: element?.metadata.id,

@@ -1,6 +1,5 @@
 import { Webview, Uri } from 'vscode'
-// import { SchemaEntity } from "../services/schemaManagerService";
-import { AffResourceTreeItem } from '../treeView/treeItem'
+import { ExplorerTreeItem } from '../tree/explorerTreeItem'
 import { getUri } from './getUri'
 
 /**
@@ -15,7 +14,7 @@ import { getUri } from './getUri'
  * @returns A template string literal containing the HTML that should be
  * rendered within the webview panel
  */
-export function getWebviewContent(webview: Webview, extensionUri: Uri, item: AffResourceTreeItem) {
+export function getWebviewContent(webview: Webview, extensionUri: Uri, item: ExplorerTreeItem) {
   const toolkitUri = getUri(webview, extensionUri, [
     'node_modules',
     '@vscode',

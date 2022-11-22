@@ -14,11 +14,9 @@ import {
 } from 'vscode'
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { SchemaDto } from '@affinidi/client-schema-manager'
-import { AffinidiExplorerProvider } from './treeView/affinidiExplorerProvider'
 import { AffinidiCodeGenProvider } from './treeView/affinidiCodeGenProvider'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
-import { AffResourceTreeItem } from './treeView/treeItem'
 import { viewProperties, viewSchemaContent } from './services/viewDataService'
 import { getWebviewContent } from './ui/getWebviewContent'
 import { initSnippets } from './snippets/initSnippets'
@@ -36,6 +34,13 @@ import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { schemaManagerClient } from './features/schema-manager/schemaManagerClient'
 import { logger } from './utils/logger'
+import { ExplorerTree } from './tree/explorerTree'
+import { AuthExplorerProvider } from './auth/authExplorerProvider'
+import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
+import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerProvider'
+import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
+import { ExplorerTreeItem } from './tree/explorerTreeItem'
+import { projectsState } from './states/projectsState'
 import { createSchema } from './features/schema-manager/commands/createSchema'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
@@ -49,14 +54,21 @@ export async function activateInternal(context: ExtensionContext) {
   ext.outputChannel = window.createOutputChannel('Affinidi')
   ext.authProvider = initAuthentication()
 
+  projectsState.clear()
+
   initSnippets()
   initGenerators()
 
-  const affExplorerTreeProvider = new AffinidiExplorerProvider()
+  const explorerTree = new ExplorerTree([
+    new AuthExplorerProvider(),
+    new IamExplorerProvider(),
+    new IssuanceExplorerProvider(),
+    new SchemaManagerExplorerProvider(),
+  ])
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {
-    treeDataProvider: affExplorerTreeProvider,
+    treeDataProvider: explorerTree,
     canSelectMany: false,
     showCollapseAll: true,
   })
@@ -67,8 +79,8 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  commands.registerCommand('affinidiExplorer.refresh', (element: AffResourceTreeItem) => {
-    affExplorerTreeProvider.refresh()
+  commands.registerCommand('affinidiExplorer.refresh', (element: ExplorerTreeItem) => {
+    explorerTree.refresh()
 
     let resourceType = ExplorerResourceTypes[ExplorerResourceTypes.project]
     if (
@@ -152,7 +164,7 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.openMarkDown', async (element: AffResourceTreeItem) => {
+    commands.registerCommand('affinidi.openMarkDown', async (element: ExplorerTreeItem) => {
       const uri: Uri = Uri.file(
         path.join(context.extensionPath, `${await viewMarkdown(element.resourceType)}`),
       )
@@ -173,7 +185,7 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.copyJsonURL', async (element: AffResourceTreeItem) => {
+    commands.registerCommand('affinidi.copyJsonURL', async (element: ExplorerTreeItem) => {
       const schema = await schemaManagerClient.getSchema(element.metadata.id as string)
       if (!schema) {
         return
@@ -193,7 +205,7 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.copyJsonLdURL', async (element: AffResourceTreeItem) => {
+    commands.registerCommand('affinidi.copyJsonLdURL', async (element: ExplorerTreeItem) => {
       const schema = await schemaManagerClient.getSchema(element.metadata.id as string)
       if (!schema) {
         return
@@ -212,7 +224,7 @@ export async function activateInternal(context: ExtensionContext) {
     }),
   )
 
-  commands.registerCommand('affinidiExplorer.viewProperties', (element: AffResourceTreeItem) => {
+  commands.registerCommand('affinidiExplorer.viewProperties', (element: ExplorerTreeItem) => {
     viewProperties({
       resourceType: element.resourceType,
       resourceInfo: element.metadata,
@@ -233,7 +245,7 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand(
       'affinidiExplorer.initiateIssuanceCsvFlow',
-      async (element: AffResourceTreeItem) => {
+      async (element: ExplorerTreeItem) => {
         const { projectId } = element
         if (!projectId) return
 
@@ -256,7 +268,7 @@ export async function activateInternal(context: ExtensionContext) {
     ),
   )
 
-  commands.registerCommand('affinidiExplorer.showJsonSchema', (element: AffResourceTreeItem) => {
+  commands.registerCommand('affinidiExplorer.showJsonSchema', (element: ExplorerTreeItem) => {
     viewSchemaContent(element.metadata.id, element.metadata.jsonSchemaUrl)
 
     sendEventToAnalytics({
@@ -269,25 +281,22 @@ export async function activateInternal(context: ExtensionContext) {
     })
   })
 
-  commands.registerCommand(
-    'affinidiExplorer.openCreateSchemaUrl',
-    (element: AffResourceTreeItem) => {
-      const createSchemaURL = buildURL(CONSOLE_URL, '/schema-manager/builder')
+  commands.registerCommand('affinidiExplorer.openCreateSchemaUrl', (element: ExplorerTreeItem) => {
+    const createSchemaURL = buildURL(CONSOLE_URL, '/schema-manager/builder')
 
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: EventSubCategory.command,
-        metadata: {
-          commandId: 'affinidiExplorer.openCreateSchemaUrl',
-          projectId: element?.projectId,
-        },
-      })
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: EventSubCategory.command,
+      metadata: {
+        commandId: 'affinidiExplorer.openCreateSchemaUrl',
+        projectId: element?.projectId,
+      },
+    })
 
-      commands.executeCommand('vscode.open', createSchemaURL)
-    },
-  )
+    commands.executeCommand('vscode.open', createSchemaURL)
+  })
 
-  commands.registerCommand('affinidiExplorer.createIssuance', (element: AffResourceTreeItem) => {
+  commands.registerCommand('affinidiExplorer.createIssuance', (element: ExplorerTreeItem) => {
     const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
       schemaUrl: element.metadata.jsonSchemaUrl,
     })
@@ -304,7 +313,7 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand('vscode.open', createIssuanceURL)
   })
 
-  commands.registerCommand('affinidiExplorer.showJsonLdContext', (element: AffResourceTreeItem) => {
+  commands.registerCommand('affinidiExplorer.showJsonLdContext', (element: ExplorerTreeItem) => {
     viewSchemaContent(element.metadata.id, element.metadata.jsonLdContextUrl, '.jsonld')
 
     sendEventToAnalytics({
@@ -321,7 +330,7 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand('affinidi.createProject', async () => {
       const result = await createProjectProcess()
 
-      affExplorerTreeProvider.refresh()
+      explorerTree.refresh()
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
