@@ -72,7 +72,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
           projectId: parent?.projectId,
           command: {
             title: l10n.t('Open schema details'),
-            command: 'schema.viewSchemaDetails',
+            command: 'schema.showSchemaDetails',
           },
         }),
     )
