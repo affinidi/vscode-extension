@@ -23,7 +23,7 @@ jobs:
           //gitlab.com/api/v4/packages/npm/:_authToken=$NPM_TOKEN
           always-auth=true" > .npmrc
         env:
-          NPM_TOKEN: 123
+          NPM_TOKEN:  ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
       - name: Install npm v8
         run: npm install -g npm@8
       - name: Install dependencies
