@@ -20,7 +20,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm install
         env:
-            NODE_AUTH_TOKEN: ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
       - run: xvfb-run -a npm test
         if: runner.os == 'Linux'
       - run: npm test
