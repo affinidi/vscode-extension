@@ -40,12 +40,12 @@
     "onCommand:affinidiDevTools.issueCredential",
     "onCommand:affinidiExplorer.createIssuance",
     "onCommand:affinidiExplorer.createSchema",
+    "onCommand:affinidiExplorer.openCreateSchemaUrl",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
     "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
-    "onCommand:affinidi.createSchemaInVsCode",
     "onStartupFinished",
     "onView:affinidiCodeGeneration",
     "onView:affinidiDevTools",
@@ -150,6 +150,11 @@
         "category": "%commands.category.explorer%"
       },
       {
+        "command": "affinidiExplorer.openCreateSchemaUrl",
+        "title": "%affinidiExplorer.openCreateSchemaUrl%",
+        "category": "%commands.category.explorer%"
+      },
+      {
         "command": "affinidiExplorer.createSchema",
         "title": "%affinidiExplorer.createSchema%",
         "category": "%commands.category.explorer%"
@@ -178,11 +183,6 @@
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
         "category": "%commands.category.explorer%"
-      },
-      {
-        "command": "affinidi.createSchemaInVsCode",
-        "title": "Create schema in vs code",
-        "category": "Affinidi"
       }
     ],
     "menus": {
@@ -217,6 +217,10 @@
         },
         {
           "command": "affinidiExplorer.showJsonLdContext",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.openCreateSchemaUrl",
           "when": "never"
         },
         {
@@ -266,7 +270,7 @@
           "group": "6_copypath"
         },
         {
-          "command": "affinidiExplorer.createSchema",
+          "command": "affinidiExplorer.openCreateSchemaUrl",
           "when": "view == affinidiExplorer && viewItem == rootSchemas",
           "group": "z_commands"
         },
