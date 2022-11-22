@@ -1,5 +1,4 @@
 import { Webview, Uri } from 'vscode'
-import { ExplorerTreeItem } from '../tree/explorerTreeItem'
 import { schemasState } from '../states/schemasState'
 import { getUri } from './getUri'
 

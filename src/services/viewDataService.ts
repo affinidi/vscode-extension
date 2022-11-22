@@ -1,4 +1,8 @@
+import { ProjectSummary } from '@affinidi/client-iam'
+import { IssuanceDto } from '@affinidi/client-issuance'
+import { SchemaDto } from '@affinidi/client-schema-manager'
 import fetch from 'node-fetch'
+import { issuancesState } from '../states/issuancesState'
 import { projectsState } from '../states/projectsState'
 import { schemasState } from '../states/schemasState'
 import { ExplorerResourceTypes } from '../treeView/treeTypes'
@@ -6,20 +10,20 @@ import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
 type ViewPropertiesProps = {
   resourceType: ExplorerResourceTypes
-  resourceInfo: any
+  issuanceId?: string
   projectId?: string
   schemaId?: string
 }
 
 export const viewProperties = async ({
   resourceType,
-  resourceInfo,
+  issuanceId,
   projectId,
   schemaId,
 }: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
-  let content: any
+  let content: ProjectSummary | SchemaDto | IssuanceDto
   switch (resourceType) {
     case ExplorerResourceTypes.project: {
       const projectSummary = projectsState.getProjectById(projectId)
@@ -37,11 +41,13 @@ export const viewProperties = async ({
       break
     }
 
-    case ExplorerResourceTypes.issuance:
-      content = resourceInfo
-      label = resourceInfo.id
-      id = resourceInfo.id
+    case ExplorerResourceTypes.issuance: {
+      const issuance = issuancesState.getIssuanceById(issuanceId)
+      content = issuance
+      label = issuance.id
+      id = issuance.id
       break
+    }
 
     default:
       throw new Error(`Unexpected resource type: ${resourceType}`)

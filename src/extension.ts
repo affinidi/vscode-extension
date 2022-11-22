@@ -12,7 +12,6 @@ import {
   WebviewPanel,
   l10n,
 } from 'vscode'
-import { IssuanceDto } from '@affinidi/client-issuance'
 import { AffinidiCodeGenProvider } from './treeView/affinidiCodeGenProvider'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
@@ -39,12 +38,10 @@ import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerPr
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
 import { projectsState } from './states/projectsState'
-<<<<<<< HEAD
 import { schemaManagerHelper } from './features/schema-manager/schemaManagerHelper'
 import { iamHelpers } from './features/iam/iamHelpers'
-=======
 import { schemasState } from './states/schemasState'
->>>>>>> 6c3964f (feat: [FTL-8015] - Moved schemas data to state)
+import { issuancesState } from './states/issuancesState'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -59,6 +56,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   projectsState.clear()
   schemasState.clear()
+  issuancesState.clear()
 
   initSnippets()
   initGenerators()
@@ -234,7 +232,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidiExplorer.viewProperties', (element: ExplorerTreeItem) => {
     viewProperties({
       resourceType: element.resourceType,
-      resourceInfo: element.metadata,
+      issuanceId: element.issuanceId,
       projectId: element.projectId,
       schemaId: element.schemaId,
     })
@@ -261,7 +259,7 @@ export async function activateInternal(context: ExtensionContext) {
           const schema = schemasState.getSchemaById(element.schemaId)
           await initiateIssuanceCsvFlow({ projectId, schema })
         } else if (element.resourceType === ExplorerResourceTypes.issuance) {
-          const issuance: IssuanceDto = element.metadata
+          const issuance = issuancesState.getIssuanceById(element.issuanceId)
           await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
         }
 

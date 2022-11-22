@@ -1,4 +1,8 @@
 /* eslint-disable max-classes-per-file, no-underscore-dangle */
+import { ProjectSummary } from '@affinidi/client-iam'
+import { IssuanceDto } from '@affinidi/client-issuance'
+import { SchemaDto } from '@affinidi/client-schema-manager'
+import { UserManagementClient } from '@affinidi/client-user-management'
 import {
   Event,
   EventEmitter,
@@ -106,6 +110,13 @@ interface Item {
   id: string
 }
 
+type UserDto = {
+  tenantIds?: string
+  role?: string
+  userId: string
+  username: string
+}
+
 export async function openReadOnlyContent({
   node,
   content,
@@ -113,8 +124,12 @@ export async function openReadOnlyContent({
   options,
 }: {
   node: Item
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: any
+  content:
+    | ProjectSummary
+    | SchemaDto
+    | IssuanceDto
+    // eslint-disable-next-line no-undef
+    | Awaited<ReturnType<UserManagementClient['me']>>
   fileExtension?: string
   options?: TextDocumentShowOptions
 }): Promise<ReadOnlyContent> {

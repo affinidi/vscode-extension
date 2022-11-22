@@ -42,7 +42,7 @@ export const initSnippets = () => {
       async (element?: ExplorerTreeItem) => {
         await insertGetIssuanceOffersSnippet({
           projectId: element?.projectId,
-          issuanceId: element?.metadata.id,
+          issuanceId: element?.issuanceId,
         })
 
         sendEventToAnalytics({
@@ -51,7 +51,7 @@ export const initSnippets = () => {
           metadata: {
             commandId: 'affinidi.codegen.getIssuanceOffers',
             projectId: element?.projectId,
-            issuanceId: element?.metadata.id,
+            issuanceId: element?.issuanceId,
           },
         })
       },
