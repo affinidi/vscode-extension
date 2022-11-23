@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - FTL-8017
+jobs:
+  test:
+    name: Test
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: NPM token
+        run: |
+          echo "@affinidi:registry=https://gitlab.com/api/v4/packages/npm/
+          //gitlab.com/api/v4/packages/npm/:_authToken=$NPM_TOKEN
+          always-auth=true" > .npmrc
+        env:
+          NPM_TOKEN:  ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
+      - name: Install dependencies
+        run: npm install
+      - run: xvfb-run -a npm test
+        if: runner.os == 'Linux'
+      - run: npm test
+        if: runner.os != 'Linux'
