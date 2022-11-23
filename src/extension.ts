@@ -41,7 +41,7 @@ import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerPr
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
 import { projectsState } from './states/projectsState'
-import { createSchema } from './features/schema-manager/commands/createSchema'
+import { openSchemaBuilder } from './features/schema-manager/commands/openSchemaBuilder'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -357,7 +357,7 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand('vscode.open', issueCredentialURL)
   })
 
-  commands.registerCommand('affinidiExplorer.createSchema', createSchema)
+  commands.registerCommand('affinidiExplorer.createSchema', openSchemaBuilder)
 
   askUserForTelemetryConsent()
 
