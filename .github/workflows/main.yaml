@@ -22,7 +22,7 @@ jobs:
           //gitlab.com/api/v4/packages/npm/:_authToken=$NPM_TOKEN
           always-auth=true" > .npmrc
         env:
-          NPM_TOKEN:  ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
+          NPM_TOKEN:  ${{secrets.NPM_TOKEN}}
       - name: Install dependencies
         run: npm install
       - run: xvfb-run -a npm test
