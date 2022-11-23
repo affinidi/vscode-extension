@@ -17,6 +17,7 @@ export async function run(): Promise<void> {
   const mocha = new Mocha({
     ui: 'bdd',
     color: true,
+    timeout: 6000,
   })
 
   return new Promise((resolve, reject) => {
