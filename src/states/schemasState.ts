@@ -1,5 +1,4 @@
 import { SchemaDto } from '@affinidi/client-schema-manager'
-import { l10n } from 'vscode'
 
 import { ext } from '../extensionVariables'
 
@@ -9,17 +8,9 @@ const getSchemas = (): SchemaDto[] | undefined => {
   return ext.context.globalState.get(STORAGE_KEY)
 }
 
-const getSchemaById = (id?: string) => {
-  if (!id) {
-    throw new Error(l10n.t('Schema ID is not provided'))
-  }
-
+const getSchemaById = (id?: string): SchemaDto | undefined => {
   const schemas = getSchemas()
   const selectedSchema = schemas?.find((schema) => schema?.id === id)
-
-  if (!selectedSchema) {
-    throw new Error(l10n.t('Schema does not exist.'))
-  }
 
   return selectedSchema
 }

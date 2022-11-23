@@ -18,7 +18,7 @@ async function askForMySchema(
   },
   options: Options,
 ): Promise<Schema | undefined> {
-  const { schemas } = await window.withProgress(
+  const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: l10n.t('Fetching available schemas...'),

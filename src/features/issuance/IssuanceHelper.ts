@@ -2,17 +2,17 @@ import { window, ProgressLocation, l10n } from 'vscode'
 import { Options } from '@affinidi/client-issuance'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { formatIssuanceName } from './formatIssuanceName'
-import { issuanceClient } from './issuanceClient'
+import { getIssuances } from './getIssuances'
 
 type Input = { projectId: string }
 
 async function askForIssuanceId(input: Input, options: Options): Promise<string | undefined> {
-  const { issuances } = await window.withProgress(
+  const issuances = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: l10n.t('Fetching available issuances...'),
     },
-    () => issuanceClient.searchIssuances({ projectId: input.projectId }, options),
+    () => getIssuances(input.projectId, options),
   )
 
   if (issuances.length === 0) {

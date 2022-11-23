@@ -257,10 +257,16 @@ export async function activateInternal(context: ExtensionContext) {
 
         if (element.resourceType === ExplorerResourceTypes.schema) {
           const schema = schemasState.getSchemaById(element.schemaId)
-          await initiateIssuanceCsvFlow({ projectId, schema })
+
+          if (schema) {
+            await initiateIssuanceCsvFlow({ projectId, schema })
+          }
         } else if (element.resourceType === ExplorerResourceTypes.issuance) {
           const issuance = issuancesState.getIssuanceById(element.issuanceId)
-          await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+
+          if (issuance) {
+            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+          }
         }
 
         sendEventToAnalytics({
@@ -277,7 +283,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidiExplorer.showJsonSchema', (element: ExplorerTreeItem) => {
     const schema = schemasState.getSchemaById(element.schemaId)
 
-    if (element.schemaId) {
+    if (element.schemaId && schema) {
       viewSchemaContent(element.schemaId, schema.jsonSchemaUrl)
 
       sendEventToAnalytics({
@@ -308,20 +314,23 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand('affinidiExplorer.createIssuance', (element: ExplorerTreeItem) => {
     const schema = schemasState.getSchemaById(element.schemaId)
-    const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
-      schemaUrl: schema.jsonSchemaUrl,
-    })
 
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiExplorer.createIssuance',
-        projectId: element.projectId,
-      },
-    })
+    if (schema) {
+      const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
+        schemaUrl: schema.jsonSchemaUrl,
+      })
 
-    commands.executeCommand('vscode.open', createIssuanceURL)
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.createIssuance',
+          projectId: element.projectId,
+        },
+      })
+
+      commands.executeCommand('vscode.open', createIssuanceURL)
+    }
   })
 
   commands.registerCommand(
