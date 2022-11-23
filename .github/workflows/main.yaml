@@ -1,13 +1,13 @@
 on:
   push:
     branches:
-      - FTL-8017
+      - main
 jobs:
   test:
     name: Test
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
