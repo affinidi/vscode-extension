@@ -437,12 +437,10 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@affinidi/affinity-common-backend": "^2.24.1",
     "@affinidi/client-iam": "^0.3.1",
     "@affinidi/client-issuance": "^0.4.0",
     "@affinidi/client-schema-manager": "^0.3.1",
     "@affinidi/client-user-management": "^0.3.2",
-    "@affinidi/common-auth": "^2.0.0",
     "@vscode/l10n": "^0.0.10",
     "@vscode/test-electron": "^2.1.5",
     "@vscode/webview-ui-toolkit": "^1.1.0",
@@ -450,7 +448,6 @@
     "date-fns": "^2.29.3",
     "execa": "^5.1.1",
     "form-data": "^4.0.0",
-    "inversify": "^6.0.1",
     "jsonschema": "^1.4.1",
     "jsonwebtoken": "^8.5.1",
     "lru-cache": "^7.14.1",

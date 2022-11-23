@@ -1,10 +1,9 @@
 import { Schema } from 'jsonschema'
-import { AnyObject } from '../../../shared/shared.dto'
 
 export type JsonSchema = Schema
 
 export type ValidationResult =
-  | { valid: true; instance: AnyObject }
+  | { valid: true; instance: any }
   | { valid: false; errors: { field: string; name: string; message: string }[] }
 
 export type VcJsonSchemaType = {

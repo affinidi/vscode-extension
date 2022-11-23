@@ -30,8 +30,11 @@ export const downloadSchemaFile = async (options: Options) => {
   }
 
   const schema = await schemaManagerHelper.askForMySchema({ did: summary?.did }, options)
+  if (!schema) {
+    return undefined
+  }
 
-  const downloadableSchemaObject = generateSampleFromJsonSchema(schema?.jsonSchemaUrl)
+  const downloadableSchemaObject = generateSampleFromJsonSchema(schema.jsonSchemaUrl)
 
   // const downloadableSchemaObject = await fetch(`${schema?.jsonSchemaUrl}`)
   //   .then((res) => {

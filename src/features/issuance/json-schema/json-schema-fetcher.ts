@@ -1,12 +1,9 @@
-import { injectable } from 'inversify'
 import fetch from 'node-fetch'
 import { validate } from 'jsonschema'
-import OperationError from '../../../OperationError'
 import { JsonSchema } from './json-schema.dto'
 import { DRAFT_07_SCHEMA, DRAFT_07_URL } from './json-schema-draft-07.schema'
 import { parseJsonSchemaUrl } from '../../../shared/parse-json-schema-url'
 
-@injectable()
 export class JsonSchemaFetcher {
   constructor(
     private readonly allowedDomains: string[],
@@ -36,7 +33,7 @@ export class JsonSchemaFetcher {
     $schema?: string
     $id?: string
   }): asserts jsonSchema is JsonSchema {
-    const schemaUrl = parseJsonSchemaUrl(jsonSchema.$schema)
+    const schemaUrl = parseJsonSchemaUrl(jsonSchema.$schema ?? '')
 
     if (
       schemaUrl.hostname !== DRAFT_07_URL.hostname ||
@@ -57,7 +54,7 @@ export class JsonSchemaFetcher {
       !this.allowedDomains.some((affinidiDomain) => url.hostname.endsWith(affinidiDomain)) ||
       !url.pathname.endsWith('.json')
     ) {
-      throw new OperationError('VIS-16')
+      throw new Error(`Invalid/unsafe URL: ${url}`)
     }
   }
 }

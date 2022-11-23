@@ -1,10 +1,8 @@
-import OperationError from '../OperationError'
-
 function isValidHttpUrl(str: string | undefined): boolean {
   let url
 
   try {
-    url = new URL(str)
+    url = new URL(str ?? '')
   } catch (_) {
     return false
   }
@@ -14,7 +12,7 @@ function isValidHttpUrl(str: string | undefined): boolean {
 
 export function parseJsonSchemaUrl(str: string): URL {
   if (!isValidHttpUrl(str)) {
-    throw new OperationError('VIS-16')
+    throw new Error(`Invalid JSON schema URL: ${str}`)
   }
 
   return new URL(str)

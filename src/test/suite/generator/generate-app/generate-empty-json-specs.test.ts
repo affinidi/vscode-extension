@@ -1,16 +1,17 @@
 import { expect } from 'chai'
-import { generateSampleFromJsonSchema } from '../../../../features/issuance/json-schema/columnsToObject'
+import { columnsToObject } from '../../../../features/issuance/json-schema/columnsToObject'
+import { ColumnSpec } from '../../../../features/issuance/json-schema/generate-empty-json-specs'
 
-describe('generate Empty JSON object', () => {
-  const credentialSubject = [
-    { path: ['name', 'firstName'], type: 'string' },
-    { path: ['name', 'lastName'], type: 'string' },
-    { path: ['age'], type: 'integer' },
-    { path: ['dateOfBirth'], type: 'unknown' },
+describe('columnsToObject()', () => {
+  const columns: ColumnSpec[] = [
+    { path: ['name', 'firstName'], type: 'string', required: false },
+    { path: ['name', 'lastName'], type: 'string', required: true },
+    { path: ['age'], type: 'integer', required: false },
+    { path: ['dateOfBirth'], type: 'unknown', required: false },
   ]
 
   it.only('should convert columns to object', () => {
-    return expect(generateSampleFromJsonSchema(credentialSubject)).to.eq({
+    return expect(columnsToObject(columns)).to.eq({
       name: {
         firstName: '',
         lastName: '',

@@ -1,29 +1,25 @@
 import { JsonSchema } from './json-schema.dto'
 import { VcJsonSchema } from './vc-json-schema'
 
-export type EmptyJson = {
+export type ColumnSpec = {
   path: string[]
-  type: 'string' | 'number' | 'integer' | 'boolean'
+  type: 'string' | 'number' | 'integer' | 'boolean' | 'unknown'
   format?: string
   required: boolean
 }
 
-export type FileColumns = {
-  credentialSubjectColumns: EmptyJson[]
-}
-
-function columnsToObject(initial: JsonSchema): EmptyJson[] {
-  const columns: EmptyJson[] = []
+function columnsToObject(initial: JsonSchema): ColumnSpec[] {
+  const columns: ColumnSpec[] = []
   const work: { schema: JsonSchema; path: string[]; requiredFromParent: boolean }[] = [
     { schema: initial, path: [], requiredFromParent: false },
   ]
   // TODO: add limitation on how long this for loop can go. maybe open to ddos.
   while (work.length > 0) {
-    const { schema, path, requiredFromParent } = work.shift()
+    const { schema, path, requiredFromParent } = work.shift()!
 
     switch (schema.type) {
       case 'object':
-        Object.entries(schema.properties).forEach(([key, value]) => {
+        Object.entries(schema.properties ?? {}).forEach(([key, value]) => {
           work.push({
             schema: value,
             path: [...path, key],
@@ -43,14 +39,18 @@ function columnsToObject(initial: JsonSchema): EmptyJson[] {
         })
         break
       default:
+        columns.push({
+          path,
+          type: 'unknown',
+          required: requiredFromParent || schema.required === true,
+        })
+        break
     }
   }
 
   return columns
 }
 
-export function generateColumnSpecs(schema: VcJsonSchema): FileColumns {
-  return {
-    credentialSubjectColumns: columnsToObject(schema.getCredentialSubjectSchema()),
-  }
+export function generateColumnSpecs(schema: VcJsonSchema): ColumnSpec[] {
+  return columnsToObject(schema.getCredentialSubjectSchema())
 }

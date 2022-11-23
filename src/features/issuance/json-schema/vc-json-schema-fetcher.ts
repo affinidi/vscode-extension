@@ -1,13 +1,11 @@
-import { inject, injectable } from 'inversify'
 import { validate } from 'jsonschema'
 import { JsonSchemaFetcher } from './json-schema-fetcher'
 import { JsonSchema, VcJsonSchemaType } from './json-schema.dto'
 import { VC_JSON_SCHEMA } from './vc-json-schema.schema'
 import { VcJsonSchema } from './vc-json-schema'
 
-@injectable()
 export class VcJsonSchemaFetcher {
-  constructor(@inject(JsonSchemaFetcher) private readonly jsonSchemaFetcher: JsonSchemaFetcher) {}
+  constructor(private readonly jsonSchemaFetcher: JsonSchemaFetcher) {}
 
   async fetch(url: URL): Promise<VcJsonSchema> {
     const schema = await this.jsonSchemaFetcher.fetch(url)
