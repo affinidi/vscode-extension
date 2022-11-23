@@ -28,7 +28,7 @@ export function columnsToObject(columns: ColumnSpec[]) {
     const field = column.path[column.path.length - 1]
     const target = createNestedTarget(result, column.path.slice(0, -1))
 
-    target[field] = 'empty'
+    target[field] = columns[0].type
   }
 
   return result
