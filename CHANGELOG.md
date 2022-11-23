@@ -1,6 +1,7 @@
 # 0.1.0 (2022-11-23)
 
 - chore(FTL-8146): updated readme
+- feat(FTL-8017): ci file added
 - fix: schema details command
 - feat(FTL-7906): Independent tree providers for features
 - feat: [FTL-8015] - Moved projects data to state
