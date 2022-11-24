@@ -28,7 +28,7 @@ jobs:
   build:
     name: Build
     needs: test
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -41,4 +41,4 @@ jobs:
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: build
-        run: npm esbuild
+        run: npm run esbuild
