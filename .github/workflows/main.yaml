@@ -19,8 +19,26 @@ jobs:
       - name: Install dependencies
         run: npm install
         env:
-          NPM_TOKEN:  ${{secrets.NPM_TOKEN}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: xvfb-run -a npm test
         if: runner.os == 'Linux'
       - run: npm test
         if: runner.os != 'Linux'
+
+  build:
+    name: Build
+    needs: test
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: build
+        run: npm esbuild

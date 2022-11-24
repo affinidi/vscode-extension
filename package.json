@@ -12,6 +12,21 @@
   "engines": {
     "vscode": "^1.73.0"
   },
+  "release": {
+    "branches": "main",
+    "verifyConditions": [
+      "@semantic-release/github"
+    ],
+    "publish": [
+      "@semantic-release/github"
+    ],
+    "success": [
+      "@semantic-release/github"
+    ],
+    "fail": [
+      "@semantic-release/github"
+    ]
+  },
   "categories": [
     "Snippets",
     "Other"
@@ -402,6 +417,7 @@
   "devDependencies": {
     "@affinidi/eslint-config": "^2.0.0-beta.0",
     "@affinidi/prettier-config": "^2.0.0-beta.0",
+    "@semantic-release/github": "^8.0.6",
     "@types/chai": "^4.3.3",
     "@types/chai-as-promised": "^7.1.5",
     "@types/deep-equal-in-any-order": "^1.0.1",
