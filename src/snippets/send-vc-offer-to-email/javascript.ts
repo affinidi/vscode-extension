@@ -56,13 +56,7 @@ const offerResponse = await fetch(\`${
   },
   body: JSON.stringify({
     // should match fields in VC Schema, specified in the Issuance template
-    credentialSubject: {
-      \${2:name: {
-        firstName: 'John',
-        lastName: 'Doe',
-      \\},
-      dateOfBirth: '1990-01-01'}
-    },
+    credentialSubject: ${JSON.stringify(input.credentialSubject, null, 4)},
     verification: {
       target: {
         email: email,

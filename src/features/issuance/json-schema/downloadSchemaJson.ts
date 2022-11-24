@@ -21,7 +21,7 @@ const getSummary = async () => {
   }
 }
 
-export const downloadSchemaFile = async (options: Options) => {
+export const downloadCredentialSubject = async (options: Options) => {
   const summary = await getSummary()
   if (!summary) {
     return undefined
@@ -32,10 +32,10 @@ export const downloadSchemaFile = async (options: Options) => {
     return undefined
   }
 
-  const downloadableSchemaObject = await generateSampleFromJsonSchema(schema.jsonSchemaUrl)
-  if (!downloadableSchemaObject) {
+  const downloadableCredentialObject = await generateSampleFromJsonSchema(schema.jsonSchemaUrl)
+  if (!downloadableCredentialObject) {
     return undefined
   }
 
-  return downloadableSchemaObject
+  return downloadableCredentialObject
 }

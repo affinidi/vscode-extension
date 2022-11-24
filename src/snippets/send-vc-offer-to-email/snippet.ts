@@ -7,6 +7,7 @@ import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
 import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
+import { downloadCredentialSubject } from '../../features/issuance/json-schema/downloadSchemaJson'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -15,6 +16,7 @@ export interface SnippetInput {
   issuerDid: string
   schema: Schema
   email?: string
+  credentialSubject?: object
 }
 
 export interface CommandInput {
@@ -57,6 +59,8 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
         prompt: l10n.t('Enter an email to send the VC offer to'),
       }))
 
+    const credentialSubject = await downloadCredentialSubject({ apiKeyHash })
+
     return {
       issuanceApiUrl: ISSUANCE_API_URL,
       issuerDid: did,
@@ -64,6 +68,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
       projectId,
       email,
       schema,
+      credentialSubject,
     }
   },
 )

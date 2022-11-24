@@ -7,6 +7,7 @@ import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
+import { downloadCredentialSubject } from '../../features/issuance/json-schema/downloadSchemaJson'
 
 export interface SnippetInput {
   iamUrl: string
@@ -15,6 +16,7 @@ export interface SnippetInput {
   issuerDid: string
   claimId: string
   schema: Schema
+  credentialSubject?: object
 }
 
 interface CommandInput {
@@ -52,6 +54,8 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
       return undefined
     }
 
+    const credentialSubject = await downloadCredentialSubject({ apiKeyHash })
+
     return {
       iamUrl: AFFINIDI_IAM_API_URL,
       cloudWalletApiUrl: CLOUD_WALLET_API_URL,
@@ -60,6 +64,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
       projectId,
       claimId: nanoid(),
       schema,
+      credentialSubject,
     }
   },
 )
