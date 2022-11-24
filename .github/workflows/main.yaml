@@ -42,3 +42,30 @@ jobs:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: build
         run: npm run esbuild
+
+  # publish:
+  #   name: Release and publish
+  #   needs: build
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 16
+  #     - name: Install dependencies
+  #       run: npm install
+  #       env:
+  #         NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+  #     - name: Release
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  #       run: npx semantic-release
+  #     - name: Publish
+  #       uses: JCofman/vscodeaction@master
+  #       env:
+  #         PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+  #       with:
+  #         args: publish -p $PUBLISHER_TOKEN
