@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - FTL-8017
+      - main
 jobs:
   test:
     name: Test
