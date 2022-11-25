@@ -19,6 +19,7 @@
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
   "affinidiExplorer.createSchema": "Create Schema",
   "affinidiExplorer.createIssuance": "Create Issuance",
+  "affinidiExplorer.createIssuanceWithSchema": "Create Issuance with Schema",
 
   "affinidiDevTools.issueCredential": "Issuance Credential",
 
@@ -36,10 +37,16 @@
 
   "walkthroughs.title": "Get started with Affinidi",
   "walkthroughs.description": "Get to know the tools that will accelerate your journey into privacy-preserving application development",
-  "walkthroughs.steps.0.title": "Create Schema",
-  "walkthroughs.steps.0.description": "Easily generate a schema for a verifiable credential.\n[Create Schema](command:getting-started.createSchema)",
-  "walkthroughs.steps.1.title": "Create Rules",
-  "walkthroughs.steps.1.description": "Create powerful rules that match verifiable credentials\n[Create Rule](command:getting-started.createRule)",
+  "walkthroughs.steps.0.title": "Create Account",
+  "walkthroughs.steps.0.description": "Click here to Sign up.\n[Create Account](command:affinidi.signUp)",
+  "walkthroughs.steps.1.title": "Create Project",
+  "walkthroughs.steps.1.description": "Click here to create your project.\n[Create Project](command:affinidi.createProject)",
+  "walkthroughs.steps.2.title": "Create Schema",
+  "walkthroughs.steps.2.description": "Click here to create your Schema.\n[Create Schema](command:affinidiExplorer.createSchema)",
+  "walkthroughs.steps.3.title": "Create Issuance With Schema",
+  "walkthroughs.steps.3.description": "Click here to create an Issuance using your schema\n[Create Issuance](command:affinidiExplorer.createIssuanceWithSchema)",
+  "walkthroughs.steps.4.title": "Build a Certification and Verification App",
+  "walkthroughs.steps.4.description": "Please refer a Sample Application\n[Build Certification](command:affinidi.codegen.app)",
 
   "authentication.title": "Affinidi OTP",
 
