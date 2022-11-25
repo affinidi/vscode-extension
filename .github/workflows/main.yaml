@@ -13,16 +13,16 @@ jobs:
       - uses: actions/checkout@v3
 
   gitleaks-scan:
-    uses: ./gitleaks-scan.yaml
+    uses: ./.github/workflows/gitleaks-scan.yaml
 
   test:
     needs: gitleaks-scan
-    uses: ./test.yaml
+    uses: ./.github/workflows/test.yaml
 
   build-release:
     needs: test
-    uses: ./build-release.yaml
+    uses: ./.github/workflows/build-release.yaml
 
   publish:
     needs: build-release
-    uses: ./publish.yaml
+    uses: ./.github/workflows/publish.yaml
