@@ -18,6 +18,7 @@
   "affinidiExplorer.showJsonLdContext": "",
   "affinidiExplorer.createSchema": "",
   "affinidiExplorer.createIssuance": "",
+  "affinidiExplorer.createIssuanceWithSchema": "",
   "affinidiExplorer.codegen.referenceApp": "",
 
   "affinidiDevTools.issueCredential": "",
@@ -41,6 +42,12 @@
   "walkthroughs.steps.0.description": "",
   "walkthroughs.steps.1.title": "",
   "walkthroughs.steps.1.description": "",
+  "walkthroughs.steps.2.title": "",
+  "walkthroughs.steps.2.description": "",
+  "walkthroughs.steps.3.title": "",
+  "walkthroughs.steps.3.description": "",
+  "walkthroughs.steps.4.title": "",
+  "walkthroughs.steps.4.description": "",
 
   "authentication.title": "",
 

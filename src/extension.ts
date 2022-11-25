@@ -41,6 +41,8 @@ import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerPr
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
 import { projectsState } from './states/projectsState'
+import { schemaManagerHelper } from './features/schema-manager/schemaManagerHelper'
+import { iamHelpers } from './features/iam/iamHelpers'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -311,6 +313,30 @@ export async function activateInternal(context: ExtensionContext) {
 
     commands.executeCommand('vscode.open', createIssuanceURL)
   })
+
+  commands.registerCommand(
+    'affinidiExplorer.createIssuanceWithSchema',
+    async (element: ExplorerTreeItem) => {
+      const projectId = await iamHelpers.askForProjectId()
+      if (!projectId) return
+
+      const jsonSchemaUrl = await schemaManagerHelper.fetchSchemaUrl(projectId)
+      const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
+        schemaUrl: jsonSchemaUrl,
+      })
+
+      commands.executeCommand('vscode.open', createIssuanceURL)
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.createIssuanceWithSchema',
+          projectId: element.projectId,
+        },
+      })
+    },
+  )
 
   commands.registerCommand('affinidiExplorer.showJsonLdContext', (element: ExplorerTreeItem) => {
     viewSchemaContent(element.metadata.id, element.metadata.jsonLdContextUrl, '.jsonld')
