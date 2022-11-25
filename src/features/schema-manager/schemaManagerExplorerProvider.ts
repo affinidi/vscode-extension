@@ -1,14 +1,14 @@
 import { l10n, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
+import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../treeView/treeTypes'
 import { projectsState } from '../../states/projectsState'
 import { getMySchemas } from './getMySchemas'
-import { SchemaExplorerTreeItem } from './schemaExplorerTreeItem'
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
   async getChildren(
-    element: SchemaExplorerTreeItem | undefined,
-  ): Promise<SchemaExplorerTreeItem[] | undefined> {
+    element: ExplorerTreeItem | undefined,
+  ): Promise<ExplorerTreeItem[] | undefined> {
     if (element === undefined) return undefined
 
     switch (element?.resourceType) {
@@ -21,9 +21,9 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     }
   }
 
-  private getRootSchemaItems(parent?: SchemaExplorerTreeItem) {
+  private getRootSchemaItems(parent?: ExplorerTreeItem) {
     return [
-      new SchemaExplorerTreeItem({
+      new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
         label: l10n.t('Public'),
         schemaScope: 'public',
@@ -31,7 +31,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
       }),
-      new SchemaExplorerTreeItem({
+      new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
         label: l10n.t('Unlisted'),
         schemaScope: 'unlisted',
@@ -42,7 +42,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     ]
   }
 
-  private async getSchemaItems(parent?: SchemaExplorerTreeItem) {
+  private async getSchemaItems(parent?: ExplorerTreeItem) {
     const {
       wallet: { did },
       apiKey: { apiKeyHash },
@@ -58,7 +58,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
 
     return schemas.map(
       (schema) =>
-        new SchemaExplorerTreeItem({
+        new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.schema,
           label: `${schema.type}V${schema.version}-${schema.revision}`,
           description: schema.description || '',

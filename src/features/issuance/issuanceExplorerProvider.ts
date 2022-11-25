@@ -5,12 +5,11 @@ import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../treeView/treeTypes'
 import { formatIssuanceName } from './formatIssuanceName'
 import { getIssuances } from './getIssuances'
-import { IssuanceExplorerTreeItem } from './issuanceExplorerTreeItem'
 
 export class IssuanceExplorerProvider implements ExplorerProvider {
   async getChildren(
-    element: IssuanceExplorerTreeItem | undefined,
-  ): Promise<IssuanceExplorerTreeItem[] | undefined> {
+    element: ExplorerTreeItem | undefined,
+  ): Promise<ExplorerTreeItem[] | undefined> {
     if (element === undefined) return undefined
 
     switch (element.resourceType) {
@@ -21,7 +20,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
     }
   }
 
-  private async getIssuanceItems(parent?: IssuanceExplorerTreeItem) {
+  private async getIssuanceItems(parent?: ExplorerTreeItem) {
     const {
       project: { projectId },
       apiKey: { apiKeyHash },
@@ -31,7 +30,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
 
     return issuances.map(
       (issuance) =>
-        new IssuanceExplorerTreeItem({
+        new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.issuance,
           issuanceId: issuance.id,
           label: formatIssuanceName(issuance),
