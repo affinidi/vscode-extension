@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import { parseJsonSchemaUrl } from '../../../shared/parse-json-schema-url'
+import { Schema } from '../../../shared/types'
 import { ColumnSpec, generateColumnSpecs } from './generate-empty-json-specs'
 import { JsonSchemaFetcher } from './json-schema-fetcher'
 import { VcJsonSchemaFetcher } from './vc-json-schema-fetcher'
@@ -21,6 +22,13 @@ function createNestedTarget(object: any, path: string[]) {
   return target
 }
 
+function columnTypeToMockValue(type: ColumnSpec['type']) {
+  if (type === 'integer' || type === 'number') return 0
+  if (type === 'string') return ''
+  if (type === 'boolean') return false
+  return null
+}
+
 export function columnsToObject(columns: ColumnSpec[]) {
   const result = {}
 
@@ -28,15 +36,15 @@ export function columnsToObject(columns: ColumnSpec[]) {
     const field = column.path[column.path.length - 1]
     const target = createNestedTarget(result, column.path.slice(0, -1))
 
-    target[field] = column.type
+    target[field] = columnTypeToMockValue(column.type)
   }
 
   return result
 }
 
-export async function generateSampleFromJsonSchema(jsonSchemaUrl: string) {
-  const jsonSchemaURL = parseJsonSchemaUrl(jsonSchemaUrl)
-  const vcJsonSchema = await vcJsonSchemaFetcher.fetch(jsonSchemaURL)
+export async function generateCredentialSubjectSample(schema: Schema) {
+  const parsedJsonSchemaUrl = parseJsonSchemaUrl(schema.jsonSchemaUrl)
+  const vcJsonSchema = await vcJsonSchemaFetcher.fetch(parsedJsonSchemaUrl)
 
   const columnSpecs = generateColumnSpecs(vcJsonSchema)
   const sample = columnsToObject(columnSpecs)

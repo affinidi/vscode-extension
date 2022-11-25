@@ -8,6 +8,8 @@ describe('columnsToObject()', () => {
     { path: ['name', 'lastName'], type: 'string', required: true },
     { path: ['age'], type: 'integer', required: false },
     { path: ['dateOfBirth'], type: 'unknown', required: false },
+    { path: ['personalInfo', 'favoriteNumber'], type: 'number', required: false },
+    { path: ['personalInfo', 'isDeveloper'], type: 'boolean', required: true },
   ]
 
   it.only('should convert columns to object', () => {
@@ -15,6 +17,10 @@ describe('columnsToObject()', () => {
       name: {
         firstName: '',
         lastName: '',
+      },
+      personalInfo: {
+        favoriteNumber: 0,
+        isDeveloper: false,
       },
       age: 0,
       dateOfBirth: null,

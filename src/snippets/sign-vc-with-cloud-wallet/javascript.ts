@@ -1,3 +1,4 @@
+import { formatObject } from '../shared/formatObject'
 import type { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
@@ -53,7 +54,7 @@ const signCredentialResponse = await fetch('${input.cloudWalletApiUrl}/wallet/si
         id: cloudWalletData.wallet.did,
       },
       // should match fields in VC Schema
-      credentialSubject: ${JSON.stringify(input.credentialSubject, null, 4)},
+      credentialSubject: ${formatObject(input.credentialSubject, { indent: 2 })},
       },
       credentialSchema: {
         id: schema.jsonSchemaUrl,

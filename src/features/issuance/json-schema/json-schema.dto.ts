@@ -2,10 +2,6 @@ import { Schema } from 'jsonschema'
 
 export type JsonSchema = Schema
 
-export type ValidationResult =
-  | { valid: true; instance: any }
-  | { valid: false; errors: { field: string; name: string; message: string }[] }
-
 export type VcJsonSchemaType = {
   $schema: string
   $id?: string
