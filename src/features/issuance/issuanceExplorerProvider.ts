@@ -1,5 +1,4 @@
 import { ThemeIcon } from 'vscode'
-import { issuancesState } from '../../states/issuancesState'
 import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'

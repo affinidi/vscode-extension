@@ -9,8 +9,17 @@ export const getMySchemas = async (
   },
   options: Options,
 ) => {
-  // let schemas = schemasState.getSchemas()?.filter(schema => schema.)
-  let schemas = schemasState.getSchemas()
+  let schemas = schemasState.getSchemas()?.filter((schema) => {
+    if (input.scope === 'public') {
+      return schema.namespace === null
+    }
+
+    if (input.scope === 'unlisted') {
+      return !!schema.namespace
+    }
+
+    return schema
+  })
 
   if (!schemas?.length) {
     const result = await schemaManagerClient.searchSchemas(

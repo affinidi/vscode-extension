@@ -23,29 +23,33 @@ export const viewProperties = async ({
 }: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
-  let content: ProjectSummary | SchemaDto | IssuanceDto
+  let content: ProjectSummary | SchemaDto | IssuanceDto = projectsState.getProjectById(projectId)
   switch (resourceType) {
     case ExplorerResourceTypes.project: {
-      const projectSummary = projectsState.getProjectById(projectId)
-      content = projectSummary
-      label = projectSummary.project.name
-      id = projectSummary.project.projectId
+      label = content.project.name
+      id = content.project.projectId
       break
     }
 
     case ExplorerResourceTypes.schema: {
       const schema = schemasState.getSchemaById(schemaId)
-      content = schema
-      label = schema.id
-      id = schema.id
+
+      if (schema) {
+        content = schema
+        label = schema.id
+        id = schema.id
+      }
       break
     }
 
     case ExplorerResourceTypes.issuance: {
       const issuance = issuancesState.getIssuanceById(issuanceId)
-      content = issuance
-      label = issuance.id
-      id = issuance.id
+
+      if (issuance) {
+        content = issuance
+        label = issuance.id
+        id = issuance.id
+      }
       break
     }
 

@@ -110,13 +110,6 @@ interface Item {
   id: string
 }
 
-type UserDto = {
-  tenantIds?: string
-  role?: string
-  userId: string
-  username: string
-}
-
 export async function openReadOnlyContent({
   node,
   content,

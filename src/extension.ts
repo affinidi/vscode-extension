@@ -82,15 +82,21 @@ export async function activateInternal(context: ExtensionContext) {
   })
 
   commands.registerCommand('affinidiExplorer.refresh', (element: ExplorerTreeItem) => {
-    explorerTree.refresh()
-
     let resourceType = ExplorerResourceTypes[ExplorerResourceTypes.project]
-    if (
-      element?.resourceType === ExplorerResourceTypes.rootSchemas ||
-      element?.resourceType === ExplorerResourceTypes.rootIssuance
-    ) {
-      resourceType = `${element?.resourceType}`
+
+    if (element?.resourceType === ExplorerResourceTypes.rootSchemas) {
+      resourceType = element?.resourceType.toString()
+      schemasState.clear()
+    } else if (element?.resourceType === ExplorerResourceTypes.rootIssuance) {
+      resourceType = element?.resourceType.toString()
+      issuancesState.clear()
+    } else {
+      projectsState.clear()
+      schemasState.clear()
+      issuancesState.clear()
     }
+
+    explorerTree.refresh(element)
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,

@@ -2,9 +2,7 @@ import { l10n, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../treeView/treeTypes'
-import { schemaManagerClient } from './schemaManagerClient'
 import { projectsState } from '../../states/projectsState'
-import { schemasState } from '../../states/schemasState'
 import { getMySchemas } from './getMySchemas'
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {

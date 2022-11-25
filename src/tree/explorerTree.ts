@@ -15,8 +15,8 @@ export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
     ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(this.authListener))
   }
 
-  refresh(): void {
-    this.onDidChangeTreeDataEmitter.fire()
+  refresh(data?: ExplorerTreeItem | undefined | void): void {
+    this.onDidChangeTreeDataEmitter.fire(data)
   }
 
   private readonly authListener = async () => {
