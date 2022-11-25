@@ -23,12 +23,10 @@
 #       - name: Install dependencies
 #         run: npm install
 #         env:
-#           NPM_TOKEN: ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
+#           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
 
 #       - name: Build
 #         run: npm run esbuild
-#         env:
-#           NPM_TOKEN: ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
 
 #       - name: Release
 #         run: npm run semantic-release
