@@ -1,0 +1,27 @@
+# name: Publish to marketplace
+
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+
+  # publish:
+  #   name: Release and publish
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+
+  #     - name: Publish
+  #       uses: JCofman/vscodeaction@master
+  #      with:
+  #         args: publish -p $PUBLISHER_TOKEN
+  #       env:
+  #         PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}

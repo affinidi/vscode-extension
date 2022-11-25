@@ -1,0 +1,37 @@
+# name: Public Release to npmjs.com
+
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   build-release:
+#     name: Build and release
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 16
+#           registry-url: "https://registry.npmjs.org"
+#           scope: "@affinidi"
+
+#       - name: Install dependencies
+#         run: npm install
+#         env:
+#           NPM_TOKEN: ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
+
+#       - name: Build
+#         run: npm run esbuild
+#         env:
+#           NPM_TOKEN: ${{secrets.PUBLIC_NPM_NODE_AUTH_TOKEN}}
+
+#       - name: Release
+#         run: npm run semantic-release
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+#           NPM_TOKEN: ${{ secrets.PUBLIC_NPM_NODE_AUTH_TOKEN }}
