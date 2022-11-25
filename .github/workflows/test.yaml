@@ -17,11 +17,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          registry-url: "https://gitlab.com/api/v4/packages/npm/"
+          scope: "@affinidi"
 
       - name: Install dependencies
         run: npm install
         env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
       - run: xvfb-run -a npm test
         if: runner.os == 'Linux'
