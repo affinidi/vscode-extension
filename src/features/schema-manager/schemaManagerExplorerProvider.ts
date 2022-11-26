@@ -43,6 +43,16 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
       }),
+      new ExplorerTreeItem({
+        resourceType: ExplorerResourceTypes.project,
+        label: l10n.t('Create Schema'),
+        icon: new ThemeIcon('file-directory-create'),
+        command: {
+          title: l10n.t('Create Schema'),
+          command: 'affinidiExplorer.createSchema',
+        },
+        projectId: parent?.projectId,
+      }),
     ]
   }
 

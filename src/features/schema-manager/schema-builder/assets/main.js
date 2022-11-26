@@ -28,7 +28,6 @@ function main() {
       isPublic: document.getElementById('isSchemaPublic').checked,
       attributes: schema.attributes.map((attribute) => ({
         id: attribute.id,
-        parentId: attribute.parentId,
         name: document.getElementById(`${attribute.id}_name`).value,
         description: document.getElementById(`${attribute.id}_description`).value,
         type: document.getElementById(`${attribute.id}_type`).value,
@@ -46,7 +45,7 @@ function main() {
       onRemoveAttribute: (id) => {
         persist()
         schema.attributes.splice(schema.attributes.findIndex((a) => a.id === id), 1)
-        fixNestedAttributes(schema)
+        removeInvalidAttributes(schema)
         render()
       },
       onAddAttribute: (parentId) => {
@@ -58,9 +57,10 @@ function main() {
   }
 
   const form = document.getElementById('schema-builder-form')
+  form.addEventListener('submit', (event) => event.preventDefault())
   form.addEventListener('change', () => {
     persist()
-    if (fixNestedAttributes(schema)) {
+    if (removeInvalidAttributes(schema)) {
       render()
     }
   })
@@ -70,7 +70,7 @@ function main() {
     vscode.postMessage({ command: 'submit', data: { schema } })
   })
 
-  fixNestedAttributes(schema)
+  removeInvalidAttributes(schema)
   render()
 }
 
@@ -87,11 +87,14 @@ function createEmptyAttribute({ parentId } = {}) {
   }
 }
 
-function fixNestedAttributes(schema) {
+/** Returns `true` if the schema has been updated */
+function removeInvalidAttributes(schema) {
+  // we should remove children from attributes that are not objects
   const nonNestedAttributesWithChildren = schema.attributes.filter(
     (a) => a.type !== 'object' && schema.attributes.some((b) => b.parentId === a.id),
   )
 
+  // we should remove attributes which no longer have valid parents
   const attributeIdsWithInvalidParents = schema.attributes
     .filter((a) => a.parentId && !schema.attributes.some((b) => a.parentId === b.id))
     .map((a) => a.id)
@@ -108,7 +111,7 @@ function fixNestedAttributes(schema) {
     (a) => !attributeIdsWithInvalidParents.includes(a.id),
   )
 
-  fixNestedAttributes(schema) // repeat until everything is fixed
+  removeInvalidAttributes(schema) // repeat until everything is fixed
 
   return true
 }

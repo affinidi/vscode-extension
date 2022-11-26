@@ -41,7 +41,7 @@ import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerPr
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
 import { projectsState } from './states/projectsState'
-import { openSchemaBuilder } from './features/schema-manager/commands/openSchemaBuilder'
+import { openSchemaBuilder } from './features/schema-manager/schema-builder/openSchemaBuilder'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -357,11 +357,23 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand('vscode.open', issueCredentialURL)
   })
 
-  commands.registerCommand('affinidiExplorer.createSchema', openSchemaBuilder)
+  commands.registerCommand('affinidiExplorer.createSchema', (element: ExplorerTreeItem) => {
+    console.log('affinidiExplorer.createSchema', element)
+
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: EventSubCategory.command,
+      metadata: {
+        commandId: 'affinidiExplorer.createSchema',
+      },
+    })
+
+    openSchemaBuilder({ projectId: element.projectId })
+  })
 
   askUserForTelemetryConsent()
 
-  commands.executeCommand('affinidiExplorer.createSchema')
+  // commands.executeCommand('affinidiExplorer.createSchema')
 
   logger.info({}, 'Affinidi extension is now active!')
 }
