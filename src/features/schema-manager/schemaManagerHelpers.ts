@@ -53,7 +53,7 @@ async function fetchSchemaUrl(projectId: string) {
   return schema.jsonSchemaUrl
 }
 
-export const schemaManagerHelper = {
+export const schemaManagerHelpers = {
   askForMySchema,
   fetchSchemaUrl,
 }

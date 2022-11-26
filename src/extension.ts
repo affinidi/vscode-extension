@@ -38,7 +38,7 @@ import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerPr
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
 import { projectsState } from './states/projectsState'
-import { schemaManagerHelper } from './features/schema-manager/schemaManagerHelper'
+import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
 import { iamHelpers } from './features/iam/iamHelpers'
 import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
@@ -345,7 +345,7 @@ export async function activateInternal(context: ExtensionContext) {
       const projectId = await iamHelpers.askForProjectId()
       if (!projectId) return
 
-      const jsonSchemaUrl = await schemaManagerHelper.fetchSchemaUrl(projectId)
+      const jsonSchemaUrl = await schemaManagerHelpers.fetchSchemaUrl(projectId)
       const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
         schemaUrl: jsonSchemaUrl,
       })
