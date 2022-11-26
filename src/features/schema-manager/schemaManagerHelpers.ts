@@ -18,7 +18,7 @@ async function askForMySchema(
   },
   options: Options,
 ): Promise<Schema | undefined> {
-  const { schemas } = await window.withProgress(
+  const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: l10n.t('Fetching available schemas...'),
@@ -53,7 +53,7 @@ async function fetchSchemaUrl(projectId: string) {
   return schema.jsonSchemaUrl
 }
 
-export const schemaManagerHelper = {
+export const schemaManagerHelpers = {
   askForMySchema,
   fetchSchemaUrl,
 }

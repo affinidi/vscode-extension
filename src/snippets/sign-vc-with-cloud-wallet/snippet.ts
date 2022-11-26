@@ -5,7 +5,7 @@ import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
+import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 
 export interface SnippetInput {
@@ -47,7 +47,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
 
     const schema =
       input?.schema ??
-      (await schemaManagerHelper.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+      (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
     if (!schema) {
       return undefined
     }
