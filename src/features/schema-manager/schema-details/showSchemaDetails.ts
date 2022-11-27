@@ -74,8 +74,6 @@ function renderSchemaDetails(input: { webview: Webview; extensionUri: Uri; schem
 }
 
 export function showSchemaDetails(schema: SchemaDto) {
-  console.log('showing details of', schema, '...')
-
   if (!panel) {
     panel = window.createWebviewPanel(
       'schemaDetailView',
