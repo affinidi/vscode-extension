@@ -44,12 +44,12 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.project,
-        label: l10n.t('Create Schema'),
+        resourceType: ExplorerResourceTypes.other,
+        label: l10n.t('Create VC Schema'),
         icon: new ThemeIcon('file-directory-create'),
         command: {
-          title: l10n.t('Create Schema'),
-          command: 'affinidiExplorer.createSchema',
+          title: l10n.t('Create VC Schema'),
+          command: 'affinidi.openSchemaBuilder',
         },
         projectId: parent?.projectId,
       }),

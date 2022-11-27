@@ -31,6 +31,7 @@
     "onCommand:affinidi.copyJsonLdURL",
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.createProject",
+    "onCommand:affinidi.openSchemaBuilder",
     "onCommand:affinidi.docs.availableSnippets",
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
@@ -39,7 +40,6 @@
     "onCommand:affinidi.signUp",
     "onCommand:affinidiDevTools.issueCredential",
     "onCommand:affinidiExplorer.createIssuance",
-    "onCommand:affinidiExplorer.createSchema",
     "onCommand:affinidiExplorer.openCreateSchemaUrl",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidiExplorer.showJsonLdContext",
@@ -155,9 +155,9 @@
         "category": "%commands.category.explorer%"
       },
       {
-        "command": "affinidiExplorer.createSchema",
-        "title": "%affinidiExplorer.createSchema%",
-        "category": "%commands.category.explorer%"
+        "command": "affinidi.openSchemaBuilder",
+        "title": "%affinidi.openSchemaBuilder%",
+        "category": "Affinidi"
       },
       {
         "command": "affinidiExplorer.createIssuance",

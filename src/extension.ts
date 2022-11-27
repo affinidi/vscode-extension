@@ -357,14 +357,14 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand('vscode.open', issueCredentialURL)
   })
 
-  commands.registerCommand('affinidiExplorer.createSchema', (element: ExplorerTreeItem) => {
-    console.log('affinidiExplorer.createSchema', element)
+  commands.registerCommand('affinidi.openSchemaBuilder', () => {
+    const element = treeView.selection[0]
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
       subCategory: EventSubCategory.command,
       metadata: {
-        commandId: 'affinidiExplorer.createSchema',
+        commandId: 'affinidi.openSchemaBuilder',
       },
     })
 
@@ -373,7 +373,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   askUserForTelemetryConsent()
 
-  // commands.executeCommand('affinidiExplorer.createSchema')
+  // commands.executeCommand('affinidi.openSchemaBuilder')
 
   logger.info({}, 'Affinidi extension is now active!')
 }

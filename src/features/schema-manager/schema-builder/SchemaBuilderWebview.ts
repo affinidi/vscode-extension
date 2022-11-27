@@ -44,13 +44,18 @@ export class SchemaBuilderWebview {
         undefined,
         ext.context.subscriptions,
       )
-      this.panel.onDidDispose(() => (this.panel = undefined), null, ext.context.subscriptions)
+      this.panel.onDidDispose(() => this.dispose(), null, ext.context.subscriptions)
     }
 
     this.render()
     this.sendMessage({ command: 'init' })
 
     this.panel.reveal()
+  }
+
+  dispose() {
+    this.panel?.dispose()
+    this.panel = undefined
   }
 
   private async handleMessage(message: IngoingMessage) {

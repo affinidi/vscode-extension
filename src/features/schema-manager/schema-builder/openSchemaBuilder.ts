@@ -18,6 +18,8 @@ export async function openSchemaBuilder(input?: { projectId?: string }) {
 
 async function getOrCreateBuilder(projectId?: string): Promise<SchemaBuilderWebview> {
   if (!builder || builder.isDisposed() || builder.projectId !== projectId) {
+    builder?.dispose()
+
     if (!projectId) {
       projectId = await iamHelpers.askForProjectId()
       if (!projectId) {

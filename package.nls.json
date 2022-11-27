@@ -17,8 +17,8 @@
   "affinidiExplorer.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidiExplorer.showJsonSchema": "Show JSON Schema",
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
-  "affinidiExplorer.createSchema": "Create Schema",
-  "affinidiExplorer.openCreateSchemaUrl": "Create Schema",
+  "affinidi.openSchemaBuilder": "Create VC Schema",
+  "affinidiExplorer.openCreateSchemaUrl": "Create VC Schema",
   "affinidiExplorer.createIssuance": "Create Issuance",
 
   "affinidiDevTools.issueCredential": "Issuance Credential",
