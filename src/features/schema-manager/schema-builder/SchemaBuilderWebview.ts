@@ -1,13 +1,9 @@
-// TODO: experiment with frameworks like React
-// TODO: build JSON-LD context and JSON schema using vc-schemas library
-// TODO: reuse panel
-// TODO: refactor & improve readability, split & reorganize files
 // TODO: state is not saved when switching tabs
+// TODO: handle "init" and "enableSubmit"
 
-import { commands, l10n, ProgressLocation, ViewColumn, WebviewPanel, window } from 'vscode'
+import { l10n, ProgressLocation, ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
 import { schemasState } from '../../../states/schemasState'
-import { ExplorerResourceTypes } from '../../../tree/types'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
 import { showSchemaDetails } from '../schema-details/showSchemaDetails'
 import { publishBuilderSchema } from './helpers/publishBuilderSchema'
