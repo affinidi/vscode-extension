@@ -15,6 +15,7 @@ window.addEventListener('load', main)
 
 function main() {
   let schema = {
+    parentId: null,
     type: '',
     description: '',
     isPublic: false,
@@ -23,11 +24,13 @@ function main() {
 
   function compileSchema() {
     return {
+      parentId: null,
       type: document.getElementById('schemaType').value,
       description: document.getElementById('schemaDescription').value,
       isPublic: document.getElementById('isSchemaPublic').checked,
       attributes: schema.attributes.map((attribute) => ({
         id: attribute.id,
+        parentId: attribute.parentId,
         name: document.getElementById(`${attribute.id}_name`).value,
         description: document.getElementById(`${attribute.id}_description`).value,
         type: document.getElementById(`${attribute.id}_type`).value,
