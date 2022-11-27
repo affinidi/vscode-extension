@@ -1,6 +1,6 @@
 import { SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { TreeItem, Command, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
-import { ExplorerResourceTypes } from '../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../tree/types'
 
 export class ExplorerTreeItem extends TreeItem {
   public readonly resourceType: ExplorerResourceTypes

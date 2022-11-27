@@ -2,10 +2,14 @@
 // TODO: build JSON-LD context and JSON schema using vc-schemas library
 // TODO: reuse panel
 // TODO: refactor & improve readability, split & reorganize files
+// TODO: state is not saved when switching tabs
 
-import { ViewColumn, WebviewPanel, window } from 'vscode'
+import { commands, l10n, ProgressLocation, ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
-import { getUri } from '../../../ui/getUri'
+import { schemasState } from '../../../states/schemasState'
+import { ExplorerResourceTypes } from '../../../tree/types'
+import { getWebviewUri } from '../../../utils/getWebviewUri'
+import { showSchemaDetails } from '../schema-details/showSchemaDetails'
 import { publishBuilderSchema } from './helpers/publishBuilderSchema'
 import { isValidSchemaType, isValidAttributeName } from './helpers/validation'
 
@@ -26,7 +30,7 @@ export type BuilderSchema = {
 }
 
 type IngoingMessage = { command: 'submit'; data: { schema: BuilderSchema } }
-type OutgoingMessage = { command: 'init'; data?: { schema?: BuilderSchema } }
+type OutgoingMessage = { command: 'init' } | { command: 'enableSubmit' }
 
 export class SchemaBuilderWebview {
   private panel: WebviewPanel | undefined
@@ -35,9 +39,14 @@ export class SchemaBuilderWebview {
 
   open() {
     if (!this.panel) {
-      this.panel = window.createWebviewPanel('schemaBuilderView', 'Schema Builder', ViewColumn.One, {
-        enableScripts: true,
-      })
+      this.panel = window.createWebviewPanel(
+        'schemaBuilderView',
+        'Schema Builder',
+        ViewColumn.One,
+        {
+          enableScripts: true,
+        },
+      )
 
       this.panel.webview.onDidReceiveMessage(
         this.handleMessage,
@@ -48,7 +57,7 @@ export class SchemaBuilderWebview {
     }
 
     this.render()
-    this.sendMessage({ command: 'init' })
+    this.sendMessage({ command: 'init' }) // TODO: handle this in webview
 
     this.panel.reveal()
   }
@@ -58,42 +67,56 @@ export class SchemaBuilderWebview {
     this.panel = undefined
   }
 
-  private async handleMessage(message: IngoingMessage) {
+  private handleMessage = async (message: IngoingMessage) => {
     const { command, data } = message
 
     if (command === 'submit') {
-      const { schema } = data
+      try {
+        const { schema } = data
 
-      if (!isValidSchemaType(schema.type)) {
-        window.showErrorMessage(
-          'Invalid schema type. Use PascalCase and alphanumeric symbols (for example, "MySchema")',
+        if (!isValidSchemaType(schema.type)) {
+          window.showErrorMessage(
+            'Invalid schema type. Use PascalCase and alphanumeric symbols (for example, "MySchema")',
+          )
+          return
+        }
+
+        if (schema.attributes.length === 0) {
+          window.showErrorMessage('Your schema is empty. Try adding an attribute.')
+          return
+        }
+
+        for (const attribute of schema.attributes) {
+          if (!attribute.name) {
+            window.showErrorMessage(
+              'Empty attribute name. Use camelCase and alphanumeric symbols (for example, "firstName")',
+            )
+            return
+          }
+
+          if (!isValidAttributeName(attribute.name)) {
+            window.showErrorMessage(
+              `Invalid attribute name: "${attribute.name}". Use camelCase and alphanumeric symbols (for example, "firstName")`,
+            )
+            return
+          }
+        }
+
+        const createdSchema = await window.withProgress(
+          { location: ProgressLocation.Notification, title: 'Publishing the schema...' },
+          () => publishBuilderSchema(schema, this.projectId),
         )
-        return
-      }
 
-      if (schema.attributes.length === 0) {
-        window.showErrorMessage('Your schema is empty. Try adding an attribute.')
-        return
-      }
-
-      for (const attribute of schema.attributes) {
-        if (!attribute.name) {
-          window.showErrorMessage(
-            'Empty attribute name. Use camelCase and alphanumeric symbols (for example, "firstName")',
-          )
-          return
-        }
-
-        if (!isValidAttributeName(attribute.name)) {
-          window.showErrorMessage(
-            `Invalid attribute name: "${attribute.name}". Use camelCase and alphanumeric symbols (for example, "firstName")`,
-          )
-          return
+        window.showInformationMessage(l10n.t('Schema has been successfully created'))
+        showSchemaDetails(createdSchema)
+        schemasState.clear()
+        ext.explorerTree.refresh()
+        this.dispose()
+      } finally {
+        if (!this.isDisposed()) {
+          this.sendMessage({ command: 'enableSubmit' })
         }
       }
-
-      const createdSchema = await publishBuilderSchema(schema, this.projectId)
-      console.log('createdSchema:', createdSchema)
     }
   }
 
@@ -105,7 +128,7 @@ export class SchemaBuilderWebview {
     const webview = this.requirePanel().webview
     const extensionUri = ext.context.extensionUri
 
-    const toolkitUri = getUri(webview, extensionUri, [
+    const toolkitUri = getWebviewUri(webview, extensionUri, [
       'node_modules',
       '@vscode',
       'webview-ui-toolkit',
@@ -113,8 +136,8 @@ export class SchemaBuilderWebview {
       'toolkit.js',
     ])
 
-    const styleUri = getUri(webview, extensionUri, ['media', 'style.css'])
-    const scriptUri = getUri(webview, extensionUri, [
+    const styleUri = getWebviewUri(webview, extensionUri, ['media', 'style.css'])
+    const scriptUri = getWebviewUri(webview, extensionUri, [
       'src',
       'features',
       'schema-manager',

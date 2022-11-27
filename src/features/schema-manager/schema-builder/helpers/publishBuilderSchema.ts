@@ -42,8 +42,9 @@ const generateSchemaId = (input: {
 const getNextVersion = ({ version, revision }: { version: number; revision: number }) =>
   revision === 999 ? [version + 1, 0] : [version, revision + 1]
 
-async function generateNextVersion(input: { type: string; scope: 'public' | 'unlisted'; apiKeyHash: string }) {
+async function generateNextVersion(input: { type: string; scope: 'public' | 'unlisted'; did: string; apiKeyHash: string }) {
   const { schemas } = await schemaManagerClient.searchSchemas({
+    did: input.did,
     type: input.type,
     scope: input.scope,
     limit: 1,
@@ -61,7 +62,7 @@ export async function publishBuilderSchema(schema: BuilderSchema, projectId: str
   const { apiKey: { apiKeyHash }, wallet: { did } } = projectsState.getProjectById(projectId)
 
   const scope = schema.isPublic ? 'public' : 'unlisted'
-  const [version, revision] = await generateNextVersion({ type: schema.type, scope, apiKeyHash })
+  const [version, revision] = await generateNextVersion({ type: schema.type, scope, did, apiKeyHash })
 
   const schemaName = generateSchemaId({
     namespace: schema.isPublic ? null : did,
@@ -102,8 +103,6 @@ export async function publishBuilderSchema(schema: BuilderSchema, projectId: str
     jsonLdContext,
   }
 
-  console.log(createSchemaInput)
-
   return schemaManagerClient.createSchema({
     authorDid: did,
     parentId: null,
@@ -114,5 +113,5 @@ export async function publishBuilderSchema(schema: BuilderSchema, projectId: str
     revision,
     jsonSchema,
     jsonLdContext,
-  })
+  }, { apiKeyHash })
 }

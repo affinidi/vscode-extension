@@ -70,6 +70,8 @@ function main() {
   
   const submitButton = document.getElementById('submit-button')
   submitButton.addEventListener('click', () => {
+    submitButton.disabled = true;
+
     vscode.postMessage({ command: 'submit', data: { schema } })
   })
 

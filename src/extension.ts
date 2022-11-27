@@ -2,21 +2,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import {
-  commands,
-  ExtensionContext,
-  Uri,
-  window,
-  env,
-  ViewColumn,
-  WebviewPanel,
-  l10n,
-} from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, WebviewPanel, l10n } from 'vscode'
 import { AffinidiCodeGenProvider } from './treeView/affinidiCodeGenProvider'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { viewProperties, viewSchemaContent } from './services/viewDataService'
-import { getWebviewContent } from './ui/getWebviewContent'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { viewMarkdown } from './services/markdownService'
@@ -27,7 +17,7 @@ import {
   sendEventToAnalytics,
 } from './services/analyticsStreamApiService'
 import { askUserForTelemetryConsent } from './utils/telemetry'
-import { ExplorerResourceTypes } from './treeView/treeTypes'
+import { ExplorerResourceTypes } from './tree/types'
 import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
@@ -43,6 +33,7 @@ import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHel
 import { iamHelpers } from './features/iam/iamHelpers'
 import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
+import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 
@@ -62,7 +53,7 @@ export async function activateInternal(context: ExtensionContext) {
   initSnippets()
   initGenerators()
 
-  const explorerTree = new ExplorerTree([
+  ext.explorerTree = new ExplorerTree([
     new AuthExplorerProvider(),
     new IamExplorerProvider(),
     new IssuanceExplorerProvider(),
@@ -71,7 +62,7 @@ export async function activateInternal(context: ExtensionContext) {
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {
-    treeDataProvider: explorerTree,
+    treeDataProvider: ext.explorerTree,
     canSelectMany: false,
     showCollapseAll: true,
   })
@@ -97,7 +88,7 @@ export async function activateInternal(context: ExtensionContext) {
       issuancesState.clear()
     }
 
-    explorerTree.refresh(element)
+    ext.explorerTree.refresh(element)
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
@@ -114,37 +105,8 @@ export async function activateInternal(context: ExtensionContext) {
 
   const openSchema = commands.registerCommand('schema.showSchemaDetails', () => {
     const selectedTreeViewItem = treeView.selection[0]
-
-    // If no panel is open, create a new one and update the HTML
-    if (!panel) {
-      panel = window.createWebviewPanel(
-        'schemaDetailView',
-        selectedTreeViewItem?.label as string,
-        ViewColumn.One,
-        {
-          enableScripts: true,
-        },
-      )
-    }
-
-    // If a panel is open, update the HTML with the selected item's content
-    panel.title = selectedTreeViewItem.label as string
-
-    panel.webview.html = getWebviewContent({
-      webview: panel.webview,
-      extensionUri: context.extensionUri,
-      label: selectedTreeViewItem.label as string,
-      schemaId: selectedTreeViewItem.schemaId,
-    })
-
-    panel?.onDidDispose(
-      () => {
-        // When the panel is closed, cancel any future updates to the webview content
-        panel = undefined
-      },
-      null,
-      context.subscriptions,
-    )
+    const schema = schemasState.getSchemaById(selectedTreeViewItem.schemaId)
+    if (!schema) return
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
@@ -154,6 +116,8 @@ export async function activateInternal(context: ExtensionContext) {
         projectId: selectedTreeViewItem.projectId,
       },
     })
+
+    showSchemaDetails(schema)
   })
 
   context.subscriptions.push(openSchema)
@@ -385,7 +349,7 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand('affinidi.createProject', async () => {
       const result = await createProjectProcess()
 
-      explorerTree.refresh()
+      ext.explorerTree.refresh()
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
