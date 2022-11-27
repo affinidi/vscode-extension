@@ -8,7 +8,7 @@
   "icon": "media/affinidi-icon-large.png",
   "preview": true,
   "repository": "https://gitlab.com/affinidi/foundational/genesis/vscode-extension",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.73.0"
   },
@@ -41,6 +41,7 @@
     "onCommand:affinidiDevTools.issueCredential",
     "onCommand:affinidiExplorer.createIssuance",
     "onCommand:affinidiExplorer.openCreateSchemaUrl",
+    "onCommand:affinidiExplorer.createIssuanceWithSchema",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
@@ -162,6 +163,11 @@
       {
         "command": "affinidiExplorer.createIssuance",
         "title": "%affinidiExplorer.createIssuance%",
+        "category": "%commands.category.explorer%"
+      },
+      {
+        "command": "affinidiExplorer.createIssuanceWithSchema",
+        "title": "%affinidiExplorer.createIssuanceWithSchema%",
         "category": "%commands.category.explorer%"
       },
       {
@@ -346,7 +352,7 @@
         "description": "%walkthroughs.description%",
         "steps": [
           {
-            "id": "createSchema",
+            "id": "createAccount",
             "title": "%walkthroughs.steps.0.title%",
             "description": "%walkthroughs.steps.0.description%",
             "media": {
@@ -354,19 +360,55 @@
               "altText": "Affinidi"
             },
             "completionEvents": [
-              "onCommand:getting-started.createschema"
+              "onCommand:affinidi.signUp"
             ]
           },
           {
-            "id": "createRule",
+            "id": "createProject",
             "title": "%walkthroughs.steps.1.title%",
-            "description": "walkthroughs.steps.1.description",
+            "description": "%walkthroughs.steps.1.description%",
             "media": {
               "image": "media/affinidi-logo.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
-              "onSettingChanged:getting-started.sampleSetting"
+              "onCommand:affinidi.createProject"
+            ]
+          },
+          {
+            "id": "createSchema",
+            "title": "%walkthroughs.steps.2.title%",
+            "description": "%walkthroughs.steps.2.description%",
+            "media": {
+              "image": "media/affinidi-logo.png",
+              "altText": "Affinidi"
+            },
+            "completionEvents": [
+              "onCommand:affinidiExplorer.createSchema"
+            ]
+          },
+          {
+            "id": "createIssuanceWithSchema",
+            "title": "%walkthroughs.steps.3.title%",
+            "description": "%walkthroughs.steps.3.description%",
+            "media": {
+              "image": "media/affinidi-logo.png",
+              "altText": "Affinidi"
+            },
+            "completionEvents": [
+              "onCommand:affinidiExplorer.createIssuanceWithSchema"
+            ]
+          },
+          {
+            "id": "buildCertification",
+            "title": "%walkthroughs.steps.4.title%",
+            "description": "%walkthroughs.steps.4.description%",
+            "media": {
+              "image": "media/affinidi-logo.png",
+              "altText": "Affinidi"
+            },
+            "completionEvents": [
+              "onCommand:affinidi.codegen.app"
             ]
           }
         ]

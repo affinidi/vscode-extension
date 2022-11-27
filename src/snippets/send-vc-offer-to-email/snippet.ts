@@ -5,7 +5,7 @@ import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
+import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
 
 export interface SnippetInput {
@@ -46,7 +46,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
 
     const schema =
       input?.schema ??
-      (await schemaManagerHelper.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+      (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
     if (!schema) {
       return undefined
     }
