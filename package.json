@@ -41,6 +41,7 @@
     "onCommand:affinidiDevTools.issueCredential",
     "onCommand:affinidiExplorer.createIssuance",
     "onCommand:affinidiExplorer.openCreateSchemaUrl",
+    "onCommand:affinidiExplorer.openSchemaBuilder",
     "onCommand:affinidiExplorer.createIssuanceWithSchema",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidiExplorer.showJsonLdContext",
@@ -166,6 +167,11 @@
         "category": "%commands.category.explorer%"
       },
       {
+        "command": "affinidiExplorer.openSchemaBuilder",
+        "title": "%affinidiExplorer.openSchemaBuilder%",
+        "category": "%commands.category.explorer%"
+      },
+      {
         "command": "affinidiExplorer.createIssuanceWithSchema",
         "title": "%affinidiExplorer.createIssuanceWithSchema%",
         "category": "%commands.category.explorer%"
@@ -227,6 +233,10 @@
         },
         {
           "command": "affinidiExplorer.openCreateSchemaUrl",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.openSchemaBuilder",
           "when": "never"
         },
         {

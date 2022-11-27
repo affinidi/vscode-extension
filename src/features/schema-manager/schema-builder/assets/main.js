@@ -14,13 +14,7 @@ const vscode = acquireVsCodeApi()
 window.addEventListener('load', main)
 
 function main() {
-  let schema = {
-    parentId: null,
-    type: '',
-    description: '',
-    isPublic: false,
-    attributes: [createEmptyAttribute()],
-  }
+  let schema = createEmptySchema()
 
   function compileSchema() {
     return {
@@ -71,15 +65,35 @@ function main() {
   const submitButton = document.getElementById('submit-button')
   submitButton.addEventListener('click', () => {
     submitButton.disabled = true;
-
     vscode.postMessage({ command: 'submit', data: { schema } })
   })
 
   removeInvalidAttributes(schema)
   render()
+
+  window.addEventListener('message', ({ data: message }) => {
+    const { command, data } = message
+
+    if (command === 'init') {
+      schema = data && data.schema || createEmptySchema()
+      render()
+    } else if (command === 'enableSubmit') {
+      submitButton.disabled = false;
+    }
+  })
 }
 
 // --- BUSINESS LOGIC
+
+function createEmptySchema() {
+  return {
+    parentId: null,
+    type: '',
+    description: '',
+    isPublic: false,
+    attributes: [createEmptyAttribute()],
+  }
+}
 
 function createEmptyAttribute({ parentId } = {}) {
   return {

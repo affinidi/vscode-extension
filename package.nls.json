@@ -3,6 +3,7 @@
   "affinidi.login": "Sign In",
   "affinidi.signOut": "Sign Out",
   "affinidi.createProject": "Create Project",
+  "affinidi.openSchemaBuilder": "Create VC Schema",
   "affinidi.me": "Account Details",
   "affinidi.codegen.sendVcOfferToEmail": "Build a script to \"Send a VC offer to an email\"",
   "affinidi.codegen.getIssuanceOffers": "Build a script to \"Get Issuance Offers\"",
@@ -17,8 +18,8 @@
   "affinidiExplorer.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidiExplorer.showJsonSchema": "Show JSON Schema",
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
-  "affinidi.openSchemaBuilder": "Create VC Schema",
   "affinidiExplorer.openCreateSchemaUrl": "Create VC Schema",
+  "affinidiExplorer.openSchemaBuilder": "Create VC Schema",
   "affinidiExplorer.createIssuance": "Create Issuance",
   "affinidiExplorer.createIssuanceWithSchema": "Create Issuance with Schema",
 

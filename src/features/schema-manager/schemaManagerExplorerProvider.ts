@@ -46,7 +46,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
         icon: new ThemeIcon('file-directory-create'),
         command: {
           title: l10n.t('Create VC Schema'),
-          command: 'affinidi.openSchemaBuilder',
+          command: 'affinidiExplorer.openSchemaBuilder',
         },
         projectId: parent?.projectId,
       }),

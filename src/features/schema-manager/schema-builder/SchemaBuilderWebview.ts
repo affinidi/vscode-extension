@@ -1,6 +1,3 @@
-// TODO: state is not saved when switching tabs
-// TODO: handle "init" and "enableSubmit"
-
 import { l10n, ProgressLocation, ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
 import { schemasState } from '../../../states/schemasState'
@@ -41,6 +38,7 @@ export class SchemaBuilderWebview {
         ViewColumn.One,
         {
           enableScripts: true,
+          retainContextWhenHidden: true,
         },
       )
 
@@ -53,7 +51,7 @@ export class SchemaBuilderWebview {
     }
 
     this.render()
-    this.sendMessage({ command: 'init' }) // TODO: handle this in webview
+    this.sendMessage({ command: 'init' })
 
     this.panel.reveal()
   }
