@@ -4,7 +4,7 @@ import { projectsState } from '../../../../states/projectsState'
 import { schemaManagerClient } from '../../schemaManagerClient'
 import { BuilderAttribute, BuilderSchema } from '../helpers'
 
-function attributesToFields(nested: BuilderAttribute[], all: BuilderAttribute[] = nested): SchemaField[] {
+function attributesToFields(nested: BuilderAttribute[], all: BuilderAttribute[]): SchemaField[] {
   return nested.map<SchemaField>((attribute) => {
     const children = all.filter(a => a.parentId === attribute.id)
     return {
@@ -12,7 +12,7 @@ function attributesToFields(nested: BuilderAttribute[], all: BuilderAttribute[] 
       description: attribute.description ?? null,
       type: attribute.type as SchemaFieldType,
       required: attribute.isRequired,
-      ...children.length > 0 && { nested: attributesToFields(children) },
+      ...children.length > 0 && { nested: attributesToFields(children, all) },
     }
   })
 }
@@ -88,7 +88,7 @@ export async function publishBuilderSchema(schema: BuilderSchema, projectId: str
       jsonLdContextUrl,
       jsonSchemaUrl,
     },
-    attributesToFields(schema.attributes),
+    attributesToFields(schema.attributes.filter(a => !a.parentId), schema.attributes),
   )
 
   const createSchemaInput = {
