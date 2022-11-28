@@ -1,27 +1,63 @@
+import { ProjectSummary } from '@affinidi/client-iam'
+import { IssuanceDto } from '@affinidi/client-issuance'
+import { SchemaDto } from '@affinidi/client-schema-manager'
 import fetch from 'node-fetch'
+import { issuancesState } from '../states/issuancesState'
+import { projectsState } from '../states/projectsState'
+import { schemasState } from '../states/schemasState'
 import { ExplorerResourceTypes } from '../treeView/treeTypes'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
-export const viewProperties = async (resourceType: ExplorerResourceTypes, resourceInfo: any) => {
+type ViewPropertiesProps = {
+  resourceType: ExplorerResourceTypes
+  issuanceId?: string
+  projectId?: string
+  schemaId?: string
+}
+
+export const viewProperties = async ({
+  resourceType,
+  issuanceId,
+  projectId,
+  schemaId,
+}: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
+  let content: ProjectSummary | SchemaDto | IssuanceDto = projectsState.getProjectById(projectId)
   switch (resourceType) {
-    case ExplorerResourceTypes.project:
-      label = resourceInfo.project.name
-      id = resourceInfo.project.projectId
+    case ExplorerResourceTypes.project: {
+      label = content.project.name
+      id = content.project.projectId
       break
+    }
 
-    case ExplorerResourceTypes.issuance:
-    case ExplorerResourceTypes.schema:
-      label = resourceInfo.id
-      id = resourceInfo.id
+    case ExplorerResourceTypes.schema: {
+      const schema = schemasState.getSchemaById(schemaId)
+
+      if (schema) {
+        content = schema
+        label = schema.id
+        id = schema.id
+      }
       break
+    }
+
+    case ExplorerResourceTypes.issuance: {
+      const issuance = issuancesState.getIssuanceById(issuanceId)
+
+      if (issuance) {
+        content = issuance
+        label = issuance.id
+        id = issuance.id
+      }
+      break
+    }
 
     default:
       throw new Error(`Unexpected resource type: ${resourceType}`)
   }
 
-  await openReadOnlyContent({ node: { label, id }, content: resourceInfo })
+  await openReadOnlyContent({ node: { label, id }, content })
 }
 
 export const viewSchemaContent = async (

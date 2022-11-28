@@ -1,7 +1,13 @@
 import { Webview, Uri } from 'vscode'
-// import { SchemaEntity } from "../services/schemaManagerService";
-import { AffResourceTreeItem } from '../treeView/treeItem'
+import { schemasState } from '../states/schemasState'
 import { getUri } from './getUri'
+
+type GetWebviewContentProps = {
+  webview: Webview
+  extensionUri: Uri
+  label: string
+  schemaId?: string
+}
 
 /**
  * Defines and returns the HTML that should be rendered within the notepad webview panel.
@@ -15,7 +21,12 @@ import { getUri } from './getUri'
  * @returns A template string literal containing the HTML that should be
  * rendered within the webview panel
  */
-export function getWebviewContent(webview: Webview, extensionUri: Uri, item: AffResourceTreeItem) {
+export function getWebviewContent({
+  webview,
+  extensionUri,
+  label,
+  schemaId,
+}: GetWebviewContentProps) {
   const toolkitUri = getUri(webview, extensionUri, [
     'node_modules',
     '@vscode',
@@ -24,7 +35,7 @@ export function getWebviewContent(webview: Webview, extensionUri: Uri, item: Aff
     'toolkit.js',
   ])
   const styleUri = getUri(webview, extensionUri, ['media', 'style.css'])
-  const schema = item.metadata
+  const schema = schemasState.getSchemaById(schemaId)
 
   return /* html */ `
     <!DOCTYPE html>
@@ -34,14 +45,14 @@ export function getWebviewContent(webview: Webview, extensionUri: Uri, item: Aff
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="module" src="${toolkitUri}"></script>
         <link rel="stylesheet" href="${styleUri}">
-        <title>${item.label}</title>
+        <title>${label}</title>
       </head>
       <body>
         <section class="wrapper">
           <div class="box-row">
             <div class="box">
               <div class="title">SCHEMA TYPE</div>
-              <div class="description">${item.label}</div>
+              <div class="description">${label}</div>
             </div>
 
             <div class="box">

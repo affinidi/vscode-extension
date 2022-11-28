@@ -5,7 +5,8 @@ import {
   EventSubCategory,
   sendEventToAnalytics,
 } from '../services/analyticsStreamApiService'
-import { AffResourceTreeItem } from '../treeView/treeItem'
+import { ExplorerTreeItem } from '../tree/explorerTreeItem'
+import { schemasState } from '../states/schemasState'
 import { insertGetIssuanceOffersSnippet } from './get-issuance-offers/snippet'
 import { insertSendVcOfferToEmailSnippet } from './send-vc-offer-to-email/snippet'
 import { insertSignVcWithCloudWalletSnippet } from './sign-vc-with-cloud-wallet/snippet'
@@ -14,10 +15,12 @@ export const initSnippets = () => {
   ext.context.subscriptions.push(
     commands.registerCommand(
       'affinidi.codegen.sendVcOfferToEmail',
-      async (element?: AffResourceTreeItem) => {
+      async (element?: ExplorerTreeItem) => {
+        const schema = schemasState.getSchemaById(element?.schemaId)
+
         await insertSendVcOfferToEmailSnippet({
           projectId: element?.projectId,
-          schema: element?.metadata,
+          schema,
         })
 
         sendEventToAnalytics({
@@ -26,7 +29,7 @@ export const initSnippets = () => {
           metadata: {
             commandId: 'affinidi.codegen.sendVcOfferToEmail',
             projectId: element?.projectId,
-            schemaId: element?.metadata.id,
+            schemaId: element?.schemaId,
           },
         })
       },
@@ -36,10 +39,10 @@ export const initSnippets = () => {
   ext.context.subscriptions.push(
     commands.registerCommand(
       'affinidi.codegen.getIssuanceOffers',
-      async (element?: AffResourceTreeItem) => {
+      async (element?: ExplorerTreeItem) => {
         await insertGetIssuanceOffersSnippet({
           projectId: element?.projectId,
-          issuanceId: element?.metadata.id,
+          issuanceId: element?.issuanceId,
         })
 
         sendEventToAnalytics({
@@ -48,7 +51,7 @@ export const initSnippets = () => {
           metadata: {
             commandId: 'affinidi.codegen.getIssuanceOffers',
             projectId: element?.projectId,
-            issuanceId: element?.metadata.id,
+            issuanceId: element?.issuanceId,
           },
         })
       },

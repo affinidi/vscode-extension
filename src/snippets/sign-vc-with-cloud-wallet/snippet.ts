@@ -1,14 +1,14 @@
 import { nanoid } from 'nanoid'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { iamHelper } from '../../features/iam/iamHelper'
+import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
-import { schemaManagerHelper } from '../../features/schema-manager/schemaManagerHelper'
-import { authHelper } from '../../auth/authHelper'
-import { requireProjectSummary } from '../../features/iam/requireProjectSummary'
+import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
+import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
+import { l10n } from 'vscode'
 
 export interface SnippetInput {
   iamUrl: string
@@ -17,6 +17,7 @@ export interface SnippetInput {
   issuerDid: string
   claimId: string
   schema: Schema
+  credentialSubject: object
 }
 
 interface CommandInput {
@@ -37,9 +38,9 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const consoleAuthToken = await authHelper.getConsoleAuthToken()
+    console.log('input:', input)
 
-    const projectId = input?.projectId ?? (await iamHelper.askForProjectId({ consoleAuthToken }))
+    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
     if (!projectId) {
       return undefined
     }
@@ -47,13 +48,18 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await requireProjectSummary(projectId, { consoleAuthToken })
+    } = iamHelpers.requireProjectSummary(projectId)
 
     const schema =
       input?.schema ??
-      (await schemaManagerHelper.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+      (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
     if (!schema) {
       return undefined
+    }
+
+    const credentialSubject = await generateCredentialSubjectSample(schema)
+    if (!credentialSubject) {
+      throw new Error(l10n.t('Could not generate credential subject sample'))
     }
 
     return {
@@ -64,6 +70,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
       projectId,
       claimId: nanoid(),
       schema,
+      credentialSubject,
     }
   },
 )

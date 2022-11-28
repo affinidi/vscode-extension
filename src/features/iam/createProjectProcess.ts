@@ -1,8 +1,11 @@
 import { ProjectDto } from '@affinidi/client-iam'
 import { ProgressLocation, window, l10n } from 'vscode'
+
 import { authHelper } from '../../auth/authHelper'
 import { logger } from '../../utils/logger'
 import { iamClient } from './iamClient'
+import { fetchProjectSummary } from './fetchProjectSummary'
+import { projectsState } from '../../states/projectsState'
 
 export const createProjectProcess = async (): Promise<ProjectDto | undefined> => {
   const projectName = await window.showInputBox({
@@ -17,19 +20,20 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
   }
 
   try {
+    const consoleAuthToken = await authHelper.getConsoleAuthToken()
     const result = await window.withProgress(
       {
         location: ProgressLocation.Notification,
         title: l10n.t('Creating Project...'),
       },
-      async () =>
-        iamClient.createProject(
-          { name: projectName },
-          { consoleAuthToken: await authHelper.getConsoleAuthToken() },
-        ),
+      async () => iamClient.createProject({ name: projectName }, { consoleAuthToken }),
     )
 
     window.showInformationMessage(l10n.t('Project created successfully'))
+
+    const projectSummary = await fetchProjectSummary(result.projectId)
+
+    projectsState.setProject(projectSummary)
 
     return result
   } catch (error) {

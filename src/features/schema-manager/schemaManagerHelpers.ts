@@ -3,6 +3,7 @@ import { Options } from '@affinidi/client-schema-manager'
 import { getMySchemas } from './getMySchemas'
 import { Schema } from '../../shared/types'
 import { showQuickPick } from '../../utils/showQuickPick'
+import { iamHelpers } from '../iam/iamHelpers'
 
 export const EXAMPLE_SCHEMA: Schema = {
   type: 'MySchema',
@@ -17,7 +18,7 @@ async function askForMySchema(
   },
   options: Options,
 ): Promise<Schema | undefined> {
-  const { schemas } = await window.withProgress(
+  const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: l10n.t('Fetching available schemas...'),
@@ -38,6 +39,21 @@ async function askForMySchema(
   return showQuickPick(pickOptions, { title: l10n.t('Select a VC Schema') })
 }
 
-export const schemaManagerHelper = {
+async function fetchSchemaUrl(projectId: string) {
+  const {
+    apiKey: { apiKeyHash },
+    wallet: { did },
+  } = iamHelpers.requireProjectSummary(projectId)
+
+  const schema = await askForMySchema({ includeExample: true, did }, { apiKeyHash })
+  if (!schema) {
+    return undefined
+  }
+
+  return schema.jsonSchemaUrl
+}
+
+export const schemaManagerHelpers = {
   askForMySchema,
+  fetchSchemaUrl,
 }

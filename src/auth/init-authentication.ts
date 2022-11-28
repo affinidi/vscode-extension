@@ -6,6 +6,9 @@ import {
   EventNames,
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
+import { issuancesState } from '../states/issuancesState'
+import { projectsState } from '../states/projectsState'
+import { schemasState } from '../states/schemasState'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 import {
@@ -79,6 +82,10 @@ async function logoutHandler(): Promise<void> {
   const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
     createIfNone: false,
   })
+
+  projectsState.clear()
+  schemasState.clear()
+  issuancesState.clear()
 
   if (session) {
     sendEventToAnalytics({

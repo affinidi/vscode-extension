@@ -12,10 +12,10 @@ export async function showQuickPick<T>(
     return undefined
   }
 
-  const entry = entries.find((entry) => entry[0] === selectedLabel)
-  if (!Array.isArray(entry)) {
+  const selectedEntry = entries.find((entry) => entry[0] === selectedLabel)
+  if (!Array.isArray(selectedEntry)) {
     return undefined
   }
 
-  return entry[1]
+  return selectedEntry[1]
 }
