@@ -1,3 +1,4 @@
+import { formatObject } from '../shared/formatObject'
 import type { SnippetInput } from './snippet'
 
 export function fetch(input: SnippetInput) {
@@ -56,13 +57,7 @@ const offerResponse = await fetch(\`${
   },
   body: JSON.stringify({
     // should match fields in VC Schema, specified in the Issuance template
-    credentialSubject: {
-      \${2:name: {
-        firstName: 'John',
-        lastName: 'Doe',
-      \\},
-      dateOfBirth: '1990-01-01'}
-    },
+    credentialSubject: ${formatObject(input.credentialSubject, { indent: 2 })},
     verification: {
       target: {
         email: email,

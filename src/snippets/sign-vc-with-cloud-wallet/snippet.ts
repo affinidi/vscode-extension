@@ -7,6 +7,8 @@ import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
+import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
+import { l10n } from 'vscode'
 
 export interface SnippetInput {
   iamUrl: string
@@ -15,6 +17,7 @@ export interface SnippetInput {
   issuerDid: string
   claimId: string
   schema: Schema
+  credentialSubject: object
 }
 
 interface CommandInput {
@@ -35,6 +38,8 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
+    console.log('input:', input)
+
     const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
     if (!projectId) {
       return undefined
@@ -52,6 +57,11 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
       return undefined
     }
 
+    const credentialSubject = await generateCredentialSubjectSample(schema)
+    if (!credentialSubject) {
+      throw new Error(l10n.t('Could not generate credential subject sample'))
+    }
+
     return {
       iamUrl: AFFINIDI_IAM_API_URL,
       cloudWalletApiUrl: CLOUD_WALLET_API_URL,
@@ -60,6 +70,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
       projectId,
       claimId: nanoid(),
       schema,
+      credentialSubject,
     }
   },
 )
