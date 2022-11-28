@@ -31,6 +31,7 @@ import { ExplorerResourceTypes } from './treeView/treeTypes'
 import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
+import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 import { ExplorerTree } from './tree/explorerTree'
 import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
@@ -44,6 +45,7 @@ import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
+const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -68,6 +70,7 @@ export async function activateInternal(context: ExtensionContext) {
     new SchemaManagerExplorerProvider(),
   ])
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
+  const affFeedbackProvider = new AffinidiFeedbackProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {
     treeDataProvider: explorerTree,
@@ -77,6 +80,12 @@ export async function activateInternal(context: ExtensionContext) {
 
   window.createTreeView('affinidiCodeGeneration', {
     treeDataProvider: affCodeGenTreeProvider,
+    canSelectMany: false,
+    showCollapseAll: true,
+  })
+
+  window.createTreeView('affinidiFeedback', {
+    treeDataProvider: affFeedbackProvider,
     canSelectMany: false,
     showCollapseAll: true,
   })
@@ -396,6 +405,13 @@ export async function activateInternal(context: ExtensionContext) {
       })
     }),
   )
+
+  context.subscriptions.push(
+    commands.registerCommand('affinidiFeedback.redirectToGithub', () => {
+      commands.executeCommand('vscode.open', GITHUB_URL)
+    }),
+  )
+
   commands.registerCommand('affinidiDevTools.issueCredential', () => {
     const issueCredentialURL = buildURL(CONSOLE_URL, '/bulk-issuance')
 

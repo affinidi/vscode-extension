@@ -46,10 +46,12 @@
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
     "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
+    "onCommand:affinidiFeedback.redirectToGithub",
     "onStartupFinished",
     "onView:affinidiCodeGeneration",
     "onView:affinidiDevTools",
-    "onView:affinidiExplorer"
+    "onView:affinidiExplorer",
+    "onView:affinidiFeedback"
   ],
   "main": "./out/main",
   "contributes": {
@@ -183,6 +185,11 @@
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
         "category": "%commands.category.explorer%"
+      },
+      {
+        "command": "affinidiFeedback.redirectToGithub",
+        "title": "%affinidiFeedback.redirectToGithub%",
+        "category": "Affinidi"
       }
     ],
     "menus": {
@@ -320,6 +327,10 @@
         {
           "id": "affinidiDevTools",
           "name": "%views.affinidi.affinidiDevTools%"
+        },
+        {
+          "id": "affinidiFeedback",
+          "name": "%views.affinidi.affinidiFeedback%"
         }
       ]
     },

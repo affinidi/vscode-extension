@@ -23,6 +23,8 @@
 
   "affinidiDevTools.issueCredential": "",
 
+  "affinidiFeedback.redirectToGithub": "",
+
   "commands.category.explorer": "",
   "commands.category.devTool": "",
   "commands.category.snippets": "",
@@ -33,6 +35,7 @@
   "views.affinidi.affinidiExplorer": "",
   "views.affinidi.affinidiCodeGeneration": "",
   "views.affinidi.affinidiDevTools": "",
+  "views.affinidi.affinidiFeedback": "",
 
   "viewsWelcome.affinidiDevTools": "",
 
