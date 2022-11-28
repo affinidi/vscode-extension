@@ -43,6 +43,7 @@ import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHel
 import { iamHelpers } from './features/iam/iamHelpers'
 import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
+import { issuanceHelper } from './features/issuance/IssuanceHelper'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -278,6 +279,15 @@ export async function activateInternal(context: ExtensionContext) {
           }
         } else if (element.resourceType === ExplorerResourceTypes.issuance) {
           const issuance = issuancesState.getIssuanceById(element.issuanceId)
+
+          if (issuance) {
+            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+          }
+        } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
+          const {
+            apiKey: { apiKeyHash },
+          } = iamHelpers.requireProjectSummary(projectId)
+          const issuance = await issuanceHelper.askForIssuance({ projectId }, { apiKeyHash })
 
           if (issuance) {
             await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })

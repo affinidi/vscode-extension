@@ -124,7 +124,7 @@
         "command": "affinidi.openMarkDown",
         "title": "%affinidi.openMarkDown%",
         "category": "%commands.category.explorer%",
-        "icon": "$(info)"
+        "icon": "$(question)"
       },
       {
         "command": "affinidi.copyJsonURL",
@@ -139,7 +139,8 @@
       {
         "command": "affinidiExplorer.viewProperties",
         "title": "%affinidiExplorer.viewProperties%",
-        "category": "%commands.category.explorer%"
+        "category": "%commands.category.explorer%",
+        "icon": "$(info)"
       },
       {
         "command": "affinidiExplorer.showJsonSchema",
@@ -184,7 +185,8 @@
       {
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
-        "category": "%commands.category.explorer%"
+        "category": "%commands.category.explorer%",
+        "icon": "$(plus)"
       },
       {
         "command": "affinidiFeedback.redirectToGithub",
@@ -255,12 +257,17 @@
         {
           "command": "affinidiExplorer.refresh",
           "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == rootIssuance",
-          "group": "inline"
+          "group": "inline@3"
         },
         {
           "command": "affinidi.openMarkDown",
           "when": "view == affinidiExplorer && viewItem == rootIssuance || view == affinidiExplorer && viewItem == rootSchemas",
-          "group": "inline"
+          "group": "inline@2"
+        },
+        {
+          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "view == affinidiExplorer && viewItem == rootIssuance",
+          "group": "inline@1"
         },
         {
           "command": "affinidi.copyJsonURL",
@@ -311,6 +318,11 @@
           "command": "affinidi.codegen.sendVcOfferToEmail",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "1"
+        },
+        {
+          "command": "affinidiExplorer.viewProperties",
+          "when": "view == affinidiExplorer && viewItem == project",
+          "group": "inline"
         }
       ]
     },
