@@ -39,6 +39,7 @@ import { logger } from './utils/logger'
 import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
+const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -336,9 +337,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidiFeedback.redirectToGithub', () => {
-      const githubUrl = 'https://github.com/affinityproject/vscode-extension/issues'
-
-      commands.executeCommand('vscode.open', githubUrl)
+      commands.executeCommand('vscode.open', GITHUB_URL)
     }),
   )
 
