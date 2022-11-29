@@ -5,6 +5,7 @@ import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../tree/types'
 import { fetchProjectsSummaryList } from './fetchProjectsSummaryList'
+import { iamHelpers } from './iamHelpers'
 
 export class IamExplorerProvider implements ExplorerProvider {
   public async getChildren(
@@ -70,7 +71,7 @@ export class IamExplorerProvider implements ExplorerProvider {
   }
 
   private async getDidItems(parent?: ExplorerTreeItem) {
-    const projectSummary = projectsState.getProjectById(parent?.projectId)
+    const projectSummary = iamHelpers.requireProjectSummary(parent?.projectId)
 
     return [
       new ExplorerTreeItem({

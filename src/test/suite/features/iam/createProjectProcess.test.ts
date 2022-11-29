@@ -6,7 +6,7 @@ import { sandbox } from '../../setup'
 import { createProjectProcess } from '../../../../features/iam/createProjectProcess'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { authHelper } from '../../../../auth/authHelper'
-import { projectsState } from '../../../../states/projectsState'
+import { iamHelpers } from '../../../../features/iam/iamHelpers'
 
 describe('createProjectProcess()', () => {
   const projectName = 'fake-project-name'
@@ -48,7 +48,7 @@ describe('createProjectProcess()', () => {
 
     expect(iamClient.createProject).calledWith({ name: projectName }, { consoleAuthToken })
     expect(iamClient.getProjectSummary).calledWith({ projectId }, { consoleAuthToken })
-    expect(projectsState.getProjectById(projectId)).equal(projectSummary)
+    expect(iamHelpers.requireProjectSummary(projectId)).equal(projectSummary)
   })
 
   it('should fail when project name is not provided', async () => {
