@@ -11,7 +11,7 @@ export class ExplorerTreeItem extends TreeItem {
 
   public readonly issuanceId: string | undefined
 
-  public readonly schemaScope: SchemaSearchScope | undefined
+  public readonly schemaScope: 'public' | 'unlisted' | undefined
 
   constructor(
     public readonly item: {
@@ -19,7 +19,7 @@ export class ExplorerTreeItem extends TreeItem {
       label: string
       schemaId?: string
       issuanceId?: string
-      schemaScope?: SchemaSearchScope
+      schemaScope?: 'public' | 'unlisted'
       description?: string
       collapsibleState?: TreeItemCollapsibleState
       icon?: ThemeIcon

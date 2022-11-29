@@ -169,7 +169,8 @@
       {
         "command": "affinidiExplorer.openSchemaBuilder",
         "title": "%affinidiExplorer.openSchemaBuilder%",
-        "category": "%commands.category.explorer%"
+        "category": "%commands.category.explorer%",
+        "icon": "$(add)"
       },
       {
         "command": "affinidiExplorer.createIssuanceWithSchema",
@@ -269,6 +270,11 @@
         {
           "command": "affinidi.openMarkDown",
           "when": "view == affinidiExplorer && viewItem == rootIssuance || view == affinidiExplorer && viewItem == rootSchemas",
+          "group": "inline"
+        },
+        {
+          "command": "affinidiExplorer.openSchemaBuilder",
+          "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == subRootSchemas",
           "group": "inline"
         },
         {

@@ -40,16 +40,6 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
       }),
-      new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.other,
-        label: l10n.t('Create VC Schema'),
-        icon: new ThemeIcon('file-directory-create'),
-        command: {
-          title: l10n.t('Create VC Schema'),
-          command: 'affinidiExplorer.openSchemaBuilder',
-        },
-        projectId: parent?.projectId,
-      }),
     ]
   }
 

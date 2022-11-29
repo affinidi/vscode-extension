@@ -22,14 +22,19 @@ function main() {
       type: document.getElementById('schemaType').value,
       description: document.getElementById('schemaDescription').value,
       isPublic: document.getElementById('isSchemaPublic').checked,
-      attributes: schema.attributes.map((attribute) => ({
-        id: attribute.id,
-        parentId: attribute.parentId,
-        name: document.getElementById(`${attribute.id}_name`).value,
-        description: document.getElementById(`${attribute.id}_description`).value,
-        type: document.getElementById(`${attribute.id}_type`).value,
-        isRequired: document.getElementById(`${attribute.id}_isRequired`).checked,
-      })),
+      attributes: schema.attributes.map((attribute) => {
+        const element = document.getElementById(attribute.id)
+        if (!element) return attribute
+
+        return {
+          id: attribute.id,
+          parentId: attribute.parentId,
+          name: document.getElementById(`${attribute.id}_name`).value,
+          description: document.getElementById(`${attribute.id}_description`).value,
+          type: document.getElementById(`${attribute.id}_type`).value,
+          isRequired: document.getElementById(`${attribute.id}_isRequired`).checked,
+        }
+      }),
     }
   }
 
@@ -79,6 +84,8 @@ function main() {
       render()
     } else if (command === 'enableSubmit') {
       submitButton.disabled = false;
+    } else if (command === 'setScope') {
+      document.getElementById('isSchemaPublic').checked = data.scope === 'public'
     }
   })
 }
@@ -210,15 +217,15 @@ function createAttributeElement(attribute, level) {
   const isNested = level > 0
 
   const attributeElement = createElement(`
-    <section class="wrapper" style="margin-left: ${level * NESTED_MARGIN_PX}px;"> 
+    <section class="wrapper" style="margin-left: ${level * NESTED_MARGIN_PX}px;" id="${attribute.id}"> 
       <div class="box-row">
         <div class="box" style="width: calc(250px - ${level * NESTED_MARGIN_PX}px);">
-          <label>${isNested ? 'Nested attribute name' : 'Attribute name'}</label>
+          <label>${isNested ? 'Nested&nbsp;attribute&nbsp;name' : 'Attribute&nbsp;name'}</label>
           <vscode-text-field size="40" id="${id}_name"></vscode-text-field>
         </div>
 
         <div class="box" style="width: 250px;">
-          <label>Description (optional)</label>
+          <label>Description&nbsp;(optional)</label>
           <vscode-text-field size="40" id="${id}_description"></vscode-text-field>
         </div>
         

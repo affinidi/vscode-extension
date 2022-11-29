@@ -101,11 +101,9 @@ export async function activateInternal(context: ExtensionContext) {
     })
   })
 
-  let panel: WebviewPanel | undefined
-
   const openSchema = commands.registerCommand('schema.showSchemaDetails', () => {
-    const selectedTreeViewItem = treeView.selection[0]
-    const schema = schemasState.getSchemaById(selectedTreeViewItem.schemaId)
+    const element = treeView.selection[0]
+    const schema = schemasState.getSchemaById(element.schemaId)
     if (!schema) return
 
     sendEventToAnalytics({
@@ -113,7 +111,7 @@ export async function activateInternal(context: ExtensionContext) {
       subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'schema.showSchemaDetails',
-        projectId: selectedTreeViewItem.projectId,
+        projectId: element.projectId,
       },
     })
 
@@ -376,7 +374,7 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand('vscode.open', issueCredentialURL)
   })
 
-  commands.registerCommand('affinidiExplorer.openSchemaBuilder', async () => {
+  commands.registerCommand('affinidiExplorer.openSchemaBuilder', async (element: ExplorerTreeItem) => {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
       subCategory: EventSubCategory.command,
@@ -385,10 +383,7 @@ export async function activateInternal(context: ExtensionContext) {
       },
     })
 
-    const element = treeView.selection[0]
-    if (!element?.projectId) return
-
-    openSchemaBuilder({ projectId: element.projectId })
+    openSchemaBuilder({ projectId: element.projectId, scope: element.schemaScope })
   })
 
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {

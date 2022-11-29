@@ -23,7 +23,7 @@ export type BuilderSchema = {
 }
 
 type IngoingMessage = { command: 'submit'; data: { schema: BuilderSchema } }
-type OutgoingMessage = { command: 'init' } | { command: 'enableSubmit' }
+type OutgoingMessage = { command: 'init' } | { command: 'enableSubmit' } | { command: 'setScope', data: { scope: string } }
 
 export class SchemaBuilderWebview {
   private panel: WebviewPanel | undefined
@@ -54,6 +54,10 @@ export class SchemaBuilderWebview {
     this.sendMessage({ command: 'init' })
 
     this.panel.reveal()
+  }
+
+  setScope(scope: 'public' | 'unlisted') {
+    this.sendMessage({ command: 'setScope', data: { scope } })
   }
 
   dispose() {

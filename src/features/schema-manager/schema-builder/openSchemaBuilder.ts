@@ -6,10 +6,11 @@ import { SchemaBuilderWebview } from './SchemaBuilderWebview'
 
 let builder: SchemaBuilderWebview | undefined
 
-export async function openSchemaBuilder(input?: { projectId?: string }) {
+export async function openSchemaBuilder(input?: { projectId?: string; scope?: 'public' | 'unlisted' }) {
   try {
     const builder = await getOrCreateBuilder(input?.projectId)
     builder.open()
+    builder.setScope(input?.scope ?? 'public')
   } catch (error) {
     logger.error(error, 'Could not get or create Schema Builder')
     notifyError(error)
