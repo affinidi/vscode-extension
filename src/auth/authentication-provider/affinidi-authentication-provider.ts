@@ -18,21 +18,33 @@ import {
   EventNames,
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
-import { SESSION_KEY_NAME, vaultService } from './vault'
+import { SESSION_KEY_NAME, credentialsVaultService } from './vault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
 
+const convertSession = (sessionValue: string) => {
+  const session = JSON.parse(sessionValue)
+
+  const convertedSession = {
+    id: session.sessionId,
+    accessToken: session.consoleAuthToken,
+    account: { label: session.account.label, id: session.account.userId },
+    scopes: [],
+  }
+
+  return convertedSession
+}
+
 const assertSession = (sessionValue: unknown): AuthenticationSession | undefined => {
-  return typeof sessionValue === 'string' && sessionValue
-    ? (JSON.parse(sessionValue) as AuthenticationSession)
-    : undefined
+  return typeof sessionValue === 'string' && sessionValue ? convertSession(sessionValue) : undefined
 }
 
 const readSessionFromStorage = (): AuthenticationSession | undefined => {
-  const storageValue = vaultService.get(SESSION_KEY_NAME)
+  const storageValue = credentialsVaultService.get(SESSION_KEY_NAME)
+
   return assertSession(storageValue)
 }
 
@@ -50,7 +62,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         supportsMultipleAccounts: false,
       }),
     )
-    this._confUnsubscribe = vaultService.onDidChange(
+    this._confUnsubscribe = credentialsVaultService.onDidChange(
       SESSION_KEY_NAME,
       this.handleExternalChangeSession,
     )
@@ -77,7 +89,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       const session = await authentication.getSession(AUTH_PROVIDER_ID, scopes, options)
 
       if (session) {
-        const token = parseJwt(session.accessToken.slice(18))
+        const token = parseJwt(session.accessToken)
 
         // subtract 1 minute in case of lag
         if (Date.now() / 1000 >= token.exp - 60) {
@@ -129,7 +141,14 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         scopes: [],
       }
 
-      vaultService.set(SESSION_KEY_NAME, JSON.stringify(session))
+      const configSession = {
+        sessionId: session.id,
+        consoleAuthToken: accessToken,
+        account: { label: email, userId: id },
+        scopes: [],
+      }
+
+      credentialsVaultService.set(SESSION_KEY_NAME, JSON.stringify(configSession))
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -166,7 +185,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const session = readSessionFromStorage()
 
     if (session) {
-      vaultService.delete(SESSION_KEY_NAME)
+      credentialsVaultService.delete(SESSION_KEY_NAME)
       this._onDidChangeSessions.fire({
         added: [],
         removed: [session],

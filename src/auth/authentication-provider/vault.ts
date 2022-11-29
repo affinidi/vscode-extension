@@ -45,4 +45,10 @@ const credentialConf = new Conf({
   watch: true,
 })
 
-export const vaultService = new VaultService(credentialConf)
+const configConf = new Conf({
+  cwd: path.join(os.homedir(), '.affinidi', 'config'),
+  watch: true,
+})
+
+export const credentialsVaultService = new VaultService(credentialConf)
+export const configVaultService = new VaultService(configConf)
