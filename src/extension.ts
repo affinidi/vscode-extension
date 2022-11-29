@@ -249,12 +249,12 @@ export async function activateInternal(context: ExtensionContext) {
         } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
           const {
             apiKey: { apiKeyHash },
+            wallet: { did },
           } = iamHelpers.requireProjectSummary(projectId)
-          const issuance = await issuanceHelper.askForIssuance({ projectId }, { apiKeyHash })
+          const schema = await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash })
+          if (!schema) return
 
-          if (issuance) {
-            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
-          }
+          await initiateIssuanceCsvFlow({ projectId, schema })
         }
 
         sendEventToAnalytics({
