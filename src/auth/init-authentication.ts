@@ -15,6 +15,7 @@ import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
 } from './authentication-provider/affinidi-authentication-provider'
+import { credentialsVaultService } from './authentication-provider/vault'
 import { authHelper } from './authHelper'
 
 const CONSENT = {
@@ -97,6 +98,7 @@ async function logoutHandler(): Promise<void> {
     })
 
     await ext.authProvider.handleRemoveSession()
+    credentialsVaultService.clear()
 
     await window.showInformationMessage(l10n.t('Signed Out of Affinidi'))
     ext.outputChannel.appendLine(l10n.t('Signed Out of Affinidi'))

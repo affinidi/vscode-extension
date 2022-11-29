@@ -2,6 +2,7 @@ import { ProgressLocation, window, commands, Uri, l10n } from 'vscode'
 import * as fs from 'fs'
 import * as execa from 'execa'
 import { ext } from '../extensionVariables'
+import { setActiveProject } from '../features/iam/setActiveProject'
 
 export const WARNING_MESSAGE = l10n.t(
   'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
@@ -55,6 +56,7 @@ export class CliHelper {
 
   async setActiveProject(projectId: string) {
     await this.exec.command(`affinidi use project ${projectId}`)
+    setActiveProject(projectId)
   }
 
   async generateApp({ path }: { path: string }): Promise<void> {

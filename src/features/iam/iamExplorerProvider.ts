@@ -35,9 +35,12 @@ export class IamExplorerProvider implements ExplorerProvider {
   private async getProjectItems() {
     await fetchProjectsSummaryList()
     const projects = projectsState.getProjects()
-    const activeProject = configVaultService.get(ACTIVE_PROJECT_ID_KEY_NAME)
-    if (projects && !activeProject) {
-      setActiveProject(projects[0].project.projectId)
+    const storedActiveProject = configVaultService.get(ACTIVE_PROJECT_ID_KEY_NAME)
+    if (projects) {
+      const activeProject = storedActiveProject
+        ? JSON.parse(storedActiveProject)
+        : projects[0].project.projectId
+      setActiveProject(activeProject)
     }
 
     return (projects ?? []).map(
