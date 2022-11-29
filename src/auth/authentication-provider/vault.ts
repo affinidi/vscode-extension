@@ -4,6 +4,7 @@ import * as os from 'os'
 import * as path from 'path'
 
 export const SESSION_KEY_NAME = 'session'
+export const ACTIVE_PROJECT_KEY_NAME = 'activeProjectSummary'
 
 class VaultService {
   private readonly store: Conf

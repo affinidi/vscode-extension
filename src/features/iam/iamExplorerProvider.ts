@@ -1,4 +1,8 @@
 import { TreeItemCollapsibleState, ThemeIcon, l10n } from 'vscode'
+import {
+  ACTIVE_PROJECT_KEY_NAME,
+  credentialsVaultService,
+} from '../../auth/authentication-provider/vault'
 import { ext } from '../../extensionVariables'
 import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
@@ -30,6 +34,9 @@ export class IamExplorerProvider implements ExplorerProvider {
   private async getProjectItems() {
     await fetchProjectsSummaryList()
     const projects = projectsState.getProjects()
+    if (projects && !credentialsVaultService.get(ACTIVE_PROJECT_KEY_NAME)) {
+      credentialsVaultService.set(ACTIVE_PROJECT_KEY_NAME, JSON.stringify(projects[0]))
+    }
 
     return (projects ?? []).map(
       (project) =>
