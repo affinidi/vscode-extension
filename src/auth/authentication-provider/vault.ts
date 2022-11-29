@@ -4,7 +4,8 @@ import * as os from 'os'
 import * as path from 'path'
 
 export const SESSION_KEY_NAME = 'session'
-export const ACTIVE_PROJECT_KEY_NAME = 'activeProjectSummary'
+export const ACTIVE_PROJECT_SUMMARY_KEY_NAME = 'activeProjectSummary'
+export const ACTIVE_PROJECT_ID_KEY_NAME = 'activeProjectId'
 
 class VaultService {
   private readonly store: Conf
@@ -42,12 +43,14 @@ class VaultService {
 }
 
 const credentialConf = new Conf({
-  cwd: path.join(os.homedir(), '.affinidi', 'credentials'),
+  configName: 'credentials',
+  cwd: path.join(os.homedir(), '.affinidi'),
   watch: true,
 })
 
 const configConf = new Conf({
-  cwd: path.join(os.homedir(), '.affinidi', 'config'),
+  configName: 'config',
+  cwd: path.join(os.homedir(), '.affinidi'),
   watch: true,
 })
 
