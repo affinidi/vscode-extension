@@ -23,7 +23,10 @@ export type BuilderSchema = {
 }
 
 type IngoingMessage = { command: 'submit'; data: { schema: BuilderSchema } }
-type OutgoingMessage = { command: 'init' } | { command: 'enableSubmit' } | { command: 'setScope', data: { scope: string } }
+type OutgoingMessage =
+  | { command: 'init' }
+  | { command: 'enableSubmit' }
+  | { command: 'setScope'; data: { scope: string } }
 
 export class SchemaBuilderWebview {
   private panel: WebviewPanel | undefined
@@ -34,7 +37,7 @@ export class SchemaBuilderWebview {
     if (!this.panel) {
       this.panel = window.createWebviewPanel(
         'schemaBuilderView',
-        'Schema Builder',
+        l10n.t('Schema Builder'),
         ViewColumn.One,
         {
           enableScripts: true,
@@ -74,34 +77,40 @@ export class SchemaBuilderWebview {
 
         if (!isValidSchemaType(schema.type)) {
           window.showErrorMessage(
-            'Invalid schema type. Use PascalCase and alphanumeric symbols (for example, "MySchema")',
+            l10n.t(
+              'Invalid schema type. Use PascalCase and alphanumeric symbols (for example, "MySchema")',
+            ),
           )
           return
         }
 
         if (schema.attributes.length === 0) {
-          window.showErrorMessage('Your schema is empty. Try adding an attribute.')
+          window.showErrorMessage(l10n.t('Your schema is empty. Try adding an attribute.'))
           return
         }
 
         for (const attribute of schema.attributes) {
           if (!attribute.name) {
             window.showErrorMessage(
-              'Empty attribute name. Use camelCase and alphanumeric symbols (for example, "firstName")',
+              l10n.t(
+                'Empty attribute name. Use camelCase and alphanumeric symbols (for example, "firstName")',
+              ),
             )
             return
           }
 
           if (!isValidAttributeName(attribute.name)) {
             window.showErrorMessage(
-              `Invalid attribute name: "${attribute.name}". Use camelCase and alphanumeric symbols (for example, "firstName")`,
+              l10n.t(
+                `Invalid attribute name: "${attribute.name}". Use camelCase and alphanumeric symbols (for example, "firstName")`,
+              ),
             )
             return
           }
         }
 
         const createdSchema = await window.withProgress(
-          { location: ProgressLocation.Notification, title: 'Publishing the schema...' },
+          { location: ProgressLocation.Notification, title: l10n.t('Publishing the schema...') },
           () => publishBuilderSchema(schema, this.projectId),
         )
 
@@ -193,7 +202,7 @@ export class SchemaBuilderWebview {
 
   private requirePanel() {
     if (!this.panel) {
-      throw new Error('Webview panel is not opened')
+      throw new Error(l10n.t('Webview panel is not opened'))
     }
 
     return this.panel
