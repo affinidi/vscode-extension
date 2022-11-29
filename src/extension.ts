@@ -21,6 +21,7 @@ import { ExplorerResourceTypes } from './tree/types'
 import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
+import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 import { ExplorerTree } from './tree/explorerTree'
 import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
@@ -34,8 +35,10 @@ import { iamHelpers } from './features/iam/iamHelpers'
 import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
+import { issuanceHelper } from './features/issuance/IssuanceHelper'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
+const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -60,6 +63,7 @@ export async function activateInternal(context: ExtensionContext) {
     new SchemaManagerExplorerProvider(),
   ])
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
+  const affFeedbackProvider = new AffinidiFeedbackProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {
     treeDataProvider: ext.explorerTree,
@@ -69,6 +73,12 @@ export async function activateInternal(context: ExtensionContext) {
 
   window.createTreeView('affinidiCodeGeneration', {
     treeDataProvider: affCodeGenTreeProvider,
+    canSelectMany: false,
+    showCollapseAll: true,
+  })
+
+  window.createTreeView('affinidiFeedback', {
+    treeDataProvider: affFeedbackProvider,
     canSelectMany: false,
     showCollapseAll: true,
   })
@@ -236,6 +246,15 @@ export async function activateInternal(context: ExtensionContext) {
           if (issuance) {
             await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
           }
+        } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
+          const {
+            apiKey: { apiKeyHash },
+          } = iamHelpers.requireProjectSummary(projectId)
+          const issuance = await issuanceHelper.askForIssuance({ projectId }, { apiKeyHash })
+
+          if (issuance) {
+            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+          }
         }
 
         sendEventToAnalytics({
@@ -357,6 +376,12 @@ export async function activateInternal(context: ExtensionContext) {
           projectId: result?.projectId,
         },
       })
+    }),
+  )
+
+  context.subscriptions.push(
+    commands.registerCommand('affinidiFeedback.redirectToGithub', () => {
+      commands.executeCommand('vscode.open', GITHUB_URL)
     }),
   )
 

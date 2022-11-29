@@ -25,15 +25,18 @@
 
   "affinidiDevTools.issueCredential": "Issuance Credential",
 
-  "commands.category.explorer": "Affinidi Explorer",
-  "commands.category.devTool": "Affinidi Dev Tool",
-  "commands.category.generators": "Affinidi Generators",
+  "affinidiFeedback.redirectToGithub": "Give Feedback",
+
+  "commands.category.explorer": "Explorer",
+  "commands.category.devTool": "Dev Tool",
+  "commands.category.generators": "Generators",
 
   "affinidi.docs.availableSnippets": "View Available Snippets",
 
   "views.affinidi.affinidiExplorer": "Explorer",
   "views.affinidi.affinidiCodeGeneration": "Snippets & Generators",
   "views.affinidi.affinidiDevTools": "Developer Tools",
+  "views.affinidi.affinidiFeedback": "Feedback",
 
   "viewsWelcome.affinidiDevTools": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiExplorer.openCreateSchemaUrl)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiDevTools.issueCredential)",
 

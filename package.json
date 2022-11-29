@@ -48,10 +48,12 @@
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
     "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
+    "onCommand:affinidiFeedback.redirectToGithub",
     "onStartupFinished",
     "onView:affinidiCodeGeneration",
     "onView:affinidiDevTools",
-    "onView:affinidiExplorer"
+    "onView:affinidiExplorer",
+    "onView:affinidiFeedback"
   ],
   "main": "./out/main",
   "contributes": {
@@ -124,7 +126,7 @@
         "command": "affinidi.openMarkDown",
         "title": "%affinidi.openMarkDown%",
         "category": "%commands.category.explorer%",
-        "icon": "$(info)"
+        "icon": "$(question)"
       },
       {
         "command": "affinidi.copyJsonURL",
@@ -139,7 +141,8 @@
       {
         "command": "affinidiExplorer.viewProperties",
         "title": "%affinidiExplorer.viewProperties%",
-        "category": "%commands.category.explorer%"
+        "category": "%commands.category.explorer%",
+        "icon": "$(info)"
       },
       {
         "command": "affinidiExplorer.showJsonSchema",
@@ -195,7 +198,13 @@
       {
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
-        "category": "%commands.category.explorer%"
+        "category": "%commands.category.explorer%",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "affinidiFeedback.redirectToGithub",
+        "title": "%affinidiFeedback.redirectToGithub%",
+        "category": "Affinidi"
       }
     ],
     "menus": {
@@ -265,12 +274,17 @@
         {
           "command": "affinidiExplorer.refresh",
           "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == rootIssuance",
-          "group": "inline"
+          "group": "inline@3"
         },
         {
           "command": "affinidi.openMarkDown",
           "when": "view == affinidiExplorer && viewItem == rootIssuance || view == affinidiExplorer && viewItem == rootSchemas",
-          "group": "inline"
+          "group": "inline@2"
+        },
+        {
+          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "view == affinidiExplorer && viewItem == rootIssuance",
+          "group": "inline@1"
         },
         {
           "command": "affinidiExplorer.openSchemaBuilder",
@@ -326,6 +340,11 @@
           "command": "affinidi.codegen.sendVcOfferToEmail",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "1"
+        },
+        {
+          "command": "affinidiExplorer.viewProperties",
+          "when": "view == affinidiExplorer && viewItem == project",
+          "group": "inline"
         }
       ]
     },
@@ -342,6 +361,10 @@
         {
           "id": "affinidiDevTools",
           "name": "%views.affinidi.affinidiDevTools%"
+        },
+        {
+          "id": "affinidiFeedback",
+          "name": "%views.affinidi.affinidiFeedback%"
         }
       ]
     },
@@ -513,6 +536,7 @@
     "date-fns": "^2.29.3",
     "execa": "^5.1.1",
     "form-data": "^4.0.0",
+    "jsonschema": "^1.4.1",
     "jsonwebtoken": "^8.5.1",
     "nanoid": "^3.3.4",
     "node-fetch": "^2.6.7",
