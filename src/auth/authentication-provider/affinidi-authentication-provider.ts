@@ -18,7 +18,12 @@ import {
   EventNames,
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
-import { SESSION_KEY_NAME, credentialsVaultService } from './vault'
+import {
+  SESSION_KEY_NAME,
+  credentialsVaultService,
+  configVaultService,
+  CURRENT_USER_ID_KEY_NAME,
+} from './vault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 
@@ -149,6 +154,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       }
 
       credentialsVaultService.set(SESSION_KEY_NAME, JSON.stringify(configSession))
+      configVaultService.set(CURRENT_USER_ID_KEY_NAME, JSON.stringify(session.account.id))
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -200,6 +206,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
     // If it's the same session ID we consider it a change
     if (oldSession && newSession && oldSession?.id === newSession?.id) {
+      configVaultService.set(CURRENT_USER_ID_KEY_NAME, JSON.stringify(newSession.account.id))
       this._onDidChangeSessions.fire({
         added: [],
         removed: [],
@@ -213,6 +220,8 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const removed = []
     if (oldSession) removed.push(oldSession)
     if (newSession) added.push(newSession)
+    if (newSession)
+      configVaultService.set(CURRENT_USER_ID_KEY_NAME, JSON.stringify(newSession.account.id))
     this._onDidChangeSessions.fire({
       added,
       removed,

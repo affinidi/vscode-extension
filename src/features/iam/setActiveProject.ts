@@ -1,9 +1,10 @@
 import { window, ProgressLocation, l10n } from 'vscode'
 import {
-  ACTIVE_PROJECT_ID_KEY_NAME,
   ACTIVE_PROJECT_SUMMARY_KEY_NAME,
   configVaultService,
   credentialsVaultService,
+  SESSION_KEY_NAME,
+  CONFIGS_KEY_NAME,
 } from '../../auth/authentication-provider/vault'
 
 import { fetchProjectSummary } from './fetchProjectSummary'
@@ -17,6 +18,14 @@ export async function setActiveProject(projectId: string): Promise<void> {
     () => fetchProjectSummary(projectId),
   )
 
-  configVaultService.set(ACTIVE_PROJECT_ID_KEY_NAME, JSON.stringify(projectId))
+  const storedSession = credentialsVaultService.get(SESSION_KEY_NAME)
+  const session = JSON.parse(storedSession)
+  const { userId } = session.account
+
+  const configs = {
+    [userId]: { activeProjectId: projectSummary.project.projectId },
+  }
+
+  configVaultService.set(CONFIGS_KEY_NAME, JSON.stringify(configs))
   credentialsVaultService.set(ACTIVE_PROJECT_SUMMARY_KEY_NAME, JSON.stringify(projectSummary))
 }

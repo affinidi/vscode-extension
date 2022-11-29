@@ -6,6 +6,8 @@ import * as path from 'path'
 export const SESSION_KEY_NAME = 'session'
 export const ACTIVE_PROJECT_SUMMARY_KEY_NAME = 'activeProjectSummary'
 export const ACTIVE_PROJECT_ID_KEY_NAME = 'activeProjectId'
+export const CURRENT_USER_ID_KEY_NAME = 'currentUserId'
+export const CONFIGS_KEY_NAME = 'configs'
 
 class VaultService {
   private readonly store: Conf
