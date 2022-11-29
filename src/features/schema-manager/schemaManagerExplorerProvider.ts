@@ -3,8 +3,7 @@ import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../tree/types'
 import { projectsState } from '../../states/projectsState'
-import { getMySchemas } from './getMySchemas'
-import { getSchemaName } from './getSchemaName'
+import { schemaManagerHelpers } from './schemaManagerHelpers'
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -49,7 +48,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       apiKey: { apiKeyHash },
     } = projectsState.getProjectById(parent?.projectId)
 
-    const schemas = await getMySchemas(
+    const schemas = await schemaManagerHelpers.getMySchemas(
       {
         did,
         scope: parent?.schemaScope,
@@ -61,7 +60,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       (schema) =>
         new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.schema,
-          label: getSchemaName(schema),
+          label: schemaManagerHelpers.getSchemaName(schema),
           description: schema.description || '',
           icon: new ThemeIcon('bracket'),
           schemaId: schema.id,

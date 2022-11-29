@@ -1,14 +1,52 @@
 import { window, ProgressLocation, l10n } from 'vscode'
-import { Options } from '@affinidi/client-schema-manager'
-import { getMySchemas } from './getMySchemas'
+import { Options, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { Schema } from '../../shared/types'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { iamHelpers } from '../iam/iamHelpers'
+import { schemasState } from '../../states/schemasState'
+import { schemaManagerClient } from './schemaManagerClient'
 
 export const EXAMPLE_SCHEMA: Schema = {
   type: 'MySchema',
   jsonLdContextUrl: 'https://schema.affinidi.com/MySchemaV1-0.jsonld',
   jsonSchemaUrl: 'https://schema.affinidi.com/MySchemaV1-0.json',
+}
+
+const getMySchemas = async (
+  input: {
+    did: string
+    scope?: SchemaSearchScope
+  },
+  options: Options,
+) => {
+  let schemas = schemasState.getSchemas()?.filter((schema) => {
+    if (input.scope === 'public') {
+      return schema.namespace === null
+    }
+
+    if (input.scope === 'unlisted') {
+      return !!schema.namespace
+    }
+
+    return schema
+  })
+
+  if (!schemas?.length) {
+    const result = await schemaManagerClient.searchSchemas(
+      {
+        did: input.did,
+        authorDid: input.did,
+        scope: input.scope ?? 'default',
+      },
+      options,
+    )
+
+    schemas = result.schemas
+
+    schemasState.setSchemas(schemas)
+  }
+
+  return schemas
 }
 
 async function askForMySchema(
@@ -53,7 +91,13 @@ async function fetchSchemaUrl(projectId: string) {
   return schema.jsonSchemaUrl
 }
 
+function getSchemaName(schema: { type: string; version: number; revision: number }) {
+  return `${schema.type}V${schema.version}-${schema.revision}`
+}
+
 export const schemaManagerHelpers = {
   askForMySchema,
   fetchSchemaUrl,
+  getSchemaName,
+  getMySchemas,
 }

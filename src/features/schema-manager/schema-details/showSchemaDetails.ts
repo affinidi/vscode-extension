@@ -1,8 +1,8 @@
 import { SchemaDto } from '@affinidi/client-schema-manager'
-import { Uri, ViewColumn, Webview, WebviewPanel, window } from 'vscode'
+import { l10n, Uri, ViewColumn, Webview, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
-import { getSchemaName } from '../getSchemaName'
+import { schemaManagerHelpers } from '../schemaManagerHelpers'
 
 let panel: WebviewPanel | undefined
 
@@ -87,7 +87,7 @@ export function showSchemaDetails(schema: SchemaDto) {
     panel.onDidDispose(() => (panel = undefined), null, ext.context.subscriptions)
   }
 
-  panel.title = `Schema: ${getSchemaName(schema)}`
+  panel.title = l10n.t('Schema: {0}', schemaManagerHelpers.getSchemaName(schema))
   panel.webview.html = renderSchemaDetails({
     webview: panel.webview,
     extensionUri: ext.context.extensionUri,
