@@ -2,16 +2,16 @@ import { ProjectSummary } from '@affinidi/client-iam'
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { SchemaDto } from '@affinidi/client-schema-manager'
 import fetch from 'node-fetch'
+import { iamState } from '../features/iam/iamState'
 import { issuancesState } from '../states/issuancesState'
-import { projectsState } from '../states/projectsState'
 import { schemasState } from '../states/schemasState'
 import { ExplorerResourceTypes } from '../tree/types'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
 type ViewPropertiesProps = {
+  projectId: string
   resourceType: ExplorerResourceTypes
   issuanceId?: string
-  projectId?: string
   schemaId?: string
 }
 
@@ -23,7 +23,7 @@ export const viewProperties = async ({
 }: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
-  let content: ProjectSummary | SchemaDto | IssuanceDto = projectsState.getProjectById(projectId)
+  let content: any = await iamState.requireProjectSummary(projectId)
   switch (resourceType) {
     case ExplorerResourceTypes.project: {
       label = content.project.name

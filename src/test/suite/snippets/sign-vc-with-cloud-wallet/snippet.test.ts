@@ -8,7 +8,6 @@ import {
 import { AFFINIDI_IAM_API_URL, iamClient } from '../../../../features/iam/iamClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
-import { projectsState } from '../../../../states/projectsState'
 
 describe('insertSignVcWithCloudWalletSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
@@ -37,8 +36,6 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
     sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
 
-    projectsState.setProject(projectSummary)
-
     await insertSignVcWithCloudWalletSnippet(
       {
         projectId,
@@ -64,7 +61,5 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     ]) {
       expect(text).contains(value)
     }
-
-    projectsState.clear()
   })
 })

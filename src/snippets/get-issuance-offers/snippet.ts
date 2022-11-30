@@ -6,6 +6,7 @@ import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
 
 import * as javascript from './javascript'
 import * as typescript from './typescript'
+import { iamState } from '../../features/iam/iamState'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -36,7 +37,7 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
 
     const {
       apiKey: { apiKeyHash },
-    } = iamHelpers.requireProjectSummary(projectId)
+    } = await iamState.requireProjectSummary(projectId)
 
     const issuanceId =
       input?.issuanceId ?? (await issuanceHelper.askForIssuance({ projectId }, { apiKeyHash }))?.id

@@ -28,14 +28,13 @@ import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
 import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerProvider'
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
-import { projectsState } from './states/projectsState'
 import { openSchemaBuilder } from './features/schema-manager/schema-builder/openSchemaBuilder'
 import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
 import { iamHelpers } from './features/iam/iamHelpers'
 import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
-import { issuanceHelper } from './features/issuance/IssuanceHelper'
+import { iamState } from './features/iam/iamState'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -49,7 +48,6 @@ export async function activateInternal(context: ExtensionContext) {
   ext.outputChannel = window.createOutputChannel('Affinidi')
   ext.authProvider = initAuthentication()
 
-  projectsState.clear()
   schemasState.clear()
   issuancesState.clear()
 
@@ -83,7 +81,7 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  commands.registerCommand('affinidiExplorer.refresh', (element: ExplorerTreeItem) => {
+  commands.registerCommand('affinidiExplorer.refresh', async (element: ExplorerTreeItem) => {
     let resourceType = ExplorerResourceTypes[ExplorerResourceTypes.project]
 
     if (element?.resourceType === ExplorerResourceTypes.rootSchemas) {
@@ -93,7 +91,7 @@ export async function activateInternal(context: ExtensionContext) {
       resourceType = element?.resourceType.toString()
       issuancesState.clear()
     } else {
-      projectsState.clear()
+      await iamState.clear()
       schemasState.clear()
       issuancesState.clear()
     }
@@ -212,7 +210,7 @@ export async function activateInternal(context: ExtensionContext) {
     viewProperties({
       resourceType: element.resourceType,
       issuanceId: element.issuanceId,
-      projectId: element.projectId,
+      projectId: element.projectId!,
       schemaId: element.schemaId,
     })
 
@@ -250,7 +248,7 @@ export async function activateInternal(context: ExtensionContext) {
           const {
             apiKey: { apiKeyHash },
             wallet: { did },
-          } = iamHelpers.requireProjectSummary(projectId)
+          } = await iamState.requireProjectSummary(projectId)
           const schema = await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash })
           if (!schema) return
 

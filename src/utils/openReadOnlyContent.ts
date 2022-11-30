@@ -117,12 +117,7 @@ export async function openReadOnlyContent({
   options,
 }: {
   node: Item
-  content:
-    | ProjectSummary
-    | SchemaDto
-    | IssuanceDto
-    // eslint-disable-next-line no-undef
-    | Awaited<ReturnType<UserManagementClient['me']>>
+  content: any
   fileExtension?: string
   options?: TextDocumentShowOptions
 }): Promise<ReadOnlyContent> {

@@ -17,9 +17,6 @@ import {
   NO_DIRECTORY_SELECTED_MESSAGE,
   NO_APP_NAME_SELECTED_MESSAGE,
 } from '../../../../generators/create-app/generator'
-import { PROJECT_REQUIRED_ERROR_MESSAGE } from '../../../../features/iam/iamHelpers'
-import { iamClient } from '../../../../features/iam/iamClient'
-import { projectsState } from '../../../../states/projectsState'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
@@ -58,11 +55,6 @@ describe('generateAffinidiAppWithCLI()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
     sandbox.stub(cliHelper, 'setActiveProject')
-    projectsState.setProject(PROJECT_SUMMARY)
-  })
-
-  afterEach(() => {
-    projectsState.clear()
   })
 
   it('should show error message when CLI is not installed', async () => {

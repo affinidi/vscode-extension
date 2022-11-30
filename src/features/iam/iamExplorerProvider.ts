@@ -1,10 +1,9 @@
 import { TreeItemCollapsibleState, ThemeIcon, l10n } from 'vscode'
 import { ext } from '../../extensionVariables'
-import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../tree/types'
-import { fetchProjectsSummaryList } from './fetchProjectsSummaryList'
+import { iamState } from './iamState'
 
 export class IamExplorerProvider implements ExplorerProvider {
   public async getChildren(
@@ -28,17 +27,16 @@ export class IamExplorerProvider implements ExplorerProvider {
   }
 
   private async getProjectItems() {
-    await fetchProjectsSummaryList()
-    const projects = projectsState.getProjects()
+    const projects = await iamState.listProjects()
 
-    return (projects ?? []).map(
+    return projects.map(
       (project) =>
         new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.project,
-          label: project.project.name,
+          label: project.name,
           collapsibleState: TreeItemCollapsibleState.Collapsed,
           icon: new ThemeIcon('project'),
-          projectId: project.project.projectId,
+          projectId: project.projectId,
         }),
     )
   }
@@ -69,8 +67,8 @@ export class IamExplorerProvider implements ExplorerProvider {
     ]
   }
 
-  private async getDidItems(parent?: ExplorerTreeItem) {
-    const projectSummary = projectsState.getProjectById(parent?.projectId)
+  private async getDidItems(parent: ExplorerTreeItem) {
+    const projectSummary = await iamState.requireProjectSummary(parent.projectId!)
 
     return [
       new ExplorerTreeItem({

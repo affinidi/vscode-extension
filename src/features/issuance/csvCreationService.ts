@@ -7,6 +7,7 @@ import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
+import { iamState } from '../iam/iamState'
 
 export interface TemplateInput {
   projectId: string
@@ -31,7 +32,7 @@ export const openCsvTemplate = async (input: TemplateInput) => {
 
   const {
     apiKey: { apiKeyHash },
-  } = iamHelpers.requireProjectSummary(projectId)
+  } = await iamState.requireProjectSummary(projectId)
 
   const template = await issuanceClient.getCsvTemplate(
     {
@@ -63,7 +64,7 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     return
   }
 
-  const { apiKey: { apiKeyHash }, wallet: { did } } = iamHelpers.requireProjectSummary(input.projectId)
+  const { apiKey: { apiKeyHash }, wallet: { did } } = await iamState.requireProjectSummary(input.projectId)
   const schema = input.schema ?? await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash })
   if (!schema) return
 

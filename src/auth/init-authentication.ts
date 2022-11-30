@@ -1,5 +1,6 @@
 import { authentication, commands, window, l10n } from 'vscode'
 import { ext } from '../extensionVariables'
+import { iamState } from '../features/iam/iamState'
 import { userManagementClient } from '../features/user-management/userManagementClient'
 import {
   sendEventToAnalytics,
@@ -7,7 +8,6 @@ import {
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
 import { issuancesState } from '../states/issuancesState'
-import { projectsState } from '../states/projectsState'
 import { schemasState } from '../states/schemasState'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
@@ -83,7 +83,7 @@ async function logoutHandler(): Promise<void> {
     createIfNone: false,
   })
 
-  projectsState.clear()
+  iamState.clear()
   schemasState.clear()
   issuancesState.clear()
 

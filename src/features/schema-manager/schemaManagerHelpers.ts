@@ -2,9 +2,9 @@ import { window, ProgressLocation, l10n } from 'vscode'
 import { Options, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { Schema } from '../../shared/types'
 import { showQuickPick } from '../../utils/showQuickPick'
-import { iamHelpers } from '../iam/iamHelpers'
 import { schemasState } from '../../states/schemasState'
 import { schemaManagerClient } from './schemaManagerClient'
+import { iamState } from '../iam/iamState'
 
 export const EXAMPLE_SCHEMA: Schema = {
   type: 'MySchema',
@@ -81,7 +81,7 @@ async function fetchSchemaUrl(projectId: string) {
   const {
     apiKey: { apiKeyHash },
     wallet: { did },
-  } = iamHelpers.requireProjectSummary(projectId)
+  } = await iamState.requireProjectSummary(projectId)
 
   const schema = await askForMySchema({ includeExample: true, did }, { apiKeyHash })
   if (!schema) {

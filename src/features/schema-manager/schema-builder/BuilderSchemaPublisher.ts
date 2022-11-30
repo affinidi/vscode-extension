@@ -1,12 +1,12 @@
 import type { BuilderAttribute, BuilderSchema } from './SchemaBuilderWebview'
 import type { SchemaDto } from '@affinidi/client-schema-manager'
 import { SchemaField, SchemaFieldType, generate } from '@affinidi/affinidi-vc-schemas'
-import { projectsState } from '../../../states/projectsState'
 import { schemaManagerClient } from '../schemaManagerClient'
+import { iamState } from '../../iam/iamState'
 
 export class BuilderSchemaPublisher {
   async publish(schema: BuilderSchema, projectId: string): Promise<SchemaDto> {
-    const { apiKey: { apiKeyHash }, wallet: { did } } = projectsState.getProjectById(projectId)
+    const { apiKey: { apiKeyHash }, wallet: { did } } = await iamState.requireProjectSummary(projectId)
   
     const scope = schema.isPublic ? 'public' : 'unlisted'
     const [version, revision] = await this.generateNextVersion({ type: schema.type, scope, did, apiKeyHash })
