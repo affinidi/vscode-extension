@@ -6,7 +6,6 @@
 
 import type { ExtensionContext } from 'vscode'
 import * as extension from './extension'
-import './_cache'
 
 export async function activate(context: ExtensionContext) {
   return extension.activateInternal(context)
