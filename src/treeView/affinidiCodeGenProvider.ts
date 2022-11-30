@@ -1,13 +1,7 @@
-import {
-  Command,
-  ThemeIcon,
-  TreeDataProvider,
-  TreeItem,
-  TreeItemCollapsibleState,
-  l10n,
-} from 'vscode'
+import { Command, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode'
 import { CodeGenTypes } from './treeTypes'
 import { AffCodeGenTreeItem } from './treeItem'
+import { errorMessage, labels } from '../messages/messages'
 
 export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeItem> {
   public getTreeItem(element: AffCodeGenTreeItem): TreeItem {
@@ -31,7 +25,7 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
         break
 
       default:
-        throw new Error(`unknown codeGenType: ${element?.codeGenType}`)
+        throw new Error(`${errorMessage.unknownCodeGen} ${element?.codeGenType}`)
     }
 
     return Promise.resolve(treeNodes)
@@ -40,25 +34,25 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
   private async addCodeGenItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootApps,
-      label: l10n.t('App Generators'),
+      label: `${labels.appGenerators}`,
       state: TreeItemCollapsibleState.Expanded,
       icon: new ThemeIcon('rocket'),
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootScripts,
-      label: l10n.t('Script Generators'),
+      label: `${labels.scriptGenerators}`,
       state: TreeItemCollapsibleState.Expanded,
       icon: new ThemeIcon('file-code'),
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootSnippets,
-      label: l10n.t('IntelliSense Snippets'),
+      label: `${labels.intelliSenseSnippets}`,
       state: TreeItemCollapsibleState.None,
       icon: new ThemeIcon('symbol-snippet'),
       command: {
-        title: l10n.t('View Available Snippets'),
+        title: `${labels.viewAvailableSnippets}`,
         command: 'affinidi.docs.availableSnippets',
       },
     })
@@ -67,30 +61,30 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
   private async addScriptItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t('Send a VC Offer to an email'),
+      label: `${labels.sendVCOfferToEmail}`,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t('Send a VC Offer to an email'),
+        title: `${labels.sendVCOfferToEmail}`,
         command: 'affinidi.codegen.sendVcOfferToEmail',
       },
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t('Get Issuance Offers'),
+      label: `${labels.getIssuanceOffers}`,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t('Get Issuance Offers'),
+        title: `${labels.getIssuanceOffers}`,
         command: 'affinidi.codegen.getIssuanceOffers',
       },
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t('Sign a VC with Cloud Wallet'),
+      label: `${labels.signCloudWalletVc}`,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t('Sign a VC with Cloud Wallet'),
+        title: `${labels.signCloudWalletVc}`,
         command: 'affinidi.codegen.signVcWithCloudWallet',
       },
     })
@@ -99,10 +93,10 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
   private async addAppItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: l10n.t('Certification & Verification'),
+      label: `${labels.certificationAndVerification}`,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: l10n.t('Certification & Verification'),
+        title: `${labels.certificationAndVerification}`,
         command: 'affinidi.codegen.app',
       },
     })

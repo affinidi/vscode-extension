@@ -1,4 +1,4 @@
-import { window, l10n } from 'vscode'
+import { window } from 'vscode'
 import { Schema } from '../../shared/types'
 import { Implementations } from '../shared/createSnippetTools'
 import { iamHelpers } from '../../features/iam/iamHelpers'
@@ -8,6 +8,7 @@ import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
+import { authMessage, snippetMessage } from '../../messages/messages'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -55,13 +56,13 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
 
     const credentialSubject = await generateCredentialSubjectSample(schema)
     if (!credentialSubject) {
-      throw new Error(l10n.t('Could not generate credential subject sample'))
+      throw new Error(snippetMessage.credentialSubjectGeneration)
     }
 
     const email =
       input?.email ??
       (await window.showInputBox({
-        prompt: l10n.t('Enter an email to send the VC offer to'),
+        prompt: `${authMessage.enterEmail}`,
       }))
 
     return {

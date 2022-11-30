@@ -8,7 +8,7 @@ import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
-import { l10n } from 'vscode'
+import { snippetMessage } from '../../messages/messages'
 
 export interface SnippetInput {
   iamUrl: string
@@ -59,7 +59,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
 
     const credentialSubject = await generateCredentialSubjectSample(schema)
     if (!credentialSubject) {
-      throw new Error(l10n.t('Could not generate credential subject sample'))
+      throw new Error(snippetMessage.credentialSubjectGeneration)
     }
 
     return {

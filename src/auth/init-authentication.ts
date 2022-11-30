@@ -1,6 +1,7 @@
 import { authentication, commands, window, l10n } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
+import { authMessage, errorMessage, labels } from '../messages/messages'
 import {
   sendEventToAnalytics,
   EventNames,
@@ -24,16 +25,14 @@ const CONSENT = {
 
 async function signUpHandler(): Promise<void> {
   const selection = await window.showWarningMessage(
-    l10n.t(
-      'Please read and accept the [Terms of Use](https://build.affinidi.com/dev-tools/terms-of-use.pdf) and [Privacy Policy](https://build.affinidi.com/dev-tools/privacy-policy.pdf)',
-    ),
+    authMessage.termsAndConditions,
     CONSENT.accept,
     CONSENT.reject,
   )
 
   switch (selection) {
     case CONSENT.accept:
-      window.showInformationMessage(l10n.t('You accepted terms and conditions'))
+      window.showInformationMessage(authMessage.acceptedTermsAndConditions)
 
       await authentication.getSession(AUTH_PROVIDER_ID, ['signup'], {
         forceNewSession: true,
@@ -47,16 +46,16 @@ async function signUpHandler(): Promise<void> {
         },
       })
 
-      window.showInformationMessage(l10n.t('Signed In to Affinidi'))
-      ext.outputChannel.appendLine(l10n.t('Signed In to Affinidi'))
+      window.showInformationMessage(labels.signIn)
+      ext.outputChannel.appendLine(labels.signIn)
       await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
       break
 
     case CONSENT.reject:
-      window.showInformationMessage(l10n.t('You rejected terms and conditions'))
+      window.showInformationMessage(authMessage.rejectedTermsAndConditons)
       break
     default:
-      throw new Error(`unknown selection: ${selection}`)
+      throw new Error(`${errorMessage.unknownSelection} ${selection}`)
   }
 }
 
@@ -73,8 +72,8 @@ async function loginHandler(): Promise<void> {
     },
   })
 
-  window.showInformationMessage(l10n.t('Signed In to Affinidi'))
-  ext.outputChannel.appendLine(l10n.t('Signed In to Affinidi'))
+  window.showInformationMessage(labels.signIn)
+  ext.outputChannel.appendLine(labels.signIn)
   await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
 }
 
@@ -98,10 +97,10 @@ async function logoutHandler(): Promise<void> {
 
     await ext.authProvider.handleRemoveSession()
 
-    await window.showInformationMessage(l10n.t('Signed Out of Affinidi'))
-    ext.outputChannel.appendLine(l10n.t('Signed Out of Affinidi'))
+    await window.showInformationMessage(labels.signOut)
+    ext.outputChannel.appendLine(labels.signOut)
   } else {
-    await window.showInformationMessage(l10n.t('Not logged in to Affinidi'))
+    await window.showInformationMessage(authMessage.notLoggedIn)
   }
 }
 

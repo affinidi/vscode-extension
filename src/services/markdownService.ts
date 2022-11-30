@@ -1,3 +1,4 @@
+import { errorMessage } from '../messages/messages'
 import { ExplorerResourceTypes } from '../treeView/treeTypes'
 
 export const viewMarkdown = async (resourceType: ExplorerResourceTypes) => {
@@ -11,7 +12,7 @@ export const viewMarkdown = async (resourceType: ExplorerResourceTypes) => {
       uri = '/document/schemaManager.md'
       break
     default:
-      throw new Error(`Unexpected resource type: ${resourceType}`)
+      throw new Error(`${errorMessage.unexpectedResourceType} ${resourceType}`)
   }
 
   return uri

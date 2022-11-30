@@ -1,4 +1,5 @@
-import { SnippetString, l10n } from 'vscode'
+import { SnippetString } from 'vscode'
+import { snippetMessage } from '../../messages/messages'
 import { showQuickPick } from '../../utils/showQuickPick'
 
 export enum SnippetImplementation {
@@ -13,8 +14,8 @@ export type Implementations<Input> = {
 }
 
 const implementationLabels = {
-  [SnippetImplementation.sdk]: l10n.t('Use Affinidi Client SDK'),
-  [SnippetImplementation.fetch]: l10n.t('Use Fetch API'),
+  [SnippetImplementation.sdk]: snippetMessage.snippetImplementationSdk,
+  [SnippetImplementation.fetch]: snippetMessage.snippetImplementationFetch,
 }
 
 export function createSnippetTools<
@@ -41,7 +42,7 @@ export function createSnippetTools<
 
       const selectedValue = await showQuickPick(
         supported.map((implementation) => [implementationLabels[implementation], implementation]),
-        { title: l10n.t('Select an implementation') },
+        { title: `${snippetMessage.selectImplementation}` },
       )
 
       if (!selectedValue) {
@@ -58,9 +59,7 @@ export function createSnippetTools<
     ): SnippetString {
       const generate = implementations[languageId]?.[implementation]
       if (!generate) {
-        throw new Error(
-          l10n.t('Could not generate a snippet: unsupported language or implementation'),
-        )
+        throw new Error(snippetMessage.unsupportedSnippetGeneration)
       }
 
       return new SnippetString(generate(input))

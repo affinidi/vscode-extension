@@ -2,6 +2,7 @@ import { ProjectSummary } from '@affinidi/client-iam'
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { SchemaDto } from '@affinidi/client-schema-manager'
 import fetch from 'node-fetch'
+import { errorMessage } from '../messages/messages'
 import { issuancesState } from '../states/issuancesState'
 import { projectsState } from '../states/projectsState'
 import { schemasState } from '../states/schemasState'
@@ -54,7 +55,7 @@ export const viewProperties = async ({
     }
 
     default:
-      throw new Error(`Unexpected resource type: ${resourceType}`)
+      throw new Error(`${errorMessage.unexpectedResourceType} ${resourceType}`)
   }
 
   await openReadOnlyContent({ node: { label, id }, content })

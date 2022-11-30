@@ -1,5 +1,6 @@
-import { TreeItemCollapsibleState, ThemeIcon, l10n } from 'vscode'
+import { TreeItemCollapsibleState, ThemeIcon } from 'vscode'
 import { ext } from '../../extensionVariables'
+import { labels } from '../../messages/messages'
 import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
@@ -47,21 +48,21 @@ export class IamExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.rootDID,
-        label: l10n.t('Digital Identities'),
+        label: `${labels.digitalIdenties}`,
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('lock'),
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.rootIssuance,
-        label: l10n.t('Issuances'),
+        label: `${labels.issuanes}`,
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('output'),
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.rootSchemas,
-        label: l10n.t('VC Schemas'),
+        label: `${labels.vcSchemas}`,
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
@@ -86,10 +87,10 @@ export class IamExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.project,
-        label: l10n.t('Create Project'),
+        label: `${labels.createProject}`,
         icon: new ThemeIcon('file-directory-create'),
         command: {
-          title: l10n.t('Create Project'),
+          title: `${labels.createProject}`,
           command: 'affinidi.createProject',
         },
       }),

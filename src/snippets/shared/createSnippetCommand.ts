@@ -1,4 +1,4 @@
-import { Position, SnippetString, TextEditor, window, workspace, l10n } from 'vscode'
+import { Position, SnippetString, TextEditor, window, workspace } from 'vscode'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { createSnippetTools, Implementations, SnippetImplementation } from './createSnippetTools'
 import * as javascript from '../boilerplates/javascript'
@@ -10,6 +10,7 @@ import {
   EventSubCategory,
   sendEventToAnalytics,
 } from '../../services/analyticsStreamApiService'
+import { snippetMessage } from '../../messages/messages'
 
 export type SnippetCommand<CommandInput = unknown> = (
   input?: CommandInput,
@@ -68,7 +69,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
 
         const selectedLanguageId = await showQuickPick(
           languageIds.map((id) => [languageIdLabels[id], id]),
-          { title: l10n.t('Select a language') },
+          { title: `${snippetMessage.selectLanguage}` },
         )
 
         if (!selectedLanguageId) {
@@ -85,10 +86,10 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
 
       if (!implementations[languageId]?.[implementation]) {
         throw new Error(
-          l10n.t('Snippet does not support {0} implementation for {1} language', [
+          `${snippetMessage.snippetDoesNotSupportImplementationForLangauge} ${[
             implementation,
             languageId,
-          ]),
+          ]}`,
         )
       }
 
@@ -131,7 +132,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         },
       })
     } catch (error: unknown) {
-      logger.error(error, 'Failed to generate a snippet')
+      logger.error(error, snippetMessage.snippetGenerationFailed)
       notifyError(error)
     }
   }

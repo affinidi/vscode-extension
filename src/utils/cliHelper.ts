@@ -1,18 +1,9 @@
-import { ProgressLocation, window, commands, Uri, l10n } from 'vscode'
+import { ProgressLocation, window, commands, Uri } from 'vscode'
 import * as fs from 'fs'
 import * as execa from 'execa'
 import { ext } from '../extensionVariables'
+import { cliMessage, generatorMessage } from '../messages/messages'
 
-export const WARNING_MESSAGE = l10n.t(
-  'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
-)
-export const ERROR_MESSAGE = l10n.t(
-  'Affinidi CLI needs to be installed to proceed with this action: npm i -g @affinidi/cli',
-)
-export const DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE = l10n.t(
-  'Directory with this name already exist.',
-)
-export const APP_SUCCESSFULLY_CREATED_MESSAGE = l10n.t('App successfully generated.')
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
 }
@@ -33,7 +24,7 @@ export class CliHelper {
 
   async assertCliIsInstalled(): Promise<void> {
     if (!(await this.isCliInstalled())) {
-      throw new Error(ERROR_MESSAGE)
+      throw new Error(cliMessage.cliNeedsToBeInstalledForAction)
     }
   }
 
@@ -42,11 +33,11 @@ export class CliHelper {
 
     if (!isInstalled) {
       if (options?.type === 'warning') {
-        window.showWarningMessage(WARNING_MESSAGE)
-        ext.outputChannel.appendLine(WARNING_MESSAGE)
+        window.showWarningMessage(cliMessage.cliNeedsToBeInstalledForExtension)
+        ext.outputChannel.appendLine(cliMessage.cliNeedsToBeInstalledForExtension)
       } else {
-        window.showErrorMessage(ERROR_MESSAGE)
-        ext.outputChannel.appendLine(ERROR_MESSAGE)
+        window.showErrorMessage(cliMessage.cliNeedsToBeInstalledForAction)
+        ext.outputChannel.appendLine(cliMessage.cliNeedsToBeInstalledForAction)
       }
     }
 
@@ -59,7 +50,7 @@ export class CliHelper {
 
   async generateApp({ path }: { path: string }): Promise<void> {
     if (fs.existsSync(path)) {
-      window.showErrorMessage(DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE)
+      window.showErrorMessage(generatorMessage.directoryNameDuplication)
       return
     }
 
@@ -70,7 +61,7 @@ export class CliHelper {
       const { stdout } = await window.withProgress(
         {
           location: ProgressLocation.Notification,
-          title: l10n.t('App is generating...'),
+          title: `${cliMessage.appIsGenerating}`,
         },
         async () => {
           return this.exec.command(command)
@@ -79,7 +70,7 @@ export class CliHelper {
 
       ext.outputChannel.append(stdout)
 
-      window.showInformationMessage(APP_SUCCESSFULLY_CREATED_MESSAGE)
+      window.showInformationMessage(cliMessage.appGenerated)
 
       const uri = Uri.file(path)
       await commands.executeCommand('vscode.openFolder', uri, {

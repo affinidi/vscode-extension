@@ -8,7 +8,6 @@ import {
   Disposable,
   Event,
   EventEmitter,
-  l10n,
 } from 'vscode'
 import { nanoid } from 'nanoid'
 import { Unsubscribe } from 'conf/dist/source/types'
@@ -21,6 +20,7 @@ import {
 import { SESSION_KEY_NAME, vaultService } from './vault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
+import { authMessage } from '../../messages/messages'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
@@ -89,7 +89,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
       return session
     } catch (error) {
-      logger.error(error, 'Failed to get active session')
+      logger.error(error, authMessage.noValidSessionFound)
       this.handleRemoveSession()
       return undefined
     }
@@ -101,7 +101,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   ): Promise<AuthenticationSession> {
     const session = await this.getActiveSession(options, scopes)
     if (!session) {
-      throw new Error(l10n.t('Valid Affinidi authentication session not found'))
+      throw new Error(authMessage.noValidSessionFound)
     }
 
     return session
@@ -139,7 +139,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
       return session
     } catch (error: unknown) {
-      logger.error(error, 'Failed to create a session')
+      logger.error(error, authMessage.unableToCreateSession)
       notifyError(error)
       throw error
     }

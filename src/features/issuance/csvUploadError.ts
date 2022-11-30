@@ -1,4 +1,5 @@
 import { l10n } from 'vscode'
+import { csvMessage } from '../../messages/messages'
 
 export type UploadError = {
   title: string
@@ -16,9 +17,9 @@ export function parseUploadError(error: any): UploadError | undefined {
       return { title: error.message }
     case 'VIS-19':
       return {
-        title: l10n.t(`Invalid CSV file`),
+        title: `${csvMessage.invalidCsvFile}`,
         row: {
-          title: l10n.t(`Invalid data in row #${error.context.row}`),
+          title: l10n.t(`${csvMessage.invalidDataInRow}${error.context.row}`),
           errors: error.context.errors.map((error: any) =>
             error.field
               ? l10n.t(`Field "${error.field}" ${error.message}`)
@@ -28,13 +29,13 @@ export function parseUploadError(error: any): UploadError | undefined {
       }
     case 'VIS-20': {
       const formatErrorTitlePrefix = error.context.possibleFormatError
-        ? l10n.t('Make sure to use comma (,) as separator. ')
+        ? `${csvMessage.commaSeperatorMessage}`
         : ''
 
       return {
-        title: l10n.t(`Invalid CSV file`),
+        title: `${csvMessage.invalidCsvFile}`,
         row: {
-          title: `${formatErrorTitlePrefix}${l10n.t('Could not find all required columns')}`,
+          title: `${formatErrorTitlePrefix}${csvMessage.couldNotFindAllColumns}`,
           errors:
             error.context.missingColumns?.length > 0
               ? [`${l10n.t('Required columns: ')} ${error.context.missingColumns.join(', ')}`]
