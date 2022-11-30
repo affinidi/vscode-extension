@@ -43,6 +43,7 @@ import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHel
 import { iamHelpers } from './features/iam/iamHelpers'
 import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
+import { activeProjectSummaryState } from './states/activeProjectSummaryState'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -59,6 +60,7 @@ export async function activateInternal(context: ExtensionContext) {
   projectsState.clear()
   schemasState.clear()
   issuancesState.clear()
+  activeProjectSummaryState.clear()
 
   initSnippets()
   initGenerators()
@@ -103,6 +105,7 @@ export async function activateInternal(context: ExtensionContext) {
       projectsState.clear()
       schemasState.clear()
       issuancesState.clear()
+      activeProjectSummaryState.clear()
     }
 
     explorerTree.refresh(element)

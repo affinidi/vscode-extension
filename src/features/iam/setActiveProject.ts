@@ -6,6 +6,7 @@ import {
   SESSION_KEY_NAME,
   CONFIGS_KEY_NAME,
 } from '../../auth/authentication-provider/vault'
+import { activeProjectSummaryState } from '../../states/activeProjectSummaryState'
 
 import { fetchProjectSummary } from './fetchProjectSummary'
 
@@ -26,6 +27,7 @@ export async function setActiveProject(projectId: string): Promise<void> {
     [userId]: { activeProjectId: projectSummary.project.projectId },
   }
 
+  activeProjectSummaryState.setActiveProjectSummary(projectSummary)
   configVaultService.set(CONFIGS_KEY_NAME, JSON.stringify(configs))
   credentialsVaultService.set(ACTIVE_PROJECT_SUMMARY_KEY_NAME, JSON.stringify(projectSummary))
 }

@@ -9,6 +9,7 @@ import {
 import { issuancesState } from '../states/issuancesState'
 import { projectsState } from '../states/projectsState'
 import { schemasState } from '../states/schemasState'
+import { activeProjectSummaryState } from '../states/activeProjectSummaryState'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 import {
@@ -87,6 +88,7 @@ async function logoutHandler(): Promise<void> {
   projectsState.clear()
   schemasState.clear()
   issuancesState.clear()
+  activeProjectSummaryState.clear()
 
   if (session) {
     sendEventToAnalytics({
