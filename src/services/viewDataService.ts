@@ -1,10 +1,7 @@
-import { ProjectSummary } from '@affinidi/client-iam'
-import { IssuanceDto } from '@affinidi/client-issuance'
-import { SchemaDto } from '@affinidi/client-schema-manager'
 import fetch from 'node-fetch'
 import { iamState } from '../features/iam/iamState'
-import { issuancesState } from '../states/issuancesState'
-import { schemasState } from '../states/schemasState'
+import { issuanceState } from '../features/issuance/issuanceState'
+import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
 import { ExplorerResourceTypes } from '../tree/types'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
@@ -32,7 +29,7 @@ export const viewProperties = async ({
     }
 
     case ExplorerResourceTypes.schema: {
-      const schema = schemasState.getSchemaById(schemaId)
+      const schema = await schemaManagerState.getAuthoredSchemaById({ projectId, schemaId: schemaId! })
 
       if (schema) {
         content = schema
@@ -43,7 +40,7 @@ export const viewProperties = async ({
     }
 
     case ExplorerResourceTypes.issuance: {
-      const issuance = issuancesState.getIssuanceById(issuanceId)
+      const issuance = await issuanceState.getIssuanceById({ projectId, issuanceId: issuanceId! })
 
       if (issuance) {
         content = issuance

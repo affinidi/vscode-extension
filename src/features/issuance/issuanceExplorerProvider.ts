@@ -4,7 +4,7 @@ import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../tree/types'
 import { iamState } from '../iam/iamState'
 import { formatIssuanceName } from './formatIssuanceName'
-import { getIssuances } from './getIssuances'
+import { issuanceState } from './issuanceState'
 
 export class IssuanceExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -23,10 +23,9 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
   private async getIssuanceItems(parent: ExplorerTreeItem) {
     const {
       project: { projectId },
-      apiKey: { apiKeyHash },
     } = await iamState.requireProjectSummary(parent.projectId!)
 
-    const issuances = await getIssuances(projectId, { apiKeyHash })
+    const issuances = await issuanceState.listIssuances({ projectId })
 
     return issuances.map(
       (issuance) =>

@@ -1,16 +1,14 @@
 import { authentication, commands, window, l10n } from 'vscode'
 import { ext } from '../extensionVariables'
-import { iamState } from '../features/iam/iamState'
 import { userManagementClient } from '../features/user-management/userManagementClient'
 import {
   sendEventToAnalytics,
   EventNames,
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
-import { issuancesState } from '../states/issuancesState'
-import { schemasState } from '../states/schemasState'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
+import { state } from '../state'
 import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
@@ -83,9 +81,7 @@ async function logoutHandler(): Promise<void> {
     createIfNone: false,
   })
 
-  iamState.clear()
-  schemasState.clear()
-  issuancesState.clear()
+  await state.clear()
 
   if (session) {
     sendEventToAnalytics({

@@ -1,12 +1,12 @@
 import { commands } from 'vscode'
 import { ext } from '../extensionVariables'
+import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
 import {
   EventNames,
   EventSubCategory,
   sendEventToAnalytics,
 } from '../services/analyticsStreamApiService'
 import { ExplorerTreeItem } from '../tree/explorerTreeItem'
-import { schemasState } from '../states/schemasState'
 import { insertGetIssuanceOffersSnippet } from './get-issuance-offers/snippet'
 import { insertSendVcOfferToEmailSnippet } from './send-vc-offer-to-email/snippet'
 import { insertSignVcWithCloudWalletSnippet } from './sign-vc-with-cloud-wallet/snippet'
@@ -15,8 +15,11 @@ export const initSnippets = () => {
   ext.context.subscriptions.push(
     commands.registerCommand(
       'affinidi.codegen.sendVcOfferToEmail',
-      async (element?: ExplorerTreeItem) => {
-        const schema = schemasState.getSchemaById(element?.schemaId)
+      async (element: ExplorerTreeItem) => {
+        const schema = await schemaManagerState.getAuthoredSchemaById({
+          projectId: element?.projectId!,
+          schemaId: element?.schemaId!,
+        })
 
         await insertSendVcOfferToEmailSnippet({
           projectId: element?.projectId,

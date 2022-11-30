@@ -2,9 +2,11 @@ import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
 import { window, ProgressLocation, l10n } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
+import { state } from '../../state'
 import { iamClient } from './iamClient'
 
-const PROJECTS_STORAGE_KEY = 'projects:list'
+const PREFIX = 'iam:'
+const storageKey = (input: string) => PREFIX + input
 
 export class IamState {
   async listProjects(): Promise<ProjectDto[]> {
@@ -25,18 +27,11 @@ export class IamState {
   }
 
   async clear() {
-    await Promise.all(
-      ext.context.globalState.keys().map(async (key) => {
-        if (key.startsWith('projects:')) {
-          await ext.context.globalState.update(key, undefined)
-        }
-      }),
-    )
+    await state.clear(PREFIX)
   }
 
   private async fetchProjectSummary(projectId: string): Promise<ProjectSummary | undefined> {
-    const key = `projects:${projectId}:summary`
-
+    const key = storageKey(`summary:${projectId}`)
     const stored = ext.context.globalState.get<ProjectSummary>(key)
     if (stored) return stored
 
@@ -55,7 +50,8 @@ export class IamState {
   }
 
   private async fetchProjects(): Promise<ProjectDto[]> {
-    const stored = ext.context.globalState.get<ProjectDto[]>(PROJECTS_STORAGE_KEY)
+    const key = storageKey('list')
+    const stored = ext.context.globalState.get<ProjectDto[]>(key)
     if (stored) return stored
 
     const { projects } = await window.withProgress(
@@ -64,7 +60,7 @@ export class IamState {
         iamClient.listProjects({ consoleAuthToken: await authHelper.getConsoleAuthToken() }),
     )
 
-    await ext.context.globalState.update(PROJECTS_STORAGE_KEY, projects)
+    await ext.context.globalState.update(key, projects)
 
     return projects
   }

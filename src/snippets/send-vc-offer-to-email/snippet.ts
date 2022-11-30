@@ -49,7 +49,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
 
     const schema =
       input?.schema ??
-      (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+      (await schemaManagerHelpers.askForMySchema({ projectId, includeExample: true }))
     if (!schema) {
       return undefined
     }

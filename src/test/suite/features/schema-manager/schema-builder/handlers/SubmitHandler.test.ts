@@ -8,7 +8,6 @@ import {
   BuilderSchema,
 } from '../../../../../../features/schema-manager/schema-builder/SchemaBuilderWebview'
 import * as showSchemaDetails from '../../../../../../features/schema-manager/schema-details/showSchemaDetails'
-import { schemasState } from '../../../../../../states/schemasState'
 import { sandbox } from '../../../../setup'
 
 function createBuilderAttribute(input?: Partial<BuilderAttribute>): BuilderAttribute {
@@ -41,7 +40,6 @@ describe('handleSubmit()', () => {
     sandbox.stub(window, 'showErrorMessage')
     sandbox.stub(window, 'showInformationMessage')
     sandbox.stub(ext.explorerTree, 'refresh')
-    sandbox.stub(schemasState, 'clear')
     sandbox.stub(showSchemaDetails, 'showSchemaDetails')
 
     webviewMock = {
@@ -104,7 +102,6 @@ describe('handleSubmit()', () => {
 
     expect(builderSchemaPublisherMock.publish).calledWith(schema, projectId)
     expect(showSchemaDetails.showSchemaDetails).calledWith(createdSchema)
-    expect(schemasState.clear).called
     expect(ext.explorerTree.refresh).called
     expect(webviewMock.dispose).called
   })
