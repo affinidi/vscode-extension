@@ -115,33 +115,33 @@ export class SchemaBuilderWebview {
         </head>
     
         <body>
-          <form id="schema-builder-form" style="margin: 20px 0px;">
+          <form class="schema" style="margin: 20px 0px;">
             <section class="wrapper">
               <div class="box-row">
                 <div class="box">
                   <div class="box">
                     <label>Schema type</label>
-                    <vscode-text-field size="40" id="schemaType"></vscode-text-field>
+                    <vscode-text-field size="40" class="schema__type"></vscode-text-field>
                   </div>
                   <div class="box">
                     <label>Description (optional)</label>
-                    <vscode-text-area rows="4" cols="50" id="schemaDescription"></vscode-text-area>
+                    <vscode-text-area rows="4" cols="50" class="schema__description"></vscode-text-area>
                   </div>
                 </div>
               </div> 
               <div class="box-row">
-                <vscode-checkbox id="isSchemaPublic">Make this schema public</vscode-checkbox>
+                <vscode-checkbox class="schema__is-public">Make this schema public</vscode-checkbox>
               </div>
             </section>
     
             <div class="divider"></div>
     
-            <section id="schemaAttributes"></section>
+            <section class="schema__attributes"></section>
     
             <div class="divider"></div>
     
             <section> 
-              <vscode-button id="submit-button">Publish the schema</vscode-button>
+              <vscode-button class="schema__submit-button">Publish the schema</vscode-button>
             </section>
           </form>
         </body>

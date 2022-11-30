@@ -1,3 +1,16 @@
+const FORM_SELECTOR = '.schema'
+const SUBMIT_BUTTON_SELECTOR = '.schema__submit-button'
+const SCHEMA_TYPE_SELECTOR = '.schema__type'
+const SCHEMA_DESCRIPTION_SELECTOR = '.schema__description'
+const SCHEMA_IS_PUBLIC_SELECTOR = '.schema__is-public'
+const SCHEMA_ATTRIBUTES_SELECTOR = '.schema__attributes'
+const ATTRIBUTE_NAME_SELECTOR = '.attribute__name'
+const ATTRIBUTE_DESCRIPTION_SELECTOR = '.attribute__description'
+const ATTRIBUTE_TYPE_SELECTOR = '.attribute__type'
+const ATTRIBUTE_IS_REQUIRED_SELECTOR = '.attribute__is-required'
+const ADD_ATTRIBUTE_BUTTON_SELECTOR = '.add-attribute-button'
+const REMOVE_ATTRIBUTE_BUTTON_SELECTOR = '.remove-attribute-button'
+
 const NESTED_MARGIN_PX = 20
 const ATTRIBUTE_TYPE_OPTIONS = [
   { type: 'did', label: 'DID' },
@@ -19,9 +32,9 @@ function main() {
   function compileSchema() {
     return {
       parentId: null,
-      type: document.getElementById('schemaType').value,
-      description: document.getElementById('schemaDescription').value,
-      isPublic: document.getElementById('isSchemaPublic').checked,
+      type: document.querySelector(SCHEMA_TYPE_SELECTOR).value,
+      description: document.querySelector(SCHEMA_DESCRIPTION_SELECTOR).value,
+      isPublic: document.querySelector(SCHEMA_IS_PUBLIC_SELECTOR).checked,
       attributes: schema.attributes.map((attribute) => {
         const element = document.getElementById(attribute.id)
         if (!element) return attribute
@@ -29,10 +42,10 @@ function main() {
         return {
           id: attribute.id,
           parentId: attribute.parentId,
-          name: document.getElementById(`${attribute.id}_name`).value,
-          description: document.getElementById(`${attribute.id}_description`).value,
-          type: document.getElementById(`${attribute.id}_type`).value,
-          isRequired: document.getElementById(`${attribute.id}_isRequired`).checked,
+          name: element.querySelector(ATTRIBUTE_NAME_SELECTOR).value,
+          description: element.querySelector(ATTRIBUTE_DESCRIPTION_SELECTOR).value,
+          type: element.querySelector(ATTRIBUTE_TYPE_SELECTOR).value,
+          isRequired: element.querySelector(ATTRIBUTE_IS_REQUIRED_SELECTOR).checked,
         }
       }),
     }
@@ -58,7 +71,7 @@ function main() {
     })
   }
 
-  const form = document.getElementById('schema-builder-form')
+  const form = document.querySelector(FORM_SELECTOR)
   form.addEventListener('submit', (event) => event.preventDefault())
   form.addEventListener('change', () => {
     persist()
@@ -67,7 +80,7 @@ function main() {
     }
   })
   
-  const submitButton = document.getElementById('submit-button')
+  const submitButton = document.querySelector(SUBMIT_BUTTON_SELECTOR)
   submitButton.addEventListener('click', () => {
     submitButton.disabled = true;
     vscode.postMessage({ command: 'submit', data: { schema } })
@@ -85,7 +98,7 @@ function main() {
     } else if (command === 'enableSubmit') {
       submitButton.disabled = false;
     } else if (command === 'setScope') {
-      document.getElementById('isSchemaPublic').checked = data.scope === 'public'
+      document.querySelector(SCHEMA_IS_PUBLIC_SELECTOR).checked = data.scope === 'public'
     }
   })
 }
@@ -105,7 +118,7 @@ function createEmptySchema() {
 function createEmptyAttribute({ parentId } = {}) {
   return {
     ...(parentId && { parentId }),
-    id: generateId(),
+    id: generateAttributeId(),
     name: '',
     description: '',
     type: 'Text',
@@ -145,10 +158,10 @@ function removeInvalidAttributes(schema) {
 // --- RENDERING
 
 function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
-  const typeInput = document.getElementById('schemaType')
-  const descriptionInput = document.getElementById('schemaDescription')
-  const isPublicCheckbox = document.getElementById('isSchemaPublic')
-  const attributesSection = document.getElementById('schemaAttributes')
+  const typeInput = document.querySelector(SCHEMA_TYPE_SELECTOR)
+  const descriptionInput = document.querySelector(SCHEMA_DESCRIPTION_SELECTOR)
+  const isPublicCheckbox = document.querySelector(SCHEMA_IS_PUBLIC_SELECTOR)
+  const attributesSection = document.querySelector(SCHEMA_ATTRIBUTES_SELECTOR)
 
   typeInput.value = schema.type
   descriptionInput.value = schema.description
@@ -178,13 +191,14 @@ function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
     attributesSection.appendChild(actionsSection)
 
     if (parent) {
-      const parentNameInput = document.getElementById(`${parent.id}_name`)
-      const parentTypeSelect = document.getElementById(`${parent.id}_type`)
+      const parentAttribute = document.getElementById(parent.id)
+      const parentNameInput = parentAttribute.querySelector(ATTRIBUTE_NAME_SELECTOR)
+      const parentTypeSelect = parentAttribute.querySelector(ATTRIBUTE_TYPE_SELECTOR)
 
       parentNameInput.addEventListener('change', update)
       parentTypeSelect.addEventListener('change', update)
 
-      const addAttributeButton = actionsSection.querySelector('.add-attribute-button')
+      const addAttributeButton = actionsSection.querySelector(ADD_ATTRIBUTE_BUTTON_SELECTOR)
       function update() {
         if (parentTypeSelect.value === 'object') {
           actionsSection.style.display = ''
@@ -203,17 +217,16 @@ function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
   attributesSection.innerHTML = ''
   renderAttributes()
 
-  for (const button of document.querySelectorAll('.remove-attribute-button')) {
+  for (const button of document.querySelectorAll(REMOVE_ATTRIBUTE_BUTTON_SELECTOR)) {
     button.addEventListener('click', () => onRemoveAttribute(button.dataset.id))
   }
 
-  for (const button of document.querySelectorAll('.add-attribute-button')) {
+  for (const button of document.querySelectorAll(ADD_ATTRIBUTE_BUTTON_SELECTOR)) {
     button.addEventListener('click', () => onAddAttribute(button.dataset.parentId))
   }  
 }
 
 function createAttributeElement(attribute, level) {
-  const id = attribute.id
   const isNested = level > 0
 
   const attributeElement = createElement(`
@@ -221,17 +234,17 @@ function createAttributeElement(attribute, level) {
       <div class="box-row">
         <div class="box" style="width: calc(250px - ${level * NESTED_MARGIN_PX}px);">
           <label>${isNested ? 'Nested&nbsp;attribute&nbsp;name' : 'Attribute&nbsp;name'}</label>
-          <vscode-text-field size="40" id="${id}_name"></vscode-text-field>
+          <vscode-text-field size="40" class="attribute__name"></vscode-text-field>
         </div>
 
         <div class="box" style="width: 250px;">
           <label>Description&nbsp;(optional)</label>
-          <vscode-text-field size="40" id="${id}_description"></vscode-text-field>
+          <vscode-text-field size="40" class="attribute__description"></vscode-text-field>
         </div>
         
         <div class="box" style="width: 150px;">
           <label>Type</label>
-          <vscode-dropdown id="${id}_type">
+          <vscode-dropdown class="attribute__type">
             ${ATTRIBUTE_TYPE_OPTIONS.map(
               (option) => `<vscode-option value="${option.type}">${option.label}</vscode-option>`,
             ).join('')}
@@ -241,18 +254,18 @@ function createAttributeElement(attribute, level) {
         <div class="box">
           <label>Options</label>
           <div class="box-row">
-            <vscode-checkbox id="${id}_isRequired">Required</vscode-checkbox>
-            <vscode-button appearance="secondary" class="remove-attribute-button" data-id="${id}">Remove</vscode-button>
+            <vscode-checkbox class="attribute__is-required">Required</vscode-checkbox>
+            <vscode-button appearance="secondary" class="remove-attribute-button" data-id="${attribute.id}">Remove</vscode-button>
           </div>
         </div>
       </div>
     </section>
   `)
 
-  const nameInput = attributeElement.querySelector(`#${id}_name`)
-  const descriptionInput = attributeElement.querySelector(`#${id}_description`)
-  const typeSelect = attributeElement.querySelector(`#${id}_type`)
-  const isRequiredCheckbox = attributeElement.querySelector(`#${id}_isRequired`)
+  const nameInput = attributeElement.querySelector(ATTRIBUTE_NAME_SELECTOR)
+  const descriptionInput = attributeElement.querySelector(ATTRIBUTE_DESCRIPTION_SELECTOR)
+  const typeSelect = attributeElement.querySelector(ATTRIBUTE_TYPE_SELECTOR)
+  const isRequiredCheckbox = attributeElement.querySelector(ATTRIBUTE_IS_REQUIRED_SELECTOR)
 
   nameInput.value = attribute.name
   descriptionInput.value = attribute.description
@@ -271,7 +284,7 @@ function createElement(html) {
 }
 
 let sequenceId = 0
-function generateId() {
+function generateAttributeId() {
   sequenceId++
-  return `id_${sequenceId}_${Date.now()}`
+  return `attribute_${sequenceId}_${Date.now()}`
 }
