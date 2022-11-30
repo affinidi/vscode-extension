@@ -39,7 +39,7 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
     } = iamHelpers.requireProjectSummary(projectId)
 
     const issuanceId =
-      input?.issuanceId ?? (await issuanceHelper.askForIssuanceId({ projectId }, { apiKeyHash }))
+      input?.issuanceId ?? (await issuanceHelper.askForIssuance({ projectId }, { apiKeyHash }))?.id
     if (!issuanceId) {
       return undefined
     }
