@@ -302,11 +302,6 @@
           "group": "6_copypath"
         },
         {
-          "command": "affinidiExplorer.openCreateSchemaUrl",
-          "when": "view == affinidiExplorer && viewItem == rootSchemas",
-          "group": "z_commands"
-        },
-        {
           "command": "affinidiExplorer.createIssuance",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "z_commands"
