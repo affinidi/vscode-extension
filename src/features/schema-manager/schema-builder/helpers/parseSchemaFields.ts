@@ -1,6 +1,6 @@
+import type { SchemaField } from '@affinidi/affinidi-vc-schemas'
+import type { BuilderAttribute } from '../SchemaBuilderWebview'
 import { nanoid } from 'nanoid'
-import { SchemaField } from '@affinidi/affinidi-vc-schemas'
-import { BuilderAttribute } from '../helpers'
 
 export function parseSchemaFields(fields: SchemaField[], parentId?: string): BuilderAttribute[] {
   return fields.flatMap((field) => {

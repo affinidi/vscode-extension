@@ -1,10 +1,8 @@
-import { l10n, ProgressLocation, ViewColumn, WebviewPanel, window } from 'vscode'
+import { l10n, ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
-import { schemasState } from '../../../states/schemasState'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
-import { showSchemaDetails } from '../schema-details/showSchemaDetails'
-import { publishBuilderSchema } from './helpers/publishBuilderSchema'
-import { isValidSchemaType, isValidAttributeName } from './helpers/validation'
+import { logger } from '../../../utils/logger'
+import { SubmitHandler } from './handlers/SubmitHandler'
 
 export type BuilderAttribute = {
   id: string
@@ -31,7 +29,7 @@ type OutgoingMessage =
 export class SchemaBuilderWebview {
   private panel: WebviewPanel | undefined
 
-  constructor(readonly projectId: string) {}
+  constructor(readonly projectId: string, private readonly submitHandler: SubmitHandler) {}
 
   open() {
     if (!this.panel) {
@@ -72,62 +70,13 @@ export class SchemaBuilderWebview {
     const { command, data } = message
 
     if (command === 'submit') {
-      try {
-        const { schema } = data
-
-        if (!isValidSchemaType(schema.type)) {
-          window.showErrorMessage(
-            l10n.t(
-              'Invalid schema type. Use PascalCase and alphanumeric symbols (for example, "MySchema")',
-            ),
-          )
-          return
-        }
-
-        if (schema.attributes.length === 0) {
-          window.showErrorMessage(l10n.t('Your schema is empty. Try adding an attribute.'))
-          return
-        }
-
-        for (const attribute of schema.attributes) {
-          if (!attribute.name) {
-            window.showErrorMessage(
-              l10n.t(
-                'Empty attribute name. Use camelCase and alphanumeric symbols (for example, "firstName")',
-              ),
-            )
-            return
-          }
-
-          if (!isValidAttributeName(attribute.name)) {
-            window.showErrorMessage(
-              l10n.t(
-                `Invalid attribute name: "${attribute.name}". Use camelCase and alphanumeric symbols (for example, "firstName")`,
-              ),
-            )
-            return
-          }
-        }
-
-        const createdSchema = await window.withProgress(
-          { location: ProgressLocation.Notification, title: l10n.t('Publishing the schema...') },
-          () => publishBuilderSchema(schema, this.projectId),
-        )
-
-        window.showInformationMessage(l10n.t('Schema has been successfully created'))
-        showSchemaDetails(createdSchema)
-        schemasState.clear()
-        ext.explorerTree.refresh()
-        this.dispose()
-      } finally {
-        if (!this.isDisposed()) {
-          this.sendMessage({ command: 'enableSubmit' })
-        }
-      }
+      await this.submitHandler.handle(this, data)
+    } else {
+      logger.warn(message, 'Unknown command')
     }
   }
 
-  private sendMessage(message: OutgoingMessage) {
+  sendMessage(message: OutgoingMessage) {
     this.requirePanel().webview.postMessage(message)
   }
 

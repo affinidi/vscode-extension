@@ -2,11 +2,16 @@ import { l10n } from 'vscode'
 import { logger } from '../../../utils/logger'
 import { notifyError } from '../../../utils/notifyError'
 import { iamHelpers } from '../../iam/iamHelpers'
+import { BuilderSchemaPublisher } from './BuilderSchemaPublisher'
+import { SubmitHandler } from './handlers/SubmitHandler'
 import { SchemaBuilderWebview } from './SchemaBuilderWebview'
 
 let builder: SchemaBuilderWebview | undefined
 
-export async function openSchemaBuilder(input?: { projectId?: string; scope?: 'public' | 'unlisted' }) {
+export async function openSchemaBuilder(input?: {
+  projectId?: string
+  scope?: 'public' | 'unlisted'
+}) {
   try {
     const builder = await getOrCreateBuilder(input?.projectId)
     builder.open()
@@ -28,7 +33,7 @@ async function getOrCreateBuilder(projectId?: string): Promise<SchemaBuilderWebv
       }
     }
 
-    builder = new SchemaBuilderWebview(projectId)
+    builder = new SchemaBuilderWebview(projectId, new SubmitHandler(new BuilderSchemaPublisher()))
   }
 
   return builder
