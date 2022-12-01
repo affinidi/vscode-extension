@@ -34,7 +34,6 @@ export const errorMessage = {
   invalidJsonSchemaUrl: l10n.t('Could not parse schema URL, please provide a valid schema URl'),
   unknownSelection: l10n.t('unknown selection'),
   unknownValue: l10n.t('unknown value'),
-  unknownCommand: l10n.t('unknown command'),
   unknownCodeGen: l10n.t('unknown codeGenType: '),
   unknownConsentType: l10n.t('unknown consent type: '),
   unexpectedResourceType: l10n.t('Unexpected resource type:'),

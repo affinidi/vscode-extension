@@ -6,19 +6,9 @@ import * as fs from 'fs'
 import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
 
-import {
-  cliHelper,
-  buildAppGenerateCommand,
-  DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE,
-  APP_SUCCESSFULLY_CREATED_MESSAGE,
-} from '../../../../utils/cliHelper'
-import {
-  generateAffinidiAppWithCLI,
-  NO_DIRECTORY_SELECTED_MESSAGE,
-  NO_APP_NAME_SELECTED_MESSAGE,
-} from '../../../../generators/create-app/generator'
-import { PROJECT_REQUIRED_ERROR_MESSAGE } from '../../../../features/iam/iamHelpers'
-import { iamClient } from '../../../../features/iam/iamClient'
+import { cliHelper, buildAppGenerateCommand } from '../../../../utils/cliHelper'
+import { cliMessage, generatorMessage } from '../../../../messages/messages'
+import { generateAffinidiAppWithCLI } from '../../../../generators/create-app/generator'
 import { projectsState } from '../../../../states/projectsState'
 
 const DIRECTORY_NAME = '/directory'
@@ -79,7 +69,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     await generateAffinidiAppWithCLI()
 
     expect(dialog).called
-    expect(showErrorMessage).calledWith(NO_DIRECTORY_SELECTED_MESSAGE)
+    expect(showErrorMessage).calledWith(generatorMessage.noDirectorySelected)
   })
 
   it("should show error message if user didn't specify app name", async () => {
@@ -88,14 +78,14 @@ describe('generateAffinidiAppWithCLI()', () => {
     await generateAffinidiAppWithCLI()
 
     expect(dialog).called
-    expect(showErrorMessage).calledWith(NO_APP_NAME_SELECTED_MESSAGE)
+    expect(showErrorMessage).calledWith(generatorMessage.appNameNotySelected)
   })
 
   it('should show error message if app with same name already exist in selected path', async () => {
     await generateAffinidiAppWithCLI()
 
     expect(dialog).called
-    expect(showErrorMessage).calledWith(DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE)
+    expect(showErrorMessage).calledWith(generatorMessage.directoryNameDuplication)
   })
 
   it('should render app with specified params', async () => {
@@ -108,7 +98,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     expect(ext.outputChannel.appendLine).calledWith(
       buildAppGenerateCommand(path.join(DIRECTORY_NAME, APP_NAME)),
     )
-    expect(showInformationMessage).calledWith(APP_SUCCESSFULLY_CREATED_MESSAGE)
+    expect(showInformationMessage).calledWith(cliMessage.appGenerated)
     expect(commands.executeCommand).calledWith('vscode.openFolder')
   })
 })

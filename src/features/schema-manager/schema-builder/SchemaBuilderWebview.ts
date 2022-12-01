@@ -73,7 +73,7 @@ export class SchemaBuilderWebview {
     if (command === 'submit') {
       await this.submitHandler.handle(this, data)
     } else {
-      logger.warn(message, labels.unknownCommand)
+      logger.warn(message, 'unknown command')
     }
   }
 
