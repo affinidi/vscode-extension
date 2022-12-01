@@ -4,10 +4,10 @@ export const viewMarkdown = async (resourceType: ExplorerResourceType) => {
   let uri: string = ''
 
   switch (resourceType) {
-    case ExplorerResourceType.rootIssuance:
+    case ExplorerResourceType.issuances:
       uri = '/document/bulkIssuance.md'
       break
-    case ExplorerResourceType.rootSchemas:
+    case ExplorerResourceType.schemas:
       uri = '/document/schemaManager.md'
       break
     default:

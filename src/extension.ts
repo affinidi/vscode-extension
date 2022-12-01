@@ -80,11 +80,11 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidiExplorer.refresh', async (element: ExplorerTreeItem) => {
     let resourceType = ExplorerResourceType[ExplorerResourceType.project]
 
-    if (element?.resourceType === ExplorerResourceType.rootSchemas) {
-      resourceType = element?.resourceType.toString()
+    if (element?.type === ExplorerResourceType.schemas) {
+      resourceType = element?.type.toString()
       await schemaManagerState.clear()
-    } else if (element?.resourceType === ExplorerResourceType.rootIssuance) {
-      resourceType = element?.resourceType.toString()
+    } else if (element?.type === ExplorerResourceType.issuances) {
+      resourceType = element?.type.toString()
       await issuanceState.clear()
     } else {
       await state.clear()
@@ -143,7 +143,7 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand('affinidi.openMarkDown', async (element: ExplorerTreeItem) => {
       const uri: Uri = Uri.file(
-        path.join(context.extensionPath, `${await viewMarkdown(element.resourceType)}`),
+        path.join(context.extensionPath, `${await viewMarkdown(element.type)}`),
       )
 
       commands.executeCommand('markdown.showPreview', uri)
@@ -155,7 +155,7 @@ export async function activateInternal(context: ExtensionContext) {
         metadata: {
           commandId: 'affinidi.openMarkDown',
           projectId: element.projectId,
-          resourceType: `${element.resourceType}`,
+          resourceType: `${element.type}`,
         },
       })
     }),
@@ -211,7 +211,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand('affinidiExplorer.viewProperties', (element: ExplorerTreeItem) => {
     viewProperties({
-      resourceType: element.resourceType,
+      resourceType: element.type,
       issuanceId: element.issuanceId,
       projectId: element.projectId!,
       schemaId: element.schemaId,
@@ -223,7 +223,7 @@ export async function activateInternal(context: ExtensionContext) {
       metadata: {
         commandId: 'affinidiExplorer.viewProperties',
         projectId: element.projectId,
-        resource: `${element.resourceType}`,
+        resource: `${element.type}`,
       },
     })
   })
@@ -235,7 +235,7 @@ export async function activateInternal(context: ExtensionContext) {
         const { projectId } = element
         if (!projectId) return
 
-        if (element.resourceType === ExplorerResourceType.schema) {
+        if (element.type === ExplorerResourceType.schema) {
           const schema = await schemaManagerState.getAuthoredSchemaById({
             projectId: element.projectId!,
             schemaId: element.schemaId!,
@@ -244,7 +244,7 @@ export async function activateInternal(context: ExtensionContext) {
           if (schema) {
             await initiateIssuanceCsvFlow({ projectId, schema })
           }
-        } else if (element.resourceType === ExplorerResourceType.issuance) {
+        } else if (element.type === ExplorerResourceType.issuance) {
           const issuance = await issuanceState.getIssuanceById({
             projectId: element.projectId!,
             issuanceId: element.issuanceId!,
@@ -253,7 +253,7 @@ export async function activateInternal(context: ExtensionContext) {
           if (issuance) {
             await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
           }
-        } else if (element.resourceType === ExplorerResourceType.rootIssuance) {
+        } else if (element.type === ExplorerResourceType.issuances) {
           const schema = await schemaManagerHelpers.askForAuthoredSchema({
             projectId,
             includeExample: true,

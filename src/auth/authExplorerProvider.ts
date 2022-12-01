@@ -19,7 +19,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
 
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceType.signup,
+        type: ExplorerResourceType.auth,
         label: l10n.t('Create an Account with Affinidi'),
         icon: new ThemeIcon('sign-in'),
         command: {
@@ -28,7 +28,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
         },
       }),
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceType.login,
+        type: ExplorerResourceType.auth,
         label: l10n.t('Sign in to Affinidi'),
         icon: new ThemeIcon('sign-in'),
         command: { title: l10n.t('Sign In'), command: 'affinidi.login' },

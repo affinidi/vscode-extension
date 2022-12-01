@@ -11,8 +11,8 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
   ): Promise<ExplorerTreeItem[] | undefined> {
     if (element === undefined) return undefined
 
-    switch (element.resourceType) {
-      case ExplorerResourceType.rootIssuance:
+    switch (element.type) {
+      case ExplorerResourceType.issuances:
         return this.getIssuanceItems(element)
       default:
         return undefined
@@ -29,7 +29,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
     return issuances.map(
       (issuance) =>
         new ExplorerTreeItem({
-          resourceType: ExplorerResourceType.issuance,
+          type: ExplorerResourceType.issuance,
           issuanceId: issuance.id,
           label: formatIssuanceName(issuance),
           description: issuance.id,

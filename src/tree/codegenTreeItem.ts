@@ -1,22 +1,15 @@
-import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from 'vscode';
-import { CodegenType } from './codegenTree';
+import { CodegenType } from './codegenTree'
+import { AffinidiTreeItem, AffinidiTreeItemInput } from './shared/affinidiTreeItem'
 
-export class CodegenTreeItem extends TreeItem {
-  public codegenType: CodegenType
+export class CodegenTreeItem extends AffinidiTreeItem {
+  public readonly type: CodegenType
 
   constructor(
-    public readonly item: {
-      codegenType: CodegenType
-      label: string
-      collapsibleState: TreeItemCollapsibleState
-      icon?: ThemeIcon
-      command?: Command
+    input: AffinidiTreeItemInput & {
+      type: CodegenType
     },
   ) {
-    super(item.label, item.collapsibleState)
-
-    this.codegenType = item.codegenType
-    this.iconPath = item.icon
-    this.command = item.command
+    super(input)
+    this.type = input.type
   }
 }

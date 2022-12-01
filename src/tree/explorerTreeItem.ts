@@ -1,8 +1,9 @@
-import { TreeItem, Command, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
+import { ThemeIcon } from 'vscode'
 import { ExplorerResourceType } from './explorerTree'
+import { AffinidiTreeItem, AffinidiTreeItemInput } from './shared/affinidiTreeItem'
 
-export class ExplorerTreeItem extends TreeItem {
-  public readonly resourceType: ExplorerResourceType
+export class ExplorerTreeItem extends AffinidiTreeItem {
+  public readonly type: ExplorerResourceType
 
   public readonly projectId: string | undefined
 
@@ -13,30 +14,25 @@ export class ExplorerTreeItem extends TreeItem {
   public readonly schemaScope: 'public' | 'unlisted' | undefined
 
   constructor(
-    public readonly item: {
-      resourceType: ExplorerResourceType
-      label: string
+    input: AffinidiTreeItemInput & {
+      type: ExplorerResourceType
       schemaId?: string
       issuanceId?: string
       schemaScope?: 'public' | 'unlisted'
       description?: string
-      collapsibleState?: TreeItemCollapsibleState
-      icon?: ThemeIcon
       projectId?: string
-      command?: Command
     },
   ) {
-    super(item.label, item.collapsibleState ?? TreeItemCollapsibleState.None)
+    super(input)
 
-    this.resourceType = item.resourceType
-    this.tooltip = String(this.item.label)
-    this.description = this.item.description
-    this.schemaId = item.schemaId
-    this.issuanceId = item.issuanceId
-    this.schemaScope = item.schemaScope
-    this.iconPath = item.icon ?? ThemeIcon.Folder
-    this.contextValue = ExplorerResourceType[item.resourceType]
-    this.projectId = item.projectId
-    this.command = item.command
+    this.type = input.type
+    this.tooltip = String(input.label)
+    this.description = input.description
+    this.schemaId = input.schemaId
+    this.issuanceId = input.issuanceId
+    this.schemaScope = input.schemaScope
+    this.iconPath = input.icon ?? ThemeIcon.Folder
+    this.contextValue = ExplorerResourceType[input.type]
+    this.projectId = input.projectId
   }
 }

@@ -10,10 +10,10 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
   ): Promise<ExplorerTreeItem[] | undefined> {
     if (element === undefined) return undefined
 
-    switch (element?.resourceType) {
-      case ExplorerResourceType.rootSchemas:
+    switch (element?.type) {
+      case ExplorerResourceType.schemas:
         return this.getRootSchemaItems(element)
-      case ExplorerResourceType.subRootSchemas:
+      case ExplorerResourceType.scopedSchemas:
         return this.getSchemaItems(element)
       default:
         return undefined
@@ -23,18 +23,18 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
   private getRootSchemaItems(parent?: ExplorerTreeItem) {
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceType.subRootSchemas,
+        type: ExplorerResourceType.scopedSchemas,
         label: l10n.t('Public'),
         schemaScope: 'public',
-        collapsibleState: TreeItemCollapsibleState.Collapsed,
+        state: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceType.subRootSchemas,
+        type: ExplorerResourceType.scopedSchemas,
         label: l10n.t('Unlisted'),
         schemaScope: 'unlisted',
-        collapsibleState: TreeItemCollapsibleState.Collapsed,
+        state: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
       }),
@@ -52,7 +52,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     return schemas.map(
       (schema) =>
         new ExplorerTreeItem({
-          resourceType: ExplorerResourceType.schema,
+          type: ExplorerResourceType.schema,
           label: schemaManagerHelpers.getSchemaName(schema),
           description: schema.description || '',
           icon: new ThemeIcon('bracket'),

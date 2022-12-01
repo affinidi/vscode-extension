@@ -10,21 +10,16 @@ export interface ExplorerProvider {
 }
 
 export enum ExplorerResourceType {
+  auth,
   project,
-  rootSchemas,
-  subRootSchemas,
+  schemas,
+  scopedSchemas,
   schema,
-  rootIssuance,
+  issuances,
   issuance,
-  rootRules,
-  rule,
-  rootDID,
+  dids,
   did,
-  rootAnalytics,
   empty,
-  other,
-  login,
-  signup,
 }
 
 export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
@@ -65,7 +60,7 @@ export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
   private async getEmptyItems() {
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceType.empty,
+        type: ExplorerResourceType.empty,
         label: l10n.t('(empty)'),
         icon: new ThemeIcon('dash'),
       }),
