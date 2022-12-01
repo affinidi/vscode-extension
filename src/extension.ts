@@ -32,7 +32,6 @@ import { openSchemaBuilder } from './features/schema-manager/schema-builder/open
 import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
 import { iamHelpers } from './features/iam/iamHelpers'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
-import { iamState } from './features/iam/iamState'
 import { issuanceState } from './features/issuance/issuanceState'
 import { schemaManagerState } from './features/schema-manager/schemaManagerState'
 import { state } from './state'

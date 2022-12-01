@@ -479,7 +479,8 @@
     "test": "node ./out/test/runTest.js",
     "clean": "rimraf ./out",
     "dev": "nodemon -x 'npm run compile'",
-    "generate-translation": "npx @vscode/l10n-dev export -o ./l10n ./src"
+    "generate-translation": "npx @vscode/l10n-dev export -o ./l10n ./src",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@affinidi/eslint-config": "^2.0.0-beta.0",
@@ -516,7 +517,8 @@
     "sinon": "^14.0.1",
     "sinon-chai": "^3.7.0",
     "source-map-support": "^0.5.21",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "husky": "^8.0.0"
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
