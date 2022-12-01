@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import { l10n, ProgressLocation, window } from 'vscode'
 import { parseJsonSchemaUrl } from '../../../shared/parse-json-schema-url'
 import { Schema } from '../../../shared/types'
 import { ColumnSpec, generateColumnSpecs } from './generate-empty-json-specs'
@@ -43,10 +44,18 @@ export function columnsToObject(columns: ColumnSpec[]) {
 }
 
 export async function generateCredentialSubjectSample(schema: Schema) {
-  const parsedJsonSchemaUrl = parseJsonSchemaUrl(schema.jsonSchemaUrl)
-  const vcJsonSchema = await vcJsonSchemaFetcher.fetch(parsedJsonSchemaUrl)
+  return window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      title: l10n.t('Generating sample credential subject...'),
+    },
+    async () => {
+      const parsedJsonSchemaUrl = parseJsonSchemaUrl(schema.jsonSchemaUrl)
+      const vcJsonSchema = await vcJsonSchemaFetcher.fetch(parsedJsonSchemaUrl)
 
-  const columnSpecs = generateColumnSpecs(vcJsonSchema)
-  const sample = columnsToObject(columnSpecs)
-  return sample
+      const columnSpecs = generateColumnSpecs(vcJsonSchema)
+      const sample = columnsToObject(columnSpecs)
+      return sample
+    },
+  )
 }

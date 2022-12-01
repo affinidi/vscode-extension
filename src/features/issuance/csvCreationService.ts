@@ -74,7 +74,7 @@ export const uploadCsvFile = async (input: TemplateInput) => {
   } = await iamState.requireProjectSummary(input.projectId)
   const schema =
     input.schema ??
-    (await schemaManagerHelpers.askForMySchema({
+    (await schemaManagerHelpers.askForAuthoredSchema({
       projectId: input.projectId,
       includeExample: true,
     }))

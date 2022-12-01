@@ -1,3 +1,4 @@
+import { SchemaDto } from '@affinidi/client-schema-manager'
 import { commands } from 'vscode'
 import { ext } from '../extensionVariables'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
@@ -15,11 +16,14 @@ export const initSnippets = () => {
   ext.context.subscriptions.push(
     commands.registerCommand(
       'affinidi.codegen.sendVcOfferToEmail',
-      async (element: ExplorerTreeItem) => {
-        const schema = await schemaManagerState.getAuthoredSchemaById({
-          projectId: element?.projectId!,
-          schemaId: element?.schemaId!,
-        })
+      async (element?: ExplorerTreeItem) => {
+        let schema: SchemaDto | undefined
+        if (element?.schemaId) {
+          schema = await schemaManagerState.getAuthoredSchemaById({
+            projectId: element.projectId!,
+            schemaId: element.schemaId,
+          })
+        }
 
         await insertSendVcOfferToEmailSnippet({
           projectId: element?.projectId,

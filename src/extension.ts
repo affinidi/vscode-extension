@@ -256,7 +256,7 @@ export async function activateInternal(context: ExtensionContext) {
             await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
           }
         } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
-          const schema = await schemaManagerHelpers.askForMySchema({
+          const schema = await schemaManagerHelpers.askForAuthoredSchema({
             projectId,
             includeExample: true,
           })
