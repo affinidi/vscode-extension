@@ -12,6 +12,8 @@ jobs:
   test:
     needs: gitleaks-scan
     uses: ./.github/workflows/test.yaml
+    with:
+      NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   build-release:
     needs: test
