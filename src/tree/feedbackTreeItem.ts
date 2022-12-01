@@ -1,6 +1,6 @@
-import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from 'vscode'
+import { TreeItem, Command, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
 
-export class AffFeedbackTreeItem extends TreeItem {
+export class FeedbackTreeItem extends TreeItem {
   public command: Command
 
   constructor(
@@ -12,6 +12,7 @@ export class AffFeedbackTreeItem extends TreeItem {
     },
   ) {
     super(item.label, item.collapsibleState)
+
     this.iconPath = item.icon
     this.command = item.command
   }

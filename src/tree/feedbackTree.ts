@@ -1,14 +1,14 @@
 import { ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState, l10n } from 'vscode'
-import { AffFeedbackTreeItem } from './treeItem'
+import { FeedbackTreeItem } from './feedbackTreeItem'
 
-export class AffinidiFeedbackProvider implements TreeDataProvider<AffFeedbackTreeItem> {
-  public getTreeItem(element: AffFeedbackTreeItem): TreeItem {
+export class FeedbackTree implements TreeDataProvider<FeedbackTreeItem> {
+  public getTreeItem(element: FeedbackTreeItem): TreeItem {
     return element
   }
 
-  public async getChildren(): Promise<AffFeedbackTreeItem[]> {
+  public async getChildren(): Promise<FeedbackTreeItem[]> {
     return [
-      new AffFeedbackTreeItem({
+      new FeedbackTreeItem({
         label: l10n.t('Give Feedback'),
         collapsibleState: TreeItemCollapsibleState.None,
         icon: new ThemeIcon('github-inverted'),

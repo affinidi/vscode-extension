@@ -19,7 +19,6 @@ import { askUserForTelemetryConsent } from './utils/telemetry'
 import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
-import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 import { ExplorerResourceTypes, ExplorerTree } from './tree/explorerTree'
 import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
@@ -34,6 +33,7 @@ import { issuanceState } from './features/issuance/issuanceState'
 import { schemaManagerState } from './features/schema-manager/schemaManagerState'
 import { state } from './state'
 import { CodegenTree } from './tree/codegenTree'
+import { FeedbackTree } from './tree/feedbackTree'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -57,8 +57,7 @@ export async function activateInternal(context: ExtensionContext) {
     new SchemaManagerExplorerProvider(),
   ])
   ext.codegenTree = new CodegenTree()
-
-  const affFeedbackProvider = new AffinidiFeedbackProvider()
+  ext.feedbackTree = new FeedbackTree()
 
   const treeView = window.createTreeView('affinidiExplorer', {
     treeDataProvider: ext.explorerTree,
@@ -73,7 +72,7 @@ export async function activateInternal(context: ExtensionContext) {
   })
 
   window.createTreeView('affinidiFeedback', {
-    treeDataProvider: affFeedbackProvider,
+    treeDataProvider: ext.feedbackTree,
     canSelectMany: false,
     showCollapseAll: true,
   })
