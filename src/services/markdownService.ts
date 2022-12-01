@@ -1,13 +1,13 @@
-import { ExplorerResourceTypes } from '../tree/explorerTree'
+import { ExplorerResourceType } from '../tree/explorerTree'
 
-export const viewMarkdown = async (resourceType: ExplorerResourceTypes) => {
+export const viewMarkdown = async (resourceType: ExplorerResourceType) => {
   let uri: string = ''
 
   switch (resourceType) {
-    case ExplorerResourceTypes.rootIssuance:
+    case ExplorerResourceType.rootIssuance:
       uri = '/document/bulkIssuance.md'
       break
-    case ExplorerResourceTypes.rootSchemas:
+    case ExplorerResourceType.rootSchemas:
       uri = '/document/schemaManager.md'
       break
     default:

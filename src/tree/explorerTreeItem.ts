@@ -1,8 +1,8 @@
 import { TreeItem, Command, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
-import { ExplorerResourceTypes } from './explorerTree'
+import { ExplorerResourceType } from './explorerTree'
 
 export class ExplorerTreeItem extends TreeItem {
-  public readonly resourceType: ExplorerResourceTypes
+  public readonly resourceType: ExplorerResourceType
 
   public readonly projectId: string | undefined
 
@@ -14,7 +14,7 @@ export class ExplorerTreeItem extends TreeItem {
 
   constructor(
     public readonly item: {
-      resourceType: ExplorerResourceTypes
+      resourceType: ExplorerResourceType
       label: string
       schemaId?: string
       issuanceId?: string
@@ -35,7 +35,7 @@ export class ExplorerTreeItem extends TreeItem {
     this.issuanceId = item.issuanceId
     this.schemaScope = item.schemaScope
     this.iconPath = item.icon ?? ThemeIcon.Folder
-    this.contextValue = ExplorerResourceTypes[item.resourceType]
+    this.contextValue = ExplorerResourceType[item.resourceType]
     this.projectId = item.projectId
     this.command = item.command
   }

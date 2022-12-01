@@ -1,6 +1,6 @@
 import { TreeItemCollapsibleState, ThemeIcon, l10n } from 'vscode'
 import { ext } from '../../extensionVariables'
-import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/explorerTree'
+import { ExplorerProvider, ExplorerResourceType } from '../../tree/explorerTree'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { iamState } from './iamState'
 
@@ -16,9 +16,9 @@ export class IamExplorerProvider implements ExplorerProvider {
     }
 
     switch (element.resourceType) {
-      case ExplorerResourceTypes.project:
+      case ExplorerResourceType.project:
         return this.getProductItems(element)
-      case ExplorerResourceTypes.rootDID:
+      case ExplorerResourceType.rootDID:
         return this.getDidItems(element)
       default:
         return undefined
@@ -31,7 +31,7 @@ export class IamExplorerProvider implements ExplorerProvider {
     return projects.map(
       (project) =>
         new ExplorerTreeItem({
-          resourceType: ExplorerResourceTypes.project,
+          resourceType: ExplorerResourceType.project,
           label: project.name,
           collapsibleState: TreeItemCollapsibleState.Collapsed,
           icon: new ThemeIcon('project'),
@@ -43,21 +43,21 @@ export class IamExplorerProvider implements ExplorerProvider {
   private async getProductItems(parent?: ExplorerTreeItem) {
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.rootDID,
+        resourceType: ExplorerResourceType.rootDID,
         label: l10n.t('Digital Identities'),
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('lock'),
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.rootIssuance,
+        resourceType: ExplorerResourceType.rootIssuance,
         label: l10n.t('Issuances'),
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('output'),
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.rootSchemas,
+        resourceType: ExplorerResourceType.rootSchemas,
         label: l10n.t('VC Schemas'),
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
@@ -71,7 +71,7 @@ export class IamExplorerProvider implements ExplorerProvider {
 
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.did,
+        resourceType: ExplorerResourceType.did,
         label: projectSummary.wallet.did,
         icon: new ThemeIcon('lock'),
         projectId: parent?.projectId,
@@ -82,7 +82,7 @@ export class IamExplorerProvider implements ExplorerProvider {
   private async getCreateProjectItem() {
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.project,
+        resourceType: ExplorerResourceType.project,
         label: l10n.t('Create Project'),
         icon: new ThemeIcon('file-directory-create'),
         command: {

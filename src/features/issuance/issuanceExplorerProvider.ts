@@ -1,5 +1,5 @@
 import { ThemeIcon } from 'vscode'
-import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/explorerTree'
+import { ExplorerProvider, ExplorerResourceType } from '../../tree/explorerTree'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { iamState } from '../iam/iamState'
 import { formatIssuanceName } from './formatIssuanceName'
@@ -12,7 +12,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
     if (element === undefined) return undefined
 
     switch (element.resourceType) {
-      case ExplorerResourceTypes.rootIssuance:
+      case ExplorerResourceType.rootIssuance:
         return this.getIssuanceItems(element)
       default:
         return undefined
@@ -29,7 +29,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
     return issuances.map(
       (issuance) =>
         new ExplorerTreeItem({
-          resourceType: ExplorerResourceTypes.issuance,
+          resourceType: ExplorerResourceType.issuance,
           issuanceId: issuance.id,
           label: formatIssuanceName(issuance),
           description: issuance.id,

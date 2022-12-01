@@ -2,12 +2,12 @@ import fetch from 'node-fetch'
 import { iamState } from '../features/iam/iamState'
 import { issuanceState } from '../features/issuance/issuanceState'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
-import { ExplorerResourceTypes } from '../tree/explorerTree'
+import { ExplorerResourceType } from '../tree/explorerTree'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
 type ViewPropertiesProps = {
   projectId: string
-  resourceType: ExplorerResourceTypes
+  resourceType: ExplorerResourceType
   issuanceId?: string
   schemaId?: string
 }
@@ -22,13 +22,13 @@ export const viewProperties = async ({
   let id: string = ''
   let content: any = await iamState.requireProjectSummary(projectId)
   switch (resourceType) {
-    case ExplorerResourceTypes.project: {
+    case ExplorerResourceType.project: {
       label = content.project.name
       id = content.project.projectId
       break
     }
 
-    case ExplorerResourceTypes.schema: {
+    case ExplorerResourceType.schema: {
       const schema = await schemaManagerState.getAuthoredSchemaById({ projectId, schemaId: schemaId! })
 
       if (schema) {
@@ -39,7 +39,7 @@ export const viewProperties = async ({
       break
     }
 
-    case ExplorerResourceTypes.issuance: {
+    case ExplorerResourceType.issuance: {
       const issuance = await issuanceState.getIssuanceById({ projectId, issuanceId: issuanceId! })
 
       if (issuance) {

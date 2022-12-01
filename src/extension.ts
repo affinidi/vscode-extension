@@ -19,7 +19,7 @@ import { askUserForTelemetryConsent } from './utils/telemetry'
 import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
-import { ExplorerResourceTypes, ExplorerTree } from './tree/explorerTree'
+import { ExplorerResourceType, ExplorerTree } from './tree/explorerTree'
 import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
 import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerProvider'
@@ -78,12 +78,12 @@ export async function activateInternal(context: ExtensionContext) {
   })
 
   commands.registerCommand('affinidiExplorer.refresh', async (element: ExplorerTreeItem) => {
-    let resourceType = ExplorerResourceTypes[ExplorerResourceTypes.project]
+    let resourceType = ExplorerResourceType[ExplorerResourceType.project]
 
-    if (element?.resourceType === ExplorerResourceTypes.rootSchemas) {
+    if (element?.resourceType === ExplorerResourceType.rootSchemas) {
       resourceType = element?.resourceType.toString()
       await schemaManagerState.clear()
-    } else if (element?.resourceType === ExplorerResourceTypes.rootIssuance) {
+    } else if (element?.resourceType === ExplorerResourceType.rootIssuance) {
       resourceType = element?.resourceType.toString()
       await issuanceState.clear()
     } else {
@@ -235,7 +235,7 @@ export async function activateInternal(context: ExtensionContext) {
         const { projectId } = element
         if (!projectId) return
 
-        if (element.resourceType === ExplorerResourceTypes.schema) {
+        if (element.resourceType === ExplorerResourceType.schema) {
           const schema = await schemaManagerState.getAuthoredSchemaById({
             projectId: element.projectId!,
             schemaId: element.schemaId!,
@@ -244,7 +244,7 @@ export async function activateInternal(context: ExtensionContext) {
           if (schema) {
             await initiateIssuanceCsvFlow({ projectId, schema })
           }
-        } else if (element.resourceType === ExplorerResourceTypes.issuance) {
+        } else if (element.resourceType === ExplorerResourceType.issuance) {
           const issuance = await issuanceState.getIssuanceById({
             projectId: element.projectId!,
             issuanceId: element.issuanceId!,
@@ -253,7 +253,7 @@ export async function activateInternal(context: ExtensionContext) {
           if (issuance) {
             await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
           }
-        } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
+        } else if (element.resourceType === ExplorerResourceType.rootIssuance) {
           const schema = await schemaManagerHelpers.askForAuthoredSchema({
             projectId,
             includeExample: true,

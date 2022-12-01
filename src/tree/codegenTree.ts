@@ -1,7 +1,7 @@
 import { l10n, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode'
 import { CodegenTreeItem } from './codegenTreeItem'
 
-export enum CodegenTypes {
+export enum CodegenType {
   rootSnippets,
   snippets,
   rootScripts,
@@ -21,9 +21,9 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
     switch (element?.codegenType) {
       case undefined:
         return this.getCodeGenItems()
-      case CodegenTypes.rootScripts:
+      case CodegenType.rootScripts:
         return this.getScriptItems()
-      case CodegenTypes.rootApps:
+      case CodegenType.rootApps:
         return this.getAppItems()
       default:
         throw new Error(`Unknown Codegen type: ${element?.codegenType}`)
@@ -33,19 +33,19 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
   private getCodeGenItems() {
     return [
       new CodegenTreeItem({
-        codegenType: CodegenTypes.rootApps,
+        codegenType: CodegenType.rootApps,
         label: l10n.t('App Generators'),
         collapsibleState: TreeItemCollapsibleState.Expanded,
         icon: new ThemeIcon('rocket'),
       }),
       new CodegenTreeItem({
-        codegenType: CodegenTypes.rootScripts,
+        codegenType: CodegenType.rootScripts,
         label: l10n.t('Script Generators'),
         collapsibleState: TreeItemCollapsibleState.Expanded,
         icon: new ThemeIcon('file-code'),
       }),
       new CodegenTreeItem({
-        codegenType: CodegenTypes.rootSnippets,
+        codegenType: CodegenType.rootSnippets,
         label: l10n.t('IntelliSense Snippets'),
         collapsibleState: TreeItemCollapsibleState.None,
         icon: new ThemeIcon('symbol-snippet'),
@@ -60,7 +60,7 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
   private getScriptItems() {
     return [
       new CodegenTreeItem({
-        codegenType: CodegenTypes.scripts,
+        codegenType: CodegenType.scripts,
         label: l10n.t('Send a VC Offer to an email'),
         collapsibleState: TreeItemCollapsibleState.None,
         command: {
@@ -69,7 +69,7 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
         },
       }),
       new CodegenTreeItem({
-        codegenType: CodegenTypes.scripts,
+        codegenType: CodegenType.scripts,
         label: l10n.t('Get Issuance Offers'),
         collapsibleState: TreeItemCollapsibleState.None,
         command: {
@@ -78,7 +78,7 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
         },
       }),
       new CodegenTreeItem({
-        codegenType: CodegenTypes.scripts,
+        codegenType: CodegenType.scripts,
         label: l10n.t('Sign a VC with Cloud Wallet'),
         collapsibleState: TreeItemCollapsibleState.None,
         command: {
@@ -92,7 +92,7 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
   private async getAppItems() {
     return [
       new CodegenTreeItem({
-        codegenType: CodegenTypes.scripts,
+        codegenType: CodegenType.scripts,
         label: l10n.t('Certification & Verification'),
         collapsibleState: TreeItemCollapsibleState.None,
         command: {

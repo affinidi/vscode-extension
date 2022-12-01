@@ -1,5 +1,5 @@
 import { l10n, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
-import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/explorerTree'
+import { ExplorerProvider, ExplorerResourceType } from '../../tree/explorerTree'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { schemaManagerHelpers } from './schemaManagerHelpers'
 import { schemaManagerState } from './schemaManagerState'
@@ -11,9 +11,9 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     if (element === undefined) return undefined
 
     switch (element?.resourceType) {
-      case ExplorerResourceTypes.rootSchemas:
+      case ExplorerResourceType.rootSchemas:
         return this.getRootSchemaItems(element)
-      case ExplorerResourceTypes.subRootSchemas:
+      case ExplorerResourceType.subRootSchemas:
         return this.getSchemaItems(element)
       default:
         return undefined
@@ -23,7 +23,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
   private getRootSchemaItems(parent?: ExplorerTreeItem) {
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.subRootSchemas,
+        resourceType: ExplorerResourceType.subRootSchemas,
         label: l10n.t('Public'),
         schemaScope: 'public',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
@@ -31,7 +31,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.subRootSchemas,
+        resourceType: ExplorerResourceType.subRootSchemas,
         label: l10n.t('Unlisted'),
         schemaScope: 'unlisted',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
@@ -52,7 +52,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     return schemas.map(
       (schema) =>
         new ExplorerTreeItem({
-          resourceType: ExplorerResourceTypes.schema,
+          resourceType: ExplorerResourceType.schema,
           label: schemaManagerHelpers.getSchemaName(schema),
           description: schema.description || '',
           icon: new ThemeIcon('bracket'),

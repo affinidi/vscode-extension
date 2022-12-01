@@ -9,7 +9,7 @@ export interface ExplorerProvider {
   ): Promise<ExplorerTreeItem[] | undefined>
 }
 
-export enum ExplorerResourceTypes {
+export enum ExplorerResourceType {
   project,
   rootSchemas,
   subRootSchemas,
@@ -65,7 +65,7 @@ export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
   private async getEmptyItems() {
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.empty,
+        resourceType: ExplorerResourceType.empty,
         label: l10n.t('(empty)'),
         icon: new ThemeIcon('dash'),
       }),

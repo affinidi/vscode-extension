@@ -1,6 +1,6 @@
 import { l10n, ThemeIcon } from 'vscode'
 import { ext } from '../extensionVariables'
-import { ExplorerProvider, ExplorerResourceTypes, ExplorerTree } from '../tree/explorerTree'
+import { ExplorerProvider, ExplorerResourceType, ExplorerTree } from '../tree/explorerTree'
 import { ExplorerTreeItem } from '../tree/explorerTreeItem'
 
 export class AuthExplorerProvider implements ExplorerProvider {
@@ -19,7 +19,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
 
     return [
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.signup,
+        resourceType: ExplorerResourceType.signup,
         label: l10n.t('Create an Account with Affinidi'),
         icon: new ThemeIcon('sign-in'),
         command: {
@@ -28,7 +28,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
         },
       }),
       new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.login,
+        resourceType: ExplorerResourceType.login,
         label: l10n.t('Sign in to Affinidi'),
         icon: new ThemeIcon('sign-in'),
         command: { title: l10n.t('Sign In'), command: 'affinidi.login' },

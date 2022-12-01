@@ -1,12 +1,12 @@
 import { Command, ThemeIcon, TreeItem, TreeItemCollapsibleState } from 'vscode';
-import { CodegenTypes } from './codegenTree';
+import { CodegenType } from './codegenTree';
 
 export class CodegenTreeItem extends TreeItem {
-  public codegenType: CodegenTypes
+  public codegenType: CodegenType
 
   constructor(
     public readonly item: {
-      codegenType: CodegenTypes
+      codegenType: CodegenType
       label: string
       collapsibleState: TreeItemCollapsibleState
       icon?: ThemeIcon
