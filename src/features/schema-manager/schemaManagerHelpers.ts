@@ -1,9 +1,6 @@
-import { window, ProgressLocation, l10n } from 'vscode'
-import { Options, SchemaSearchScope } from '@affinidi/client-schema-manager'
+import { l10n } from 'vscode'
 import { Schema } from '../../shared/types'
 import { showQuickPick } from '../../utils/showQuickPick'
-import { schemaManagerClient } from './schemaManagerClient'
-import { iamState } from '../iam/iamState'
 import { schemaManagerState } from './schemaManagerState'
 
 export const EXAMPLE_SCHEMA: Schema = {
@@ -12,7 +9,7 @@ export const EXAMPLE_SCHEMA: Schema = {
   jsonSchemaUrl: 'https://schema.affinidi.com/MySchemaV1-0.json',
 }
 
-async function askForMySchema(
+async function askForAuthoredSchema(
   input: {
     projectId: string
     includeExample?: boolean
@@ -33,7 +30,7 @@ async function askForMySchema(
 }
 
 async function fetchSchemaUrl(projectId: string) {
-  const schema = await askForMySchema({ includeExample: true, projectId })
+  const schema = await askForAuthoredSchema({ includeExample: true, projectId })
   if (!schema) {
     return undefined
   }
@@ -46,7 +43,7 @@ function getSchemaName(schema: { type: string; version: number; revision: number
 }
 
 export const schemaManagerHelpers = {
-  askForMySchema,
+  askForAuthoredSchema,
   fetchSchemaUrl,
   getSchemaName,
 }

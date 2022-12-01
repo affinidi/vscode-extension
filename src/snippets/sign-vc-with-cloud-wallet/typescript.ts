@@ -58,7 +58,7 @@ const signCredentialResponse = await fetch('${input.cloudWalletApiUrl}/wallet/si
         id: cloudWalletData.wallet.did,
       },
       // should match fields in VC Schema
-      credentialSubject: ${formatObject(input.credentialSubject, { indent: 2 })},
+      credentialSubject: ${formatObject(input.credentialSubject, { indent: 3 })},
       credentialSchema: {
         id: schema.jsonSchemaUrl,
         type: schema.type,
