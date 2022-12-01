@@ -17,25 +17,11 @@ import {
   NO_DIRECTORY_SELECTED_MESSAGE,
   NO_APP_NAME_SELECTED_MESSAGE,
 } from '../../../../generators/create-app/generator'
+import { iamHelpers } from '../../../../features/iam/iamHelpers'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
 const PROJECT_ID = 'fake-project-id'
-const PROJECT_SUMMARY = {
-  wallet: {
-    didUrl: '',
-    did: '',
-  },
-  apiKey: {
-    apiKeyHash: '',
-    apiKeyName: '',
-  },
-  project: {
-    projectId: PROJECT_ID,
-    name: '',
-    createdAt: '',
-  },
-}
 
 describe('generateAffinidiAppWithCLI()', () => {
   let showErrorMessage: sinon.SinonStub
@@ -55,6 +41,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
     sandbox.stub(cliHelper, 'setActiveProject')
+    sandbox.stub(iamHelpers, 'askForProjectId').resolves(PROJECT_ID)
   })
 
   it('should show error message when CLI is not installed', async () => {

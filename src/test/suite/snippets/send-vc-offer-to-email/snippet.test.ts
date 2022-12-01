@@ -8,6 +8,7 @@ import { iamClient } from '../../../../features/iam/iamClient'
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
+import { iamState } from '../../../../features/iam/iamState'
 
 describe('insertSendVcOfferToEmailSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
@@ -35,7 +36,7 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
     }
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
-    sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
+    sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
 
     await insertSendVcOfferToEmailSnippet(
       {

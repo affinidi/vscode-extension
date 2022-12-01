@@ -36,7 +36,6 @@ describe('createProjectProcess()', () => {
       createdAt: '',
       name: projectName,
     })
-    sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
     sandbox.stub(window, 'showInformationMessage')
 
     showInputBoxStub = sandbox.stub(window, 'showInputBox').resolves(projectName)
@@ -46,7 +45,6 @@ describe('createProjectProcess()', () => {
     await createProjectProcess()
 
     expect(iamClient.createProject).calledWith({ name: projectName }, { consoleAuthToken })
-    expect(iamClient.getProjectSummary).calledWith({ projectId }, { consoleAuthToken })
   })
 
   it('should fail when project name is not provided', async () => {

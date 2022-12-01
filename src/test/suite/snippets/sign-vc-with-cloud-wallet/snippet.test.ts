@@ -5,9 +5,10 @@ import {
   implementations,
   insertSignVcWithCloudWalletSnippet,
 } from '../../../../snippets/sign-vc-with-cloud-wallet/snippet'
-import { AFFINIDI_IAM_API_URL, iamClient } from '../../../../features/iam/iamClient'
+import { AFFINIDI_IAM_API_URL } from '../../../../features/iam/iamClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
+import { iamState } from '../../../../features/iam/iamState'
 
 describe('insertSignVcWithCloudWalletSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
@@ -34,7 +35,7 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     }
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
-    sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
+    sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
 
     await insertSignVcWithCloudWalletSnippet(
       {
