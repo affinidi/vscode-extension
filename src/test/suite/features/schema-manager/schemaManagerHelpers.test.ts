@@ -1,4 +1,3 @@
-import { SchemaDto } from '@affinidi/client-schema-manager'
 import { window } from 'vscode'
 import { expect } from 'chai'
 import * as sinon from 'sinon'
@@ -11,24 +10,13 @@ import {
 import { projectsState } from '../../../../states/projectsState'
 import { schemasState } from '../../../../states/schemasState'
 import { schemaManagerClient } from '../../../../features/schema-manager/schemaManagerClient'
+import { generateProjectSummary, generateSchema } from '../../testUtils'
 
 describe('schemaManagerHelpers()', () => {
   const projectId = 'fake-project-id'
   const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
-  const schema: SchemaDto = {
-    id: '1',
-    parentId: null,
-    authorDid: '',
-    description: null,
-    createdAt: '',
-    namespace: null,
-    type: 'test',
-    version: 0,
-    revision: 0,
-    jsonSchemaUrl: 'jsonSchemaUrlTest',
-    jsonLdContextUrl: '',
-  }
+  const schema = generateSchema()
   let withProgress: sinon.SinonStub
   let showQuickPick: sinon.SinonStub
 
@@ -86,21 +74,7 @@ describe('schemaManagerHelpers()', () => {
   })
 
   describe('fetchSchemaUrl()', () => {
-    const projectSummary = {
-      wallet: {
-        didUrl: '',
-        did: '',
-      },
-      apiKey: {
-        apiKeyHash: '',
-        apiKeyName: '',
-      },
-      project: {
-        projectId,
-        name: '',
-        createdAt: '',
-      },
-    }
+    const projectSummary = generateProjectSummary({ projectId })
 
     beforeEach(() => {
       projectsState.setProject(projectSummary)

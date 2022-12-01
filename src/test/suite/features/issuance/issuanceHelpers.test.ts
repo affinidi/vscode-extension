@@ -1,4 +1,3 @@
-import { IssuanceDto } from '@affinidi/client-issuance'
 import { window } from 'vscode'
 import { expect } from 'chai'
 import * as sinon from 'sinon'
@@ -8,24 +7,12 @@ import {
   issuanceHelpers,
   NO_ISSUANCES_ERROR_MESSAGE,
 } from '../../../../features/issuance/issuanceHelpers'
-import { EXAMPLE_SCHEMA } from '../../../../features/schema-manager/schemaManagerHelpers'
+import { generateIssuance } from '../../testUtils'
 
 describe('issuanceHelpers()', () => {
   const projectId = 'fake-project-id'
-  const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
-  const issuance: IssuanceDto = {
-    id: '1',
-    createdAt: 'Wed Nov 30 2022 13:27:11 GMT+0200',
-    template: {
-      verification: {
-        method: 'email',
-      },
-      schema: EXAMPLE_SCHEMA,
-      issuerDid: did,
-    },
-    projectId,
-  }
+  const issuance = generateIssuance({ projectId })
   let withProgress: sinon.SinonStub
   let showQuickPick: sinon.SinonStub
 

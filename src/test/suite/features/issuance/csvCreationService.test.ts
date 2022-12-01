@@ -1,5 +1,3 @@
-import { IssuanceDto } from '@affinidi/client-issuance'
-import { SchemaDto } from '@affinidi/client-schema-manager'
 import { window, workspace } from 'vscode'
 import { expect } from 'chai'
 import * as sinon from 'sinon'
@@ -13,56 +11,19 @@ import {
   implementationLabels,
   ISSUANCE_CREATED_MESSAGE,
 } from '../../../../features/issuance/csvCreationService'
-import { EXAMPLE_SCHEMA } from '../../../../features/schema-manager/schemaManagerHelpers'
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
 import { projectsState, NO_PROJECT_ERROR_MESSAGE } from '../../../../states/projectsState'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
+import { generateIssuance, generateProjectSummary, generateSchema } from '../../testUtils'
 
 describe('csvCreationService()', () => {
   const projectId = 'fake-project-id'
   const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
-  const issuance: IssuanceDto = {
-    id: '1',
-    createdAt: 'Wed Nov 30 2022 13:27:11 GMT+0200',
-    template: {
-      verification: {
-        method: 'email',
-      },
-      schema: EXAMPLE_SCHEMA,
-      issuerDid: did,
-    },
-    projectId,
-  }
-  const schema: SchemaDto = {
-    id: '1',
-    parentId: null,
-    authorDid: '',
-    description: null,
-    createdAt: '',
-    namespace: null,
-    type: 'test',
-    version: 0,
-    revision: 0,
-    jsonSchemaUrl: 'jsonSchemaUrlTest',
-    jsonLdContextUrl: '',
-  }
-  const projectSummary = {
-    wallet: {
-      didUrl: '',
-      did: '',
-    },
-    apiKey: {
-      apiKeyHash,
-      apiKeyName: '',
-    },
-    project: {
-      projectId,
-      name: '',
-      createdAt: '',
-    },
-  }
+  const issuance = generateIssuance({ projectId, issuerDid: did })
+  const schema = generateSchema()
+  const projectSummary = generateProjectSummary({ did, projectId, apiKeyHash })
   let showTextDocument: sinon.SinonStub
   let openTextDocument: sinon.SinonStub
 

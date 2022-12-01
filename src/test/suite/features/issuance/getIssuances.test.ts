@@ -1,28 +1,15 @@
-import { IssuanceDto } from '@affinidi/client-issuance'
 import { expect } from 'chai'
 
 import { sandbox } from '../../setup'
 import { getIssuances } from '../../../../features/issuance/getIssuances'
 import { issuancesState } from '../../../../states/issuancesState'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
-import { EXAMPLE_SCHEMA } from '../../../../features/schema-manager/schemaManagerHelpers'
+import { generateIssuance } from '../../testUtils'
 
 describe('getIssuances()', () => {
   const projectId = 'fake-project-id'
-  const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
-  const issuance: IssuanceDto = {
-    id: '1',
-    createdAt: '',
-    template: {
-      verification: {
-        method: 'email',
-      },
-      schema: EXAMPLE_SCHEMA,
-      issuerDid: did,
-    },
-    projectId,
-  }
+  const issuance = generateIssuance({ projectId })
 
   afterEach(() => {
     issuancesState.clear()

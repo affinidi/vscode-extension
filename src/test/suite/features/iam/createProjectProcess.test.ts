@@ -7,26 +7,13 @@ import { createProjectProcess } from '../../../../features/iam/createProjectProc
 import { iamClient } from '../../../../features/iam/iamClient'
 import { authHelper } from '../../../../auth/authHelper'
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
+import { generateProjectSummary } from '../../testUtils'
 
 describe('createProjectProcess()', () => {
   const projectName = 'fake-project-name'
   const consoleAuthToken = 'fake-console-auth-token'
   const projectId = 'fake-project-id'
-  const projectSummary = {
-    wallet: {
-      didUrl: '',
-      did: '',
-    },
-    apiKey: {
-      apiKeyHash: '',
-      apiKeyName: '',
-    },
-    project: {
-      projectId,
-      name: projectName,
-      createdAt: '',
-    },
-  }
+  const projectSummary = generateProjectSummary({ projectId, projectName })
 
   let showInputBoxStub: sinon.SinonStub
 
