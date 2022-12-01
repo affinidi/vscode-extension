@@ -1,18 +1,18 @@
 import { window, ProgressLocation, l10n } from 'vscode'
-import { Options } from '@affinidi/client-issuance'
+import { IssuanceDto, Options } from '@affinidi/client-issuance'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { formatIssuanceName } from './formatIssuanceName'
-import { issuanceClient } from './issuanceClient'
+import { getIssuances } from './getIssuances'
 
 type Input = { projectId: string }
 
-async function askForIssuanceId(input: Input, options: Options): Promise<string | undefined> {
-  const { issuances } = await window.withProgress(
+async function askForIssuance(input: Input, options: Options): Promise<IssuanceDto | undefined> {
+  const issuances = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: l10n.t('Fetching available issuances...'),
     },
-    () => issuanceClient.searchIssuances({ projectId: input.projectId }, options),
+    () => getIssuances(input.projectId, options),
   )
 
   if (issuances.length === 0) {
@@ -20,16 +20,11 @@ async function askForIssuanceId(input: Input, options: Options): Promise<string 
   }
 
   return showQuickPick(
-    [
-      ...issuances.map<[string, string]>((issuance) => [
-        `${formatIssuanceName(issuance)} (${issuance.id})`,
-        issuance.id,
-      ]),
-    ],
+    [...issuances.map<[string, IssuanceDto]>((i) => [`${formatIssuanceName(i)} (${i.id})`, i])],
     { title: l10n.t('Select an Issuance') },
   )
 }
 
 export const issuanceHelper = {
-  askForIssuanceId,
+  askForIssuance,
 }

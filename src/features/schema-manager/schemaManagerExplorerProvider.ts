@@ -1,9 +1,9 @@
 import { l10n, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../treeView/treeTypes'
-import { schemaManagerClient } from './schemaManagerClient'
+import { ExplorerResourceTypes } from '../../tree/types'
 import { projectsState } from '../../states/projectsState'
+import { schemaManagerHelpers } from './schemaManagerHelpers'
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -26,9 +26,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
         label: l10n.t('Public'),
-        metadata: {
-          scope: 'public',
-        },
+        schemaScope: 'public',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
@@ -36,9 +34,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
         label: l10n.t('Unlisted'),
-        metadata: {
-          scope: 'unlisted',
-        },
+        schemaScope: 'unlisted',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
@@ -52,11 +48,10 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       apiKey: { apiKeyHash },
     } = projectsState.getProjectById(parent?.projectId)
 
-    const { schemas } = await schemaManagerClient.searchSchemas(
+    const schemas = await schemaManagerHelpers.getMySchemas(
       {
         did,
-        authorDid: did,
-        scope: parent?.metadata?.scope,
+        scope: parent?.schemaScope,
       },
       { apiKeyHash },
     )
@@ -65,10 +60,10 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       (schema) =>
         new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.schema,
-          label: `${schema.type}V${schema.version}-${schema.revision}`,
+          label: schemaManagerHelpers.getSchemaName(schema),
           description: schema.description || '',
-          metadata: schema,
           icon: new ThemeIcon('bracket'),
+          schemaId: schema.id,
           projectId: parent?.projectId,
           command: {
             title: l10n.t('Open schema details'),

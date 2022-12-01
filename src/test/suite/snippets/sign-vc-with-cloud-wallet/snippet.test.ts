@@ -16,8 +16,8 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     const apiKeyHash = 'fake-api-key-hash'
     const did = 'fake-did'
     const type = 'MySchema'
-    const jsonSchemaUrl = 'http://example.com/MySchema.json'
-    const jsonLdContextUrl = 'http://example.com/MySchema.jsonld'
+    const jsonSchemaUrl = 'https://schema.affinidi.com/MySchemaV1-0.json'
+    const jsonLdContextUrl = 'https://schema.affinidi.com/MySchemaV1-0.jsonld'
     const projectSummary = {
       wallet: {
         didUrl: '',

@@ -3,6 +3,7 @@
   "affinidi.login": "Acceso",
   "affinidi.signOut": "",
   "affinidi.createProject": "",
+  "affinidi.openSchemaBuilder": "",
   "affinidi.me": "",
   "affinidi.codegen.sendVcOfferToEmail": "",
   "affinidi.codegen.getIssuanceOffers": "",
@@ -16,11 +17,14 @@
   "affinidiExplorer.initiateIssuanceCsvFlow": "",
   "affinidiExplorer.showJsonSchema": "",
   "affinidiExplorer.showJsonLdContext": "",
-  "affinidiExplorer.createSchema": "",
+  "affinidiExplorer.openSchemaBuilder": "",
   "affinidiExplorer.createIssuance": "",
+  "affinidiExplorer.createIssuanceWithSchema": "",
   "affinidiExplorer.codegen.referenceApp": "",
 
   "affinidiDevTools.issueCredential": "",
+
+  "affinidiFeedback.redirectToGithub": "",
 
   "commands.category.explorer": "",
   "commands.category.devTool": "",
@@ -32,6 +36,7 @@
   "views.affinidi.affinidiExplorer": "",
   "views.affinidi.affinidiCodeGeneration": "",
   "views.affinidi.affinidiDevTools": "",
+  "views.affinidi.affinidiFeedback": "",
 
   "viewsWelcome.affinidiDevTools": "",
 
@@ -41,6 +46,12 @@
   "walkthroughs.steps.0.description": "",
   "walkthroughs.steps.1.title": "",
   "walkthroughs.steps.1.description": "",
+  "walkthroughs.steps.2.title": "",
+  "walkthroughs.steps.2.description": "",
+  "walkthroughs.steps.3.title": "",
+  "walkthroughs.steps.3.description": "",
+  "walkthroughs.steps.4.title": "",
+  "walkthroughs.steps.4.description": "",
 
   "authentication.title": "",
 

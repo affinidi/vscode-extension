@@ -3,7 +3,7 @@ import { ext } from '../../extensionVariables'
 import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../../tree/types'
 import { fetchProjectsSummaryList } from './fetchProjectsSummaryList'
 
 export class IamExplorerProvider implements ExplorerProvider {
@@ -75,7 +75,6 @@ export class IamExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.did,
-        metadata: projectSummary.wallet,
         label: projectSummary.wallet.did,
         icon: new ThemeIcon('lock'),
         projectId: parent?.projectId,

@@ -1,7 +1,7 @@
 import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
 import { ExplorerTreeItem } from './explorerTreeItem'
 import { ext } from '../extensionVariables'
-import { ExplorerResourceTypes } from '../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../tree/types'
 import { ExplorerProvider } from './types'
 
 export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
@@ -15,8 +15,8 @@ export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
     ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(this.authListener))
   }
 
-  refresh(): void {
-    this.onDidChangeTreeDataEmitter.fire()
+  refresh(data?: ExplorerTreeItem | undefined | void): void {
+    this.onDidChangeTreeDataEmitter.fire(data)
   }
 
   private readonly authListener = async () => {

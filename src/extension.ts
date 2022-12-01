@@ -2,23 +2,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import {
-  commands,
-  ExtensionContext,
-  Uri,
-  window,
-  env,
-  ViewColumn,
-  WebviewPanel,
-  l10n,
-} from 'vscode'
-import { IssuanceDto } from '@affinidi/client-issuance'
-import { SchemaDto } from '@affinidi/client-schema-manager'
+import { commands, ExtensionContext, Uri, window, env, WebviewPanel, l10n } from 'vscode'
 import { AffinidiCodeGenProvider } from './treeView/affinidiCodeGenProvider'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { viewProperties, viewSchemaContent } from './services/viewDataService'
-import { getWebviewContent } from './ui/getWebviewContent'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { viewMarkdown } from './services/markdownService'
@@ -29,11 +17,11 @@ import {
   sendEventToAnalytics,
 } from './services/analyticsStreamApiService'
 import { askUserForTelemetryConsent } from './utils/telemetry'
-import { ExplorerResourceTypes } from './treeView/treeTypes'
+import { ExplorerResourceTypes } from './tree/types'
 import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
-import { schemaManagerClient } from './features/schema-manager/schemaManagerClient'
 import { logger } from './utils/logger'
+import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 import { ExplorerTree } from './tree/explorerTree'
 import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
@@ -41,8 +29,16 @@ import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerPr
 import { SchemaManagerExplorerProvider } from './features/schema-manager/schemaManagerExplorerProvider'
 import { ExplorerTreeItem } from './tree/explorerTreeItem'
 import { projectsState } from './states/projectsState'
+import { openSchemaBuilder } from './features/schema-manager/schema-builder/openSchemaBuilder'
+import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
+import { iamHelpers } from './features/iam/iamHelpers'
+import { schemasState } from './states/schemasState'
+import { issuancesState } from './states/issuancesState'
+import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
+import { issuanceHelper } from './features/issuance/IssuanceHelper'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
+const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -54,20 +50,23 @@ export async function activateInternal(context: ExtensionContext) {
   ext.authProvider = initAuthentication()
 
   projectsState.clear()
+  schemasState.clear()
+  issuancesState.clear()
 
   initSnippets()
   initGenerators()
 
-  const explorerTree = new ExplorerTree([
+  ext.explorerTree = new ExplorerTree([
     new AuthExplorerProvider(),
     new IamExplorerProvider(),
     new IssuanceExplorerProvider(),
     new SchemaManagerExplorerProvider(),
   ])
   const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
+  const affFeedbackProvider = new AffinidiFeedbackProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {
-    treeDataProvider: explorerTree,
+    treeDataProvider: ext.explorerTree,
     canSelectMany: false,
     showCollapseAll: true,
   })
@@ -78,16 +77,28 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  commands.registerCommand('affinidiExplorer.refresh', (element: ExplorerTreeItem) => {
-    explorerTree.refresh()
+  window.createTreeView('affinidiFeedback', {
+    treeDataProvider: affFeedbackProvider,
+    canSelectMany: false,
+    showCollapseAll: true,
+  })
 
+  commands.registerCommand('affinidiExplorer.refresh', (element: ExplorerTreeItem) => {
     let resourceType = ExplorerResourceTypes[ExplorerResourceTypes.project]
-    if (
-      element?.resourceType === ExplorerResourceTypes.rootSchemas ||
-      element?.resourceType === ExplorerResourceTypes.rootIssuance
-    ) {
-      resourceType = `${element?.resourceType}`
+
+    if (element?.resourceType === ExplorerResourceTypes.rootSchemas) {
+      resourceType = element?.resourceType.toString()
+      schemasState.clear()
+    } else if (element?.resourceType === ExplorerResourceTypes.rootIssuance) {
+      resourceType = element?.resourceType.toString()
+      issuancesState.clear()
+    } else {
+      projectsState.clear()
+      schemasState.clear()
+      issuancesState.clear()
     }
+
+    ext.explorerTree.refresh(element)
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
@@ -100,49 +111,21 @@ export async function activateInternal(context: ExtensionContext) {
     })
   })
 
-  let panel: WebviewPanel | undefined
-
   const openSchema = commands.registerCommand('schema.showSchemaDetails', () => {
-    const selectedTreeViewItem = treeView.selection[0]
-
-    // If no panel is open, create a new one and update the HTML
-    if (!panel) {
-      panel = window.createWebviewPanel(
-        'schemaDetailView',
-        selectedTreeViewItem?.label as string,
-        ViewColumn.One,
-        {
-          enableScripts: true,
-        },
-      )
-    }
-
-    // If a panel is open, update the HTML with the selected item's content
-    panel.title = selectedTreeViewItem.label as string
-
-    panel.webview.html = getWebviewContent(
-      panel.webview,
-      context.extensionUri,
-      selectedTreeViewItem,
-    )
-
-    panel?.onDidDispose(
-      () => {
-        // When the panel is closed, cancel any future updates to the webview content
-        panel = undefined
-      },
-      null,
-      context.subscriptions,
-    )
+    const element = treeView.selection[0]
+    const schema = schemasState.getSchemaById(element.schemaId)
+    if (!schema) return
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
       subCategory: EventSubCategory.command,
       metadata: {
         commandId: 'schema.showSchemaDetails',
-        projectId: selectedTreeViewItem.projectId,
+        projectId: element.projectId,
       },
     })
+
+    showSchemaDetails(schema)
   })
 
   context.subscriptions.push(openSchema)
@@ -185,7 +168,8 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.copyJsonURL', async (element: ExplorerTreeItem) => {
-      const schema = await schemaManagerClient.getSchema(element.metadata.id as string)
+      const schema = schemasState.getSchemaById(element.schemaId)
+
       if (!schema) {
         return
       }
@@ -205,7 +189,8 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.copyJsonLdURL', async (element: ExplorerTreeItem) => {
-      const schema = await schemaManagerClient.getSchema(element.metadata.id as string)
+      const schema = schemasState.getSchemaById(element.schemaId)
+
       if (!schema) {
         return
       }
@@ -226,8 +211,9 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidiExplorer.viewProperties', (element: ExplorerTreeItem) => {
     viewProperties({
       resourceType: element.resourceType,
-      resourceInfo: element.metadata,
+      issuanceId: element.issuanceId,
       projectId: element.projectId,
+      schemaId: element.schemaId,
     })
 
     sendEventToAnalytics({
@@ -249,11 +235,26 @@ export async function activateInternal(context: ExtensionContext) {
         if (!projectId) return
 
         if (element.resourceType === ExplorerResourceTypes.schema) {
-          const schema: SchemaDto = element.metadata
-          await initiateIssuanceCsvFlow({ projectId, schema })
+          const schema = schemasState.getSchemaById(element.schemaId)
+
+          if (schema) {
+            await initiateIssuanceCsvFlow({ projectId, schema })
+          }
         } else if (element.resourceType === ExplorerResourceTypes.issuance) {
-          const issuance: IssuanceDto = element.metadata
-          await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+          const issuance = issuancesState.getIssuanceById(element.issuanceId)
+
+          if (issuance) {
+            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+          }
+        } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
+          const {
+            apiKey: { apiKeyHash },
+            wallet: { did },
+          } = iamHelpers.requireProjectSummary(projectId)
+          const schema = await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash })
+          if (!schema) return
+
+          await initiateIssuanceCsvFlow({ projectId, schema })
         }
 
         sendEventToAnalytics({
@@ -268,26 +269,30 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   commands.registerCommand('affinidiExplorer.showJsonSchema', (element: ExplorerTreeItem) => {
-    viewSchemaContent(element.metadata.id, element.metadata.jsonSchemaUrl)
+    const schema = schemasState.getSchemaById(element.schemaId)
 
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiExplorer.showJsonSchema',
-        projectId: element.projectId,
-      },
-    })
+    if (element.schemaId && schema) {
+      viewSchemaContent(element.schemaId, schema.jsonSchemaUrl)
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.showJsonSchema',
+          projectId: element.projectId,
+        },
+      })
+    }
   })
 
-  commands.registerCommand('affinidiExplorer.createSchema', (element: ExplorerTreeItem) => {
+  commands.registerCommand('affinidiExplorer.openCreateSchemaUrl', (element: ExplorerTreeItem) => {
     const createSchemaURL = buildURL(CONSOLE_URL, '/schema-manager/builder')
 
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
       subCategory: EventSubCategory.command,
       metadata: {
-        commandId: 'affinidiExplorer.createSchema',
+        commandId: 'affinidiExplorer.openCreateSchemaUrl',
         projectId: element?.projectId,
       },
     })
@@ -296,40 +301,72 @@ export async function activateInternal(context: ExtensionContext) {
   })
 
   commands.registerCommand('affinidiExplorer.createIssuance', (element: ExplorerTreeItem) => {
-    const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
-      schemaUrl: element.metadata.jsonSchemaUrl,
-    })
+    const schema = schemasState.getSchemaById(element.schemaId)
 
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiExplorer.createIssuance',
-        projectId: element.projectId,
-      },
-    })
+    if (schema) {
+      const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
+        schemaUrl: schema.jsonSchemaUrl,
+      })
 
-    commands.executeCommand('vscode.open', createIssuanceURL)
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.createIssuance',
+          projectId: element.projectId,
+        },
+      })
+
+      commands.executeCommand('vscode.open', createIssuanceURL)
+    }
   })
 
-  commands.registerCommand('affinidiExplorer.showJsonLdContext', (element: ExplorerTreeItem) => {
-    viewSchemaContent(element.metadata.id, element.metadata.jsonLdContextUrl, '.jsonld')
+  commands.registerCommand(
+    'affinidiExplorer.createIssuanceWithSchema',
+    async (element: ExplorerTreeItem) => {
+      const projectId = await iamHelpers.askForProjectId()
+      if (!projectId) return
 
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiExplorer.showJsonLdContext',
-        projectId: element.projectId,
-      },
-    })
+      const jsonSchemaUrl = await schemaManagerHelpers.fetchSchemaUrl(projectId)
+      const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
+        schemaUrl: jsonSchemaUrl,
+      })
+
+      commands.executeCommand('vscode.open', createIssuanceURL)
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.createIssuanceWithSchema',
+          projectId: element.projectId,
+        },
+      })
+    },
+  )
+
+  commands.registerCommand('affinidiExplorer.showJsonLdContext', (element: ExplorerTreeItem) => {
+    const schema = schemasState.getSchemaById(element.schemaId)
+
+    if (schema && element.schemaId) {
+      viewSchemaContent(element.schemaId, schema.jsonLdContextUrl, '.jsonld')
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.showJsonLdContext',
+          projectId: element.projectId,
+        },
+      })
+    }
   })
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.createProject', async () => {
       const result = await createProjectProcess()
 
-      explorerTree.refresh()
+      ext.explorerTree.refresh()
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
@@ -341,6 +378,13 @@ export async function activateInternal(context: ExtensionContext) {
       })
     }),
   )
+
+  context.subscriptions.push(
+    commands.registerCommand('affinidiFeedback.redirectToGithub', () => {
+      commands.executeCommand('vscode.open', GITHUB_URL)
+    }),
+  )
+
   commands.registerCommand('affinidiDevTools.issueCredential', () => {
     const issueCredentialURL = buildURL(CONSOLE_URL, '/bulk-issuance')
 
@@ -353,6 +397,30 @@ export async function activateInternal(context: ExtensionContext) {
     })
 
     commands.executeCommand('vscode.open', issueCredentialURL)
+  })
+
+  commands.registerCommand('affinidiExplorer.openSchemaBuilder', async (element: ExplorerTreeItem) => {
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: EventSubCategory.command,
+      metadata: {
+        commandId: 'affinidiExplorer.openSchemaBuilder',
+      },
+    })
+
+    openSchemaBuilder({ projectId: element.projectId, scope: element.schemaScope })
+  })
+
+  commands.registerCommand('affinidi.openSchemaBuilder', async () => {
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: EventSubCategory.command,
+      metadata: {
+        commandId: 'affinidi.openSchemaBuilder',
+      },
+    })
+
+    openSchemaBuilder({ projectId: await iamHelpers.askForProjectId() })
   })
 
   askUserForTelemetryConsent()

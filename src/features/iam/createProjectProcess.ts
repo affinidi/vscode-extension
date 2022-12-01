@@ -31,7 +31,7 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
 
     window.showInformationMessage(l10n.t('Project created successfully'))
 
-    const projectSummary = await fetchProjectSummary(result.projectId)
+    const projectSummary = await fetchProjectSummary(result.projectId, { consoleAuthToken })
 
     projectsState.setProject(projectSummary)
 

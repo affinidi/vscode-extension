@@ -17,8 +17,8 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
     const did = 'fake-did'
     const email = 'fake@example.com'
     const type = 'MySchema'
-    const jsonSchemaUrl = 'http://example.com/MySchema.json'
-    const jsonLdContextUrl = 'http://example.com/MySchema.jsonld'
+    const jsonSchemaUrl = 'https://schema.affinidi.com/MySchemaV1-0.json'
+    const jsonLdContextUrl = 'https://schema.affinidi.com/MySchemaV1-0.jsonld'
     const projectSummary = {
       wallet: {
         didUrl: '',

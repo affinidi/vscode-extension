@@ -6,7 +6,9 @@ import {
   EventNames,
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
+import { issuancesState } from '../states/issuancesState'
 import { projectsState } from '../states/projectsState'
+import { schemasState } from '../states/schemasState'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 import {
@@ -82,6 +84,8 @@ async function logoutHandler(): Promise<void> {
   })
 
   projectsState.clear()
+  schemasState.clear()
+  issuancesState.clear()
 
   if (session) {
     sendEventToAnalytics({
@@ -94,10 +98,10 @@ async function logoutHandler(): Promise<void> {
 
     await ext.authProvider.handleRemoveSession()
 
-    await window.showInformationMessage(l10n.t('Signed Out of Affinidi'))
+    window.showInformationMessage(l10n.t('Signed Out of Affinidi'))
     ext.outputChannel.appendLine(l10n.t('Signed Out of Affinidi'))
   } else {
-    await window.showInformationMessage(l10n.t('Not logged in to Affinidi'))
+    window.showInformationMessage(l10n.t('Not logged in to Affinidi'))
   }
 }
 
