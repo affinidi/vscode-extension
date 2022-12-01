@@ -1,5 +1,6 @@
-import { l10n, ViewColumn, WebviewPanel, window } from 'vscode'
+import { ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
+import { errorMessage, labels } from '../../../messages/messages'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
 import { logger } from '../../../utils/logger'
 import { SubmitHandler } from './handlers/SubmitHandler'
@@ -35,7 +36,7 @@ export class SchemaBuilderWebview {
     if (!this.panel) {
       this.panel = window.createWebviewPanel(
         'schemaBuilderView',
-        l10n.t('Schema Builder'),
+        labels.schemaBuilder,
         ViewColumn.One,
         {
           enableScripts: true,
@@ -72,7 +73,7 @@ export class SchemaBuilderWebview {
     if (command === 'submit') {
       await this.submitHandler.handle(this, data)
     } else {
-      logger.warn(message, 'Unknown command')
+      logger.warn(message, labels.unknownCommand)
     }
   }
 
@@ -151,7 +152,7 @@ export class SchemaBuilderWebview {
 
   private requirePanel() {
     if (!this.panel) {
-      throw new Error(l10n.t('Webview panel is not opened'))
+      throw new Error(errorMessage.webpanelNotOpen)
     }
 
     return this.panel

@@ -1,4 +1,4 @@
-import { l10n } from 'vscode'
+import { schemaMessage } from '../../../messages/messages'
 import { logger } from '../../../utils/logger'
 import { notifyError } from '../../../utils/notifyError'
 import { iamHelpers } from '../../iam/iamHelpers'
@@ -17,7 +17,7 @@ export async function openSchemaBuilder(input?: {
     builder.open()
     builder.setScope(input?.scope ?? 'public')
   } catch (error) {
-    logger.error(error, 'Could not get or create Schema Builder')
+    logger.error(error, schemaMessage.couldNotCreateSchemaBuilder)
     notifyError(error)
   }
 }
@@ -29,7 +29,7 @@ async function getOrCreateBuilder(projectId?: string): Promise<SchemaBuilderWebv
     if (!projectId) {
       projectId = await iamHelpers.askForProjectId()
       if (!projectId) {
-        throw new Error(l10n.t('You must select a project to create a schema'))
+        throw new Error(schemaMessage.selectProjectToCreateSchema)
       }
     }
 

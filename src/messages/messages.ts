@@ -7,6 +7,7 @@ export const labels = {
   createProject: l10n.t('Create Proejct'),
   issuanes: l10n.t('Issuances'),
   vcSchemas: l10n.t('VC Schemas'),
+  schemaBuilder: l10n.t('Schema Builder'),
   digitalIdenties: l10n.t('Digital Identities'),
   select: l10n.t('Select'),
   empty: l10n.t('(empty)'),
@@ -30,19 +31,21 @@ export const errorMessage = {
   internalErrorNullOrUnderinedOrEmpty: l10n.t(
     'Internal error: Expected value to be neither null, undefined, nor empty',
   ),
-  invalidJsonSchemaUrl: l10n.t('Invalid JSON schema URL'),
+  invalidJsonSchemaUrl: l10n.t('Could not parse schema URL, please provide a valid schema URl'),
   unknownSelection: l10n.t('unknown selection'),
   unknownValue: l10n.t('unknown value'),
+  unknownCommand: l10n.t('unknown command'),
   unknownCodeGen: l10n.t('unknown codeGenType: '),
   unknownConsentType: l10n.t('unknown consent type: '),
   unexpectedResourceType: l10n.t('Unexpected resource type:'),
+  webpanelNotOpen: l10n.t('Webview panel is not opened'),
 }
 
 export const authMessage = {
   enterEmail: l10n.t('Enter Email'),
   enterEmailOfAffindiAccount: l10n.t('Enter the email of your Affinidi account'),
   pasteEmailAddress: l10n.t('Paste the code sent to your email'),
-  vaidEmailAddress: l10n.t('Enter a valid email address'),
+  vaidEmailAddress: l10n.t('Invalid email address entered'),
   emaillNotFound: l10n.t(
     "Please enter the email address you signed-up with or sign-up if you don't have an account.",
   ),
@@ -55,7 +58,7 @@ export const authMessage = {
   unableToCreateSession: l10n.t('Failed to create a session'),
   noValidSessionFound: l10n.t('Valid Affinidi authentication session not found'),
   somethingWentWrong: l10n.t('Something went wrong. Please try again later.'),
-  notLoggedIn: l10n.t('Not logged in to Affinidi'),
+  notLoggedIn: l10n.t('You are already logged out'),
   acceptedTermsAndConditions: l10n.t('You accepted terms and conditions'),
   rejectedTermsAndConditons: l10n.t('You rejected terms and conditions'),
   termsAndConditions: l10n.t(
@@ -74,7 +77,7 @@ export const projectMessage = {
   projectNameRequired: l10n.t('project name is required'),
   projectNotCreated: l10n.t('Project could not be created'),
   noProjectSummary: l10n.t('Could not find project summary: {0}'),
-  projectDoesNotExist: l10n.t('Project does not exist.'),
+  projectDoesNotExist: l10n.t('Please provide an existing project ID or activate a project.'),
   missingProjectID: l10n.t('Project ID is not provided'),
   pleaseTryAgain: l10n.t('Please try again later.'),
 }
@@ -90,6 +93,18 @@ export const schemaMessage = {
   selectSchema: l10n.t('Select a VC Schema'),
   exampleSchema: l10n.t('Use an example Schema'),
   openSchemaDetails: l10n.t('Open schema details'),
+  invalidSchemaType: l10n.t(
+    'Invalid schema type. Use PascalCase and alphanumeric symbols (for example, "MySchema")',
+  ),
+  emptySchema: l10n.t('Your schema is empty. Try adding an attribute.'),
+  emptySchemaAttribute: l10n.t(
+    'Empty attribute name. Use camelCase and alphanumeric symbols (for example, "firstName")',
+  ),
+  duplicateAttributeName: l10n.t('Duplicate attribute name: "'),
+  publishingSchema: l10n.t('Publishing the schema...'),
+  schemaCreated: l10n.t('Schema has been successfully created'),
+  couldNotCreateSchemaBuilder: l10n.t('Could not get or create Schema Builder'),
+  selectProjectToCreateSchema: l10n.t('You must select a project to create a schema'),
 }
 
 export const snippetMessage = {
@@ -147,34 +162,3 @@ export const csvMessage = {
   invalidDataInRow: l10n.t('Invalid data in row #'),
   couldNotFindAllColumns: l10n.t('Could not find all required columns'),
 }
-
-// cross reference with CLI + ignore
-export const wrongEmailError = l10n.t('Invalid email address entered')
-export const invalidOrExpiredOTPError = l10n.t(
-  'The confirmation code entered is either invalid or expired',
-)
-export const emailAlreadyRegistered = l10n.t(
-  'This email has already been registered, please use the login command.',
-)
-
-export const userNotAuthenticated = l10n.t('You are already logged out')
-export const wrongStructureForJson = l10n.t(
-  'Please check that your json file content is in the right structure as in the schema.',
-)
-export const wrongFileExtension = l10n.t('Please provide a valid file extension (.json)')
-export const invalidSchemaUrl = l10n.t(
-  'Could not parse schema URL, please provide a valid schema URl',
-)
-export const jsonFileSyntaxError = l10n.t('Please check syntax of json file and try again.')
-export const verifierBadRequest = l10n.t('Please make sure that the VC is valid.')
-export const projectNotFound = l10n.t(
-  'Please provide an existing project ID or activate a project.',
-)
-export const schemaNotFound = l10n.t('Please provide an existing schema ID.')
-export const invalidSchemaName = l10n.t(
-  'Please, enter a schema name using only alpha numeric characters',
-)
-export const invalidCredentialSubject = l10n.t(
-  'Please make sure to provide a valid schema credential subject.',
-)
-export const SignoutError = l10n.t(`There was an error while trying to sign-out. ${pleaseTryAgain}`)
