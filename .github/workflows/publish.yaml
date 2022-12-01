@@ -5,7 +5,6 @@ on: [workflow_call]
 jobs:
   publish:
     name: Release and publish
-    needs: build
     runs-on: ubuntu-latest
     environment:
       name: publishEnv
