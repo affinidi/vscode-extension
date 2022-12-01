@@ -98,14 +98,6 @@ describe('generateAffinidiAppWithCLI()', () => {
     expect(showErrorMessage).calledWith(DIRECTORY_NAME_DUPLICATION_ERROR_MESSAGE)
   })
 
-  it.skip('should show error message when user has no projects', async () => {
-    sandbox.stub(iamClient, 'listProjects').resolves({ projects: [] })
-
-    await generateAffinidiAppWithCLI()
-
-    expect(showErrorMessage).calledWith(PROJECT_REQUIRED_ERROR_MESSAGE)
-  })
-
   it('should render app with specified params', async () => {
     existsSync.restore()
     existsSync.resolves(false)

@@ -3,7 +3,7 @@ import { ext } from '../extensionVariables'
 import { ExplorerTree } from '../tree/explorerTree'
 import { ExplorerTreeItem } from '../tree/explorerTreeItem'
 import { ExplorerProvider } from '../tree/types'
-import { ExplorerResourceTypes } from '../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../tree/types'
 
 export class AuthExplorerProvider implements ExplorerProvider {
   async getChildren(

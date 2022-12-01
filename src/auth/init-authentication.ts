@@ -98,10 +98,10 @@ async function logoutHandler(): Promise<void> {
 
     await ext.authProvider.handleRemoveSession()
 
-    await window.showInformationMessage(l10n.t('Signed Out of Affinidi'))
+    window.showInformationMessage(l10n.t('Signed Out of Affinidi'))
     ext.outputChannel.appendLine(l10n.t('Signed Out of Affinidi'))
   } else {
-    await window.showInformationMessage(l10n.t('Not logged in to Affinidi'))
+    window.showInformationMessage(l10n.t('Not logged in to Affinidi'))
   }
 }
 
