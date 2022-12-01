@@ -1,39 +1,26 @@
 import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
-import { ExplorerTreeItem } from './explorerTreeItem'
 import { ext } from '../extensionVariables'
+import { BasicTreeItem } from './basicTreeItem'
 
 export interface ExplorerProvider {
   getChildren(
-    element: ExplorerTreeItem | undefined,
+    element: BasicTreeItem | undefined,
     context: { tree: ExplorerTree },
-  ): Promise<ExplorerTreeItem[] | undefined>
+  ): Promise<BasicTreeItem[] | undefined>
 }
 
-export enum ExplorerResourceType {
-  auth,
-  project,
-  schemas,
-  scopedSchemas,
-  schema,
-  issuances,
-  issuance,
-  dids,
-  did,
-  empty,
-}
+export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
+  private readonly onDidChangeTreeDataEmitter: EventEmitter<BasicTreeItem | undefined | void> =
+    new EventEmitter<BasicTreeItem | undefined | void>()
 
-export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
-  private readonly onDidChangeTreeDataEmitter: EventEmitter<ExplorerTreeItem | undefined | void> =
-    new EventEmitter<ExplorerTreeItem | undefined | void>()
-
-  readonly onDidChangeTreeData: Event<ExplorerTreeItem | undefined | void> =
+  readonly onDidChangeTreeData: Event<BasicTreeItem | undefined | void> =
     this.onDidChangeTreeDataEmitter.event
 
   constructor(private readonly providers: ExplorerProvider[]) {
     ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(this.authListener))
   }
 
-  refresh(data?: ExplorerTreeItem | undefined | void): void {
+  refresh(data?: BasicTreeItem | undefined | void): void {
     this.onDidChangeTreeDataEmitter.fire(data)
   }
 
@@ -41,11 +28,11 @@ export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
     this.refresh()
   }
 
-  public getTreeItem(element: ExplorerTreeItem): TreeItem {
+  public getTreeItem(element: BasicTreeItem): TreeItem {
     return element
   }
 
-  public async getChildren(element?: ExplorerTreeItem): Promise<ExplorerTreeItem[]> {
+  public async getChildren(element?: BasicTreeItem): Promise<BasicTreeItem[]> {
     for (const provider of this.providers) {
       // eslint-disable-next-line no-await-in-loop
       const items = await provider.getChildren(element, { tree: this })
@@ -59,8 +46,7 @@ export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
 
   private async getEmptyItems() {
     return [
-      new ExplorerTreeItem({
-        type: ExplorerResourceType.empty,
+      new BasicTreeItem({
         label: l10n.t('(empty)'),
         icon: new ThemeIcon('dash'),
       }),

@@ -1,57 +1,48 @@
 import fetch from 'node-fetch'
 import { iamState } from '../features/iam/iamState'
+import { ProjectTreeItem } from '../features/iam/tree/treeItems'
 import { issuanceState } from '../features/issuance/issuanceState'
+import { IssuanceTreeItem } from '../features/issuance/tree/treeItems'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
-import { ExplorerResourceType } from '../tree/explorerTree'
+import { SchemaTreeItem } from '../features/schema-manager/tree/treeItems'
+import { BasicTreeItem } from '../tree/basicTreeItem'
+import { logger } from '../utils/logger'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
-type ViewPropertiesProps = {
-  projectId: string
-  resourceType: ExplorerResourceType
-  issuanceId?: string
-  schemaId?: string
-}
-
-export const viewProperties = async ({
-  resourceType,
-  issuanceId,
-  projectId,
-  schemaId,
-}: ViewPropertiesProps) => {
+export const viewProperties = async (element: BasicTreeItem) => {
   let label: string = ''
   let id: string = ''
-  let content: any = await iamState.requireProjectSummary(projectId)
-  switch (resourceType) {
-    case ExplorerResourceType.project: {
-      label = content.project.name
-      id = content.project.projectId
-      break
-    }
+  let content: any = {}
 
-    case ExplorerResourceType.schema: {
-      const schema = await schemaManagerState.getAuthoredSchemaById({ projectId, schemaId: schemaId! })
+  if (element instanceof ProjectTreeItem) {
+    const projectSummary = await iamState.requireProjectSummary(element.projectId)
 
-      if (schema) {
-        content = schema
-        label = schema.id
-        id = schema.id
-      }
-      break
-    }
+    label = projectSummary.project.name
+    id = element.projectId
+    content = projectSummary
+  } else if (element instanceof SchemaTreeItem) {
+    const schema = await schemaManagerState.getAuthoredSchemaById({
+      projectId: element.projectId,
+      schemaId: element.schemaId,
+    })
+    if (!schema) return
 
-    case ExplorerResourceType.issuance: {
-      const issuance = await issuanceState.getIssuanceById({ projectId, issuanceId: issuanceId! })
+    content = schema
+    label = schema.id
+    id = schema.id
+  } else if (element instanceof IssuanceTreeItem) {
+    const issuance = await issuanceState.getIssuanceById({
+      projectId: element.projectId,
+      issuanceId: element.issuanceId,
+    })
+    if (!issuance) return
 
-      if (issuance) {
-        content = issuance
-        label = issuance.id
-        id = issuance.id
-      }
-      break
-    }
-
-    default:
-      throw new Error(`Unexpected resource type: ${resourceType}`)
+    content = issuance
+    label = issuance.id
+    id = issuance.id
+  } else {
+    logger.warn(element, 'Unknown element')
+    return
   }
 
   await openReadOnlyContent({ node: { label, id }, content })

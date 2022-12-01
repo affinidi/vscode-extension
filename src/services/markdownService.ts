@@ -1,17 +1,17 @@
-import { ExplorerResourceType } from '../tree/explorerTree'
+import { Feature } from '../features/feature'
 
-export const viewMarkdown = async (resourceType: ExplorerResourceType) => {
+export const viewFeatureMarkdown = async (feature: Feature) => {
   let uri: string = ''
 
-  switch (resourceType) {
-    case ExplorerResourceType.issuances:
+  switch (feature) {
+    case Feature.ISSUANCES:
       uri = '/document/bulkIssuance.md'
       break
-    case ExplorerResourceType.schemas:
+    case Feature.SCHEMAS:
       uri = '/document/schemaManager.md'
       break
     default:
-      throw new Error(`Unexpected resource type: ${resourceType}`)
+      throw new Error(`Unexpected resource type: ${feature}`)
   }
 
   return uri

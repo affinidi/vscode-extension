@@ -1,11 +1,11 @@
 import { CodegenType } from './codegenTree'
-import { AffinidiTreeItem, AffinidiTreeItemInput } from './shared/affinidiTreeItem'
+import { BasicTreeItem, BasicTreeItemInput } from './basicTreeItem'
 
-export class CodegenTreeItem extends AffinidiTreeItem {
+export class CodegenTreeItem extends BasicTreeItem {
   public readonly type: CodegenType
 
   constructor(
-    input: AffinidiTreeItemInput & {
+    input: BasicTreeItemInput & {
       type: CodegenType
     },
   ) {

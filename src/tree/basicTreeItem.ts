@@ -1,6 +1,6 @@
 import { TreeItem, TreeItemCollapsibleState, ThemeIcon, Command } from 'vscode'
 
-export type AffinidiTreeItemInput = {
+export type BasicTreeItemInput = {
   label: string
   description?: string
   state?: TreeItemCollapsibleState
@@ -9,8 +9,8 @@ export type AffinidiTreeItemInput = {
   contextValue?: string
 }
 
-export class AffinidiTreeItem extends TreeItem {
-  constructor(input: AffinidiTreeItemInput) {
+export class BasicTreeItem extends TreeItem {
+  constructor(input: BasicTreeItemInput) {
     super(input.label, input.state ?? TreeItemCollapsibleState.None)
 
     this.iconPath = input.icon
