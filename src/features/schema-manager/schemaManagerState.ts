@@ -47,7 +47,7 @@ export class SchemaManagerState {
     } = await iamState.requireProjectSummary(projectId)
 
     const { schemas } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Fetching authored schemas...') },
+      { location: ProgressLocation.Notification, title: l10n.t('Fetching your schemas...') },
       async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
     )
 

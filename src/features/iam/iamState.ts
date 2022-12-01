@@ -36,7 +36,7 @@ export class IamState {
     if (stored) return stored
 
     const projectSummary = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Fetching project summary...') },
+      { location: ProgressLocation.Notification, title: l10n.t('Fetching project details...') },
       async () =>
         iamClient.getProjectSummary(
           { projectId },
