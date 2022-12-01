@@ -7,14 +7,7 @@ import { issuanceState } from './issuanceState'
 type Input = { projectId: string }
 
 async function askForIssuance(input: Input): Promise<IssuanceDto | undefined> {
-  const issuances = await window.withProgress(
-    {
-      location: ProgressLocation.Notification,
-      title: l10n.t('Fetching available issuances...'),
-    },
-    () => issuanceState.listIssuances({ projectId: input.projectId }),
-  )
-
+  const issuances = await issuanceState.listIssuances({ projectId: input.projectId })
   if (issuances.length === 0) {
     throw new Error(l10n.t("You don't have any issuances to choose from"))
   }

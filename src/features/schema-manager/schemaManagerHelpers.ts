@@ -18,14 +18,7 @@ async function askForMySchema(
     includeExample?: boolean
   },
 ): Promise<Schema | undefined> {
-  const schemas = await window.withProgress(
-    {
-      location: ProgressLocation.Notification,
-      title: l10n.t('Fetching available schemas...'),
-    },
-    () => schemaManagerState.listAuthoredSchemas(input),
-  )
-
+  const schemas = await schemaManagerState.listAuthoredSchemas(input)
   const pickOptions = schemas.map<[string, Schema]>((schema) => [schema.id, schema])
 
   if (input.includeExample) {
