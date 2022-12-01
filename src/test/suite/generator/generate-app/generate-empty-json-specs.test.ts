@@ -12,8 +12,8 @@ describe('columnsToObject()', () => {
     { path: ['personalInfo', 'isDeveloper'], type: 'boolean', required: true },
   ]
 
-  it.only('should convert columns to object', () => {
-    return expect(columnsToObject(columns)).to.eq({
+  it('should convert columns to object', () => {
+    expect(columnsToObject(columns)).to.deep.eq({
       name: {
         firstName: '',
         lastName: '',

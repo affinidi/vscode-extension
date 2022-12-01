@@ -1,5 +1,5 @@
 import { errorMessage } from '../messages/messages'
-import { ExplorerResourceTypes } from '../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../tree/types'
 
 export const viewMarkdown = async (resourceType: ExplorerResourceTypes) => {
   let uri: string = ''

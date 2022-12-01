@@ -4,7 +4,7 @@ import { labels } from '../../messages/messages'
 import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../../tree/types'
 import { fetchProjectsSummaryList } from './fetchProjectsSummaryList'
 
 export class IamExplorerProvider implements ExplorerProvider {

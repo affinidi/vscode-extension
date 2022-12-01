@@ -54,6 +54,7 @@ describe('createProjectProcess()', () => {
   it('should fail when project name is not provided', async () => {
     showInputBoxStub.resolves(undefined)
 
-    expect(createProjectProcess()).to.rejectedWith('Project name is required')
+    expect(await createProjectProcess()).to.be.undefined
+    expect(iamClient.createProject).not.called
   })
 })

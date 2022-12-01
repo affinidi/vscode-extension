@@ -32,7 +32,7 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
 
     window.showInformationMessage(projectMessage.successfulProjectCreation)
 
-    const projectSummary = await fetchProjectSummary(result.projectId)
+    const projectSummary = await fetchProjectSummary(result.projectId, { consoleAuthToken })
 
     projectsState.setProject(projectSummary)
 

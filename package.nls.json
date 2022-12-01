@@ -3,6 +3,7 @@
   "affinidi.login": "Sign In",
   "affinidi.signOut": "Sign Out",
   "affinidi.createProject": "Create Project",
+  "affinidi.openSchemaBuilder": "Create VC Schema",
   "affinidi.me": "Account Details",
   "affinidi.codegen.sendVcOfferToEmail": "Build a script to \"Send a VC offer to an email\"",
   "affinidi.codegen.getIssuanceOffers": "Build a script to \"Get Issuance Offers\"",
@@ -17,7 +18,8 @@
   "affinidiExplorer.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidiExplorer.showJsonSchema": "Show JSON Schema",
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
-  "affinidiExplorer.createSchema": "Create Schema",
+  "affinidiExplorer.openCreateSchemaUrl": "Create VC Schema",
+  "affinidiExplorer.openSchemaBuilder": "Create VC Schema",
   "affinidiExplorer.createIssuance": "Create Issuance",
   "affinidiExplorer.createIssuanceWithSchema": "Create Issuance with Schema",
 
@@ -36,7 +38,7 @@
   "views.affinidi.affinidiDevTools": "Developer Tools",
   "views.affinidi.affinidiFeedback": "Feedback",
 
-  "viewsWelcome.affinidiDevTools": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiExplorer.createSchema)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiDevTools.issueCredential)",
+  "viewsWelcome.affinidiDevTools": "Schemas allow you to build powerful workflows based on issued verifiable credentials.\n[Create Schema](command:affinidiExplorer.openCreateSchemaUrl)\nIssue credentials for them to claim and add to their wallet\n[Issue Credentials](command:affinidiDevTools.issueCredential)",
 
   "walkthroughs.title": "Get started with Affinidi",
   "walkthroughs.description": "Get to know the tools that will accelerate your journey into privacy-preserving application development",

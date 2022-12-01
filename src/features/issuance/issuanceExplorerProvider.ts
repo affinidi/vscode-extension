@@ -2,7 +2,7 @@ import { ThemeIcon } from 'vscode'
 import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../../tree/types'
 import { formatIssuanceName } from './formatIssuanceName'
 import { getIssuances } from './getIssuances'
 

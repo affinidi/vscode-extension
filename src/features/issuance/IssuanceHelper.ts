@@ -1,5 +1,5 @@
 import { window, ProgressLocation } from 'vscode'
-import { Options } from '@affinidi/client-issuance'
+import { IssuanceDto, Options } from '@affinidi/client-issuance'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { formatIssuanceName } from './formatIssuanceName'
 import { getIssuances } from './getIssuances'
@@ -7,7 +7,7 @@ import { issuanceMessage } from '../../messages/messages'
 
 type Input = { projectId: string }
 
-async function askForIssuanceId(input: Input, options: Options): Promise<string | undefined> {
+async function askForIssuance(input: Input, options: Options): Promise<IssuanceDto | undefined> {
   const issuances = await window.withProgress(
     {
       location: ProgressLocation.Notification,
@@ -21,16 +21,11 @@ async function askForIssuanceId(input: Input, options: Options): Promise<string 
   }
 
   return showQuickPick(
-    [
-      ...issuances.map<[string, string]>((issuance) => [
-        `${formatIssuanceName(issuance)} (${issuance.id})`,
-        issuance.id,
-      ]),
-    ],
+    [...issuances.map<[string, IssuanceDto]>((i) => [`${formatIssuanceName(i)} (${i.id})`, i])],
     { title: `${issuanceMessage.selectIssuance}` },
   )
 }
 
 export const issuanceHelper = {
-  askForIssuanceId,
+  askForIssuance,
 }

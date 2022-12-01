@@ -1,18 +1,18 @@
-import { ProjectSummary } from '@affinidi/client-iam'
+import { Options, ProjectSummary } from '@affinidi/client-iam'
 import { window, ProgressLocation } from 'vscode'
-
-import { authHelper } from '../../auth/authHelper'
 import { projectMessage } from '../../messages/messages'
 import { iamClient } from './iamClient'
 
-export async function fetchProjectSummary(projectId: string): Promise<ProjectSummary> {
-  const consoleAuthToken = await authHelper.getConsoleAuthToken()
+export async function fetchProjectSummary(
+  projectId: string,
+  options: Options,
+): Promise<ProjectSummary> {
   const projectSummary = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: `${projectMessage.fetchProject}`,
     },
-    () => iamClient.getProjectSummary({ projectId }, { consoleAuthToken }),
+    () => iamClient.getProjectSummary({ projectId }, options),
   )
 
   if (!projectSummary) {

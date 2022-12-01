@@ -1,7 +1,7 @@
 import { Event, EventEmitter, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
 import { ExplorerTreeItem } from './explorerTreeItem'
 import { ext } from '../extensionVariables'
-import { ExplorerResourceTypes } from '../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../tree/types'
 import { ExplorerProvider } from './types'
 import { labels } from '../messages/messages'
 

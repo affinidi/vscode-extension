@@ -6,7 +6,7 @@ import { errorMessage } from '../messages/messages'
 import { issuancesState } from '../states/issuancesState'
 import { projectsState } from '../states/projectsState'
 import { schemasState } from '../states/schemasState'
-import { ExplorerResourceTypes } from '../treeView/treeTypes'
+import { ExplorerResourceTypes } from '../tree/types'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
 type ViewPropertiesProps = {
