@@ -1,9 +1,8 @@
 import { l10n, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
-import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../tree/types'
-import { projectsState } from '../../states/projectsState'
+import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/types'
 import { schemaManagerHelpers } from './schemaManagerHelpers'
+import { iamHelpers } from '../iam/iamHelpers'
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -46,7 +45,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     const {
       wallet: { did },
       apiKey: { apiKeyHash },
-    } = projectsState.getProjectById(parent?.projectId)
+    } = iamHelpers.requireProjectSummary(parent?.projectId)
 
     const schemas = await schemaManagerHelpers.getMySchemas(
       {

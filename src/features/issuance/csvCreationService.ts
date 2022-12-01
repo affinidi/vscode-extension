@@ -8,7 +8,7 @@ import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 
-export interface TemplateInput {
+interface TemplateInput {
   projectId: string
   schema: Schema
 }
@@ -18,12 +18,17 @@ export enum CSVImplementation {
   uploadCsvFile,
 }
 
-const implementationLabels = {
+export const implementationLabels = {
   [CSVImplementation.openCsvTemplate]: l10n.t('Open a CSV template'),
   [CSVImplementation.uploadCsvFile]: l10n.t('Upload a CSV file'),
 }
 
-export const openCsvTemplate = async (input: TemplateInput) => {
+export const ISSUANCE_CREATED_MESSAGE =
+  'Issuance has been created and the offers were sent. Issuance ID:'
+export const CSV_UPLOAD_ERROR =
+  'Could not create issuance due to validation errors in the CSV file:'
+
+const openCsvTemplate = async (input: TemplateInput) => {
   const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
   if (!projectId) {
     return
@@ -49,7 +54,7 @@ export const openCsvTemplate = async (input: TemplateInput) => {
   )
 }
 
-export const uploadCsvFile = async (input: TemplateInput) => {
+const uploadCsvFile = async (input: TemplateInput) => {
   const options: OpenDialogOptions = {
     canSelectMany: false,
     openLabel: l10n.t('Select'),
@@ -59,6 +64,7 @@ export const uploadCsvFile = async (input: TemplateInput) => {
 
   const selectedFiles = await window.showOpenDialog(options)
   const selectedFilePath = selectedFiles?.[0]?.fsPath
+
   if (!selectedFilePath) {
     return
   }
@@ -84,32 +90,30 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      ext.outputChannel.appendLine(
-        l10n.t('Issuance has been created and the offers were sent. Issuance ID: {0}', issuance.id),
-      )
+      // TODO: do we need to add issuance to state???
+      ext.outputChannel.appendLine(l10n.t(`${ISSUANCE_CREATED_MESSAGE} {0}`, issuance.id))
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
     const parsedCsvUploadError = parseUploadError(error)
+
     if (parsedCsvUploadError) {
       ext.outputChannel.appendLine(
-        l10n.t(
-          'Could not create issuance due to validation errors in the CSV file: {0}',
-          JSON.stringify(parsedCsvUploadError, null, 2),
-        ),
+        l10n.t(`${CSV_UPLOAD_ERROR} {0}`, JSON.stringify(parsedCsvUploadError, null, 2)),
       )
       ext.outputChannel.show()
     }
   }
 }
 
-export const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
+const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
   const supported = [CSVImplementation.openCsvTemplate, CSVImplementation.uploadCsvFile]
 
   const selectedValue = await showQuickPick(
     supported.map((implementation) => [implementationLabels[implementation], implementation]),
     { title: l10n.t('Select an implementation') },
   )
+  console.log('selectedValue', selectedValue)
 
   switch (selectedValue) {
     case CSVImplementation.openCsvTemplate:
@@ -121,4 +125,10 @@ export const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<voi
     default:
       throw new Error(`${l10n.t('unknown value:')} ${selectedValue}`)
   }
+}
+
+export const csvCreationService = {
+  openCsvTemplate,
+  uploadCsvFile,
+  initiateIssuanceCsvFlow,
 }
