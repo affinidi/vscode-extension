@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import { AffinidiAuthenticationProvider } from './auth/authentication-provider/affinidi-authentication-provider'
+import { CodegenTree } from './tree/codegenTree'
 import { ExplorerTree } from './tree/explorerTree'
 
 export namespace ext {
@@ -7,4 +8,5 @@ export namespace ext {
   export let outputChannel: vscode.OutputChannel
   export let authProvider: AffinidiAuthenticationProvider
   export let explorerTree: ExplorerTree
+  export let codegenTree: CodegenTree
 }

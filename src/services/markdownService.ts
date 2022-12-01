@@ -1,4 +1,4 @@
-import { ExplorerResourceTypes } from '../tree/types'
+import { ExplorerResourceTypes } from '../tree/explorerTree'
 
 export const viewMarkdown = async (resourceType: ExplorerResourceTypes) => {
   let uri: string = ''

@@ -1,8 +1,31 @@
 import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
 import { ExplorerTreeItem } from './explorerTreeItem'
 import { ext } from '../extensionVariables'
-import { ExplorerResourceTypes } from '../tree/types'
-import { ExplorerProvider } from './types'
+
+export interface ExplorerProvider {
+  getChildren(
+    element: ExplorerTreeItem | undefined,
+    context: { tree: ExplorerTree },
+  ): Promise<ExplorerTreeItem[] | undefined>
+}
+
+export enum ExplorerResourceTypes {
+  project,
+  rootSchemas,
+  subRootSchemas,
+  schema,
+  rootIssuance,
+  issuance,
+  rootRules,
+  rule,
+  rootDID,
+  did,
+  rootAnalytics,
+  empty,
+  other,
+  login,
+  signup,
+}
 
 export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
   private readonly onDidChangeTreeDataEmitter: EventEmitter<ExplorerTreeItem | undefined | void> =

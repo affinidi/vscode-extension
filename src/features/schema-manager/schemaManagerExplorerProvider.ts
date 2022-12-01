@@ -1,8 +1,6 @@
 import { l10n, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
+import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/explorerTree'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
-import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../tree/types'
-import { iamState } from '../iam/iamState'
 import { schemaManagerHelpers } from './schemaManagerHelpers'
 import { schemaManagerState } from './schemaManagerState'
 

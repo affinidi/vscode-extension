@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import { iamState } from '../features/iam/iamState'
 import { issuanceState } from '../features/issuance/issuanceState'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
-import { ExplorerResourceTypes } from '../tree/types'
+import { ExplorerResourceTypes } from '../tree/explorerTree'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
 type ViewPropertiesProps = {

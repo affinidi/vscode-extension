@@ -1,8 +1,7 @@
 import { TreeItemCollapsibleState, ThemeIcon, l10n } from 'vscode'
 import { ext } from '../../extensionVariables'
+import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/explorerTree'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
-import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../tree/types'
 import { iamState } from './iamState'
 
 export class IamExplorerProvider implements ExplorerProvider {

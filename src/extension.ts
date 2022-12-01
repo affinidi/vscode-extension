@@ -3,7 +3,6 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
 import { commands, ExtensionContext, Uri, window, env, l10n } from 'vscode'
-import { AffinidiCodeGenProvider } from './treeView/affinidiCodeGenProvider'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { viewProperties, viewSchemaContent } from './services/viewDataService'
@@ -17,12 +16,11 @@ import {
   sendEventToAnalytics,
 } from './services/analyticsStreamApiService'
 import { askUserForTelemetryConsent } from './utils/telemetry'
-import { ExplorerResourceTypes } from './tree/types'
 import { createProjectProcess } from './features/iam/createProjectProcess'
 import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
 import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
-import { ExplorerTree } from './tree/explorerTree'
+import { ExplorerResourceTypes, ExplorerTree } from './tree/explorerTree'
 import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IamExplorerProvider } from './features/iam/iamExplorerProvider'
 import { IssuanceExplorerProvider } from './features/issuance/issuanceExplorerProvider'
@@ -35,6 +33,7 @@ import { showSchemaDetails } from './features/schema-manager/schema-details/show
 import { issuanceState } from './features/issuance/issuanceState'
 import { schemaManagerState } from './features/schema-manager/schemaManagerState'
 import { state } from './state'
+import { CodegenTree } from './tree/codegenTree'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -57,7 +56,8 @@ export async function activateInternal(context: ExtensionContext) {
     new IssuanceExplorerProvider(),
     new SchemaManagerExplorerProvider(),
   ])
-  const affCodeGenTreeProvider = new AffinidiCodeGenProvider()
+  ext.codegenTree = new CodegenTree()
+
   const affFeedbackProvider = new AffinidiFeedbackProvider()
 
   const treeView = window.createTreeView('affinidiExplorer', {
@@ -67,7 +67,7 @@ export async function activateInternal(context: ExtensionContext) {
   })
 
   window.createTreeView('affinidiCodeGeneration', {
-    treeDataProvider: affCodeGenTreeProvider,
+    treeDataProvider: ext.codegenTree,
     canSelectMany: false,
     showCollapseAll: true,
   })

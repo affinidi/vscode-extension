@@ -1,9 +1,7 @@
 import { l10n, ThemeIcon } from 'vscode'
 import { ext } from '../extensionVariables'
-import { ExplorerTree } from '../tree/explorerTree'
+import { ExplorerProvider, ExplorerResourceTypes, ExplorerTree } from '../tree/explorerTree'
 import { ExplorerTreeItem } from '../tree/explorerTreeItem'
-import { ExplorerProvider } from '../tree/types'
-import { ExplorerResourceTypes } from '../tree/types'
 
 export class AuthExplorerProvider implements ExplorerProvider {
   async getChildren(
