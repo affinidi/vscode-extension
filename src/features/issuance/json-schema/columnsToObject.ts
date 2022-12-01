@@ -54,8 +54,7 @@ export async function generateCredentialSubjectSample(schema: Schema) {
       const vcJsonSchema = await vcJsonSchemaFetcher.fetch(parsedJsonSchemaUrl)
 
       const columnSpecs = generateColumnSpecs(vcJsonSchema)
-      const sample = columnsToObject(columnSpecs)
-      return sample
+      return columnsToObject(columnSpecs)
     },
   )
 }
