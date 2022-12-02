@@ -1,4 +1,4 @@
-import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
+import { ProjectDto } from '@affinidi/client-iam'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { projectMessage } from '../../messages/messages'
 import { iamState } from './iamState'
