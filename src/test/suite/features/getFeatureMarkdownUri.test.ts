@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Feature } from '../../../features/feature'
-import { getFeatureMarkdownUri } from '../../../services/markdownService'
+import { getFeatureMarkdownUri } from '../../../features/getFeatureMarkdownUri'
 
 describe('getFeatureMarkdownUri()', () => {
   it('should return path to schema manager markdown', async () => {

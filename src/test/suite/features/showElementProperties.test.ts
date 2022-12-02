@@ -7,12 +7,12 @@ import { IssuanceTreeItem } from '../../../features/issuance/tree/treeItems'
 import { schemaManagerHelpers } from '../../../features/schema-manager/schemaManagerHelpers'
 import { schemaManagerState } from '../../../features/schema-manager/schemaManagerState'
 import { SchemaTreeItem } from '../../../features/schema-manager/tree/treeItems'
-import { viewElementProperties } from '../../../services/viewElementProperties'
+import { showElementProperties } from '../../../features/showElementProperties'
 import { readOnlyContentViewer } from '../../../utils/openReadOnlyContent'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../helpers'
 import { sandbox } from '../setup'
 
-describe('viewElementProperties', () => {
+describe('showElementProperties()', () => {
   const projectId = 'fake-project-id'
 
   let openReadOnlyContent: sinon.SinonStub
@@ -31,7 +31,7 @@ describe('viewElementProperties', () => {
 
     sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
 
-    await viewElementProperties(element)
+    await showElementProperties(element)
 
     expect(readOnlyContentViewer.open).calledWith({
       content: projectSummary,
@@ -58,7 +58,7 @@ describe('viewElementProperties', () => {
       .withArgs({ projectId, schemaId })
       .resolves(schema)
 
-    await viewElementProperties(element)
+    await showElementProperties(element)
 
     expect(readOnlyContentViewer.open).calledWith({
       content: schema,
@@ -85,7 +85,7 @@ describe('viewElementProperties', () => {
       .withArgs({ projectId, issuanceId })
       .resolves(issuance)
 
-    await viewElementProperties(element)
+    await showElementProperties(element)
 
     expect(readOnlyContentViewer.open).calledWith({
       content: issuance,

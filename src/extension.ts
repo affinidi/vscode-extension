@@ -5,10 +5,10 @@ import * as path from 'path'
 import { commands, ExtensionContext, Uri, window, env, l10n } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
-import { viewElementProperties } from './services/viewElementProperties'
+import { showElementProperties } from './features/showElementProperties'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
-import { getFeatureMarkdownUri } from './services/markdownService'
+import { getFeatureMarkdownUri } from './features/getFeatureMarkdownUri'
 import { buildURL } from './api-client/api-fetch'
 import {
   EventNames,
@@ -217,7 +217,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand(
     'affinidiExplorer.viewProperties',
     (element: BasicTreeItemWithProject) => {
-      viewElementProperties(element)
+      showElementProperties(element)
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,

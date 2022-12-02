@@ -1,16 +1,16 @@
-import { iamState } from '../features/iam/iamState'
-import { ProjectTreeItem } from '../features/iam/tree/treeItems'
-import { issuanceHelpers } from '../features/issuance/issuanceHelpers'
-import { issuanceState } from '../features/issuance/issuanceState'
-import { IssuanceTreeItem } from '../features/issuance/tree/treeItems'
-import { schemaManagerHelpers } from '../features/schema-manager/schemaManagerHelpers'
-import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
-import { SchemaTreeItem } from '../features/schema-manager/tree/treeItems'
+import { iamState } from './iam/iamState'
+import { ProjectTreeItem } from './iam/tree/treeItems'
+import { issuanceHelpers } from './issuance/issuanceHelpers'
+import { issuanceState } from './issuance/issuanceState'
+import { IssuanceTreeItem } from './issuance/tree/treeItems'
+import { schemaManagerHelpers } from './schema-manager/schemaManagerHelpers'
+import { schemaManagerState } from './schema-manager/schemaManagerState'
+import { SchemaTreeItem } from './schema-manager/tree/treeItems'
 import { BasicTreeItem } from '../tree/basicTreeItem'
 import { logger } from '../utils/logger'
 import { readOnlyContentViewer } from '../utils/openReadOnlyContent'
 
-export const viewElementProperties = async (element: BasicTreeItem) => {
+export const showElementProperties = async (element: BasicTreeItem) => {
   let label: string = ''
   let id: string = ''
   let content: any = {}
