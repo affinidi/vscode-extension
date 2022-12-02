@@ -9,27 +9,14 @@ import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
 import { projectsState } from '../../../../states/projectsState'
+import { generateProjectSummary } from '../../testUtils'
 
 describe('insertGetIssuanceOffersSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
     const projectId = 'fake-project-id'
     const issuanceId = 'fake-issuance-id'
     const apiKeyHash = 'fake-api-key-hash'
-    const projectSummary = {
-      wallet: {
-        didUrl: '',
-        did: '',
-      },
-      apiKey: {
-        apiKeyHash,
-        apiKeyName: '',
-      },
-      project: {
-        projectId,
-        name: '',
-        createdAt: '',
-      },
-    }
+    const projectSummary = generateProjectSummary({ projectId, apiKeyHash })
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
     sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)

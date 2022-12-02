@@ -4,6 +4,8 @@ import { projectMessage } from '../messages/messages'
 
 const STORAGE_KEY = 'projects'
 
+export const NO_PROJECT_ERROR_MESSAGE = l10n.t('Project does not exist.')
+
 const getProjects = (): ProjectSummary[] | undefined => {
   return ext.context.globalState.get(STORAGE_KEY)
 }

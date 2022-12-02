@@ -9,7 +9,7 @@ import { ext } from '../../extensionVariables'
 import { csvMessage, errorMessage, snippetMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 
-export interface TemplateInput {
+interface TemplateInput {
   projectId: string
   schema: Schema
 }
@@ -24,7 +24,12 @@ const implementationLabels = {
   [CSVImplementation.uploadCsvFile]: csvMessage.uploadCsvFile,
 }
 
-export const openCsvTemplate = async (input: TemplateInput) => {
+export const ISSUANCE_CREATED_MESSAGE =
+  'Issuance has been created and the offers were sent. Issuance ID:'
+export const CSV_UPLOAD_ERROR =
+  'Could not create issuance due to validation errors in the CSV file:'
+
+const openCsvTemplate = async (input: TemplateInput) => {
   const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
   if (!projectId) {
     return
@@ -50,7 +55,7 @@ export const openCsvTemplate = async (input: TemplateInput) => {
   )
 }
 
-export const uploadCsvFile = async (input: TemplateInput) => {
+const uploadCsvFile = async (input: TemplateInput) => {
   const options: OpenDialogOptions = {
     canSelectMany: false,
     openLabel: `${labels.select}`,
@@ -60,6 +65,7 @@ export const uploadCsvFile = async (input: TemplateInput) => {
 
   const selectedFiles = await window.showOpenDialog(options)
   const selectedFilePath = selectedFiles?.[0]?.fsPath
+
   if (!selectedFilePath) {
     return
   }
@@ -95,6 +101,7 @@ export const uploadCsvFile = async (input: TemplateInput) => {
     }
   } catch (error: unknown) {
     const parsedCsvUploadError = parseUploadError(error)
+
     if (parsedCsvUploadError) {
       ext.outputChannel.appendLine(
         `${csvMessage.csvValidationError},
@@ -105,13 +112,14 @@ export const uploadCsvFile = async (input: TemplateInput) => {
   }
 }
 
-export const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
+const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
   const supported = [CSVImplementation.openCsvTemplate, CSVImplementation.uploadCsvFile]
 
   const selectedValue = await showQuickPick(
     supported.map((implementation) => [implementationLabels[implementation], implementation]),
     { title: `${snippetMessage.selectImplementation}` },
   )
+  console.log('selectedValue', selectedValue)
 
   switch (selectedValue) {
     case CSVImplementation.openCsvTemplate:
@@ -123,4 +131,10 @@ export const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<voi
     default:
       throw new Error(`${errorMessage.unknownValue} ${selectedValue}`)
   }
+}
+
+export const csvCreationService = {
+  openCsvTemplate,
+  uploadCsvFile,
+  initiateIssuanceCsvFlow,
 }

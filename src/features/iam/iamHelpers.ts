@@ -22,7 +22,11 @@ async function askForProjectId(): Promise<string | undefined> {
   return project?.projectId
 }
 
-function requireProjectSummary(projectId: string): ProjectSummary {
+function requireProjectSummary(projectId: string | undefined): ProjectSummary {
+  if (!projectId) {
+    throw new Error(l10n.t('Project ID is not provided'))
+  }
+
   const projectSummary = projectsState.getProjectById(projectId)
 
   if (!projectSummary) {

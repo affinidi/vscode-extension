@@ -14,6 +14,6 @@ export async function fetchProjectsSummaryList(): Promise<void> {
     sortedProjects.map(async (project) => {
       const projectSummary = await fetchProjectSummary(project.projectId, { consoleAuthToken })
       projectsState.setProject(projectSummary)
-    })
+    }),
   )
 }

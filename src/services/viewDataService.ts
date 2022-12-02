@@ -3,8 +3,8 @@ import { IssuanceDto } from '@affinidi/client-issuance'
 import { SchemaDto } from '@affinidi/client-schema-manager'
 import fetch from 'node-fetch'
 import { errorMessage } from '../messages/messages'
+import { iamHelpers } from '../features/iam/iamHelpers'
 import { issuancesState } from '../states/issuancesState'
-import { projectsState } from '../states/projectsState'
 import { schemasState } from '../states/schemasState'
 import { ExplorerResourceTypes } from '../tree/types'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
@@ -24,7 +24,8 @@ export const viewProperties = async ({
 }: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
-  let content: ProjectSummary | SchemaDto | IssuanceDto = projectsState.getProjectById(projectId)
+  let content: ProjectSummary | SchemaDto | IssuanceDto =
+    iamHelpers.requireProjectSummary(projectId)
   switch (resourceType) {
     case ExplorerResourceTypes.project: {
       label = content.project.name

@@ -2,7 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import { commands, ExtensionContext, Uri, window, env, WebviewPanel, l10n } from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, l10n } from 'vscode'
 import { AffinidiCodeGenProvider } from './treeView/affinidiCodeGenProvider'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
@@ -19,7 +19,7 @@ import {
 import { askUserForTelemetryConsent } from './utils/telemetry'
 import { ExplorerResourceTypes } from './tree/types'
 import { createProjectProcess } from './features/iam/createProjectProcess'
-import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
+import { csvCreationService } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
 import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 import { ExplorerTree } from './tree/explorerTree'
@@ -35,7 +35,6 @@ import { iamHelpers } from './features/iam/iamHelpers'
 import { schemasState } from './states/schemasState'
 import { issuancesState } from './states/issuancesState'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
-import { issuanceHelper } from './features/issuance/IssuanceHelper'
 
 const CONSOLE_URL = 'https://console.affinidi.com'
 const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -238,23 +237,29 @@ export async function activateInternal(context: ExtensionContext) {
           const schema = schemasState.getSchemaById(element.schemaId)
 
           if (schema) {
-            await initiateIssuanceCsvFlow({ projectId, schema })
+            await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
           }
         } else if (element.resourceType === ExplorerResourceTypes.issuance) {
           const issuance = issuancesState.getIssuanceById(element.issuanceId)
 
           if (issuance) {
-            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+            await csvCreationService.initiateIssuanceCsvFlow({
+              projectId,
+              schema: issuance.template.schema,
+            })
           }
         } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
           const {
             apiKey: { apiKeyHash },
             wallet: { did },
           } = iamHelpers.requireProjectSummary(projectId)
-          const schema = await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash })
+          const schema = await schemaManagerHelpers.askForMySchema(
+            { includeExample: true, did },
+            { apiKeyHash },
+          )
           if (!schema) return
 
-          await initiateIssuanceCsvFlow({ projectId, schema })
+          await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
         }
 
         sendEventToAnalytics({
@@ -399,17 +404,20 @@ export async function activateInternal(context: ExtensionContext) {
     commands.executeCommand('vscode.open', issueCredentialURL)
   })
 
-  commands.registerCommand('affinidiExplorer.openSchemaBuilder', async (element: ExplorerTreeItem) => {
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiExplorer.openSchemaBuilder',
-      },
-    })
+  commands.registerCommand(
+    'affinidiExplorer.openSchemaBuilder',
+    async (element: ExplorerTreeItem) => {
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.openSchemaBuilder',
+        },
+      })
 
-    openSchemaBuilder({ projectId: element.projectId, scope: element.schemaScope })
-  })
+      openSchemaBuilder({ projectId: element.projectId, scope: element.schemaScope })
+    },
+  )
 
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {
     sendEventToAnalytics({

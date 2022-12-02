@@ -1,10 +1,9 @@
 import { ThemeIcon } from 'vscode'
-import { projectsState } from '../../states/projectsState'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
-import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../tree/types'
-import { formatIssuanceName } from './formatIssuanceName'
+import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/types'
+import { issuanceHelpers } from './issuanceHelpers'
 import { getIssuances } from './getIssuances'
+import { iamHelpers } from '../iam/iamHelpers'
 
 export class IssuanceExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -24,7 +23,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
     const {
       project: { projectId },
       apiKey: { apiKeyHash },
-    } = projectsState.getProjectById(parent?.projectId)
+    } = iamHelpers.requireProjectSummary(parent?.projectId)
 
     const issuances = await getIssuances(projectId, { apiKeyHash })
 
@@ -33,7 +32,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
         new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.issuance,
           issuanceId: issuance.id,
-          label: formatIssuanceName(issuance),
+          label: issuanceHelpers.getIssuanceName(issuance),
           description: issuance.id,
           icon: new ThemeIcon('output'),
           projectId: parent?.projectId,
