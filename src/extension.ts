@@ -386,18 +386,16 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.createProject', async () => {
-      const result = await createProjectProcess()
-
-      ext.explorerTree.refresh()
-
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
         subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidi.createProject',
-          projectId: result?.projectId,
         },
       })
+
+      await createProjectProcess()
+      ext.explorerTree.refresh()
     }),
   )
 
