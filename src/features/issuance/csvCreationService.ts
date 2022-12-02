@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
-import { Schema } from '../../shared/types'
+import { Schema } from '../../utils/types'
 import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'

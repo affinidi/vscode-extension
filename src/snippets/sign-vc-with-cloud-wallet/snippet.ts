@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { Schema } from '../../shared/types'
+import { Schema } from '../../utils/types'
 import { Implementations } from '../shared/createSnippetTools'
 import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
