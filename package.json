@@ -257,6 +257,10 @@
           "when": "never"
         },
         {
+          "command": "affinidiExplorer.forkSchema",
+          "when": "never"
+        },
+        {
           "command": "affinidiExplorer.createIssuance",
           "when": "never"
         },
