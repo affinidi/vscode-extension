@@ -76,9 +76,9 @@ export const projectMessage = {
   projectNameRequired: l10n.t('project name is required'),
   projectNotCreated: l10n.t('Project could not be created'),
   noProjectSummary: l10n.t('Could not find project summary: {0}'),
-  projectDoesNotExist: l10n.t('Please provide an existing project ID or activate a project.'),
   missingProjectID: l10n.t('Project ID is not provided'),
   pleaseTryAgain: l10n.t('Please try again later.'),
+  projectDoesNotExist: l10n.t('Project does not exist.'),
 }
 
 export const issuanceMessage = {
@@ -151,12 +151,8 @@ export const csvMessage = {
   openCsvTemplate: l10n.t('Open a CSV template'),
   uploadCsvFile: l10n.t('Upload a CSV file'),
   commaSeperatorMessage: l10n.t('Make sure to use comma (,) as separator. '),
-  csvValidationError: l10n.t(
-    'Could not create issuance due to validation errors in the CSV file: {0}',
-  ),
-  IssaunceCreationMessage: l10n.t(
-    'Issuance has been created and the offers were sent. Issuance ID: {0}',
-  ),
+  csvValidationError: 'Could not create issuance due to validation errors in the CSV file:',
+  IssaunceCreationMessage: 'Issuance has been created and the offers were sent. Issuance ID:',
   invalidCsvFile: l10n.t('Invalid CSV file'),
   invalidDataInRow: l10n.t('Invalid data in row #'),
   couldNotFindAllColumns: l10n.t('Could not find all required columns'),

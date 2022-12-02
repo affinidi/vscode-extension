@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { OpenDialogOptions, window, workspace } from 'vscode'
+import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
 import { Schema } from '../../shared/types'
 import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
@@ -19,15 +19,10 @@ export enum CSVImplementation {
   uploadCsvFile,
 }
 
-const implementationLabels = {
+export const implementationLabels = {
   [CSVImplementation.openCsvTemplate]: csvMessage.openCsvTemplate,
   [CSVImplementation.uploadCsvFile]: csvMessage.uploadCsvFile,
 }
-
-export const ISSUANCE_CREATED_MESSAGE =
-  'Issuance has been created and the offers were sent. Issuance ID:'
-export const CSV_UPLOAD_ERROR =
-  'Could not create issuance due to validation errors in the CSV file:'
 
 const openCsvTemplate = async (input: TemplateInput) => {
   const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
@@ -96,7 +91,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      ext.outputChannel.appendLine(`${csvMessage.IssaunceCreationMessage}, ${issuance.id}`)
+      ext.outputChannel.appendLine(l10n.t(`${csvMessage.IssaunceCreationMessage} {0}`, issuance.id))
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
@@ -104,8 +99,9 @@ const uploadCsvFile = async (input: TemplateInput) => {
 
     if (parsedCsvUploadError) {
       ext.outputChannel.appendLine(
-        `${csvMessage.csvValidationError},
-        ${JSON.stringify(parsedCsvUploadError, null, 2)}`,
+        l10n.t(
+          `${csvMessage.csvValidationError} {0} ${JSON.stringify(parsedCsvUploadError, null, 2)}`,
+        ),
       )
       ext.outputChannel.show()
     }
@@ -119,7 +115,6 @@ const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
     supported.map((implementation) => [implementationLabels[implementation], implementation]),
     { title: `${snippetMessage.selectImplementation}` },
   )
-  console.log('selectedValue', selectedValue)
 
   switch (selectedValue) {
     case CSVImplementation.openCsvTemplate:
