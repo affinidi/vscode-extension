@@ -20,9 +20,11 @@ export const viewProperties = async ({
 }: ViewPropertiesProps) => {
   let label: string = ''
   let id: string = ''
-  let content: any = await iamState.requireProjectSummary(projectId)
+  let content: any
+
   switch (resourceType) {
     case ExplorerResourceTypes.project: {
+      content = await iamState.requireProjectSummary(projectId)
       label = content.project.name
       id = content.project.projectId
       break

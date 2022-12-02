@@ -1,5 +1,5 @@
-import { l10n } from 'vscode'
-import { Schema } from '../../shared/types'
+import {  l10n } from 'vscode'
+import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { schemaManagerState } from './schemaManagerState'
 

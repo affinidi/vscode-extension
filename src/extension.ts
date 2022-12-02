@@ -142,9 +142,9 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.openMarkDown', async (element: ExplorerTreeItem) => {
+    commands.registerCommand('affinidi.openMarkDown', (element: ExplorerTreeItem) => {
       const uri: Uri = Uri.file(
-        path.join(context.extensionPath, `${await viewMarkdown(element.resourceType)}`),
+        path.join(context.extensionPath, `${viewMarkdown(element.resourceType)}`),
       )
 
       commands.executeCommand('markdown.showPreview', uri)
