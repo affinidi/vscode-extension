@@ -8,6 +8,7 @@ import { logger } from '../../../utils/logger'
 import { vcJsonSchemaFetcher } from '../../issuance/json-schema/json-schema-fetcher'
 import { schemaManagerState } from '../schemaManagerState'
 import { SubmitHandler } from './handlers/SubmitHandler'
+import { createBuilderSchemaFork } from './helpers/createBuilderSchemaFork'
 
 export type BuilderAttribute = {
   id: string
@@ -24,23 +25,6 @@ export type BuilderSchema = {
   description: string
   isPublic: boolean
   attributes: BuilderAttribute[]
-}
-
-function fieldsToAttributes(fields: SchemaField[], parentId?: string): BuilderAttribute[] {
-  return fields.flatMap((field) => {
-    const id = nanoid()
-    return [
-      {
-        id,
-        parentId,
-        name: field.name,
-        description: field.description ?? '',
-        isRequired: field.required,
-        type: field.type,
-      },
-      ...fieldsToAttributes(field.nested ?? [], id),
-    ]
-  })
 }
 
 type IngoingMessage = { command: 'submit'; data: { schema: BuilderSchema } }
@@ -61,30 +45,10 @@ export class SchemaBuilderWebview {
   async open() {
     let parentBuilderSchema: BuilderSchema | undefined
     if (this.parentSchemaId) {
-      parentBuilderSchema = await window.withProgress(
-        { location: ProgressLocation.Notification, title: schemaMessage.loadingSchemaContent },
-        async () => {
-          const parentSchema = await schemaManagerState.getAuthoredSchemaById({
-            projectId: this.projectId,
-            schemaId: this.parentSchemaId!,
-          })
-
-          if (parentSchema) {
-            const fetcher = await vcJsonSchemaFetcher.fetch(new URL(parentSchema.jsonSchemaUrl))
-            const { fields } = parseSchema(fetcher.getContent())
-
-            return {
-              parentId: parentSchema.id,
-              type: parentSchema.type,
-              description: parentSchema.description ?? '',
-              isPublic: parentSchema.namespace === null,
-              attributes: fieldsToAttributes(fields),
-            }
-          }
-
-          return undefined
-        },
-      )
+      parentBuilderSchema = await createBuilderSchemaFork({
+        projectId: this.projectId,
+        schemaId: this.parentSchemaId,
+      })
     }
 
     if (!this.panel) {

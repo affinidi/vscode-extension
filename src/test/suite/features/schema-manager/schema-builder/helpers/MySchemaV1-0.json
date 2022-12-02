@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schema.affinidi.com/MySchemaV1-0.json",
+  "$metadata": {
+    "version": 1,
+    "revision": 0,
+    "discoverable": true,
+    "uris": {
+      "jsonLdContext": "https://schema.affinidi.com/MySchemaV1-0.jsonld",
+      "jsonSchema": "https://schema.affinidi.com/MySchemaV1-0.json"
+    }
+  },
+  "title": "MySchema",
+  "description": "Schema example",
+  "type": "object",
+  "required": [
+    "@context",
+    "type",
+    "issuer",
+    "issuanceDate",
+    "credentialSubject"
+  ],
+  "properties": {
+    "@context": {
+      "type": [
+        "string",
+        "array",
+        "object"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "type": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "issuer": {
+      "type": [
+        "string",
+        "object"
+      ],
+      "format": "uri",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "issuanceDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expirationDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "credentialSubject": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "name",
+          "type": "object",
+          "description": "",
+          "properties": {
+            "firstName": {
+              "title": "firstName",
+              "type": "string",
+              "description": "Person's first name"
+            },
+            "lastName": {
+              "title": "lastName",
+              "type": "string",
+              "description": "Person's last name"
+            }
+          },
+          "required": [
+            "firstName",
+            "lastName"
+          ]
+        },
+        "dateOfBirth": {
+          "title": "dateOfBirth",
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "credentialSchema": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
