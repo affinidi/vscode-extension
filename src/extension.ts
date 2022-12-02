@@ -24,7 +24,7 @@ import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IssuanceExplorerProvider } from './features/issuance/tree/issuanceExplorerProvider'
 import { SchemaManagerExplorerProvider } from './features/schema-manager/tree/schemaManagerExplorerProvider'
 import { openSchemaBuilder } from './features/schema-manager/schema-builder/openSchemaBuilder'
-import { schemaManagerHelpers, viewSchemaContent } from './features/schema-manager/schemaManagerHelpers'
+import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
 import { iamHelpers } from './features/iam/iamHelpers'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
 import { issuanceState } from './features/issuance/issuanceState'
@@ -299,7 +299,7 @@ export async function activateInternal(context: ExtensionContext) {
     })
     if (!schema) return
 
-    await viewSchemaContent(schema, 'json')
+    await schemaManagerHelpers.showSchemaFile(schema, 'json')
   })
 
   commands.registerCommand('affinidiExplorer.openCreateSchemaUrl', (element: BasicTreeItem) => {
@@ -380,7 +380,7 @@ export async function activateInternal(context: ExtensionContext) {
       })
       if (!schema) return
 
-      await viewSchemaContent(schema, 'jsonld')
+      await schemaManagerHelpers.showSchemaFile(schema, 'jsonld')
     },
   )
 

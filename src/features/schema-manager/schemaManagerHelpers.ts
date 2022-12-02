@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import nodeFetch from 'node-fetch'
 import * as path from 'path'
 import { window, ProgressLocation } from 'vscode'
 import { Schema } from '../../utils/types'
@@ -52,7 +52,11 @@ function getSchemaName(schema: { type: string; version: number; revision: number
   return `${schema.type}V${schema.version}-${schema.revision}`
 }
 
-export const viewSchemaContent = async (schema: SchemaDto, file: 'json' | 'jsonld') => {
+const showSchemaFile = async (
+  schema: SchemaDto,
+  file: 'json' | 'jsonld',
+  fetch = nodeFetch,
+) => {
   return window.withProgress(
     { location: ProgressLocation.Notification, title: schemaMessage.loadingSchemaContent },
     async () => {
@@ -61,8 +65,14 @@ export const viewSchemaContent = async (schema: SchemaDto, file: 'json' | 'jsonl
       const fetchedData = await fetch(url)
       const schemaContent = await fetchedData.json()
 
+      console.log({
+        node: { label: schemaManagerHelpers.getSchemaName(schema), id: schema.id },
+        content: schemaContent,
+        fileExtension: path.extname(url),
+      })
+
       await readOnlyContentViewer.open({
-        node: { label: getSchemaName(schema), id: schema.id },
+        node: { label: schemaManagerHelpers.getSchemaName(schema), id: schema.id },
         content: schemaContent,
         fileExtension: path.extname(url),
       })
@@ -71,6 +81,7 @@ export const viewSchemaContent = async (schema: SchemaDto, file: 'json' | 'jsonl
 }
 
 export const schemaManagerHelpers = {
+  showSchemaFile,
   askForAuthoredSchema,
   fetchSchemaUrl,
   getSchemaName,
