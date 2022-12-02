@@ -512,6 +512,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-security": "^1.4.0",
     "glob": "^8.0.3",
+    "husky": "^8.0.0",
     "mocha": "^10.0.0",
     "nock": "^13.2.9",
     "nodemon": "^2.0.20",
@@ -520,8 +521,7 @@
     "sinon": "^14.0.1",
     "sinon-chai": "^3.7.0",
     "source-map-support": "^0.5.21",
-    "typescript": "^4.8.4",
-    "husky": "^8.0.0"
+    "typescript": "^4.8.4"
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
@@ -529,6 +529,9 @@
     "@affinidi/client-issuance": "^0.4.0",
     "@affinidi/client-schema-manager": "^0.3.1",
     "@affinidi/client-user-management": "^0.3.2",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^9.0.1",
     "@vscode/l10n": "^0.0.10",
     "@vscode/test-electron": "^2.1.5",
     "@vscode/webview-ui-toolkit": "^1.1.0",
