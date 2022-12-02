@@ -42,6 +42,7 @@
     "onCommand:affinidiExplorer.createIssuance",
     "onCommand:affinidiExplorer.openCreateSchemaUrl",
     "onCommand:affinidiExplorer.openSchemaBuilder",
+    "onCommand:affinidiExplorer.forkSchema",
     "onCommand:affinidiExplorer.createIssuanceWithSchema",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidiExplorer.showJsonLdContext",
@@ -176,6 +177,12 @@
         "icon": "$(add)"
       },
       {
+        "command": "affinidiExplorer.forkSchema",
+        "title": "%affinidiExplorer.forkSchema%",
+        "category": "%commands.category.explorer%",
+        "icon": "$(file-add)"
+      },
+      {
         "command": "affinidiExplorer.createIssuanceWithSchema",
         "title": "%affinidiExplorer.createIssuanceWithSchema%",
         "category": "%commands.category.explorer%"
@@ -289,6 +296,11 @@
         {
           "command": "affinidiExplorer.openSchemaBuilder",
           "when": "view == affinidiExplorer && viewItem == schemas || view == affinidiExplorer && viewItem == scopedSchemas",
+          "group": "inline"
+        },
+        {
+          "command": "affinidiExplorer.forkSchema",
+          "when": "view == affinidiExplorer && viewItem == schema",
           "group": "inline"
         },
         {

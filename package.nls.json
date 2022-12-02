@@ -20,6 +20,7 @@
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
   "affinidiExplorer.openCreateSchemaUrl": "Create VC Schema",
   "affinidiExplorer.openSchemaBuilder": "Create VC Schema",
+  "affinidiExplorer.forkSchema": "Fork this VC Schema",
   "affinidiExplorer.createIssuance": "Create Issuance",
   "affinidiExplorer.createIssuanceWithSchema": "Create Issuance with Schema",
 

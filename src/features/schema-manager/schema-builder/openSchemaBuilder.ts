@@ -9,12 +9,13 @@ import { SchemaBuilderWebview } from './SchemaBuilderWebview'
 let builder: SchemaBuilderWebview | undefined
 
 export async function openSchemaBuilder(input?: {
+  parentSchemaId?: string
   projectId?: string
   scope?: 'public' | 'unlisted'
 }) {
   try {
-    const builder = await getOrCreateBuilder(input?.projectId)
-    builder.open()
+    const builder = await getOrCreateBuilder(input)
+    await builder.open()
     builder.setScope(input?.scope ?? 'public')
   } catch (error) {
     logger.error(error, schemaMessage.couldNotCreateSchemaBuilder)
@@ -22,18 +23,28 @@ export async function openSchemaBuilder(input?: {
   }
 }
 
-async function getOrCreateBuilder(projectId?: string): Promise<SchemaBuilderWebview> {
-  if (!builder || builder.isDisposed() || builder.projectId !== projectId) {
+async function getOrCreateBuilder(input?: {
+  projectId?: string
+  parentSchemaId?: string
+}): Promise<SchemaBuilderWebview> {
+  if (
+    !builder ||
+    builder.isDisposed() ||
+    builder.projectId !== input?.projectId ||
+    builder.parentSchemaId !== input?.parentSchemaId
+  ) {
     builder?.dispose()
 
+    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
     if (!projectId) {
-      projectId = await iamHelpers.askForProjectId()
-      if (!projectId) {
-        throw new Error(schemaMessage.selectProjectToCreateSchema)
-      }
+      throw new Error(schemaMessage.selectProjectToCreateSchema)
     }
 
-    builder = new SchemaBuilderWebview(projectId, new SubmitHandler(new BuilderSchemaPublisher()))
+    builder = new SchemaBuilderWebview(
+      projectId,
+      input?.parentSchemaId,
+      new SubmitHandler(new BuilderSchemaPublisher()),
+    )
   }
 
   return builder

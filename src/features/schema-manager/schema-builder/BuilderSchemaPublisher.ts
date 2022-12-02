@@ -48,8 +48,8 @@ export class BuilderSchemaPublisher {
 
     return schemaManagerClient.createSchema(
       {
+        parentId: schema.parentId,
         authorDid: did,
-        parentId: null,
         scope,
         type,
         description,

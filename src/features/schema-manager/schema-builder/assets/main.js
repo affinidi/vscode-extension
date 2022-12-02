@@ -31,7 +31,7 @@ function main() {
 
   function compileSchema() {
     return {
-      parentId: null,
+      parentId: schema.parentId,
       type: document.querySelector(SCHEMA_TYPE_SELECTOR).value,
       description: document.querySelector(SCHEMA_DESCRIPTION_SELECTOR).value,
       isPublic: document.querySelector(SCHEMA_IS_PUBLIC_SELECTOR).checked,
@@ -216,6 +216,8 @@ function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
 
   attributesSection.innerHTML = ''
   renderAttributes()
+
+  document.querySelector(SUBMIT_BUTTON_SELECTOR).innerText = schema.parentId ? 'Fork the schema' : 'Publish the schema'
 
   for (const button of document.querySelectorAll(REMOVE_ATTRIBUTE_BUTTON_SELECTOR)) {
     button.addEventListener('click', () => onRemoveAttribute(button.dataset.id))
