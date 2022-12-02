@@ -1,13 +1,10 @@
 name: Public Release to npmjs.com
 
-on:
-  push:
-    branches:
-      - main
+on: [workflow_call]
+
 jobs:
   build-release:
     name: Build and release
-    needs: build
     runs-on: ubuntu-latest
     environment:
       name: publishEnv

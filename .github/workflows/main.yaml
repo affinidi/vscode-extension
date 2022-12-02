@@ -4,20 +4,16 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
   gitleaks-scan:
     uses: ./.github/workflows/gitleaks-scan.yaml
 
   test:
     needs: gitleaks-scan
     uses: ./.github/workflows/test.yaml
+    with:
+      NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   build-release:
     needs: test
