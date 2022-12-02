@@ -3,7 +3,7 @@ import { authMessage } from '../../messages/messages'
 export function validateEmail(value: string) {
   const re = /\S+@\S+\.\S+/
   if (!re.test(value)) {
-    return authMessage.vaidEmailAddress
+    return authMessage.invalidEmailAddress
   }
 }
 

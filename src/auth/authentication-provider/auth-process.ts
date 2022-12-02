@@ -28,7 +28,7 @@ export const executeAuthProcess = async ({
   })
 
   if (!email) {
-    throw new Error(authMessage.emaillNotFound)
+    throw new Error(authMessage.emailNotFound)
   }
 
   const { token } = await window.withProgress(

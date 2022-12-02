@@ -38,11 +38,13 @@ export const errorMessage = {
 }
 
 export const authMessage = {
+  accept: l10n.t('Accept'),
+  reject: l10n.t('Reject'),
   enterEmail: l10n.t('Enter Email'),
   enterEmailOfAffindiAccount: l10n.t('Enter the email of your Affinidi account'),
   pasteEmailAddress: l10n.t('Paste the code sent to your email'),
-  vaidEmailAddress: l10n.t('Invalid email address entered'),
-  emaillNotFound: l10n.t(
+  invalidEmailAddress: l10n.t('Invalid email address entered'),
+  emailNotFound: l10n.t(
     "Please enter the email address you signed-up with or sign-up if you don't have an account.",
   ),
   confirmationCode: l10n.t('Confirmation Code'),
@@ -141,12 +143,15 @@ export const cliMessage = {
 }
 
 export const telemetryMessage = {
+  accept: l10n.t('Accept'),
+  deny: l10n.t('Deny'),
   sendUsageData: l10n.t(
     'Help us make Affinidi better! Do you accept to send anonymous usage data?',
   ),
 }
 
 export const csvMessage = {
+  generatingCredentialSubjectSample: l10n.t('Generating sample credential subject...'),
   downloadingCsvTemplate: l10n.t('Downloading CSV template...'),
   uploadingCsvFile: l10n.t('Uploading CSV file...'),
   openCsvTemplate: l10n.t('Open a CSV template'),

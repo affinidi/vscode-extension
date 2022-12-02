@@ -1,4 +1,5 @@
 import { l10n, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode'
+import { labels } from '../messages/messages'
 import { CodegenTreeItem } from './codegenTreeItem'
 
 export enum CodegenType {
@@ -32,22 +33,22 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
     return [
       new CodegenTreeItem({
         type: CodegenType.apps,
-        label: l10n.t('App Generators'),
+        label: labels.appGenerators,
         state: TreeItemCollapsibleState.Expanded,
         icon: new ThemeIcon('rocket'),
       }),
       new CodegenTreeItem({
         type: CodegenType.scripts,
-        label: l10n.t('Script Generators'),
+        label: labels.scriptGenerators,
         state: TreeItemCollapsibleState.Expanded,
         icon: new ThemeIcon('file-code'),
       }),
       new CodegenTreeItem({
         type: CodegenType.snippets,
-        label: l10n.t('IntelliSense Snippets'),
+        label: labels.intelliSenseSnippets,
         icon: new ThemeIcon('symbol-snippet'),
         command: {
-          title: l10n.t('View Available Snippets'),
+          title: labels.viewAvailableSnippets,
           command: 'affinidi.docs.availableSnippets',
         },
       })
@@ -58,17 +59,17 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
     return [
       new CodegenTreeItem({
         type: CodegenType.script,
-        label: l10n.t('Send a VC Offer to an email'),
+        label: labels.sendVCOfferToEmail,
         command: 'affinidi.codegen.sendVcOfferToEmail',
       }),
       new CodegenTreeItem({
         type: CodegenType.script,
-        label: l10n.t('Get Issuance Offers'),
+        label: labels.getIssuanceOffers,
         command: 'affinidi.codegen.getIssuanceOffers',
       }),
       new CodegenTreeItem({
         type: CodegenType.script,
-        label: l10n.t('Sign a VC with Cloud Wallet'),
+        label: labels.signCloudWalletVc,
         command: 'affinidi.codegen.signVcWithCloudWallet',
       })
     ]
@@ -78,7 +79,7 @@ export class CodegenTree implements TreeDataProvider<CodegenTreeItem> {
     return [
       new CodegenTreeItem({
         type: CodegenType.app,
-        label: l10n.t('Certification & Verification'),
+        label: labels.certificationAndVerification,
         command: 'affinidi.codegen.app',
       }),
     ]

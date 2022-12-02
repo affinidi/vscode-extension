@@ -10,7 +10,7 @@ export class FeedbackTree implements TreeDataProvider<BasicTreeItem> {
   public async getChildren(): Promise<BasicTreeItem[]> {
     return [
       new BasicTreeItem({
-        label: l10n.t('Give Feedback'),
+        label: labels.giveFeedback,
         state: TreeItemCollapsibleState.None,
         icon: new ThemeIcon('github-inverted'),
         command: {

@@ -1,5 +1,6 @@
 import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
 import { ext } from '../extensionVariables'
+import { labels } from '../messages/messages'
 import { BasicTreeItem } from './basicTreeItem'
 
 export interface ExplorerProvider {
@@ -47,7 +48,7 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
   private async getEmptyItems() {
     return [
       new BasicTreeItem({
-        label: l10n.t('(empty)'),
+        label: labels.empty,
         icon: new ThemeIcon('dash'),
       }),
     ]

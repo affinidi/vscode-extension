@@ -20,7 +20,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
 
     return [
       new BasicTreeItem({
-        label: l10n.t('Create an Account with Affinidi'),
+        label: labels.createAnAccountWithAffinidi,
         icon: new ThemeIcon('sign-in'),
         command: {
           title: authMessage.createAnAccount,
@@ -28,7 +28,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
         },
       }),
       new BasicTreeItem({
-        label: l10n.t('Sign in to Affinidi'),
+        label: labels.signIn,
         icon: new ThemeIcon('sign-in'),
         command: { title: labels.signIn, command: 'affinidi.login' },
       }),

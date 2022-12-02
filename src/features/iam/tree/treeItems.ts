@@ -26,6 +26,7 @@ export class ProjectFeatureTreeItem extends BasicTreeItemWithProject {
     this.feature = input.feature
   }
 }
+
 export class DigitalIdentityTreeItem extends BasicTreeItemWithProject {
   public readonly did: string
 

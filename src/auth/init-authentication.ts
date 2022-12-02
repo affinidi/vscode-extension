@@ -17,8 +17,8 @@ import {
 import { authHelper } from './authHelper'
 
 const CONSENT = {
-  accept: l10n.t('Accept'),
-  reject: l10n.t('Reject'),
+  accept: authMessage.accept,
+  reject: authMessage.reject,
 }
 
 async function signUpHandler(): Promise<void> {
