@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "icon": "media/affinidi-icon-large.png",
   "preview": true,
-  "repository": "https://gitlab.com/affinidi/foundational/genesis/vscode-extension",
+  "repository": "https://github.com/affinidi/vscode-extension",
   "version": "0.1.0",
   "engines": {
     "vscode": "^1.73.0"
