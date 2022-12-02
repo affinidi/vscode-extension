@@ -1,5 +1,6 @@
 import { l10n, ThemeIcon } from 'vscode'
 import { ext } from '../extensionVariables'
+import { authMessage, labels } from '../messages/messages'
 import { BasicTreeItem } from '../tree/basicTreeItem'
 import { ExplorerProvider, ExplorerTree } from '../tree/explorerTree'
 
@@ -22,14 +23,14 @@ export class AuthExplorerProvider implements ExplorerProvider {
         label: l10n.t('Create an Account with Affinidi'),
         icon: new ThemeIcon('sign-in'),
         command: {
-          title: l10n.t('Create an Account'),
+          title: authMessage.createAnAccount,
           command: 'affinidi.signUp',
         },
       }),
       new BasicTreeItem({
         label: l10n.t('Sign in to Affinidi'),
         icon: new ThemeIcon('sign-in'),
-        command: { title: l10n.t('Sign In'), command: 'affinidi.login' },
+        command: { title: labels.signIn, command: 'affinidi.login' },
       }),
     ]
   }

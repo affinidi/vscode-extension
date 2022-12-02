@@ -8,7 +8,7 @@ import { initAuthentication } from './auth/init-authentication'
 import { viewProperties, viewSchemaContent } from './services/viewDataService'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
-import { viewFeatureMarkdown } from './services/markdownService'
+import { getFeatureMarkdownUri } from './services/markdownService'
 import { buildURL } from './api-client/api-fetch'
 import {
   EventNames,
@@ -17,7 +17,7 @@ import {
 } from './services/analyticsStreamApiService'
 import { askUserForTelemetryConsent } from './utils/telemetry'
 import { createProjectProcess } from './features/iam/createProjectProcess'
-import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
+import { csvCreationService } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
 import { ExplorerTree } from './tree/explorerTree'
 import { AuthExplorerProvider } from './auth/authExplorerProvider'
@@ -149,7 +149,7 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand('affinidi.openMarkDown', async (element: ProjectFeatureTreeItem) => {
       const uri: Uri = Uri.file(
-        path.join(context.extensionPath, `${await viewFeatureMarkdown(element.feature)}`),
+        path.join(context.extensionPath, await getFeatureMarkdownUri(element.feature)),
       )
 
       commands.executeCommand('markdown.showPreview', uri)
@@ -245,7 +245,7 @@ export async function activateInternal(context: ExtensionContext) {
           })
 
           if (schema) {
-            await initiateIssuanceCsvFlow({ projectId, schema })
+            await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
           }
         } else if (element instanceof IssuanceTreeItem) {
           const issuance = await issuanceState.getIssuanceById({
@@ -254,7 +254,10 @@ export async function activateInternal(context: ExtensionContext) {
           })
 
           if (issuance) {
-            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+            await csvCreationService.initiateIssuanceCsvFlow({
+              projectId,
+              schema: issuance.template.schema,
+            })
           }
         } else if (
           element instanceof ProjectFeatureTreeItem &&
@@ -266,7 +269,7 @@ export async function activateInternal(context: ExtensionContext) {
           })
           if (!schema) return
 
-          await initiateIssuanceCsvFlow({ projectId, schema })
+          await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
         }
 
         sendEventToAnalytics({

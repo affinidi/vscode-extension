@@ -11,21 +11,6 @@ describe('createProjectProcess()', () => {
   const projectName = 'fake-project-name'
   const consoleAuthToken = 'fake-console-auth-token'
   const projectId = 'fake-project-id'
-  const projectSummary = {
-    wallet: {
-      didUrl: '',
-      did: '',
-    },
-    apiKey: {
-      apiKeyHash: '',
-      apiKeyName: '',
-    },
-    project: {
-      projectId,
-      name: projectName,
-      createdAt: '',
-    },
-  }
 
   let showInputBoxStub: sinon.SinonStub
 

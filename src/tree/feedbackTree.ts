@@ -13,7 +13,7 @@ export class FeedbackTree implements TreeDataProvider<BasicTreeItem> {
         state: TreeItemCollapsibleState.None,
         icon: new ThemeIcon('github-inverted'),
         command: {
-          title: l10n.t('Give Feedback'),
+          title: labels.giveFeedback,
           command: 'affinidiFeedback.redirectToGithub',
         },
       }),

@@ -1,3 +1,5 @@
+import { errorMessage } from '../messages/messages'
+
 function isValidHttpUrl(str: string | undefined): boolean {
   let url
 
@@ -12,7 +14,7 @@ function isValidHttpUrl(str: string | undefined): boolean {
 
 export function parseJsonSchemaUrl(str: string): URL {
   if (!isValidHttpUrl(str)) {
-    throw new Error(`Invalid JSON schema URL: ${str}`)
+    throw new Error(`${errorMessage.invalidJsonSchemaUrl} ${str}`)
   }
 
   return new URL(str)

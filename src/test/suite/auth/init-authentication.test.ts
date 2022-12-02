@@ -1,5 +1,6 @@
 import { authentication, commands, window } from 'vscode'
 import { expect } from 'chai'
+import * as sinon from 'sinon'
 import { AUTH_PROVIDER_ID } from '../../../auth/authentication-provider/affinidi-authentication-provider'
 import { ext } from '../../../extensionVariables'
 import { sandbox } from '../setup'

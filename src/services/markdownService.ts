@@ -1,6 +1,6 @@
 import { Feature } from '../features/feature'
 
-export const viewFeatureMarkdown = async (feature: Feature) => {
+export const getFeatureMarkdownUri = async (feature: Feature) => {
   let uri: string = ''
 
   switch (feature) {

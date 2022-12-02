@@ -4,6 +4,7 @@ import { ext } from '../../../../extensionVariables'
 import { showSchemaDetails } from '../../schema-details/showSchemaDetails'
 import { BuilderSchemaPublisher } from '../BuilderSchemaPublisher'
 import { isValidSchemaType, isValidAttributeName } from '../helpers/validation'
+import { schemaMessage } from '../../../../messages/messages'
 import { schemaManagerState } from '../../schemaManagerState'
 
 export class SubmitHandler {
@@ -12,26 +13,18 @@ export class SubmitHandler {
   async handle(webview: SchemaBuilderWebview, data: { schema: BuilderSchema }) {
     try {
       if (!isValidSchemaType(data.schema.type)) {
-        window.showErrorMessage(
-          l10n.t(
-            'Invalid schema type. Use PascalCase and alphanumeric symbols (for example, "MySchema")',
-          ),
-        )
+        window.showErrorMessage(schemaMessage.invalidSchemaType)
         return
       }
 
       if (data.schema.attributes.length === 0) {
-        window.showErrorMessage(l10n.t('Your schema is empty. Try adding an attribute.'))
+        window.showErrorMessage(schemaMessage.emptySchema)
         return
       }
 
       for (const attribute of data.schema.attributes) {
         if (!attribute.name) {
-          window.showErrorMessage(
-            l10n.t(
-              'Empty attribute name. Use camelCase and alphanumeric symbols (for example, "firstName")',
-            ),
-          )
+          window.showErrorMessage(schemaMessage.emptySchemaAttribute)
           return
         }
 
@@ -52,17 +45,17 @@ export class SubmitHandler {
               a.name === attribute.name,
           )
         ) {
-          window.showErrorMessage(l10n.t(`Duplicate attribute name: "${attribute.name}"`))
+          window.showErrorMessage(`${schemaMessage.duplicateAttributeName} ${attribute.name}"`)
           return
         }
       }
 
       const createdSchema = await window.withProgress(
-        { location: ProgressLocation.Notification, title: l10n.t('Publishing the schema...') },
+        { location: ProgressLocation.Notification, title: schemaMessage.publishingSchema },
         () => this.builderSchemaPublisher.publish(data.schema, webview.projectId),
       )
 
-      window.showInformationMessage(l10n.t('Schema has been successfully created'))
+      window.showInformationMessage(schemaMessage.schemaCreated)
       showSchemaDetails(createdSchema)
       await schemaManagerState.clear()
       ext.explorerTree.refresh()

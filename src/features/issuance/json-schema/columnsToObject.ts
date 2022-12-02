@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import { l10n, ProgressLocation, window } from 'vscode'
-import { parseJsonSchemaUrl } from '../../../shared/parse-json-schema-url'
-import { Schema } from '../../../shared/types'
+import { parseJsonSchemaUrl } from '../../../utils/parseJsonSchemaUrl'
+import { Schema } from '../../../utils/types'
 import { ColumnSpec, generateColumnSpecs } from './generate-empty-json-specs'
 import { JsonSchemaFetcher } from './json-schema-fetcher'
 import { VcJsonSchemaFetcher } from './vc-json-schema-fetcher'
@@ -54,8 +54,7 @@ export async function generateCredentialSubjectSample(schema: Schema) {
       const vcJsonSchema = await vcJsonSchemaFetcher.fetch(parsedJsonSchemaUrl)
 
       const columnSpecs = generateColumnSpecs(vcJsonSchema)
-      const sample = columnsToObject(columnSpecs)
-      return sample
+      return columnsToObject(columnSpecs)
     },
   )
 }
