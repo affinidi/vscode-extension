@@ -1,18 +1,13 @@
 import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
-import { l10n } from 'vscode'
-
 import { showQuickPick } from '../../utils/showQuickPick'
 import { projectsState } from '../../states/projectsState'
-
-export const PROJECT_REQUIRED_ERROR_MESSAGE = l10n.t(
-  'You need to have a project to perform this operation',
-)
+import { projectMessage } from '../../messages/messages'
 
 async function askForProjectId(): Promise<string | undefined> {
   const projects = projectsState.getProjects() ?? []
 
   if (projects.length === 0) {
-    throw new Error(PROJECT_REQUIRED_ERROR_MESSAGE)
+    throw new Error(projectMessage.projectRequired)
   }
 
   let project: ProjectDto | undefined = projects[0]?.project
@@ -20,7 +15,7 @@ async function askForProjectId(): Promise<string | undefined> {
   if (projects.length > 1) {
     project = await showQuickPick(
       projects.map((p) => [p.project.name, p.project]),
-      { title: l10n.t('Select a project') },
+      { title: projectMessage.selectProject },
     )
   }
 
@@ -29,13 +24,13 @@ async function askForProjectId(): Promise<string | undefined> {
 
 function requireProjectSummary(projectId: string | undefined): ProjectSummary {
   if (!projectId) {
-    throw new Error(l10n.t('Project ID is not provided'))
+    throw new Error(projectMessage.missingProjectID)
   }
 
   const projectSummary = projectsState.getProjectById(projectId)
 
   if (!projectSummary) {
-    throw new Error(l10n.t(`Could not find project summary: {0}`, projectId))
+    throw new Error(`${projectMessage.noProjectSummary} ${projectId}`)
   }
 
   return projectSummary

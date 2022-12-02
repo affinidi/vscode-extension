@@ -1,10 +1,11 @@
-import { window, ProgressLocation, l10n } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { Options, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { iamHelpers } from '../iam/iamHelpers'
 import { schemasState } from '../../states/schemasState'
 import { schemaManagerClient } from './schemaManagerClient'
+import { schemaMessage } from '../../messages/messages'
 
 export const EXAMPLE_SCHEMA: Schema = {
   type: 'MySchema',
@@ -59,7 +60,7 @@ async function askForMySchema(
   const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: l10n.t('Fetching available schemas...'),
+      title: schemaMessage.fetchSchemas,
     },
     () => getMySchemas(input, options),
   )
@@ -71,10 +72,10 @@ async function askForMySchema(
       return EXAMPLE_SCHEMA
     }
 
-    pickOptions.unshift([l10n.t('Use an example schema'), EXAMPLE_SCHEMA])
+    pickOptions.unshift([schemaMessage.exampleSchema, EXAMPLE_SCHEMA])
   }
 
-  return showQuickPick(pickOptions, { title: l10n.t('Select a VC Schema') })
+  return showQuickPick(pickOptions, { title: schemaMessage.selectSchema })
 }
 
 async function fetchSchemaUrl(projectId: string) {

@@ -1,18 +1,24 @@
 import { ProjectSummary } from '@affinidi/client-iam'
-import { l10n } from 'vscode'
 import { ext } from '../extensionVariables'
+import { projectMessage } from '../messages/messages'
 
 const STORAGE_KEY = 'projects'
-
-export const NO_PROJECT_ERROR_MESSAGE = l10n.t('Project does not exist.')
 
 const getProjects = (): ProjectSummary[] | undefined => {
   return ext.context.globalState.get(STORAGE_KEY)
 }
 
 const getProjectById = (projectId?: string) => {
+  if (!projectId) {
+    throw new Error(projectMessage.missingProjectID)
+  }
+
   const projects = getProjects()
   const selectedProject = projects?.find(({ project }) => project?.projectId === projectId)
+
+  if (!selectedProject) {
+    throw new Error(projectMessage.projectDoesNotExist)
+  }
 
   return selectedProject
 }

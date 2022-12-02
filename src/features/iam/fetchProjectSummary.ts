@@ -1,5 +1,6 @@
 import { Options, ProjectSummary } from '@affinidi/client-iam'
-import { window, ProgressLocation, l10n } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
+import { projectMessage } from '../../messages/messages'
 import { iamClient } from './iamClient'
 
 export async function fetchProjectSummary(
@@ -9,13 +10,13 @@ export async function fetchProjectSummary(
   const projectSummary = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: l10n.t('Fetching project information...'),
+      title: projectMessage.fetchProject,
     },
     () => iamClient.getProjectSummary({ projectId }, options),
   )
 
   if (!projectSummary) {
-    throw new Error(l10n.t(`Could not find project summary: {0}`, projectId))
+    throw new Error(`${projectMessage.noProjectSummary}, ${projectId}`)
   }
 
   return projectSummary

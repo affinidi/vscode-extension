@@ -1,13 +1,12 @@
-import { window, ProgressLocation, l10n } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { IssuanceDto, Options } from '@affinidi/client-issuance'
 import { format } from 'date-fns'
 
 import { showQuickPick } from '../../utils/showQuickPick'
 import { getIssuances } from './getIssuances'
+import { issuanceMessage } from '../../messages/messages'
 
 type Input = { projectId: string }
-
-export const NO_ISSUANCES_ERROR_MESSAGE = l10n.t("You don't have any issuances to choose from")
 
 export const getIssuanceName = (issuance: IssuanceDto) =>
   `${issuance.template.schema.type} at ${format(
@@ -19,17 +18,17 @@ async function askForIssuance(input: Input, options: Options): Promise<IssuanceD
   const issuances = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: l10n.t('Fetching available issuances...'),
+      title: issuanceMessage.fetchIssuances,
     },
     () => getIssuances(input.projectId, options),
   )
 
   if (issuances.length === 0) {
-    throw new Error(NO_ISSUANCES_ERROR_MESSAGE)
+    throw new Error(issuanceMessage.noIssauces)
   }
 
   return showQuickPick([...issuances.map<[string, IssuanceDto]>((i) => [getIssuanceName(i), i])], {
-    title: l10n.t('Select an Issuance'),
+    title: issuanceMessage.selectIssuance,
   })
 }
 

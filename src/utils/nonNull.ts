@@ -1,5 +1,5 @@
 import { l10n } from 'vscode'
-import { isNullOrUndefined } from 'util'
+import { errorMessage } from '../messages/messages'
 
 /**
  * Retrieves a property by name from an object and checks that it's not null and not undefined.  It is strongly typed
@@ -10,20 +10,16 @@ export function nonNullProp<TSource, TKey extends keyof TSource>(
   name: TKey,
 ): NonNullable<TSource[TKey]> {
   const value: NonNullable<TSource[TKey]> = <NonNullable<TSource[TKey]>>source[name]
-  return nonNullValue(value, <string>name)
+  return nonNull(value, <string>name)
 }
 
 /**
  * Validates that a given value is not null and not undefined.
  */
-export function nonNullValue<T>(value: T | undefined, propertyNameOrMessage?: string): T {
-  if (isNullOrUndefined(value)) {
-    throw new Error(
-      l10n.t('Internal error: Expected value to be neither null nor undefined') +
-        (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : ''),
-    )
+export function nonNull<T>(value: T | undefined, propertyNameOrMessage: string): T {
+  if (value === undefined || value === undefined) {
+    throw new Error(`${errorMessage.internalErrorNullOrUnderined} ${propertyNameOrMessage}`)
   }
-
   return value
 }
 

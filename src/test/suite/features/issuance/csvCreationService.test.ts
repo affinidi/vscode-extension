@@ -7,15 +7,14 @@ import { sandbox } from '../../setup'
 import {
   csvCreationService,
   CSVImplementation,
-  CSV_UPLOAD_ERROR,
   implementationLabels,
-  ISSUANCE_CREATED_MESSAGE,
 } from '../../../../features/issuance/csvCreationService'
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
-import { projectsState, NO_PROJECT_ERROR_MESSAGE } from '../../../../states/projectsState'
+import { projectsState } from '../../../../states/projectsState'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../../testUtils'
+import { csvMessage, projectMessage } from '../../../../messages/messages'
 
 describe('csvCreationService()', () => {
   const projectId = 'fake-project-id'
@@ -45,7 +44,7 @@ describe('csvCreationService()', () => {
         await csvCreationService.openCsvTemplate({ projectId: '', schema })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
-        expect(e.message).equal(NO_PROJECT_ERROR_MESSAGE)
+        expect(e.message).equal(projectMessage.projectDoesNotExist)
       }
     })
 
@@ -97,7 +96,9 @@ describe('csvCreationService()', () => {
 
       await csvCreationService.uploadCsvFile({ projectId, schema })
 
-      expect(ext.outputChannel.appendLine).calledWith(`${ISSUANCE_CREATED_MESSAGE} ${issuance.id}`)
+      expect(ext.outputChannel.appendLine).calledWith(
+        `${csvMessage.issaunceCreationMessage} ${issuance.id}`,
+      )
     })
 
     it('should show an error if some upload error', async () => {
@@ -106,7 +107,7 @@ describe('csvCreationService()', () => {
 
       await csvCreationService.uploadCsvFile({ projectId, schema })
 
-      expect(ext.outputChannel.appendLine).calledWithMatch(CSV_UPLOAD_ERROR)
+      expect(ext.outputChannel.appendLine).calledWithMatch(csvMessage.csvValidationError)
     })
   })
 

@@ -4,7 +4,8 @@ import * as sinon from 'sinon'
 import { ext } from '../../../extensionVariables'
 
 import { sandbox } from '../setup'
-import { CliHelper, ERROR_MESSAGE, WARNING_MESSAGE } from '../../../utils/cliHelper'
+import { CliHelper } from '../../../utils/cliHelper'
+import { cliMessage } from '../../../messages/messages'
 
 let showWarningMessage: sinon.SinonStub
 let showErrorMessage: sinon.SinonStub
@@ -30,7 +31,7 @@ describe('CLI installed', () => {
 
     await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
 
-    expect(ext.outputChannel.appendLine).calledWith(WARNING_MESSAGE)
+    expect(ext.outputChannel.appendLine).calledWith(cliMessage.cliNeedsToBeInstalledForExtension)
     expect(showWarningMessage).called
     expect(showErrorMessage).not.called
   })
@@ -42,7 +43,7 @@ describe('CLI installed', () => {
 
     await cliHelper.isCliInstalledOrWarn({ type: 'error' })
 
-    expect(ext.outputChannel.appendLine).calledWith(ERROR_MESSAGE)
+    expect(ext.outputChannel.appendLine).calledWith(cliMessage.cliNeedsToBeInstalledForAction)
     expect(showErrorMessage).called
     expect(showWarningMessage).not.called
   })
@@ -74,7 +75,9 @@ describe('CLI installed', () => {
       stdout: '',
     })
 
-    await expect(cliHelper.assertCliIsInstalled()).rejectedWith(ERROR_MESSAGE)
+    await expect(cliHelper.assertCliIsInstalled()).rejectedWith(
+      cliMessage.cliNeedsToBeInstalledForAction,
+    )
 
     execMock.command.withArgs('npm list -g').returns({
       stdout: '@affinidi/cli',

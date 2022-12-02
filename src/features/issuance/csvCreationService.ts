@@ -6,6 +6,7 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
+import { csvMessage, errorMessage, snippetMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 
 interface TemplateInput {
@@ -19,14 +20,9 @@ export enum CSVImplementation {
 }
 
 export const implementationLabels = {
-  [CSVImplementation.openCsvTemplate]: l10n.t('Open a CSV template'),
-  [CSVImplementation.uploadCsvFile]: l10n.t('Upload a CSV file'),
+  [CSVImplementation.openCsvTemplate]: csvMessage.openCsvTemplate,
+  [CSVImplementation.uploadCsvFile]: csvMessage.uploadCsvFile,
 }
-
-export const ISSUANCE_CREATED_MESSAGE =
-  'Issuance has been created and the offers were sent. Issuance ID:'
-export const CSV_UPLOAD_ERROR =
-  'Could not create issuance due to validation errors in the CSV file:'
 
 const openCsvTemplate = async (input: TemplateInput) => {
   const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
@@ -57,7 +53,7 @@ const openCsvTemplate = async (input: TemplateInput) => {
 const uploadCsvFile = async (input: TemplateInput) => {
   const options: OpenDialogOptions = {
     canSelectMany: false,
-    openLabel: l10n.t('Select'),
+    openLabel: labels.select,
     canSelectFiles: true,
     canSelectFolders: false,
   }
@@ -95,8 +91,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      // TODO: do we need to add issuance to state???
-      ext.outputChannel.appendLine(l10n.t(`${ISSUANCE_CREATED_MESSAGE} {0}`, issuance.id))
+      ext.outputChannel.appendLine(l10n.t(`${csvMessage.issaunceCreationMessage} {0}`, issuance.id))
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
@@ -104,7 +99,9 @@ const uploadCsvFile = async (input: TemplateInput) => {
 
     if (parsedCsvUploadError) {
       ext.outputChannel.appendLine(
-        l10n.t(`${CSV_UPLOAD_ERROR} {0}`, JSON.stringify(parsedCsvUploadError, null, 2)),
+        l10n.t(
+          `${csvMessage.csvValidationError} {0} ${JSON.stringify(parsedCsvUploadError, null, 2)}`,
+        ),
       )
       ext.outputChannel.show()
     }
@@ -116,7 +113,7 @@ const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
 
   const selectedValue = await showQuickPick(
     supported.map((implementation) => [implementationLabels[implementation], implementation]),
-    { title: l10n.t('Select an implementation') },
+    { title: snippetMessage.selectImplementation },
   )
 
   switch (selectedValue) {
@@ -127,7 +124,7 @@ const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
       await uploadCsvFile(input)
       break
     default:
-      throw new Error(`${l10n.t('unknown value:')} ${selectedValue}`)
+      throw new Error(`${errorMessage.unknownValue} ${selectedValue}`)
   }
 }
 
