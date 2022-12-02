@@ -1,6 +1,6 @@
 import { window, ProgressLocation, l10n } from 'vscode'
 import { Options, SchemaSearchScope } from '@affinidi/client-schema-manager'
-import { Schema } from '../../shared/types'
+import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { iamHelpers } from '../iam/iamHelpers'
 import { schemasState } from '../../states/schemasState'

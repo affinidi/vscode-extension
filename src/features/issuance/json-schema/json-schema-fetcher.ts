@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import { validate } from 'jsonschema'
 import { JsonSchema } from './json-schema.dto'
 import { DRAFT_07_SCHEMA, DRAFT_07_URL } from './json-schema-draft-07.schema'
-import { parseJsonSchemaUrl } from '../../../shared/parse-json-schema-url'
+import { parseJsonSchemaUrl } from '../../../utils/parseJsonSchemaUrl'
 
 export class JsonSchemaFetcher {
   constructor(

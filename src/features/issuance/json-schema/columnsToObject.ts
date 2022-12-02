@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
-import { parseJsonSchemaUrl } from '../../../shared/parse-json-schema-url'
-import { Schema } from '../../../shared/types'
+import { parseJsonSchemaUrl } from '../../../utils/parseJsonSchemaUrl'
+import { Schema } from '../../../utils/types'
 import { ColumnSpec, generateColumnSpecs } from './generate-empty-json-specs'
 import { JsonSchemaFetcher } from './json-schema-fetcher'
 import { VcJsonSchemaFetcher } from './vc-json-schema-fetcher'

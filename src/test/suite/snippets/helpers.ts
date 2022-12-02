@@ -1,4 +1,3 @@
-import { SchemaDto } from '@affinidi/client-schema-manager'
 import { TextEditor, window, workspace } from 'vscode'
 import { Implementations, SnippetImplementation } from '../../../snippets/shared/createSnippetTools'
 

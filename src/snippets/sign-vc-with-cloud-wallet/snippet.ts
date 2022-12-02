@@ -1,5 +1,6 @@
+import { l10n } from 'vscode'
 import { nanoid } from 'nanoid'
-import { Schema } from '../../shared/types'
+import { Schema } from '../../utils/types'
 import { Implementations } from '../shared/createSnippetTools'
 import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
@@ -8,7 +9,6 @@ import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
-import { l10n } from 'vscode'
 
 export interface SnippetInput {
   iamUrl: string
