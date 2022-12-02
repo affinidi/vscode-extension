@@ -451,7 +451,6 @@ export async function activateInternal(context: ExtensionContext) {
       openSchemaBuilder({
         parentSchemaId: element.schemaId,
         projectId: element.projectId,
-        scope: element instanceof ScopedSchemasTreeItem ? element.scope : 'public',
       })
     },
   )
