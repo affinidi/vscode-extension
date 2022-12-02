@@ -13,7 +13,7 @@ import {
   workspace,
 } from 'vscode'
 import { ext } from '../extensionVariables'
-import { nonNullValue } from './nonNull'
+import { nonNull } from './nonNull'
 import { randomUtils } from './randomUtils'
 
 let cachedScheme: string | undefined
@@ -86,7 +86,7 @@ class ReadOnlyContentProvider implements TextDocumentContentProvider {
   }
 
   public async provideTextDocumentContent(uri: Uri): Promise<string> {
-    const readOnlyContent: ReadOnlyContent = nonNullValue(
+    const readOnlyContent: ReadOnlyContent = nonNull(
       this._contentMap.get(uri.toString()),
       'ReadOnlyContentProvider._contentMap.get',
     )

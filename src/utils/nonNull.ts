@@ -1,4 +1,3 @@
-import { isNullOrUndefined } from 'util'
 import { l10n } from 'vscode'
 import { errorMessage } from '../messages/messages'
 
@@ -11,29 +10,32 @@ export function nonNullProp<TSource, TKey extends keyof TSource>(
   name: TKey,
 ): NonNullable<TSource[TKey]> {
   const value: NonNullable<TSource[TKey]> = <NonNullable<TSource[TKey]>>source[name]
-  return nonNullValue(value, <string>name)
+  return nonNull(value, <string>name)
 }
 
 /**
  * Validates that a given value is not null and not undefined.
  */
-export function nonNullValue<T>(value: T | undefined, propertyNameOrMessage?: string): T {
-  if (isNullOrUndefined(value)) {
-    throw new Error(
-      l10n.t('Internal error: Expected value to be neither null, undefined, nor empty') +
-        (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : ''),
-    )
+export function nonNull<T>(value: T | undefined, propertyNameOrMessage: string): T {
+  if (value === undefined || value === undefined) {
+    throw new Error(`${errorMessage.internalErrorNullOrUnderined} ${propertyNameOrMessage}`)
   }
-
   return value
 }
 
 /**
  * Validates that a given string is not null, undefined, nor empty
  */
-export function nonNull<T>(value: T | undefined, propertyNameOrMessage: string): T {
-  if (value === undefined || value === undefined) {
-    throw new Error(`${errorMessage.internalErrorNullOrUnderined} ${propertyNameOrMessage}`)
+export function nonNullOrEmptyValue(
+  value: string | undefined,
+  propertyNameOrMessage?: string,
+): string {
+  if (!value) {
+    throw new Error(
+      l10n.t('Internal error: Expected value to be neither null, undefined, nor empty') +
+        (propertyNameOrMessage ? `: ${propertyNameOrMessage}` : ''),
+    )
   }
+
   return value
 }
