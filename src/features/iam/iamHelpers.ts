@@ -1,4 +1,4 @@
-import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
+import { ProjectDto } from '@affinidi/client-iam'
 import { l10n } from 'vscode'
 
 import { showQuickPick } from '../../utils/showQuickPick'

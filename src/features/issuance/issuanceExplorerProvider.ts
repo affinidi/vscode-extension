@@ -3,7 +3,7 @@ import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider } from '../../tree/types'
 import { ExplorerResourceTypes } from '../../tree/types'
 import { iamState } from '../iam/iamState'
-import { formatIssuanceName } from './formatIssuanceName'
+import { issuanceHelpers } from './issuanceHelpers'
 import { issuanceState } from './issuanceState'
 
 export class IssuanceExplorerProvider implements ExplorerProvider {
@@ -32,7 +32,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
         new ExplorerTreeItem({
           resourceType: ExplorerResourceTypes.issuance,
           issuanceId: issuance.id,
-          label: formatIssuanceName(issuance),
+          label: issuanceHelpers.getIssuanceName(issuance),
           description: issuance.id,
           icon: new ThemeIcon('output'),
           projectId: parent?.projectId,

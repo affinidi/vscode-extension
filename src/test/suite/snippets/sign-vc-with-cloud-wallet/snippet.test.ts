@@ -8,6 +8,7 @@ import {
 import { AFFINIDI_IAM_API_URL } from '../../../../features/iam/iamClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
+import { generateProjectSummary } from '../../testUtils'
 import { iamState } from '../../../../features/iam/iamState'
 
 describe('insertSignVcWithCloudWalletSnippet()', () => {
@@ -18,21 +19,7 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     const type = 'MySchema'
     const jsonSchemaUrl = 'https://schema.affinidi.com/MySchemaV1-0.json'
     const jsonLdContextUrl = 'https://schema.affinidi.com/MySchemaV1-0.jsonld'
-    const projectSummary = {
-      wallet: {
-        didUrl: '',
-        did,
-      },
-      apiKey: {
-        apiKeyHash,
-        apiKeyName: '',
-      },
-      project: {
-        projectId,
-        name: '',
-        createdAt: '',
-      },
-    }
+    const projectSummary = generateProjectSummary({ did, projectId, apiKeyHash })
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
     sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)

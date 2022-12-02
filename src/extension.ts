@@ -19,7 +19,7 @@ import {
 import { askUserForTelemetryConsent } from './utils/telemetry'
 import { ExplorerResourceTypes } from './tree/types'
 import { createProjectProcess } from './features/iam/createProjectProcess'
-import { initiateIssuanceCsvFlow } from './features/issuance/csvCreationService'
+import { csvCreationService } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
 import { AffinidiFeedbackProvider } from './treeView/affinidiFeedbackProvider'
 import { ExplorerTree } from './tree/explorerTree'
@@ -243,7 +243,7 @@ export async function activateInternal(context: ExtensionContext) {
           })
 
           if (schema) {
-            await initiateIssuanceCsvFlow({ projectId, schema })
+            await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
           }
         } else if (element.resourceType === ExplorerResourceTypes.issuance) {
           const issuance = await issuanceState.getIssuanceById({
@@ -252,7 +252,10 @@ export async function activateInternal(context: ExtensionContext) {
           })
 
           if (issuance) {
-            await initiateIssuanceCsvFlow({ projectId, schema: issuance.template.schema })
+            await csvCreationService.initiateIssuanceCsvFlow({
+              projectId,
+              schema: issuance.template.schema,
+            })
           }
         } else if (element.resourceType === ExplorerResourceTypes.rootIssuance) {
           const schema = await schemaManagerHelpers.askForAuthoredSchema({
@@ -261,7 +264,7 @@ export async function activateInternal(context: ExtensionContext) {
           })
           if (!schema) return
 
-          await initiateIssuanceCsvFlow({ projectId, schema })
+          await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
         }
 
         sendEventToAnalytics({
