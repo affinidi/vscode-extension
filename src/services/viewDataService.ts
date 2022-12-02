@@ -2,6 +2,7 @@ import fetch from 'node-fetch'
 import { iamState } from '../features/iam/iamState'
 import { issuanceState } from '../features/issuance/issuanceState'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
+import { errorMessage } from '../messages/messages'
 import { ExplorerResourceTypes } from '../tree/types'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 
@@ -53,7 +54,7 @@ export const viewProperties = async ({
     }
 
     default:
-      throw new Error(`Unexpected resource type: ${resourceType}`)
+      throw new Error(`${errorMessage.unexpectedResourceType} ${resourceType}`)
   }
 
   await openReadOnlyContent({ node: { label, id }, content })

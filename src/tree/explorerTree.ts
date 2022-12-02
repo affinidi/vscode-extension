@@ -1,8 +1,8 @@
-import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
+import { Event, EventEmitter, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
 import { ExplorerTreeItem } from './explorerTreeItem'
 import { ext } from '../extensionVariables'
-import { ExplorerResourceTypes } from '../tree/types'
-import { ExplorerProvider } from './types'
+import { ExplorerResourceTypes, ExplorerProvider } from './types'
+import { labels } from '../messages/messages'
 
 export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
   private readonly onDidChangeTreeDataEmitter: EventEmitter<ExplorerTreeItem | undefined | void> =
@@ -43,7 +43,7 @@ export class ExplorerTree implements TreeDataProvider<ExplorerTreeItem> {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.empty,
-        label: l10n.t('(empty)'),
+        label: labels.empty,
         icon: new ThemeIcon('dash'),
       }),
     ]

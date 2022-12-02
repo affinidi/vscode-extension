@@ -1,4 +1,3 @@
-import { l10n } from 'vscode'
 import { nanoid } from 'nanoid'
 import { Schema } from '../../utils/types'
 import { Implementations } from '../shared/createSnippetTools'
@@ -9,6 +8,7 @@ import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
+import { snippetMessage } from '../../messages/messages'
 import { iamState } from '../../features/iam/iamState'
 
 export interface SnippetInput {
@@ -58,7 +58,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
 
     const credentialSubject = await generateCredentialSubjectSample(schema)
     if (!credentialSubject) {
-      throw new Error(l10n.t('Could not generate credential subject sample'))
+      throw new Error(snippetMessage.credentialSubjectGeneration)
     }
 
     return {

@@ -1,4 +1,5 @@
 import { ProgressLocation, window, l10n } from 'vscode'
+import { authMessage } from '../../messages/messages'
 import { userManagementClient } from '../../features/user-management/userManagementClient'
 import { validateEmail, validateOTP } from './validators'
 
@@ -22,18 +23,18 @@ export const executeAuthProcess = async ({
   const email = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: 'email@domain.com',
-    prompt: isSignUp ? l10n.t('Enter email') : l10n.t('Enter the email of your Affinidi account'),
+    prompt: isSignUp ? authMessage.enterEmail : authMessage.enterEmailOfAffindiAccount,
     validateInput: validateEmail,
   })
 
   if (!email) {
-    throw new Error(l10n.t('Email is required'))
+    throw new Error(authMessage.emaillNotFound)
   }
 
   const { token } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: l10n.t('Sending confirmation code'),
+      title: authMessage.sendingConfirmationCode,
     },
     async () => {
       return isSignUp
@@ -42,17 +43,17 @@ export const executeAuthProcess = async ({
     },
   )
 
-  window.showInformationMessage(`${l10n.t('Confirmation code sent to')} ${email}`)
+  window.showInformationMessage(`${authMessage.confirmationCodeSent} ${email}`)
 
   const confirmationCode = await window.showInputBox({
     ignoreFocusOut: true,
-    placeHolder: l10n.t('Confirmation Code'),
-    prompt: l10n.t('Paste the code sent to your email'),
+    placeHolder: authMessage.confirmationCode,
+    prompt: authMessage.pasteEmailAddress,
     validateInput: validateOTP,
   })
 
   if (!confirmationCode) {
-    throw new Error(l10n.t('Confirmation code is required'))
+    throw new Error(authMessage.confirmationCodeRequired)
   }
 
   const { consoleAuthToken } = await window.withProgress(

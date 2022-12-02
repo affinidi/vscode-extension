@@ -1,7 +1,7 @@
-import { l10n, TreeItemCollapsibleState, ThemeIcon } from 'vscode'
+import { TreeItemCollapsibleState, ThemeIcon } from 'vscode'
 import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
-import { ExplorerProvider } from '../../tree/types'
-import { ExplorerResourceTypes } from '../../tree/types'
+import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/types'
+import { schemaMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from './schemaManagerHelpers'
 import { schemaManagerState } from './schemaManagerState'
 
@@ -25,7 +25,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
-        label: l10n.t('Public'),
+        label: labels.public,
         schemaScope: 'public',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
@@ -33,7 +33,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       }),
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
-        label: l10n.t('Unlisted'),
+        label: labels.unlisted,
         schemaScope: 'unlisted',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
@@ -60,7 +60,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
           schemaId: schema.id,
           projectId: parent?.projectId,
           command: {
-            title: l10n.t('Open schema details'),
+            title: schemaMessage.openSchemaDetails,
             command: 'schema.showSchemaDetails',
           },
         }),

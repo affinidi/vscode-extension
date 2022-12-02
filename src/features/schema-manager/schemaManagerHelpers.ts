@@ -1,6 +1,7 @@
-import {  l10n } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
+import { schemaMessage } from '../../messages/messages'
 import { schemaManagerState } from './schemaManagerState'
 
 export const EXAMPLE_SCHEMA: Schema = {
@@ -15,7 +16,14 @@ async function askForAuthoredSchema(
     includeExample?: boolean
   },
 ): Promise<Schema | undefined> {
-  const schemas = await schemaManagerState.listAuthoredSchemas(input)
+  const schemas = await window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      title: schemaMessage.fetchSchemas,
+    },
+    () => schemaManagerState.listAuthoredSchemas(input),
+  )
+
   const pickOptions = schemas.map<[string, Schema]>((schema) => [schema.id, schema])
 
   if (input.includeExample) {
@@ -23,10 +31,10 @@ async function askForAuthoredSchema(
       return EXAMPLE_SCHEMA
     }
 
-    pickOptions.unshift([l10n.t('Use an example schema'), EXAMPLE_SCHEMA])
+    pickOptions.unshift([schemaMessage.exampleSchema, EXAMPLE_SCHEMA])
   }
 
-  return showQuickPick(pickOptions, { title: l10n.t('Select a VC Schema') })
+  return showQuickPick(pickOptions, { title: schemaMessage.selectSchema })
 }
 
 async function fetchSchemaUrl(projectId: string) {

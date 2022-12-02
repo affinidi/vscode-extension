@@ -7,14 +7,13 @@ import { sandbox } from '../../setup'
 import {
   csvCreationService,
   CSVImplementation,
-  CSV_UPLOAD_ERROR,
   implementationLabels,
-  ISSUANCE_CREATED_MESSAGE,
 } from '../../../../features/issuance/csvCreationService'
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../../testUtils'
+import { csvMessage } from '../../../../messages/messages'
 import { iamState } from '../../../../features/iam/iamState'
 
 describe('csvCreationService()', () => {
@@ -75,7 +74,9 @@ describe('csvCreationService()', () => {
     it('should create issuance', async () => {
       await csvCreationService.uploadCsvFile({ projectId, schema })
 
-      expect(ext.outputChannel.appendLine).calledWith(`${ISSUANCE_CREATED_MESSAGE} ${issuance.id}`)
+      expect(ext.outputChannel.appendLine).calledWith(
+        `${csvMessage.issaunceCreationMessage} ${issuance.id}`,
+      )
     })
 
     it('should show an error if some upload error', async () => {
@@ -83,7 +84,7 @@ describe('csvCreationService()', () => {
 
       await csvCreationService.uploadCsvFile({ projectId, schema })
 
-      expect(ext.outputChannel.appendLine).calledWithMatch(CSV_UPLOAD_ERROR)
+      expect(ext.outputChannel.appendLine).calledWithMatch(csvMessage.csvValidationError)
     })
   })
 

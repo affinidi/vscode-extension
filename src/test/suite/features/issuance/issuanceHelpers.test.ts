@@ -3,11 +3,9 @@ import { expect } from 'chai'
 import * as sinon from 'sinon'
 
 import { sandbox } from '../../setup'
-import {
-  issuanceHelpers,
-  NO_ISSUANCES_ERROR_MESSAGE,
-} from '../../../../features/issuance/issuanceHelpers'
+import { issuanceHelpers } from '../../../../features/issuance/issuanceHelpers'
 import { generateIssuance } from '../../testUtils'
+import { issuanceMessage } from '../../../../messages/messages'
 
 describe('issuanceHelpers()', () => {
   const projectId = 'fake-project-id'
@@ -27,7 +25,7 @@ describe('issuanceHelpers()', () => {
         await issuanceHelpers.askForIssuance({ projectId })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
-        expect(e.message).equal(NO_ISSUANCES_ERROR_MESSAGE)
+        expect(e.message).equal(issuanceMessage.noIssauces)
       }
     })
 

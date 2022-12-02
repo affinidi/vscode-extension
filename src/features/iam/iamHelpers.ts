@@ -1,18 +1,13 @@
-import { ProjectDto } from '@affinidi/client-iam'
-import { l10n } from 'vscode'
-
+import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
 import { showQuickPick } from '../../utils/showQuickPick'
+import { projectMessage } from '../../messages/messages'
 import { iamState } from './iamState'
-
-export const PROJECT_REQUIRED_ERROR_MESSAGE = l10n.t(
-  'You need to have a project to perform this operation',
-)
 
 async function askForProjectId(): Promise<string | undefined> {
   const projects = await iamState.listProjects()
 
   if (projects.length === 0) {
-    throw new Error(PROJECT_REQUIRED_ERROR_MESSAGE)
+    throw new Error(projectMessage.projectRequired)
   }
 
   let project: ProjectDto | undefined = projects[0]
@@ -20,7 +15,7 @@ async function askForProjectId(): Promise<string | undefined> {
   if (projects.length > 1) {
     project = await showQuickPick(
       projects.map((project) => [project.name, project]),
-      { title: l10n.t('Select a project') },
+      { title: projectMessage.selectProject },
     )
   }
 
