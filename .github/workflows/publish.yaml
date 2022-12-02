@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish:
-    name: Release and publish
+    name: Publish to Marketplace
     runs-on: ubuntu-latest
     environment:
       name: publishEnv
