@@ -15,7 +15,7 @@ async function askForProjectId(): Promise<string | undefined> {
   if (projects.length > 1) {
     project = await showQuickPick(
       projects.map((p) => [p.project.name, p.project]),
-      { title: `${projectMessage.selectProject}` },
+      { title: projectMessage.selectProject },
     )
   }
 

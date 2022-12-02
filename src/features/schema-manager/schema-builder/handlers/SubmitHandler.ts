@@ -51,7 +51,7 @@ export class SubmitHandler {
       }
 
       const createdSchema = await window.withProgress(
-        { location: ProgressLocation.Notification, title: `${schemaMessage.publishingSchema}` },
+        { location: ProgressLocation.Notification, title: schemaMessage.publishingSchema },
         () => this.builderSchemaPublisher.publish(data.schema, webview.projectId),
       )
 

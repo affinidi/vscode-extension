@@ -17,9 +17,9 @@ export function parseUploadError(error: any): UploadError | undefined {
       return { title: error.message }
     case 'VIS-19':
       return {
-        title: `${csvMessage.invalidCsvFile}`,
+        title: csvMessage.invalidCsvFile,
         row: {
-          title: l10n.t(`${csvMessage.invalidDataInRow}${error.context.row}`),
+          title: `${csvMessage.invalidDataInRow}${error.context.row}`,
           errors: error.context.errors.map((error: any) =>
             error.field
               ? l10n.t(`Field "${error.field}" ${error.message}`)
@@ -29,13 +29,13 @@ export function parseUploadError(error: any): UploadError | undefined {
       }
     case 'VIS-20': {
       const formatErrorTitlePrefix = error.context.possibleFormatError
-        ? `${csvMessage.commaSeperatorMessage}`
+        ? csvMessage.commaSeperatorMessage
         : ''
 
       return {
-        title: `${csvMessage.invalidCsvFile}`,
+        title: csvMessage.invalidCsvFile,
         row: {
-          title: `${formatErrorTitlePrefix}${csvMessage.couldNotFindAllColumns}`,
+          title: `${formatErrorTitlePrefix} ${csvMessage.couldNotFindAllColumns}`,
           errors:
             error.context.missingColumns?.length > 0
               ? [`${l10n.t('Required columns: ')} ${error.context.missingColumns.join(', ')}`]

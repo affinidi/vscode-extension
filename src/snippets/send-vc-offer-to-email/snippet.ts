@@ -62,7 +62,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
     const email =
       input?.email ??
       (await window.showInputBox({
-        prompt: `${authMessage.enterEmail}`,
+        prompt: authMessage.enterEmail,
       }))
 
     return {

@@ -10,11 +10,11 @@ export class AffinidiFeedbackProvider implements TreeDataProvider<AffFeedbackTre
   public async getChildren(): Promise<AffFeedbackTreeItem[]> {
     return [
       new AffFeedbackTreeItem({
-        label: `${labels.giveFeedback}`,
+        label: labels.giveFeedback,
         collapsibleState: TreeItemCollapsibleState.None,
         icon: new ThemeIcon('github-inverted'),
         command: {
-          title: `${labels.giveFeedback}`,
+          title: labels.giveFeedback,
           command: 'affinidiFeedback.redirectToGithub',
         },
       }),

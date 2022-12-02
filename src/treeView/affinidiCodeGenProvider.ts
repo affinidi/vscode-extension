@@ -34,25 +34,25 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
   private async addCodeGenItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootApps,
-      label: `${labels.appGenerators}`,
+      label: labels.appGenerators,
       state: TreeItemCollapsibleState.Expanded,
       icon: new ThemeIcon('rocket'),
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootScripts,
-      label: `${labels.scriptGenerators}`,
+      label: labels.scriptGenerators,
       state: TreeItemCollapsibleState.Expanded,
       icon: new ThemeIcon('file-code'),
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.rootSnippets,
-      label: `${labels.intelliSenseSnippets}`,
+      label: labels.intelliSenseSnippets,
       state: TreeItemCollapsibleState.None,
       icon: new ThemeIcon('symbol-snippet'),
       command: {
-        title: `${labels.viewAvailableSnippets}`,
+        title: labels.viewAvailableSnippets,
         command: 'affinidi.docs.availableSnippets',
       },
     })
@@ -61,30 +61,30 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
   private async addScriptItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: `${labels.sendVCOfferToEmail}`,
+      label: labels.sendVCOfferToEmail,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: `${labels.sendVCOfferToEmail}`,
+        title: labels.sendVCOfferToEmail,
         command: 'affinidi.codegen.sendVcOfferToEmail',
       },
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: `${labels.getIssuanceOffers}`,
+      label: labels.getIssuanceOffers,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: `${labels.getIssuanceOffers}`,
+        title: labels.getIssuanceOffers,
         command: 'affinidi.codegen.getIssuanceOffers',
       },
     })
 
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: `${labels.signCloudWalletVc}`,
+      label: labels.signCloudWalletVc,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: `${labels.signCloudWalletVc}`,
+        title: labels.signCloudWalletVc,
         command: 'affinidi.codegen.signVcWithCloudWallet',
       },
     })
@@ -93,10 +93,10 @@ export class AffinidiCodeGenProvider implements TreeDataProvider<AffCodeGenTreeI
   private async addAppItems(treeNodes: AffCodeGenTreeItem[]): Promise<void> {
     this.addNewTreeItem(treeNodes, {
       type: CodeGenTypes.scripts,
-      label: `${labels.certificationAndVerification}`,
+      label: labels.certificationAndVerification,
       state: TreeItemCollapsibleState.None,
       command: {
-        title: `${labels.certificationAndVerification}`,
+        title: labels.certificationAndVerification,
         command: 'affinidi.codegen.app',
       },
     })

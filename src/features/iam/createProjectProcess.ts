@@ -1,18 +1,17 @@
 import { ProjectDto } from '@affinidi/client-iam'
 import { ProgressLocation, window } from 'vscode'
-
 import { authHelper } from '../../auth/authHelper'
 import { logger } from '../../utils/logger'
 import { iamClient } from './iamClient'
 import { fetchProjectSummary } from './fetchProjectSummary'
 import { projectsState } from '../../states/projectsState'
-import { errorMessage, projectMessage } from '../../messages/messages'
+import { projectMessage } from '../../messages/messages'
 
 export const createProjectProcess = async (): Promise<ProjectDto | undefined> => {
   const projectName = await window.showInputBox({
     ignoreFocusOut: true,
-    placeHolder: `${projectMessage.projectName}`,
-    prompt: `${projectMessage.enterProjectName}`,
+    placeHolder: projectMessage.projectName,
+    prompt: projectMessage.enterProjectName,
   })
 
   if (!projectName) {
@@ -25,7 +24,7 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
     const result = await window.withProgress(
       {
         location: ProgressLocation.Notification,
-        title: `${projectMessage.creatingProject}`,
+        title: projectMessage.creatingProject,
       },
       async () => iamClient.createProject({ name: projectName }, { consoleAuthToken }),
     )

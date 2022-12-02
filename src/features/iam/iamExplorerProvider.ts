@@ -48,21 +48,21 @@ export class IamExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.rootDID,
-        label: `${labels.digitalIdenties}`,
+        label: labels.digitalIdenties,
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('lock'),
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.rootIssuance,
-        label: `${labels.issuanes}`,
+        label: labels.issuanes,
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('output'),
         projectId: parent?.projectId,
       }),
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.rootSchemas,
-        label: `${labels.vcSchemas}`,
+        label: labels.vcSchemas,
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
         projectId: parent?.projectId,
@@ -87,10 +87,10 @@ export class IamExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.project,
-        label: `${labels.createProject}`,
+        label: labels.createProject,
         icon: new ThemeIcon('file-directory-create'),
         command: {
-          title: `${labels.createProject}`,
+          title: labels.createProject,
           command: 'affinidi.createProject',
         },
       }),

@@ -23,7 +23,7 @@ export const executeAuthProcess = async ({
   const email = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: 'email@domain.com',
-    prompt: isSignUp ? `${authMessage.enterEmail}` : `${authMessage.enterEmailOfAffindiAccount}`,
+    prompt: isSignUp ? authMessage.enterEmail : authMessage.enterEmailOfAffindiAccount,
     validateInput: validateEmail,
   })
 
@@ -34,7 +34,7 @@ export const executeAuthProcess = async ({
   const { token } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: `${authMessage.sendingConfirmationCode}`,
+      title: authMessage.sendingConfirmationCode,
     },
     async () => {
       return isSignUp
@@ -47,8 +47,8 @@ export const executeAuthProcess = async ({
 
   const confirmationCode = await window.showInputBox({
     ignoreFocusOut: true,
-    placeHolder: `${authMessage.confirmationCode}`,
-    prompt: `${authMessage.pasteEmailAddress}`,
+    placeHolder: authMessage.confirmationCode,
+    prompt: authMessage.pasteEmailAddress,
     validateInput: validateOTP,
   })
 

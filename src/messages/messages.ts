@@ -25,10 +25,10 @@ export const labels = {
 }
 
 export const errorMessage = {
-  internalErrorNullOrUnderined: l10n.t(
+  internalErrorNullOrUndefined: l10n.t(
     'Internal error: Expected value to be neither null nor undefined',
   ),
-  internalErrorNullOrUnderinedOrEmpty: l10n.t(
+  internalErrorNullOrUndefinedOrEmpty: l10n.t(
     'Internal error: Expected value to be neither null, undefined, nor empty',
   ),
   invalidJsonSchemaUrl: l10n.t('Could not parse schema URL, please provide a valid schema URl'),
@@ -125,7 +125,7 @@ export const generatorMessage = {
   failedToGenerateApp: l10n.t('Failed to generate app'),
   directoryNameDuplication: l10n.t('Directory with this name already exist.'),
   noDirectorySelected: l10n.t("Installation folder wasn't selected."),
-  appNameNotySelected: l10n.t("App name wasn't specified."),
+  appNameNotSelected: l10n.t("App name wasn't specified."),
   checkCliInstall: l10n.t('Checking CLI installation...'),
   enterAppName: l10n.t('Enter an app name'),
 }
@@ -152,7 +152,7 @@ export const csvMessage = {
   uploadCsvFile: l10n.t('Upload a CSV file'),
   commaSeperatorMessage: l10n.t('Make sure to use comma (,) as separator. '),
   csvValidationError: 'Could not create issuance due to validation errors in the CSV file:',
-  IssaunceCreationMessage: 'Issuance has been created and the offers were sent. Issuance ID:',
+  issaunceCreationMessage: 'Issuance has been created and the offers were sent. Issuance ID:',
   invalidCsvFile: l10n.t('Invalid CSV file'),
   invalidDataInRow: l10n.t('Invalid data in row #'),
   couldNotFindAllColumns: l10n.t('Could not find all required columns'),

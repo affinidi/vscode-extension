@@ -17,7 +17,7 @@ export function isTelemetryEnabled() {
 export async function askUserForTelemetryConsent() {
   if (isTelemetryEnabled() === null) {
     const consent = await window.showInformationMessage(
-      `${telemetryMessage.sendUsageData}`,
+      telemetryMessage.sendUsageData,
       CONSENT.accept,
       CONSENT.deny,
     )

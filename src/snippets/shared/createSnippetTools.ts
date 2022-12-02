@@ -42,7 +42,7 @@ export function createSnippetTools<
 
       const selectedValue = await showQuickPick(
         supported.map((implementation) => [implementationLabels[implementation], implementation]),
-        { title: `${snippetMessage.selectImplementation}` },
+        { title: snippetMessage.selectImplementation },
       )
 
       if (!selectedValue) {

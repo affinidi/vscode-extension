@@ -69,7 +69,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
 
         const selectedLanguageId = await showQuickPick(
           languageIds.map((id) => [languageIdLabels[id], id]),
-          { title: `${snippetMessage.selectLanguage}` },
+          { title: snippetMessage.selectLanguage },
         )
 
         if (!selectedLanguageId) {

@@ -78,7 +78,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     await generateAffinidiAppWithCLI()
 
     expect(dialog).called
-    expect(showErrorMessage).calledWith(generatorMessage.appNameNotySelected)
+    expect(showErrorMessage).calledWith(generatorMessage.appNameNotSelected)
   })
 
   it('should show error message if app with same name already exist in selected path', async () => {

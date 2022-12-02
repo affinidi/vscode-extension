@@ -53,7 +53,7 @@ const openCsvTemplate = async (input: TemplateInput) => {
 const uploadCsvFile = async (input: TemplateInput) => {
   const options: OpenDialogOptions = {
     canSelectMany: false,
-    openLabel: `${labels.select}`,
+    openLabel: labels.select,
     canSelectFiles: true,
     canSelectFolders: false,
   }
@@ -91,7 +91,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      ext.outputChannel.appendLine(l10n.t(`${csvMessage.IssaunceCreationMessage} {0}`, issuance.id))
+      ext.outputChannel.appendLine(l10n.t(`${csvMessage.issaunceCreationMessage} {0}`, issuance.id))
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
@@ -113,7 +113,7 @@ const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
 
   const selectedValue = await showQuickPick(
     supported.map((implementation) => [implementationLabels[implementation], implementation]),
-    { title: `${snippetMessage.selectImplementation}` },
+    { title: snippetMessage.selectImplementation },
   )
 
   switch (selectedValue) {

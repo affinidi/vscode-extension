@@ -10,7 +10,7 @@ export async function fetchProjectSummary(
   const projectSummary = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: `${projectMessage.fetchProject}`,
+      title: projectMessage.fetchProject,
     },
     () => iamClient.getProjectSummary({ projectId }, options),
   )

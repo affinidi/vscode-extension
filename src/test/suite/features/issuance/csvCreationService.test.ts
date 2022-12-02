@@ -97,7 +97,7 @@ describe('csvCreationService()', () => {
       await csvCreationService.uploadCsvFile({ projectId, schema })
 
       expect(ext.outputChannel.appendLine).calledWith(
-        `${csvMessage.IssaunceCreationMessage} ${issuance.id}`,
+        `${csvMessage.issaunceCreationMessage} ${issuance.id}`,
       )
     })
 

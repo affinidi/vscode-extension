@@ -25,7 +25,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     return [
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
-        label: `${labels.public}`,
+        label: labels.public,
         schemaScope: 'public',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
@@ -33,7 +33,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       }),
       new ExplorerTreeItem({
         resourceType: ExplorerResourceTypes.subRootSchemas,
-        label: `${labels.unlisted}`,
+        label: labels.unlisted,
         schemaScope: 'unlisted',
         collapsibleState: TreeItemCollapsibleState.Collapsed,
         icon: new ThemeIcon('bracket'),
@@ -66,7 +66,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
           schemaId: schema.id,
           projectId: parent?.projectId,
           command: {
-            title: `${schemaMessage.openSchemaDetails}`,
+            title: schemaMessage.openSchemaDetails,
             command: 'schema.showSchemaDetails',
           },
         }),

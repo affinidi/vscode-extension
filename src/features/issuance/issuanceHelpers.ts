@@ -18,7 +18,7 @@ async function askForIssuance(input: Input, options: Options): Promise<IssuanceD
   const issuances = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: `${issuanceMessage.fetchIssuances}`,
+      title: issuanceMessage.fetchIssuances,
     },
     () => getIssuances(input.projectId, options),
   )
@@ -28,7 +28,7 @@ async function askForIssuance(input: Input, options: Options): Promise<IssuanceD
   }
 
   return showQuickPick([...issuances.map<[string, IssuanceDto]>((i) => [getIssuanceName(i), i])], {
-    title: `${issuanceMessage.selectIssuance}`,
+    title: issuanceMessage.selectIssuance,
   })
 }
 

@@ -60,7 +60,7 @@ async function askForMySchema(
   const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: `${schemaMessage.fetchSchemas}`,
+      title: schemaMessage.fetchSchemas,
     },
     () => getMySchemas(input, options),
   )
@@ -72,10 +72,10 @@ async function askForMySchema(
       return EXAMPLE_SCHEMA
     }
 
-    pickOptions.unshift([`${schemaMessage.exampleSchema}`, EXAMPLE_SCHEMA])
+    pickOptions.unshift([schemaMessage.exampleSchema, EXAMPLE_SCHEMA])
   }
 
-  return showQuickPick(pickOptions, { title: `${schemaMessage.selectSchema}` })
+  return showQuickPick(pickOptions, { title: schemaMessage.selectSchema })
 }
 
 async function fetchSchemaUrl(projectId: string) {

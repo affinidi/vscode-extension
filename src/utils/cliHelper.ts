@@ -61,7 +61,7 @@ export class CliHelper {
       const { stdout } = await window.withProgress(
         {
           location: ProgressLocation.Notification,
-          title: `${cliMessage.appIsGenerating}`,
+          title: cliMessage.appIsGenerating,
         },
         async () => {
           return this.exec.command(command)

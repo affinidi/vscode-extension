@@ -11,7 +11,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
     const isCLIInstalled = await window.withProgress(
       {
         location: ProgressLocation.Notification,
-        title: `${generatorMessage.checkCliInstall}`,
+        title: generatorMessage.checkCliInstall,
       },
       async () => {
         return cliHelper.isCliInstalledOrWarn({ type: 'error' })
@@ -29,7 +29,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
 
     const selectedFolder = await window.showOpenDialog({
       canSelectMany: false,
-      openLabel: `${labels.select}`,
+      openLabel: labels.select,
       canSelectFiles: false,
       canSelectFolders: true,
     })
@@ -42,11 +42,11 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
     const { fsPath: folderPath } = Uri.parse(selectedFolder[0].toString())
 
     const appName = await window.showInputBox({
-      prompt: `${generatorMessage.enterAppName}`,
+      prompt: generatorMessage.enterAppName,
     })
 
     if (!appName) {
-      window.showErrorMessage(generatorMessage.appNameNotySelected)
+      window.showErrorMessage(generatorMessage.appNameNotSelected)
       return
     }
 
