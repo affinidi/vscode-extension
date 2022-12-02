@@ -1,4 +1,5 @@
 import { Feature } from '../features/feature'
+import { errorMessage } from '../messages/messages'
 
 export const getFeatureMarkdownUri = async (feature: Feature) => {
   let uri: string = ''
@@ -11,7 +12,7 @@ export const getFeatureMarkdownUri = async (feature: Feature) => {
       uri = '/document/schemaManager.md'
       break
     default:
-      throw new Error(`Unexpected resource type: ${feature}`)
+      throw new Error(`${errorMessage.unexpectedResourceType} ${feature}`)
   }
 
   return uri

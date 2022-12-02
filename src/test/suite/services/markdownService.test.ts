@@ -1,27 +1,21 @@
 import { expect } from 'chai'
-import { viewMarkdown } from '../../../services/markdownService'
-import { ExplorerResourceTypes } from '../../../tree/types'
+import { Feature } from '../../../features/feature'
+import { getFeatureMarkdownUri } from '../../../services/markdownService'
 
-describe('viewMarkdown()', () => {
-  it('should return path to schema manager markdown', () => {
-    const result = viewMarkdown(ExplorerResourceTypes.rootSchemas)
+describe('getFeatureMarkdownUri()', () => {
+  it('should return path to schema manager markdown', async () => {
+    const result = await getFeatureMarkdownUri(Feature.SCHEMAS)
 
     expect(result).equal('/document/schemaManager.md')
   })
 
-  it('should return path to bulk issuance markdown', () => {
-    const result = viewMarkdown(ExplorerResourceTypes.rootIssuance)
+  it('should return path to bulk issuance markdown', async () => {
+    const result = await getFeatureMarkdownUri(Feature.ISSUANCES)
 
     expect(result).equal('/document/bulkIssuance.md')
   })
 
-  it('should throw an error if any other resource type provided', () => {
-    try {
-      viewMarkdown(ExplorerResourceTypes.project)
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      expect(error.message).contain('Unexpected resource type')
-    }
+  it('should throw an error if any other resource type provided', async () => {
+    await expect(getFeatureMarkdownUri('unknown' as any)).to.be.rejected
   })
 })

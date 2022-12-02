@@ -6,7 +6,7 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
-import { csvMessage, errorMessage, snippetMessage, labels } from '../../messages/messages'
+import { csvMessage, errorMessage, snippetMessage, labels, projectMessage } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 import { iamState } from '../iam/iamState'
 
@@ -36,7 +36,7 @@ const openCsvTemplate = async (input: TemplateInput) => {
   } = await iamState.requireProjectSummary(projectId)
 
   const template = await window.withProgress(
-    { location: ProgressLocation.Notification, title: l10n.t('Downloading CSV template...') },
+    { location: ProgressLocation.Notification, title: csvMessage.downloadingCsvTemplate },
     () =>
       issuanceClient.getCsvTemplate(
         {
@@ -84,7 +84,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
 
   try {
     const { issuance } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Uploading CSV file...') },
+      { location: ProgressLocation.Notification, title: csvMessage.uploadingCsvFile },
       () =>
         issuanceClient.createFromCsv(
           {
@@ -103,7 +103,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      ext.outputChannel.appendLine(l10n.t(`${csvMessage.issaunceCreationMessage} {0}`, issuance.id))
+      ext.outputChannel.appendLine(l10n.t(`${csvMessage.issuanceCreationMessage} {0}`, issuance.id))
       ext.outputChannel.show()
     }
   } catch (error: unknown) {

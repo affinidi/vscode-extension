@@ -1,6 +1,7 @@
 import { SchemaDto, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { window, ProgressLocation, l10n } from 'vscode'
 import { ext } from '../../extensionVariables'
+import { schemaMessage } from '../../messages/messages'
 import { state } from '../../state'
 import { iamState } from '../iam/iamState'
 import { schemaManagerClient } from './schemaManagerClient'
@@ -47,7 +48,7 @@ export class SchemaManagerState {
     } = await iamState.requireProjectSummary(projectId)
 
     const { schemas } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Fetching your schemas...') },
+      { location: ProgressLocation.Notification, title: schemaMessage.fetchingSchemas },
       async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
     )
 

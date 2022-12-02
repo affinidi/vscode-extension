@@ -19,7 +19,7 @@ async function askForAuthoredSchema(
   const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: schemaMessage.fetchSchemas,
+      title: schemaMessage.fetchingSchemas,
     },
     () => schemaManagerState.listAuthoredSchemas(input),
   )

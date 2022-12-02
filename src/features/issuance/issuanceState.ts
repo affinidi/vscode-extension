@@ -1,6 +1,7 @@
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { l10n, ProgressLocation, window } from 'vscode'
 import { ext } from '../../extensionVariables'
+import { issuanceMessage } from '../../messages/messages'
 import { state } from '../../state'
 import { iamState } from '../iam/iamState'
 import { issuanceClient } from './issuanceClient'
@@ -33,7 +34,7 @@ export class IssuanceState {
 
     const projectSummary = await iamState.requireProjectSummary(projectId)
     const { issuances } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Fetching project issuances...') },
+      { location: ProgressLocation.Notification, title: issuanceMessage.fetchingIssuances },
       async () =>
         issuanceClient.searchIssuances(
           { projectId },

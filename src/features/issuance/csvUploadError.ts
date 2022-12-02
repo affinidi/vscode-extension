@@ -29,7 +29,7 @@ export function parseUploadError(error: any): UploadError | undefined {
       }
     case 'VIS-20': {
       const formatErrorTitlePrefix = error.context.possibleFormatError
-        ? csvMessage.commaSeperatorMessage
+        ? csvMessage.commaSeparatorMessage
         : ''
 
       return {

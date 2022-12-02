@@ -25,7 +25,7 @@ describe('issuanceHelpers()', () => {
         await issuanceHelpers.askForIssuance({ projectId })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
-        expect(e.message).equal(issuanceMessage.noIssauces)
+        expect(e.message).equal(issuanceMessage.noIssuances)
       }
     })
 

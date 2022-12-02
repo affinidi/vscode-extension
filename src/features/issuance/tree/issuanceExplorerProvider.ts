@@ -1,11 +1,11 @@
 import { ExplorerProvider } from '../../../tree/explorerTree'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { iamState } from '../../iam/iamState'
-import { formatIssuanceName } from '../formatIssuanceName'
 import { issuanceState } from '../issuanceState'
 import { ProjectFeatureTreeItem } from '../../iam/tree/treeItems'
 import { Feature } from '../../feature'
 import { IssuanceTreeItem } from './treeItems'
+import { issuanceHelpers } from '../issuanceHelpers'
 
 export class IssuanceExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -29,7 +29,7 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
       (issuance) =>
         new IssuanceTreeItem({
           issuanceId: issuance.id,
-          label: formatIssuanceName(issuance),
+          label: issuanceHelpers.getIssuanceName(issuance),
           description: issuance.id,
           projectId: parent.projectId,
         }),

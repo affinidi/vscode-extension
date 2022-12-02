@@ -1,4 +1,5 @@
 import { l10n, ThemeIcon } from 'vscode'
+import { labels, schemaMessage } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
 import { Feature } from '../../feature'
@@ -28,12 +29,12 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     return [
       new ScopedSchemasTreeItem({
         projectId: parent.projectId,
-        label: l10n.t('Public'),
+        label: labels.public,
         scope: 'public',
       }),
       new ScopedSchemasTreeItem({
         projectId: parent.projectId,
-        label: l10n.t('Unlisted'),
+        label: labels.unlisted,
         scope: 'unlisted',
       }),
     ]
@@ -56,7 +57,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
           schemaId: schema.id,
           projectId: parent.projectId,
           command: {
-            title: l10n.t('Open schema details'),
+            title: schemaMessage.openSchemaDetails,
             command: 'schema.showSchemaDetails',
           },
         }),

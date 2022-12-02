@@ -1,5 +1,6 @@
 import { ThemeIcon, l10n } from 'vscode'
 import { ext } from '../../../extensionVariables'
+import { labels, projectMessage } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
 import { Feature } from '../../feature'
@@ -17,7 +18,7 @@ export class IamExplorerProvider implements ExplorerProvider {
       return [
         ...(await this.getProjects()),
         new BasicTreeItem({
-          label: l10n.t('Create Project'),
+          label: labels.createProject,
           icon: new ThemeIcon('file-directory-create'),
           command: 'affinidi.createProject',
         }),
@@ -51,19 +52,19 @@ export class IamExplorerProvider implements ExplorerProvider {
     return [
       new ProjectFeatureTreeItem({
         feature: Feature.DIGITAL_IDENTITIES,
-        label: l10n.t('Digital Identities'),
+        label: labels.digitalIdentities,
         icon: new ThemeIcon('lock'),
         projectId: parent.projectId,
       }),
       new ProjectFeatureTreeItem({
         feature: Feature.ISSUANCES,
-        label: l10n.t('Issuances'),
+        label: labels.issuances,
         icon: new ThemeIcon('output'),
         projectId: parent.projectId,
       }),
       new ProjectFeatureTreeItem({
         feature: Feature.SCHEMAS,
-        label: l10n.t('VC Schemas'),
+        label: labels.schemas,
         icon: new ThemeIcon('bracket'),
         projectId: parent.projectId,
       }),
