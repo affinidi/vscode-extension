@@ -7,12 +7,13 @@ import {
   schemaManagerHelpers,
   EXAMPLE_SCHEMA,
 } from '../../../../features/schema-manager/schemaManagerHelpers'
-import { generateSchema } from '../../testUtils'
 import { schemaManagerState } from '../../../../features/schema-manager/schemaManagerState'
+import { generateSchema } from '../../helpers'
 
 describe('schemaManagerHelpers()', () => {
   const projectId = 'fake-project-id'
   const schema = generateSchema()
+
   let listAuthoredSchemas: sinon.SinonStub
   let showQuickPick: sinon.SinonStub
 

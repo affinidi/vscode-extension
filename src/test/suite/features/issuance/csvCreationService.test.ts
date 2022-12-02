@@ -12,18 +12,18 @@ import {
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
-import { generateIssuance, generateProjectSummary, generateSchema } from '../../testUtils'
 import { csvMessage } from '../../../../messages/messages'
 import { iamState } from '../../../../features/iam/iamState'
+import { generateIssuance, generateProjectSummary, generateSchema } from '../../helpers'
 
 describe('csvCreationService()', () => {
   const projectId = 'fake-project-id'
   const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
+  const csvTemplate = 'fake-csv-template'
   const issuance = generateIssuance({ projectId, issuerDid: did })
   const schema = generateSchema()
   const projectSummary = generateProjectSummary({ did, projectId, apiKeyHash })
-  const csvTemplate = 'fake-csv-template'
 
   let showTextDocument: sinon.SinonStub
   let openTextDocument: sinon.SinonStub

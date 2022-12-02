@@ -4,13 +4,13 @@ import * as sinon from 'sinon'
 
 import { sandbox } from '../../setup'
 import { issuanceHelpers } from '../../../../features/issuance/issuanceHelpers'
-import { generateIssuance } from '../../testUtils'
 import { issuanceMessage } from '../../../../messages/messages'
+import { generateIssuance } from '../../helpers'
 
 describe('issuanceHelpers()', () => {
   const projectId = 'fake-project-id'
-  const apiKeyHash = 'fake-api-hash-key'
   const issuance = generateIssuance({ projectId })
+
   let withProgress: sinon.SinonStub
   let showQuickPick: sinon.SinonStub
 
