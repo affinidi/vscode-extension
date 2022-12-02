@@ -19,9 +19,8 @@ export function nonNullProp<TSource, TKey extends keyof TSource>(
 export function nonNullValue<T>(value: T | undefined, propertyNameOrMessage?: string): T {
   if (isNullOrUndefined(value)) {
     throw new Error(
-      (errorMessage.internalErrorNullOrUndefined + propertyNameOrMessage ||
-        `:${propertyNameOrMessage}`) ??
-        '',
+      `${errorMessage.internalErrorNullOrUnderined} +
+      ${propertyNameOrMessage ? `: ${propertyNameOrMessage}` : ''}`,
     )
   }
 
@@ -37,9 +36,8 @@ export function nonNullOrEmptyValue(
 ): string {
   if (!value) {
     throw new Error(
-      (errorMessage.internalErrorNullOrUndefinedOrEmpty + propertyNameOrMessage ||
-        `:${propertyNameOrMessage}`) ??
-        '',
+      `${errorMessage.internalErrorNullOrUnderinedOrEmpty} +
+      ${propertyNameOrMessage ? `: ${propertyNameOrMessage}` : ''}`,
     )
   }
 
