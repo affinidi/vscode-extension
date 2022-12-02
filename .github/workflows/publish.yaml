@@ -1,6 +1,9 @@
 name: Publish to marketplace
 
-on: [workflow_call]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   publish:
