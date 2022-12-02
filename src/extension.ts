@@ -249,8 +249,8 @@ export async function activateInternal(context: ExtensionContext) {
           }
         } else if (element instanceof IssuanceTreeItem) {
           const issuance = await issuanceState.getIssuanceById({
-            projectId: element.projectId!,
-            issuanceId: element.issuanceId!,
+            projectId: element.projectId,
+            issuanceId: element.issuanceId,
           })
 
           if (issuance) {
