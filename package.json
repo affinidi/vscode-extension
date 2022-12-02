@@ -273,22 +273,22 @@
       "view/item/context": [
         {
           "command": "affinidiExplorer.refresh",
-          "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == rootIssuance",
+          "when": "view == affinidiExplorer && viewItem == schemas || view == affinidiExplorer && viewItem == issuances",
           "group": "inline@3"
         },
         {
           "command": "affinidi.openMarkDown",
-          "when": "view == affinidiExplorer && viewItem == rootIssuance || view == affinidiExplorer && viewItem == rootSchemas",
+          "when": "view == affinidiExplorer && viewItem == issuances || view == affinidiExplorer && viewItem == schemas",
           "group": "inline@2"
         },
         {
           "command": "affinidiExplorer.initiateIssuanceCsvFlow",
-          "when": "view == affinidiExplorer && viewItem == rootIssuance",
+          "when": "view == affinidiExplorer && viewItem == issuances",
           "group": "inline@1"
         },
         {
           "command": "affinidiExplorer.openSchemaBuilder",
-          "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == subRootSchemas",
+          "when": "view == affinidiExplorer && viewItem == schemas || view == affinidiExplorer && viewItem == scopedSchemas",
           "group": "inline"
         },
         {

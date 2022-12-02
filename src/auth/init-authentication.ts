@@ -44,8 +44,8 @@ async function signUpHandler(): Promise<void> {
         },
       })
 
-      window.showInformationMessage(labels.signIn)
-      ext.outputChannel.appendLine(labels.signIn)
+      window.showInformationMessage(authMessage.signedUp)
+      ext.outputChannel.appendLine(authMessage.signedUp)
       await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
       break
 
@@ -70,8 +70,8 @@ async function loginHandler(): Promise<void> {
     },
   })
 
-  window.showInformationMessage(labels.signIn)
-  ext.outputChannel.appendLine(labels.signIn)
+  window.showInformationMessage(authMessage.signedIn)
+  ext.outputChannel.appendLine(authMessage.signedIn)
   await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
 }
 
@@ -93,8 +93,8 @@ async function logoutHandler(): Promise<void> {
 
     await ext.authProvider.handleRemoveSession()
 
-    await window.showInformationMessage(labels.signOut)
-    ext.outputChannel.appendLine(labels.signOut)
+    await window.showInformationMessage(authMessage.signedOut)
+    ext.outputChannel.appendLine(authMessage.signedOut)
   } else {
     await window.showInformationMessage(authMessage.notLoggedIn)
   }

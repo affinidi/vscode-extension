@@ -1,10 +1,9 @@
 import { l10n } from 'vscode'
 
 export const labels = {
-  signIn: l10n.t('Signed In to Affinidi'),
-  signOut: l10n.t('Signed Out of Affinidi'),
+  signIn: l10n.t('Sign in to Affinidi'),
   createAnAccountWithAffinidi: l10n.t('Create an Account with Affinidi'),
-  createProject: l10n.t('Create Proejct'),
+  createProject: l10n.t('Create Project'),
   issuances: l10n.t('Issuances'),
   schemas: l10n.t('VC Schemas'),
   schemaBuilder: l10n.t('Schema Builder'),
@@ -38,6 +37,9 @@ export const errorMessage = {
 }
 
 export const authMessage = {
+  signedIn: l10n.t('Signed in to Affinidi'),
+  signedUp: l10n.t('Signed up in to Affinidi'),
+  signedOut: l10n.t('Signed out of Affinidi'),
   accept: l10n.t('Accept'),
   reject: l10n.t('Reject'),
   enterEmail: l10n.t('Enter Email'),
