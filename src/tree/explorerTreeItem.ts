@@ -30,7 +30,7 @@ export class ExplorerTreeItem extends TreeItem {
     super(item.label, item.collapsibleState ?? TreeItemCollapsibleState.None)
 
     this.resourceType = item.resourceType
-    this.tooltip = this.item.label.toString()
+    this.tooltip = String(this.item.label)
     this.description = this.item.description
     this.schemaId = item.schemaId
     this.issuanceId = item.issuanceId

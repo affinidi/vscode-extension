@@ -3,8 +3,8 @@ import { IssuanceDto, Options } from '@affinidi/client-issuance'
 import { format } from 'date-fns'
 
 import { showQuickPick } from '../../utils/showQuickPick'
-import { getIssuances } from './getIssuances'
 import { issuanceMessage } from '../../messages/messages'
+import { issuanceState } from './issuanceState'
 
 type Input = { projectId: string }
 
@@ -14,13 +14,13 @@ export const getIssuanceName = (issuance: IssuanceDto) =>
     'yyyy-MM-dd HH:mm',
   )} (${issuance.id})`
 
-async function askForIssuance(input: Input, options: Options): Promise<IssuanceDto | undefined> {
+async function askForIssuance(input: Input): Promise<IssuanceDto | undefined> {
   const issuances = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: issuanceMessage.fetchIssuances,
     },
-    () => getIssuances(input.projectId, options),
+    () => issuanceState.listIssuances({ projectId: input.projectId }),
   )
 
   if (issuances.length === 0) {

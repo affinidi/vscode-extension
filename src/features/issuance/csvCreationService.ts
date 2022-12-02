@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
+import { l10n, OpenDialogOptions, ProgressLocation, window, workspace } from 'vscode'
 import { Schema } from '../../utils/types'
 import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
@@ -8,6 +8,7 @@ import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
 import { csvMessage, errorMessage, snippetMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
+import { iamState } from '../iam/iamState'
 
 interface TemplateInput {
   projectId: string
@@ -32,14 +33,18 @@ const openCsvTemplate = async (input: TemplateInput) => {
 
   const {
     apiKey: { apiKeyHash },
-  } = iamHelpers.requireProjectSummary(projectId)
+  } = await iamState.requireProjectSummary(projectId)
 
-  const template = await issuanceClient.getCsvTemplate(
-    {
-      jsonSchemaUrl: input.schema.jsonSchemaUrl,
-      verificationMethod: 'email',
-    },
-    { apiKeyHash },
+  const template = await window.withProgress(
+    { location: ProgressLocation.Notification, title: l10n.t('Downloading CSV template...') },
+    () =>
+      issuanceClient.getCsvTemplate(
+        {
+          jsonSchemaUrl: input.schema.jsonSchemaUrl,
+          verificationMethod: 'email',
+        },
+        { apiKeyHash },
+      ),
   )
 
   await window.showTextDocument(
@@ -68,26 +73,33 @@ const uploadCsvFile = async (input: TemplateInput) => {
   const {
     apiKey: { apiKeyHash },
     wallet: { did },
-  } = iamHelpers.requireProjectSummary(input.projectId)
+  } = await iamState.requireProjectSummary(input.projectId)
   const schema =
     input.schema ??
-    (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+    (await schemaManagerHelpers.askForAuthoredSchema({
+      projectId: input.projectId,
+      includeExample: true,
+    }))
   if (!schema) return
 
   try {
-    const { issuance } = await issuanceClient.createFromCsv(
-      {
-        projectId: input.projectId,
-        template: {
-          issuerDid: did,
-          schema,
-          verification: {
-            method: 'email',
+    const { issuance } = await window.withProgress(
+      { location: ProgressLocation.Notification, title: l10n.t('Uploading CSV file...') },
+      () =>
+        issuanceClient.createFromCsv(
+          {
+            projectId: input.projectId,
+            template: {
+              issuerDid: did,
+              schema,
+              verification: {
+                method: 'email',
+              },
+            },
           },
-        },
-      },
-      fs.createReadStream(selectedFilePath),
-      { apiKeyHash },
+          fs.createReadStream(selectedFilePath),
+          { apiKeyHash },
+        ),
     )
 
     if (issuance) {

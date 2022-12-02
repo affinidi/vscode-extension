@@ -1,20 +1,20 @@
-import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
+import { ProjectDto } from '@affinidi/client-iam'
 import { showQuickPick } from '../../utils/showQuickPick'
-import { projectsState } from '../../states/projectsState'
 import { projectMessage } from '../../messages/messages'
+import { iamState } from './iamState'
 
 async function askForProjectId(): Promise<string | undefined> {
-  const projects = projectsState.getProjects() ?? []
+  const projects = await iamState.listProjects()
 
   if (projects.length === 0) {
     throw new Error(projectMessage.projectRequired)
   }
 
-  let project: ProjectDto | undefined = projects[0]?.project
+  let project: ProjectDto | undefined = projects[0]
 
   if (projects.length > 1) {
     project = await showQuickPick(
-      projects.map((p) => [p.project.name, p.project]),
+      projects.map((project) => [project.name, project]),
       { title: projectMessage.selectProject },
     )
   }
@@ -22,21 +22,6 @@ async function askForProjectId(): Promise<string | undefined> {
   return project?.projectId
 }
 
-function requireProjectSummary(projectId: string | undefined): ProjectSummary {
-  if (!projectId) {
-    throw new Error(projectMessage.missingProjectID)
-  }
-
-  const projectSummary = projectsState.getProjectById(projectId)
-
-  if (!projectSummary) {
-    throw new Error(`${projectMessage.noProjectSummary} ${projectId}`)
-  }
-
-  return projectSummary
-}
-
 export const iamHelpers = {
   askForProjectId,
-  requireProjectSummary,
 }

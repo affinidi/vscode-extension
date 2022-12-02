@@ -3,8 +3,6 @@ import { ProgressLocation, window } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
 import { logger } from '../../utils/logger'
 import { iamClient } from './iamClient'
-import { fetchProjectSummary } from './fetchProjectSummary'
-import { projectsState } from '../../states/projectsState'
 import { projectMessage } from '../../messages/messages'
 
 export const createProjectProcess = async (): Promise<ProjectDto | undefined> => {
@@ -30,10 +28,6 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
     )
 
     window.showInformationMessage(projectMessage.successfulProjectCreation)
-
-    const projectSummary = await fetchProjectSummary(result.projectId, { consoleAuthToken })
-
-    projectsState.setProject(projectSummary)
 
     return result
   } catch (error) {

@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
+import { iamState } from '../../../features/iam/iamState'
+import { issuanceState } from '../../../features/issuance/issuanceState'
+import { schemaManagerState } from '../../../features/schema-manager/schemaManagerState'
 
 import { viewProperties } from '../../../services/viewDataService'
-import { issuancesState } from '../../../states/issuancesState'
-import { projectsState } from '../../../states/projectsState'
-import { schemasState } from '../../../states/schemasState'
 import { ExplorerResourceTypes } from '../../../tree/types'
 import * as openers from '../../../utils/openReadOnlyContent'
 import { sandbox } from '../setup'
@@ -24,7 +24,7 @@ describe('viewDataService', () => {
         projectId,
         projectName: 'fake-project-name',
       })
-      projectsState.setProject(projectSummary)
+      sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
 
       await viewProperties({ resourceType: ExplorerResourceTypes.project, projectId })
 
@@ -32,29 +32,36 @@ describe('viewDataService', () => {
         node: { label: projectSummary.project.name, id: projectId },
         content: projectSummary,
       })
-
-      projectsState.clear()
     })
 
     it('should call openReadOnlyContent with schema args', async () => {
       const schema = generateSchema()
-      schemasState.setSchemas([schema])
+      sandbox
+        .stub(schemaManagerState, 'getAuthoredSchemaById')
+        .withArgs({ projectId, schemaId: schema.id })
+        .resolves(schema)
 
-      await viewProperties({ resourceType: ExplorerResourceTypes.schema, schemaId: schema.id })
+      await viewProperties({
+        projectId,
+        resourceType: ExplorerResourceTypes.schema,
+        schemaId: schema.id,
+      })
 
       expect(openReadOnlyContent).calledWith({
         node: { label: schema.id, id: schema.id },
         content: schema,
       })
-
-      schemasState.clear()
     })
 
     it('should call openReadOnlyContent with issuance args', async () => {
       const issuance = generateIssuance({ projectId })
-      issuancesState.setIssuances([issuance])
+      sandbox
+        .stub(issuanceState, 'getIssuanceById')
+        .withArgs({ projectId, issuanceId: issuance.id })
+        .resolves(issuance)
 
       await viewProperties({
+        projectId,
         resourceType: ExplorerResourceTypes.issuance,
         issuanceId: issuance.id,
       })
@@ -63,16 +70,18 @@ describe('viewDataService', () => {
         node: { label: issuance.id, id: issuance.id },
         content: issuance,
       })
-
-      issuancesState.clear()
     })
 
     it('should throw an error for other resourceType', async () => {
       const issuance = generateIssuance({ projectId })
-      issuancesState.setIssuances([issuance])
+      sandbox
+        .stub(issuanceState, 'getIssuanceById')
+        .withArgs({ projectId, issuanceId: issuance.id })
+        .resolves(issuance)
 
       try {
         await viewProperties({
+          projectId,
           resourceType: ExplorerResourceTypes.rootIssuance,
           issuanceId: issuance.id,
         })
@@ -80,8 +89,6 @@ describe('viewDataService', () => {
       } catch (error: any) {
         expect(error.message).include('Unexpected resource type')
       }
-
-      issuancesState.clear()
     })
   })
 })

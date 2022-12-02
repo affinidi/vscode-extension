@@ -9,26 +9,11 @@ import { ext } from '../../../../extensionVariables'
 import { cliHelper, buildAppGenerateCommand } from '../../../../utils/cliHelper'
 import { cliMessage, generatorMessage } from '../../../../messages/messages'
 import { generateAffinidiAppWithCLI } from '../../../../generators/create-app/generator'
-import { projectsState } from '../../../../states/projectsState'
+import { iamHelpers } from '../../../../features/iam/iamHelpers'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
 const PROJECT_ID = 'fake-project-id'
-const PROJECT_SUMMARY = {
-  wallet: {
-    didUrl: '',
-    did: '',
-  },
-  apiKey: {
-    apiKeyHash: '',
-    apiKeyName: '',
-  },
-  project: {
-    projectId: PROJECT_ID,
-    name: '',
-    createdAt: '',
-  },
-}
 
 describe('generateAffinidiAppWithCLI()', () => {
   let showErrorMessage: sinon.SinonStub
@@ -48,11 +33,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
     sandbox.stub(cliHelper, 'setActiveProject')
-    projectsState.setProject(PROJECT_SUMMARY)
-  })
-
-  afterEach(() => {
-    projectsState.clear()
+    sandbox.stub(iamHelpers, 'askForProjectId').resolves(PROJECT_ID)
   })
 
   it('should show error message when CLI is not installed', async () => {

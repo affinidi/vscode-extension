@@ -9,6 +9,7 @@ import { schemaManagerHelpers } from '../../features/schema-manager/schemaManage
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
 import { snippetMessage } from '../../messages/messages'
+import { iamState } from '../../features/iam/iamState'
 
 export interface SnippetInput {
   iamUrl: string
@@ -46,11 +47,11 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = iamHelpers.requireProjectSummary(projectId)
+    } = await iamState.requireProjectSummary(projectId)
 
     const schema =
       input?.schema ??
-      (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+      (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
     if (!schema) {
       return undefined
     }

@@ -10,11 +10,11 @@ import {
   implementationLabels,
 } from '../../../../features/issuance/csvCreationService'
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
-import { projectsState } from '../../../../states/projectsState'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../../testUtils'
-import { csvMessage, projectMessage } from '../../../../messages/messages'
+import { csvMessage } from '../../../../messages/messages'
+import { iamState } from '../../../../features/iam/iamState'
 
 describe('csvCreationService()', () => {
   const projectId = 'fake-project-id'
@@ -23,43 +23,24 @@ describe('csvCreationService()', () => {
   const issuance = generateIssuance({ projectId, issuerDid: did })
   const schema = generateSchema()
   const projectSummary = generateProjectSummary({ did, projectId, apiKeyHash })
+  const csvTemplate = 'fake-csv-template'
+
   let showTextDocument: sinon.SinonStub
   let openTextDocument: sinon.SinonStub
+  let askForProjectId: sinon.SinonStub
 
   beforeEach(() => {
     sandbox.stub(ext.outputChannel, 'appendLine')
+    sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
+    sandbox.stub(issuanceClient, 'getCsvTemplate').resolves(csvTemplate)
+
     showTextDocument = sandbox.stub(window, 'showTextDocument')
     openTextDocument = sandbox.stub(workspace, 'openTextDocument')
-  })
-
-  afterEach(() => {
-    projectsState.clear()
+    askForProjectId = sandbox.stub(iamHelpers, 'askForProjectId').resolves(projectId)
   })
 
   describe('openCsvTemplate()', () => {
-    it('should throw an error if no project with selected id', async () => {
-      sandbox.stub(iamHelpers, 'askForProjectId').resolves(undefined)
-
-      try {
-        await csvCreationService.openCsvTemplate({ projectId: '', schema })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        expect(e.message).equal(projectMessage.projectDoesNotExist)
-      }
-    })
-
-    it('should return undefined if project id is not provided', async () => {
-      sandbox.stub(iamHelpers, 'askForProjectId').resolves(undefined)
-      const result = await csvCreationService.openCsvTemplate({ projectId: '', schema })
-
-      expect(result).equal(undefined)
-    })
-
     it('should open text document', async () => {
-      const csvTemplate = 'getCsvTemplateTest'
-      projectsState.setProject(projectSummary)
-      sandbox.stub(iamHelpers, 'askForProjectId').resolves(undefined)
-      sandbox.stub(issuanceClient, 'getCsvTemplate').resolves(csvTemplate)
       await csvCreationService.openCsvTemplate({ projectId, schema })
 
       expect(openTextDocument).calledWith({
@@ -77,8 +58,7 @@ describe('csvCreationService()', () => {
     let createFromCsv: sinon.SinonStub
 
     beforeEach(() => {
-      // @ts-ignore
-      showOpenDialog = sandbox.stub(window, 'showOpenDialog').resolves([{ fsPath: 'fsPathTest' }])
+      showOpenDialog = sandbox.stub(window, 'showOpenDialog').resolves([{ fsPath: 'fsPathTest' }] as any)
       createFromCsv = sandbox.stub(issuanceClient, 'createFromCsv').resolves({ issuance })
       sandbox.stub(fs, 'createReadStream')
     })
@@ -92,8 +72,6 @@ describe('csvCreationService()', () => {
     })
 
     it('should create issuance', async () => {
-      projectsState.setProject(projectSummary)
-
       await csvCreationService.uploadCsvFile({ projectId, schema })
 
       expect(ext.outputChannel.appendLine).calledWith(
@@ -102,7 +80,6 @@ describe('csvCreationService()', () => {
     })
 
     it('should show an error if some upload error', async () => {
-      projectsState.setProject(projectSummary)
       createFromCsv.throws({ code: 'VIS-1', message: 'messageTest' })
 
       await csvCreationService.uploadCsvFile({ projectId, schema })
@@ -119,7 +96,6 @@ describe('csvCreationService()', () => {
     })
 
     it.skip('should open a CSV template', async () => {
-      // @ts-ignore
       showQuickPick.resolves(implementationLabels[CSVImplementation.openCsvTemplate])
       const openCsvTemplate = sandbox.stub(csvCreationService, 'openCsvTemplate')
 
@@ -129,7 +105,6 @@ describe('csvCreationService()', () => {
     })
 
     it.skip('should upload a CSV file', async () => {
-      // @ts-ignore
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
       const uploadCsvFile = sandbox.stub(csvCreationService, 'uploadCsvFile')
 
@@ -141,12 +116,7 @@ describe('csvCreationService()', () => {
     it('should throw an error', async () => {
       showQuickPick.resolves()
 
-      try {
-        await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
-      } catch (error) {
-        // @ts-ignore
-        expect(error?.message).contain('unknown value')
-      }
+      await expect(csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })).to.be.rejected
     })
   })
 })

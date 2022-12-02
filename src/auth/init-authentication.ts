@@ -7,11 +7,9 @@ import {
   EventNames,
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
-import { issuancesState } from '../states/issuancesState'
-import { projectsState } from '../states/projectsState'
-import { schemasState } from '../states/schemasState'
 import { cliHelper } from '../utils/cliHelper'
 import { openReadOnlyContent } from '../utils/openReadOnlyContent'
+import { state } from '../state'
 import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
@@ -82,9 +80,7 @@ async function logoutHandler(): Promise<void> {
     createIfNone: false,
   })
 
-  projectsState.clear()
-  schemasState.clear()
-  issuancesState.clear()
+  await state.clear()
 
   if (session) {
     sendEventToAnalytics({

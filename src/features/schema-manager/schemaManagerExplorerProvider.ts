@@ -3,7 +3,7 @@ import { ExplorerTreeItem } from '../../tree/explorerTreeItem'
 import { ExplorerProvider, ExplorerResourceTypes } from '../../tree/types'
 import { schemaMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from './schemaManagerHelpers'
-import { iamHelpers } from '../iam/iamHelpers'
+import { schemaManagerState } from './schemaManagerState'
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -42,18 +42,12 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
     ]
   }
 
-  private async getSchemaItems(parent?: ExplorerTreeItem) {
-    const {
-      wallet: { did },
-      apiKey: { apiKeyHash },
-    } = iamHelpers.requireProjectSummary(parent?.projectId)
-
-    const schemas = await schemaManagerHelpers.getMySchemas(
+  private async getSchemaItems(parent: ExplorerTreeItem) {
+    const schemas = await schemaManagerState.listAuthoredSchemas(
       {
-        did,
-        scope: parent?.schemaScope,
+        projectId: parent.projectId!,
+        scope: parent.schemaScope,
       },
-      { apiKeyHash },
     )
 
     return schemas.map(

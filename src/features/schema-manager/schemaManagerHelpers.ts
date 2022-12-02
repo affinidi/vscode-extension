@@ -1,11 +1,8 @@
 import { window, ProgressLocation } from 'vscode'
-import { Options, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
-import { iamHelpers } from '../iam/iamHelpers'
-import { schemasState } from '../../states/schemasState'
-import { schemaManagerClient } from './schemaManagerClient'
 import { schemaMessage } from '../../messages/messages'
+import { schemaManagerState } from './schemaManagerState'
 
 export const EXAMPLE_SCHEMA: Schema = {
   type: 'MySchema',
@@ -13,56 +10,18 @@ export const EXAMPLE_SCHEMA: Schema = {
   jsonSchemaUrl: 'https://schema.affinidi.com/MySchemaV1-0.json',
 }
 
-const getMySchemas = async (
+async function askForAuthoredSchema(
   input: {
-    did: string
-    scope?: SchemaSearchScope
-  },
-  options: Options,
-) => {
-  let schemas = schemasState.getSchemas()?.filter((schema) => {
-    if (input.scope === 'public') {
-      return schema.namespace === null
-    }
-
-    if (input.scope === 'unlisted') {
-      return !!schema.namespace
-    }
-
-    return schema
-  })
-
-  if (!schemas?.length) {
-    const result = await schemaManagerClient.searchSchemas(
-      {
-        did: input.did,
-        authorDid: input.did,
-        scope: input.scope ?? 'default',
-      },
-      options,
-    )
-
-    schemas = result.schemas
-
-    schemasState.setSchemas(schemas)
-  }
-
-  return schemas
-}
-
-async function askForMySchema(
-  input: {
+    projectId: string
     includeExample?: boolean
-    did: string
   },
-  options: Options,
 ): Promise<Schema | undefined> {
   const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
       title: schemaMessage.fetchSchemas,
     },
-    () => getMySchemas(input, options),
+    () => schemaManagerState.listAuthoredSchemas(input),
   )
 
   const pickOptions = schemas.map<[string, Schema]>((schema) => [schema.id, schema])
@@ -79,12 +38,7 @@ async function askForMySchema(
 }
 
 async function fetchSchemaUrl(projectId: string) {
-  const {
-    apiKey: { apiKeyHash },
-    wallet: { did },
-  } = iamHelpers.requireProjectSummary(projectId)
-
-  const schema = await askForMySchema({ includeExample: true, did }, { apiKeyHash })
+  const schema = await askForAuthoredSchema({ includeExample: true, projectId })
   if (!schema) {
     return undefined
   }
@@ -97,8 +51,7 @@ function getSchemaName(schema: { type: string; version: number; revision: number
 }
 
 export const schemaManagerHelpers = {
-  askForMySchema,
+  askForAuthoredSchema,
   fetchSchemaUrl,
   getSchemaName,
-  getMySchemas,
 }

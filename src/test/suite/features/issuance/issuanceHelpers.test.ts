@@ -22,7 +22,7 @@ describe('issuanceHelpers()', () => {
   describe('askForIssuance()', () => {
     it('should throw an error if no issuances', async () => {
       try {
-        await issuanceHelpers.askForIssuance({ projectId }, { apiKeyHash })
+        await issuanceHelpers.askForIssuance({ projectId })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         expect(e.message).equal(issuanceMessage.noIssauces)
@@ -32,7 +32,7 @@ describe('issuanceHelpers()', () => {
     it('should return selected issuance', async () => {
       withProgress.resolves([issuance])
       showQuickPick.resolves(issuanceHelpers.getIssuanceName(issuance))
-      const result = await issuanceHelpers.askForIssuance({ projectId }, { apiKeyHash })
+      const result = await issuanceHelpers.askForIssuance({ projectId })
 
       expect(result).equal(issuance)
     })

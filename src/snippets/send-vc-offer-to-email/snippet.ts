@@ -9,6 +9,7 @@ import { schemaManagerHelpers } from '../../features/schema-manager/schemaManage
 import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
 import { authMessage, snippetMessage } from '../../messages/messages'
+import { iamState } from '../../features/iam/iamState'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -45,11 +46,11 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = iamHelpers.requireProjectSummary(projectId)
+    } = await iamState.requireProjectSummary(projectId)
 
     const schema =
       input?.schema ??
-      (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
+      (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
     if (!schema) {
       return undefined
     }

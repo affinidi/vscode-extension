@@ -1,11 +1,11 @@
 import type { BuilderSchema, SchemaBuilderWebview } from '../SchemaBuilderWebview'
 import { window, l10n, ProgressLocation } from 'vscode'
 import { ext } from '../../../../extensionVariables'
-import { schemasState } from '../../../../states/schemasState'
 import { showSchemaDetails } from '../../schema-details/showSchemaDetails'
 import { BuilderSchemaPublisher } from '../BuilderSchemaPublisher'
 import { isValidSchemaType, isValidAttributeName } from '../helpers/validation'
 import { schemaMessage } from '../../../../messages/messages'
+import { schemaManagerState } from '../../schemaManagerState'
 
 export class SubmitHandler {
   constructor(private builderSchemaPublisher: BuilderSchemaPublisher) {}
@@ -57,7 +57,7 @@ export class SubmitHandler {
 
       window.showInformationMessage(schemaMessage.schemaCreated)
       showSchemaDetails(createdSchema)
-      schemasState.clear()
+      await schemaManagerState.clear()
       ext.explorerTree.refresh()
       webview.dispose()
     } finally {

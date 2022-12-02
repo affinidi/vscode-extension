@@ -4,12 +4,11 @@ import {
   implementations,
   insertSendVcOfferToEmailSnippet,
 } from '../../../../snippets/send-vc-offer-to-email/snippet'
-import { iamClient } from '../../../../features/iam/iamClient'
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
-import { projectsState } from '../../../../states/projectsState'
 import { generateProjectSummary } from '../../testUtils'
+import { iamState } from '../../../../features/iam/iamState'
 
 describe('insertSendVcOfferToEmailSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
@@ -23,9 +22,7 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
     const projectSummary = generateProjectSummary({ projectId, did, apiKeyHash })
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
-    sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
-
-    projectsState.setProject(projectSummary)
+    sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
 
     await insertSendVcOfferToEmailSnippet(
       {
@@ -55,7 +52,5 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
     ]) {
       expect(text).contains(value)
     }
-
-    projectsState.clear()
   })
 })

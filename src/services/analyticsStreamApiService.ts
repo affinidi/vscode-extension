@@ -1,6 +1,7 @@
 import { authentication } from 'vscode'
 import { apiFetch } from '../api-client/api-fetch'
 import { AUTH_PROVIDER_ID } from '../auth/authentication-provider/affinidi-authentication-provider'
+import { logger } from '../utils/logger'
 import { isTelemetryEnabled } from '../utils/telemetry'
 
 const affinidiPackage = require('../../package.json')
@@ -56,23 +57,27 @@ export const sendEventToAnalytics = async ({
   const uuid = session?.account?.id ?? 'anonymous-user'
   const userEmail = session?.account?.label
 
-  await apiFetch({
-    endpoint: `${ANALYTICS_STREAM_API_URL}/api/events`,
-    method: 'POST',
-    requestBody: {
-      name,
-      category: 'APPLICATION',
-      subCategory,
-      component: 'VsCodeExtension',
-      uuid,
-      metadata: {
-        extensionVersion: affinidiPackage.version,
-        ...generateUserMetadata(userEmail),
-        ...metadata,
+  try {
+    await apiFetch({
+      endpoint: `${ANALYTICS_STREAM_API_URL}/api/events`,
+      method: 'POST',
+      requestBody: {
+        name,
+        category: 'APPLICATION',
+        subCategory,
+        component: 'VsCodeExtension',
+        uuid,
+        metadata: {
+          extensionVersion: affinidiPackage.version,
+          ...generateUserMetadata(userEmail),
+          ...metadata,
+        },
       },
-    },
-    headers: {
-      authorization: `Bearer ${JWT_TOKEN}`,
-    },
-  })
+      headers: {
+        authorization: `Bearer ${JWT_TOKEN}`,
+      },
+    })
+  } catch (error) {
+    logger.warn(error, 'Could not send analytics event')
+  }
 }
