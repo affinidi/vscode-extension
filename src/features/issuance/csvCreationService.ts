@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import { l10n, OpenDialogOptions, window, workspace } from 'vscode'
-import { Schema } from '../../shared/types'
+import { Schema } from '../../utils/types'
 import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
@@ -69,8 +69,13 @@ const uploadCsvFile = async (input: TemplateInput) => {
     return
   }
 
-  const { apiKey: { apiKeyHash }, wallet: { did } } = iamHelpers.requireProjectSummary(input.projectId)
-  const schema = input.schema ?? await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash })
+  const {
+    apiKey: { apiKeyHash },
+    wallet: { did },
+  } = iamHelpers.requireProjectSummary(input.projectId)
+  const schema =
+    input.schema ??
+    (await schemaManagerHelpers.askForMySchema({ includeExample: true, did }, { apiKeyHash }))
   if (!schema) return
 
   try {
@@ -113,7 +118,6 @@ const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
     supported.map((implementation) => [implementationLabels[implementation], implementation]),
     { title: l10n.t('Select an implementation') },
   )
-  console.log('selectedValue', selectedValue)
 
   switch (selectedValue) {
     case CSVImplementation.openCsvTemplate:

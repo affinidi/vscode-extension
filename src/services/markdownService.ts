@@ -1,6 +1,6 @@
 import { ExplorerResourceTypes } from '../tree/types'
 
-export const viewMarkdown = async (resourceType: ExplorerResourceTypes) => {
+export const viewMarkdown = (resourceType: ExplorerResourceTypes) => {
   let uri: string = ''
 
   switch (resourceType) {

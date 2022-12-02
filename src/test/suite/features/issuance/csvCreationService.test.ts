@@ -120,7 +120,7 @@ describe('csvCreationService()', () => {
     it.skip('should open a CSV template', async () => {
       // @ts-ignore
       showQuickPick.resolves(implementationLabels[CSVImplementation.openCsvTemplate])
-      const openCsvTemplate = sandbox.stub(csvCreationService, 'openCsvTemplate').resolves()
+      const openCsvTemplate = sandbox.stub(csvCreationService, 'openCsvTemplate')
 
       await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
 
@@ -130,7 +130,7 @@ describe('csvCreationService()', () => {
     it.skip('should upload a CSV file', async () => {
       // @ts-ignore
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
-      const uploadCsvFile = sandbox.stub(csvCreationService, 'uploadCsvFile').resolves()
+      const uploadCsvFile = sandbox.stub(csvCreationService, 'uploadCsvFile')
 
       await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
 
