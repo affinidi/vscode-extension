@@ -1,4 +1,4 @@
-name: Public Release to npmjs.com
+name: Build and Release
 
 on:
   push:
