@@ -1,6 +1,6 @@
 import { l10n } from 'vscode'
 
-export const labels = {
+export const labels: Record<string, string> = {
   signIn: l10n.t('Signed In to Affinidi'),
   signOut: l10n.t('Signed Out of Affinidi'),
   createAnAccountWithAffinidi: l10n.t('Create an Account with Affinidi'),
@@ -24,7 +24,7 @@ export const labels = {
   giveFeedback: l10n.t('Give Feedback'),
 }
 
-export const errorMessage = {
+export const errorMessage: Record<string, string> = {
   internalErrorNullOrUndefined: l10n.t(
     'Internal error: Expected value to be neither null nor undefined',
   ),
@@ -40,7 +40,7 @@ export const errorMessage = {
   webpanelNotOpen: l10n.t('Webview panel is not opened'),
 }
 
-export const authMessage = {
+export const authMessage: Record<string, string> = {
   enterEmail: l10n.t('Enter Email'),
   enterEmailOfAffindiAccount: l10n.t('Enter the email of your Affinidi account'),
   pasteEmailAddress: l10n.t('Paste the code sent to your email'),
@@ -65,7 +65,7 @@ export const authMessage = {
   ),
 }
 
-export const projectMessage = {
+export const projectMessage: Record<string, string> = {
   projectName: l10n.t('Project Name'),
   enterProjectName: l10n.t('Enter Project Name'),
   creatingProject: l10n.t('Creating Project...'),
@@ -81,13 +81,13 @@ export const projectMessage = {
   projectDoesNotExist: l10n.t('Project does not exist.'),
 }
 
-export const issuanceMessage = {
+export const issuanceMessage: Record<string, string> = {
   fetchIssuances: l10n.t('Fetching available issuances...'),
   selectIssuance: l10n.t('Select an Issuance'),
   noIssauces: l10n.t("You don't have any issuances to choose from"),
 }
 
-export const schemaMessage = {
+export const schemaMessage: Record<string, string> = {
   fetchSchemas: l10n.t('Fetching available schemas...'),
   selectSchema: l10n.t('Select a VC Schema'),
   exampleSchema: l10n.t('Use an example Schema'),
@@ -106,7 +106,7 @@ export const schemaMessage = {
   selectProjectToCreateSchema: l10n.t('You must select a project to create a schema'),
 }
 
-export const snippetMessage = {
+export const snippetMessage: Record<string, string> = {
   selectLanguage: l10n.t('Select a language'),
   selectImplementation: l10n.t('Select an implementation'),
   snippetImplementationSdk: l10n.t('Use Affinidi Client SDK'),
@@ -121,7 +121,7 @@ export const snippetMessage = {
   ),
 }
 
-export const generatorMessage = {
+export const generatorMessage: Record<string, string> = {
   failedToGenerateApp: l10n.t('Failed to generate app'),
   directoryNameDuplication: l10n.t('Directory with this name already exist.'),
   noDirectorySelected: l10n.t("Installation folder wasn't selected."),
@@ -130,7 +130,7 @@ export const generatorMessage = {
   enterAppName: l10n.t('Enter an app name'),
 }
 
-export const cliMessage = {
+export const cliMessage: Record<string, string> = {
   cliNeedsToBeInstalledForExtension: l10n.t(
     'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
   ),
@@ -141,13 +141,13 @@ export const cliMessage = {
   appGenerated: l10n.t('App successfully generated.'),
 }
 
-export const telemetryMessage = {
+export const telemetryMessage: Record<string, string> = {
   sendUsageData: l10n.t(
     'Help us make Affinidi better! Do you accept to send anonymous usage data?',
   ),
 }
 
-export const csvMessage = {
+export const csvMessage: Record<string, string> = {
   openCsvTemplate: l10n.t('Open a CSV template'),
   uploadCsvFile: l10n.t('Upload a CSV file'),
   commaSeperatorMessage: l10n.t('Make sure to use comma (,) as separator. '),
