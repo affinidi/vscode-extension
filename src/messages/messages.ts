@@ -28,9 +28,6 @@ export const errorMessage: Record<string, string> = {
   internalErrorNullOrUndefined: l10n.t(
     'Internal error: Expected value to be neither null nor undefined',
   ),
-  internalErrorNullOrUndefinedOrEmpty: l10n.t(
-    'Internal error: Expected value to be neither null, undefined, nor empty',
-  ),
   invalidJsonSchemaUrl: l10n.t('Could not parse schema URL, please provide a valid schema URl'),
   unknownSelection: l10n.t('unknown selection'),
   unknownValue: l10n.t('unknown value'),
