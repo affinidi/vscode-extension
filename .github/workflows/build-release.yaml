@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-release:
-    name: Release to npm
+    name: Build and Release
     runs-on: ubuntu-latest
     environment:
       name: publishEnv
