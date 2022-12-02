@@ -5,7 +5,7 @@ import * as path from 'path'
 import { commands, ExtensionContext, Uri, window, env, l10n } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
-import { viewProperties, viewSchemaContent } from './services/viewDataService'
+import { viewElementProperties } from './services/viewElementProperties'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { getFeatureMarkdownUri } from './services/markdownService'
@@ -24,7 +24,7 @@ import { AuthExplorerProvider } from './auth/authExplorerProvider'
 import { IssuanceExplorerProvider } from './features/issuance/tree/issuanceExplorerProvider'
 import { SchemaManagerExplorerProvider } from './features/schema-manager/tree/schemaManagerExplorerProvider'
 import { openSchemaBuilder } from './features/schema-manager/schema-builder/openSchemaBuilder'
-import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
+import { schemaManagerHelpers, viewSchemaContent } from './features/schema-manager/schemaManagerHelpers'
 import { iamHelpers } from './features/iam/iamHelpers'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
 import { issuanceState } from './features/issuance/issuanceState'
@@ -217,7 +217,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand(
     'affinidiExplorer.viewProperties',
     (element: BasicTreeItemWithProject) => {
-      viewProperties(element)
+      viewElementProperties(element)
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
@@ -284,23 +284,22 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   commands.registerCommand('affinidiExplorer.showJsonSchema', async (element: SchemaTreeItem) => {
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: EventSubCategory.command,
+      metadata: {
+        commandId: 'affinidiExplorer.showJsonSchema',
+        projectId: element.projectId,
+      },
+    })
+
     const schema = await schemaManagerState.getAuthoredSchemaById({
       projectId: element.projectId,
       schemaId: element.schemaId,
     })
+    if (!schema) return
 
-    if (element.schemaId && schema) {
-      viewSchemaContent(element.schemaId, schema.jsonSchemaUrl)
-
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: EventSubCategory.command,
-        metadata: {
-          commandId: 'affinidiExplorer.showJsonSchema',
-          projectId: element.projectId,
-        },
-      })
-    }
+    await viewSchemaContent(schema, 'json')
   })
 
   commands.registerCommand('affinidiExplorer.openCreateSchemaUrl', (element: BasicTreeItem) => {
@@ -366,23 +365,22 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand(
     'affinidiExplorer.showJsonLdContext',
     async (element: SchemaTreeItem) => {
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.showJsonLdContext',
+          projectId: element.projectId,
+        },
+      })
+
       const schema = await schemaManagerState.getAuthoredSchemaById({
         projectId: element.projectId,
         schemaId: element.schemaId,
       })
+      if (!schema) return
 
-      if (schema && element.schemaId) {
-        viewSchemaContent(element.schemaId, schema.jsonLdContextUrl, '.jsonld')
-
-        sendEventToAnalytics({
-          name: EventNames.commandExecuted,
-          subCategory: EventSubCategory.command,
-          metadata: {
-            commandId: 'affinidiExplorer.showJsonLdContext',
-            projectId: element.projectId,
-          },
-        })
-      }
+      await viewSchemaContent(schema, 'jsonld')
     },
   )
 

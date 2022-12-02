@@ -1,8 +1,12 @@
+import fetch from 'node-fetch'
+import * as path from 'path'
 import { window, ProgressLocation } from 'vscode'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { schemaMessage } from '../../messages/messages'
 import { schemaManagerState } from './schemaManagerState'
+import { readOnlyContentViewer } from '../../utils/openReadOnlyContent'
+import { SchemaDto } from '@affinidi/client-schema-manager'
 
 export const EXAMPLE_SCHEMA: Schema = {
   type: 'MySchema',
@@ -10,12 +14,10 @@ export const EXAMPLE_SCHEMA: Schema = {
   jsonSchemaUrl: 'https://schema.affinidi.com/MySchemaV1-0.json',
 }
 
-async function askForAuthoredSchema(
-  input: {
-    projectId: string
-    includeExample?: boolean
-  },
-): Promise<Schema | undefined> {
+async function askForAuthoredSchema(input: {
+  projectId: string
+  includeExample?: boolean
+}): Promise<Schema | undefined> {
   const schemas = await window.withProgress(
     {
       location: ProgressLocation.Notification,
@@ -48,6 +50,24 @@ async function fetchSchemaUrl(projectId: string) {
 
 function getSchemaName(schema: { type: string; version: number; revision: number }) {
   return `${schema.type}V${schema.version}-${schema.revision}`
+}
+
+export const viewSchemaContent = async (schema: SchemaDto, file: 'json' | 'jsonld') => {
+  return window.withProgress(
+    { location: ProgressLocation.Notification, title: schemaMessage.loadingSchemaContent },
+    async () => {
+      const url = file === 'json' ? schema.jsonSchemaUrl : schema.jsonLdContextUrl
+
+      const fetchedData = await fetch(url)
+      const schemaContent = await fetchedData.json()
+
+      await readOnlyContentViewer.open({
+        node: { label: getSchemaName(schema), id: schema.id },
+        content: schemaContent,
+        fileExtension: path.extname(url),
+      })
+    },
+  )
 }
 
 export const schemaManagerHelpers = {

@@ -40,7 +40,7 @@ describe('issuanceHelpers()', () => {
 
   describe('askForIssuance()', () => {
     it('should return formatted name', () => {
-      expect(issuanceHelpers.getIssuanceName(issuance)).equal('MySchema at 2022-11-30 13:27 (1)')
+      expect(issuanceHelpers.getIssuanceName(issuance)).equal('MySchema at 2022-11-30 13:27 (fake-issuance-id)')
     })
   })
 })

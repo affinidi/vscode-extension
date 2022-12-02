@@ -1,8 +1,4 @@
 /* eslint-disable max-classes-per-file, no-underscore-dangle */
-import { ProjectSummary } from '@affinidi/client-iam'
-import { IssuanceDto } from '@affinidi/client-issuance'
-import { SchemaDto } from '@affinidi/client-schema-manager'
-import { UserManagementClient } from '@affinidi/client-user-management'
 import {
   Event,
   EventEmitter,
@@ -110,22 +106,19 @@ interface Item {
   id: string
 }
 
-export async function openReadOnlyContent({
-  node,
-  content,
-  fileExtension = '.json',
-  options,
-}: {
-  node: Item
-  content: any
-  fileExtension?: string
-  options?: TextDocumentShowOptions
-}): Promise<ReadOnlyContent> {
-  const contentProvider = getContentProvider()
-  return contentProvider.openReadOnlyContent(
-    node,
-    JSON.stringify(content, null, 2),
-    fileExtension,
-    options,
-  )
+export const readOnlyContentViewer = {
+  open: async (input: {
+    node: Item
+    content: any
+    fileExtension?: string
+    options?: TextDocumentShowOptions
+  }) => {
+    const contentProvider = getContentProvider()
+    await contentProvider.openReadOnlyContent(
+      input.node,
+      JSON.stringify(input.content, null, 2),
+      input.fileExtension ?? '.json',
+      input.options,
+    )
+  }
 }

@@ -8,13 +8,13 @@ import {
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
 import { cliHelper } from '../utils/cliHelper'
-import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 import { state } from '../state'
 import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
 } from './authentication-provider/affinidi-authentication-provider'
 import { authHelper } from './authHelper'
+import { readOnlyContentViewer } from '../utils/openReadOnlyContent'
 
 const CONSENT = {
   accept: authMessage.accept,
@@ -106,7 +106,7 @@ async function userDetailsHandler(): Promise<void> {
   })
 
   ext.outputChannel.appendLine(JSON.stringify(userDetails))
-  openReadOnlyContent({
+  readOnlyContentViewer.open({
     node: { label: 'AccountDetails', id: userDetails.userId },
     content: userDetails,
   })

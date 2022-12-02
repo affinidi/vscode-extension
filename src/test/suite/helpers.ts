@@ -32,8 +32,8 @@ export function generateConsoleAuthToken(values?: { userId?: string; username?: 
 }
 
 
-export const generateSchema = (): SchemaDto => ({
-  id: '1',
+export const generateSchema = ({ id = 'fake-schema-id' } = {}): SchemaDto => ({
+  id,
   parentId: null,
   authorDid: '',
   description: null,
@@ -47,10 +47,11 @@ export const generateSchema = (): SchemaDto => ({
 })
 
 export const generateIssuance = ({
+  id = 'fake-issuance-id',
   projectId = 'fake-project-id',
   issuerDid = 'fake-did',
 }): IssuanceDto => ({
-  id: '1',
+  id,
   createdAt: 'Wed Nov 30 2022 13:27:11',
   template: {
     verification: {

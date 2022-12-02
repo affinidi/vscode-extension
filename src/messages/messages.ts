@@ -89,6 +89,7 @@ export const issuanceMessage = {
 }
 
 export const schemaMessage = {
+  loadingSchemaContent: l10n.t('Fetching schema content...'),
   fetchingSchemas: l10n.t('Fetching available schemas...'),
   selectSchema: l10n.t('Select a VC Schema'),
   exampleSchema: l10n.t('Use an example Schema'),
