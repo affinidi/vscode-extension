@@ -1,4 +1,5 @@
 import { isNullOrUndefined } from 'util'
+import { l10n } from 'vscode'
 import { errorMessage } from '../messages/messages'
 
 /**
