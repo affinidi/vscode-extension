@@ -6,6 +6,7 @@ import { BuilderSchemaPublisher } from './BuilderSchemaPublisher'
 import { SubmitHandler } from './handlers/SubmitHandler'
 import { SchemaBuilderWebview } from './SchemaBuilderWebview'
 
+let isLoading = false
 let builder: SchemaBuilderWebview | undefined
 
 export async function openSchemaBuilder(input?: {
@@ -13,13 +14,21 @@ export async function openSchemaBuilder(input?: {
   projectId?: string
   scope?: 'public' | 'unlisted'
 }) {
+  if (isLoading) return
+  isLoading = true
+
   try {
     const builder = await getOrCreateBuilder(input)
     await builder.open()
-    builder.setScope(input?.scope ?? 'public')
+    
+    if (!input?.parentSchemaId) {
+      builder.setScope(input?.scope ?? 'public')
+    }
   } catch (error) {
     logger.error(error, schemaMessage.couldNotCreateSchemaBuilder)
     notifyError(error)
+  } finally {
+    isLoading = false
   }
 }
 

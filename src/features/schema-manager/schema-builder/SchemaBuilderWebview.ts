@@ -54,7 +54,7 @@ export class SchemaBuilderWebview {
     if (!this.panel) {
       this.panel = window.createWebviewPanel(
         'schemaBuilderView',
-        labels.schemaBuilder,
+        parentBuilderSchema ? labels.schemaBuilderFork(parentBuilderSchema.type) : labels.schemaBuilder,
         ViewColumn.One,
         {
           enableScripts: true,
