@@ -6,7 +6,7 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
-import { csvMessage, errorMessage, snippetMessage, labels, projectMessage } from '../../messages/messages'
+import { csvMessage, snippetMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 import { iamState } from '../iam/iamState'
 
@@ -111,7 +111,10 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string }) => {
   }
 }
 
-const initiateIssuanceCsvFlow = async (input: { schema: Schema; projectId?: string }): Promise<void> => {
+const initiateIssuanceCsvFlow = async (input: {
+  schema: Schema
+  projectId?: string
+}): Promise<void> => {
   const projectId = input.projectId ?? (await iamHelpers.askForProjectId())
   if (!projectId) {
     return

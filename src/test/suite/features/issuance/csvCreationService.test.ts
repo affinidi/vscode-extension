@@ -34,7 +34,9 @@ describe('csvCreationService()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
     sandbox.stub(issuanceClient, 'getCsvTemplate').resolves(csvTemplate)
-    showOpenDialog = sandbox.stub(window, 'showOpenDialog').resolves([{ fsPath: 'fsPathTest' }] as any)
+    showOpenDialog = sandbox
+      .stub(window, 'showOpenDialog')
+      .resolves([{ fsPath: 'fsPathTest' }] as any)
 
     showTextDocument = sandbox.stub(window, 'showTextDocument')
     openTextDocument = sandbox.stub(workspace, 'openTextDocument')
@@ -59,6 +61,7 @@ describe('csvCreationService()', () => {
     let createFromCsv: sinon.SinonStub
 
     beforeEach(() => {
+      showOpenDialog.resolves([{ fsPath: 'fsPathTest' }] as any)
       createFromCsv = sandbox.stub(issuanceClient, 'createFromCsv').resolves({ issuance })
       sandbox.stub(fs, 'createReadStream')
     })

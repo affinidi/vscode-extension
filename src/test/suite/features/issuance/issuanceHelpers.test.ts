@@ -21,12 +21,9 @@ describe('issuanceHelpers()', () => {
 
   describe('askForIssuance()', () => {
     it('should throw an error if no issuances', async () => {
-      try {
-        await issuanceHelpers.askForIssuance({ projectId })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        expect(e.message).equal(issuanceMessage.noIssuances)
-      }
+      await expect(issuanceHelpers.askForIssuance({ projectId })).to.eventually.be.rejectedWith(
+        issuanceMessage.noIssuances,
+      )
     })
 
     it('should return selected issuance', async () => {
@@ -40,7 +37,9 @@ describe('issuanceHelpers()', () => {
 
   describe('askForIssuance()', () => {
     it('should return formatted name', () => {
-      expect(issuanceHelpers.getIssuanceName(issuance)).equal('MySchema at 2022-11-30 13:27 (fake-issuance-id)')
+      expect(issuanceHelpers.getIssuanceName(issuance)).equal(
+        'MySchema at 2022-11-30 13:27 (fake-issuance-id)',
+      )
     })
   })
 })

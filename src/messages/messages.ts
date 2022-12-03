@@ -34,7 +34,8 @@ export const errorMessage = {
   unknownCodeGen: l10n.t('unknown codeGenType: '),
   unknownConsentType: l10n.t('unknown consent type: '),
   unexpectedResourceType: l10n.t('Unexpected resource type:'),
-  webpanelNotOpen: l10n.t('Webview panel is not opened'),
+  webPanelNotOpen: l10n.t('Webview panel is not opened'),
+  unexpectedError: l10n.t('Unexpected error'),
 }
 
 export const authMessage = {
@@ -44,7 +45,7 @@ export const authMessage = {
   accept: l10n.t('Accept'),
   reject: l10n.t('Reject'),
   enterEmail: l10n.t('Enter Email'),
-  enterEmailOfAffindiAccount: l10n.t('Enter the email of your Affinidi account'),
+  enterEmailOfAffinidiAccount: l10n.t('Enter the email of your Affinidi account'),
   pasteEmailAddress: l10n.t('Paste the code sent to your email'),
   invalidEmailAddress: l10n.t('Invalid email address entered'),
   emailNotFound: l10n.t(
@@ -61,7 +62,7 @@ export const authMessage = {
   somethingWentWrong: l10n.t('Something went wrong. Please try again later.'),
   notLoggedIn: l10n.t('You are already logged out'),
   acceptedTermsAndConditions: l10n.t('You accepted terms and conditions'),
-  rejectedTermsAndConditons: l10n.t('You rejected terms and conditions'),
+  rejectedTermsAndConditions: l10n.t('You rejected terms and conditions'),
   termsAndConditions: l10n.t(
     'Please read and accept the [Terms of Use](https://build.affinidi.com/dev-tools/terms-of-use.pdf) and [Privacy Policy](https://build.affinidi.com/dev-tools/privacy-policy.pdf)',
   ),
@@ -82,7 +83,7 @@ export const projectMessage = {
   missingProjectID: l10n.t('Project ID is not provided'),
   pleaseTryAgain: l10n.t('Please try again later.'),
   projectDoesNotExist: l10n.t('Project does not exist.'),
-  projectNotFound: (projectId: string) => l10n.t('Project not found: {0}', projectId)
+  projectNotFound: (projectId: string) => l10n.t('Project not found: {0}', projectId),
 }
 
 export const issuanceMessage = {

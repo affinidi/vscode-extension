@@ -50,7 +50,7 @@ async function signUpHandler(): Promise<void> {
       break
 
     case CONSENT.reject:
-      window.showInformationMessage(authMessage.rejectedTermsAndConditons)
+      window.showInformationMessage(authMessage.rejectedTermsAndConditions)
       break
     default:
       throw new Error(`${errorMessage.unknownSelection} ${selection}`)
