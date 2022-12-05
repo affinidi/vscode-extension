@@ -2,6 +2,7 @@ import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from
 import { credentialsVaultService } from '../auth/authentication-provider/credentialsVault'
 import { affinidiActiveProjectChangeProvider } from '../auth/handleActiveProjectChange'
 import { ext } from '../extensionVariables'
+import { iamState } from '../features/iam/iamState'
 import { setActiveProject } from '../features/iam/setActiveProject'
 import { labels } from '../messages/messages'
 import { BasicTreeItem } from './basicTreeItem'
@@ -38,10 +39,16 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
   private readonly activeProjectListener = async () => {
     this.refresh()
     const activeProject = credentialsVaultService.getActiveProjectSummary()
-    // const configs = configVaultService.getConfigs()
+    console.log('activeProject', activeProject)
     if (activeProject) {
       setActiveProject(activeProject.project.projectId)
+      return
     }
+    const projects = await iamState.listProjects()
+    const sortedProjects = projects.sort(
+      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+    )
+    setActiveProject(sortedProjects[0].projectId)
   }
 
   public getTreeItem(element: BasicTreeItem): TreeItem {
