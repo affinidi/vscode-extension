@@ -18,13 +18,13 @@ async function askForIssuance(input: Input): Promise<IssuanceDto | undefined> {
   const issuances = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: issuanceMessage.fetchIssuances,
+      title: issuanceMessage.fetchingIssuances,
     },
     () => issuanceState.listIssuances({ projectId: input.projectId }),
   )
 
   if (issuances.length === 0) {
-    throw new Error(issuanceMessage.noIssauces)
+    throw new Error(issuanceMessage.noIssuances)
   }
 
   return showQuickPick([...issuances.map<[string, IssuanceDto]>((i) => [getIssuanceName(i), i])], {

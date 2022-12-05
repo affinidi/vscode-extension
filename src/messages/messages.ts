@@ -1,14 +1,13 @@
 import { l10n } from 'vscode'
 
-export const labels: Record<string, string> = {
-  signIn: l10n.t('Signed In to Affinidi'),
-  signOut: l10n.t('Signed Out of Affinidi'),
+export const labels = {
+  signIn: l10n.t('Sign in to Affinidi'),
   createAnAccountWithAffinidi: l10n.t('Create an Account with Affinidi'),
-  createProject: l10n.t('Create Proejct'),
-  issuanes: l10n.t('Issuances'),
-  vcSchemas: l10n.t('VC Schemas'),
+  createProject: l10n.t('Create Project'),
+  issuances: l10n.t('Issuances'),
+  schemas: l10n.t('VC Schemas'),
   schemaBuilder: l10n.t('Schema Builder'),
-  digitalIdenties: l10n.t('Digital Identities'),
+  digitalIdentities: l10n.t('Digital Identities'),
   select: l10n.t('Select'),
   empty: l10n.t('(empty)'),
   public: l10n.t('Public'),
@@ -24,7 +23,7 @@ export const labels: Record<string, string> = {
   giveFeedback: l10n.t('Give Feedback'),
 }
 
-export const errorMessage: Record<string, string> = {
+export const errorMessage = {
   internalErrorNullOrUndefined: l10n.t(
     'Internal error: Expected value to be neither null nor undefined',
   ),
@@ -37,12 +36,17 @@ export const errorMessage: Record<string, string> = {
   webpanelNotOpen: l10n.t('Webview panel is not opened'),
 }
 
-export const authMessage: Record<string, string> = {
+export const authMessage = {
+  signedIn: l10n.t('Signed in to Affinidi'),
+  signedUp: l10n.t('Signed up in to Affinidi'),
+  signedOut: l10n.t('Signed out of Affinidi'),
+  accept: l10n.t('Accept'),
+  reject: l10n.t('Reject'),
   enterEmail: l10n.t('Enter Email'),
   enterEmailOfAffindiAccount: l10n.t('Enter the email of your Affinidi account'),
   pasteEmailAddress: l10n.t('Paste the code sent to your email'),
-  vaidEmailAddress: l10n.t('Invalid email address entered'),
-  emaillNotFound: l10n.t(
+  invalidEmailAddress: l10n.t('Invalid email address entered'),
+  emailNotFound: l10n.t(
     "Please enter the email address you signed-up with or sign-up if you don't have an account.",
   ),
   confirmationCode: l10n.t('Confirmation Code'),
@@ -62,12 +66,13 @@ export const authMessage: Record<string, string> = {
   ),
 }
 
-export const projectMessage: Record<string, string> = {
+export const projectMessage = {
   projectName: l10n.t('Project Name'),
   enterProjectName: l10n.t('Enter Project Name'),
   creatingProject: l10n.t('Creating Project...'),
   selectProject: l10n.t('Select a project'),
-  fetchProject: l10n.t('Fetching project information...'),
+  fetchingProjects: l10n.t('Fetching project list...'),
+  fetchingProjectSummary: l10n.t('Fetching project details...'),
   successfulProjectCreation: l10n.t('Project created successfully'),
   projectRequired: l10n.t('You need to have a project to perform this operation'),
   projectNameRequired: l10n.t('project name is required'),
@@ -76,16 +81,18 @@ export const projectMessage: Record<string, string> = {
   missingProjectID: l10n.t('Project ID is not provided'),
   pleaseTryAgain: l10n.t('Please try again later.'),
   projectDoesNotExist: l10n.t('Project does not exist.'),
+  projectNotFound: (projectId: string) => l10n.t('Project not found: {0}', projectId)
 }
 
-export const issuanceMessage: Record<string, string> = {
-  fetchIssuances: l10n.t('Fetching available issuances...'),
+export const issuanceMessage = {
+  fetchingIssuances: l10n.t('Fetching project issuances...'),
   selectIssuance: l10n.t('Select an Issuance'),
-  noIssauces: l10n.t("You don't have any issuances to choose from"),
+  noIssuances: l10n.t("You don't have any issuances to choose from"),
 }
 
-export const schemaMessage: Record<string, string> = {
-  fetchSchemas: l10n.t('Fetching available schemas...'),
+export const schemaMessage = {
+  loadingSchemaContent: l10n.t('Fetching schema content...'),
+  fetchingSchemas: l10n.t('Fetching available schemas...'),
   selectSchema: l10n.t('Select a VC Schema'),
   exampleSchema: l10n.t('Use an example Schema'),
   openSchemaDetails: l10n.t('Open schema details'),
@@ -103,7 +110,7 @@ export const schemaMessage: Record<string, string> = {
   selectProjectToCreateSchema: l10n.t('You must select a project to create a schema'),
 }
 
-export const snippetMessage: Record<string, string> = {
+export const snippetMessage = {
   selectLanguage: l10n.t('Select a language'),
   selectImplementation: l10n.t('Select an implementation'),
   snippetImplementationSdk: l10n.t('Use Affinidi Client SDK'),
@@ -118,7 +125,7 @@ export const snippetMessage: Record<string, string> = {
   ),
 }
 
-export const generatorMessage: Record<string, string> = {
+export const generatorMessage = {
   failedToGenerateApp: l10n.t('Failed to generate app'),
   directoryNameDuplication: l10n.t('Directory with this name already exist.'),
   noDirectorySelected: l10n.t("Installation folder wasn't selected."),
@@ -127,7 +134,7 @@ export const generatorMessage: Record<string, string> = {
   enterAppName: l10n.t('Enter an app name'),
 }
 
-export const cliMessage: Record<string, string> = {
+export const cliMessage = {
   cliNeedsToBeInstalledForExtension: l10n.t(
     'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
   ),
@@ -138,18 +145,23 @@ export const cliMessage: Record<string, string> = {
   appGenerated: l10n.t('App successfully generated.'),
 }
 
-export const telemetryMessage: Record<string, string> = {
+export const telemetryMessage = {
+  accept: l10n.t('Accept'),
+  deny: l10n.t('Deny'),
   sendUsageData: l10n.t(
     'Help us make Affinidi better! Do you accept to send anonymous usage data?',
   ),
 }
 
-export const csvMessage: Record<string, string> = {
+export const csvMessage = {
+  generatingCredentialSubjectSample: l10n.t('Generating sample credential subject...'),
+  downloadingCsvTemplate: l10n.t('Downloading CSV template...'),
+  uploadingCsvFile: l10n.t('Uploading CSV file...'),
   openCsvTemplate: l10n.t('Open a CSV template'),
   uploadCsvFile: l10n.t('Upload a CSV file'),
-  commaSeperatorMessage: l10n.t('Make sure to use comma (,) as separator. '),
+  commaSeparatorMessage: l10n.t('Make sure to use comma (,) as separator. '),
   csvValidationError: 'Could not create issuance due to validation errors in the CSV file:',
-  issaunceCreationMessage: 'Issuance has been created and the offers were sent. Issuance ID:',
+  issuanceCreationMessage: 'Issuance has been created and the offers were sent. Issuance ID:',
   invalidCsvFile: l10n.t('Invalid CSV file'),
   invalidDataInRow: l10n.t('Invalid data in row #'),
   couldNotFindAllColumns: l10n.t('Could not find all required columns'),

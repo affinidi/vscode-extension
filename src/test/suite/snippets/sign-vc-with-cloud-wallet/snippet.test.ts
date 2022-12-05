@@ -8,8 +8,8 @@ import {
 import { AFFINIDI_IAM_API_URL } from '../../../../features/iam/iamClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
-import { generateProjectSummary } from '../../testUtils'
 import { iamState } from '../../../../features/iam/iamState'
+import { generateProjectSummary } from '../../helpers'
 
 describe('insertSignVcWithCloudWalletSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {

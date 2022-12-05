@@ -5,7 +5,7 @@ import { logger } from '../../utils/logger'
 import { iamClient } from './iamClient'
 import { projectMessage } from '../../messages/messages'
 
-export const createProjectProcess = async (): Promise<ProjectDto | undefined> => {
+export const createProjectProcess = async (): Promise<void> => {
   const projectName = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: projectMessage.projectName,
@@ -19,7 +19,7 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
 
   try {
     const consoleAuthToken = await authHelper.getConsoleAuthToken()
-    const result = await window.withProgress(
+    await window.withProgress(
       {
         location: ProgressLocation.Notification,
         title: projectMessage.creatingProject,
@@ -28,8 +28,6 @@ export const createProjectProcess = async (): Promise<ProjectDto | undefined> =>
     )
 
     window.showInformationMessage(projectMessage.successfulProjectCreation)
-
-    return result
   } catch (error) {
     logger.error(error, projectMessage.projectNotCreated)
     window.showErrorMessage(`${projectMessage.projectNotCreated} ${projectMessage.pleaseTryAgain}`)

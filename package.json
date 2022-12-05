@@ -273,22 +273,22 @@
       "view/item/context": [
         {
           "command": "affinidiExplorer.refresh",
-          "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == rootIssuance",
+          "when": "view == affinidiExplorer && viewItem == schemas || view == affinidiExplorer && viewItem == issuances",
           "group": "inline@3"
         },
         {
           "command": "affinidi.openMarkDown",
-          "when": "view == affinidiExplorer && viewItem == rootIssuance || view == affinidiExplorer && viewItem == rootSchemas",
+          "when": "view == affinidiExplorer && viewItem == issuances || view == affinidiExplorer && viewItem == schemas",
           "group": "inline@2"
         },
         {
           "command": "affinidiExplorer.initiateIssuanceCsvFlow",
-          "when": "view == affinidiExplorer && viewItem == rootIssuance",
+          "when": "view == affinidiExplorer && viewItem == issuances",
           "group": "inline@1"
         },
         {
           "command": "affinidiExplorer.openSchemaBuilder",
-          "when": "view == affinidiExplorer && viewItem == rootSchemas || view == affinidiExplorer && viewItem == subRootSchemas",
+          "when": "view == affinidiExplorer && viewItem == schemas || view == affinidiExplorer && viewItem == scopedSchemas",
           "group": "inline"
         },
         {
@@ -518,7 +518,6 @@
     "glob": "^8.0.3",
     "husky": "^8.0.0",
     "mocha": "^10.0.0",
-    "nock": "^13.2.9",
     "nodemon": "^2.0.20",
     "rimraf": "^3.0.2",
     "semantic-release": "^19.0.5",

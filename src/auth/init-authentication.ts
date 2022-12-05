@@ -8,17 +8,17 @@ import {
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
 import { cliHelper } from '../utils/cliHelper'
-import { openReadOnlyContent } from '../utils/openReadOnlyContent'
 import { state } from '../state'
 import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
 } from './authentication-provider/affinidi-authentication-provider'
 import { authHelper } from './authHelper'
+import { readOnlyContentViewer } from '../utils/openReadOnlyContent'
 
 const CONSENT = {
-  accept: l10n.t('Accept'),
-  reject: l10n.t('Reject'),
+  accept: authMessage.accept,
+  reject: authMessage.reject,
 }
 
 async function signUpHandler(): Promise<void> {
@@ -44,8 +44,8 @@ async function signUpHandler(): Promise<void> {
         },
       })
 
-      window.showInformationMessage(labels.signIn)
-      ext.outputChannel.appendLine(labels.signIn)
+      window.showInformationMessage(authMessage.signedUp)
+      ext.outputChannel.appendLine(authMessage.signedUp)
       await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
       break
 
@@ -70,8 +70,8 @@ async function loginHandler(): Promise<void> {
     },
   })
 
-  window.showInformationMessage(labels.signIn)
-  ext.outputChannel.appendLine(labels.signIn)
+  window.showInformationMessage(authMessage.signedIn)
+  ext.outputChannel.appendLine(authMessage.signedIn)
   await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
 }
 
@@ -93,8 +93,8 @@ async function logoutHandler(): Promise<void> {
 
     await ext.authProvider.handleRemoveSession()
 
-    await window.showInformationMessage(labels.signOut)
-    ext.outputChannel.appendLine(labels.signOut)
+    await window.showInformationMessage(authMessage.signedOut)
+    ext.outputChannel.appendLine(authMessage.signedOut)
   } else {
     await window.showInformationMessage(authMessage.notLoggedIn)
   }
@@ -106,7 +106,7 @@ async function userDetailsHandler(): Promise<void> {
   })
 
   ext.outputChannel.appendLine(JSON.stringify(userDetails))
-  openReadOnlyContent({
+  readOnlyContentViewer.open({
     node: { label: 'AccountDetails', id: userDetails.userId },
     content: userDetails,
   })

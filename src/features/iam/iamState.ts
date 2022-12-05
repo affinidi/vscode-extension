@@ -2,6 +2,7 @@ import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
 import { window, ProgressLocation, l10n } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
+import { projectMessage } from '../../messages/messages'
 import { state } from '../../state'
 import { iamClient } from './iamClient'
 
@@ -20,7 +21,7 @@ export class IamState {
   async requireProjectSummary(projectId: string): Promise<ProjectSummary> {
     const projectSummary = await this.fetchProjectSummary(projectId)
     if (!projectSummary) {
-      throw new Error(l10n.t('Project not found: {0}', projectId))
+      throw new Error(projectMessage.projectNotFound(projectId))
     }
 
     return projectSummary
@@ -36,7 +37,7 @@ export class IamState {
     if (stored) return stored
 
     const projectSummary = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Fetching project details...') },
+      { location: ProgressLocation.Notification, title: projectMessage.fetchingProjectSummary },
       async () =>
         iamClient.getProjectSummary(
           { projectId },
@@ -55,7 +56,7 @@ export class IamState {
     if (stored) return stored
 
     const { projects } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Fetching project list...') },
+      { location: ProgressLocation.Notification, title: projectMessage.fetchingProjects },
       async () =>
         iamClient.listProjects({ consoleAuthToken: await authHelper.getConsoleAuthToken() }),
     )

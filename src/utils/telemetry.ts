@@ -7,8 +7,8 @@ import {
 } from '../services/analyticsStreamApiService'
 
 const CONSENT = {
-  accept: l10n.t('Accept'),
-  deny: l10n.t('Deny'),
+  accept: telemetryMessage.accept,
+  deny: telemetryMessage.deny,
 }
 export function isTelemetryEnabled() {
   return workspace.getConfiguration().get('affinidi.telemetry.enabled')
