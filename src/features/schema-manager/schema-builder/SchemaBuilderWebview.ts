@@ -1,12 +1,8 @@
-import { parseSchema, SchemaField } from '@affinidi/affinidi-vc-schemas'
-import { nanoid } from 'nanoid'
-import { ProgressLocation, ViewColumn, WebviewPanel, window } from 'vscode'
+import { ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
-import { errorMessage, labels, schemaMessage } from '../../../messages/messages'
+import { errorMessage, labels } from '../../../messages/messages'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
 import { logger } from '../../../utils/logger'
-import { vcJsonSchemaFetcher } from '../../issuance/json-schema/json-schema-fetcher'
-import { schemaManagerState } from '../schemaManagerState'
 import { SubmitHandler } from './handlers/SubmitHandler'
 import { createBuilderSchemaFork } from './helpers/createBuilderSchemaFork'
 
@@ -54,7 +50,9 @@ export class SchemaBuilderWebview {
     if (!this.panel) {
       this.panel = window.createWebviewPanel(
         'schemaBuilderView',
-        parentBuilderSchema ? labels.schemaBuilderFork(parentBuilderSchema.type) : labels.schemaBuilder,
+        parentBuilderSchema
+          ? labels.schemaBuilderFork(parentBuilderSchema.type)
+          : labels.schemaBuilder,
         ViewColumn.One,
         {
           enableScripts: true,
@@ -88,7 +86,7 @@ export class SchemaBuilderWebview {
     this.panel = undefined
   }
 
-  private handleMessage = async (message: IngoingMessage) => {
+  private readonly handleMessage = async (message: IngoingMessage) => {
     const { command, data } = message
 
     if (command === 'submit') {
@@ -103,8 +101,8 @@ export class SchemaBuilderWebview {
   }
 
   private render() {
-    const webview = this.requirePanel().webview
-    const extensionUri = ext.context.extensionUri
+    const { webview } = this.requirePanel()
+    const { extensionUri } = ext.context
 
     const toolkitUri = getWebviewUri(webview, extensionUri, [
       'node_modules',
@@ -135,7 +133,7 @@ export class SchemaBuilderWebview {
           <link rel="stylesheet" href="${styleUri}">
           <title>Schema Builder</title>
         </head>
-    
+
         <body>
           <form class="schema" style="margin: 20px 0px;">
             <section class="wrapper">
@@ -150,19 +148,19 @@ export class SchemaBuilderWebview {
                     <vscode-text-area rows="4" cols="50" class="schema__description"></vscode-text-area>
                   </div>
                 </div>
-              </div> 
+              </div>
               <div class="box-row">
                 <vscode-checkbox class="schema__is-public">Make this schema public</vscode-checkbox>
               </div>
             </section>
-    
+
             <div class="divider"></div>
-    
+
             <section class="schema__attributes"></section>
-    
+
             <div class="divider"></div>
-    
-            <section> 
+
+            <section>
               <vscode-button class="schema__submit-button"></vscode-button>
             </section>
           </form>
@@ -173,7 +171,7 @@ export class SchemaBuilderWebview {
 
   private requirePanel() {
     if (!this.panel) {
-      throw new Error(errorMessage.webpanelNotOpen)
+      throw new Error(errorMessage.webPanelNotOpen)
     }
 
     return this.panel

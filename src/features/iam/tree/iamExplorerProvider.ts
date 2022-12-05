@@ -1,6 +1,6 @@
-import { ThemeIcon, l10n } from 'vscode'
+import { ThemeIcon } from 'vscode'
 import { ext } from '../../../extensionVariables'
-import { labels, projectMessage } from '../../../messages/messages'
+import { labels } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
 import { Feature } from '../../feature'

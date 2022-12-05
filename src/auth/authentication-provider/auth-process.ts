@@ -23,7 +23,7 @@ export const executeAuthProcess = async ({
   const email = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: 'email@domain.com',
-    prompt: isSignUp ? authMessage.enterEmail : authMessage.enterEmailOfAffindiAccount,
+    prompt: isSignUp ? authMessage.enterEmail : authMessage.enterEmailOfAffinidiAccount,
     validateInput: validateEmail,
   })
 
