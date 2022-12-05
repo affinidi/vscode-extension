@@ -19,6 +19,9 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
 
   constructor(private readonly providers: ExplorerProvider[]) {
     ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(this.authListener))
+    ext.context.subscriptions.push(
+      affinidiActiveProjectChangeProvider.onDidChangeActiveProject(this.activeProjectListener),
+    )
   }
 
   refresh(data?: BasicTreeItem | undefined | void): void {
@@ -27,6 +30,15 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
 
   private readonly authListener = async () => {
     this.refresh()
+  }
+
+  private readonly activeProjectListener = async () => {
+    this.refresh()
+    const activeProject = credentialsVaultService.getActiveProjectSummary()
+    // const configs = configVaultService.getConfigs()
+    if (activeProject) {
+      setActiveProject(activeProject.project.projectId)
+    }
   }
 
   public getTreeItem(element: BasicTreeItem): TreeItem {

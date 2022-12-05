@@ -8,31 +8,46 @@ import {
   Disposable,
   Event,
   EventEmitter,
+  l10n,
+  FileChangeEvent,
+  FileChangeType,
+  Uri,
 } from 'vscode'
 import { nanoid } from 'nanoid'
 import { Unsubscribe } from 'conf/dist/source/types'
+import * as path from 'path'
+import * as os from 'os'
 import { executeAuthProcess, parseJwt } from './auth-process'
 import {
   sendEventToAnalytics,
   EventNames,
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
-import { SESSION_KEY_NAME, vaultService } from './vault'
+import { credentialsVaultService, Session, SESSION_KEY_NAME } from './credentialsVault'
+import { configVaultService, CONFIGS_KEY_NAME } from './configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
-import { authMessage } from '../../messages/messages'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
 
+const convertSession = (session: Session) => {
+  const convertedSession: AuthenticationSession = {
+    id: session.sessionId,
+    accessToken: session.consoleAuthToken,
+    account: { label: session.account.label, id: session.account.userId },
+    scopes: [],
+  }
+
+  return convertedSession
+}
+
 const assertSession = (sessionValue: unknown): AuthenticationSession | undefined => {
-  return typeof sessionValue === 'string' && sessionValue
-    ? (JSON.parse(sessionValue) as AuthenticationSession)
-    : undefined
+  return sessionValue === null ? null : convertSession(sessionValue)
 }
 
 const readSessionFromStorage = (): AuthenticationSession | undefined => {
-  const storageValue = vaultService.get(SESSION_KEY_NAME)
+  const storageValue = credentialsVaultService.getSession()
   return assertSession(storageValue)
 }
 
@@ -44,20 +59,27 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   private readonly _onDidChangeSessions =
     new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>()
 
+  private readonly _onDidChangeActiveProject = new EventEmitter<FileChangeEvent>()
+
   constructor() {
     this._disposable = Disposable.from(
       authentication.registerAuthenticationProvider(AUTH_PROVIDER_ID, AUTH_NAME, this, {
         supportsMultipleAccounts: false,
       }),
     )
-    this._confUnsubscribe = vaultService.onDidChange(
+    this._confUnsubscribe = credentialsVaultService.onDidChange(
       SESSION_KEY_NAME,
       this.handleExternalChangeSession,
     )
+    configVaultService.onDidChange(CONFIGS_KEY_NAME, this.handleExternalChangeActiveProject)
   }
 
   get onDidChangeSessions(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
     return this._onDidChangeSessions.event
+  }
+
+  get onDidChangeActiveProject(): Event<FileChangeEvent> {
+    return this._onDidChangeActiveProject.event
   }
 
   dispose(): void {
@@ -75,9 +97,10 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   ): Promise<AuthenticationSession | undefined> {
     try {
       const session = await authentication.getSession(AUTH_PROVIDER_ID, scopes, options)
+      console.log('getActiveSession', session)
 
       if (session) {
-        const token = parseJwt(session.accessToken.slice(18))
+        const token = parseJwt(session.accessToken)
 
         // subtract 1 minute in case of lag
         if (Date.now() / 1000 >= token.exp - 60) {
@@ -89,7 +112,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
       return session
     } catch (error) {
-      logger.error(error, authMessage.noValidSessionFound)
+      logger.error(error, 'Failed to get active session')
       this.handleRemoveSession()
       return undefined
     }
@@ -101,7 +124,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   ): Promise<AuthenticationSession> {
     const session = await this.getActiveSession(options, scopes)
     if (!session) {
-      throw new Error(authMessage.noValidSessionFound)
+      throw new Error(l10n.t('Valid Affinidi authentication session not found'))
     }
 
     return session
@@ -110,6 +133,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   // This function is called first when `vscode.authentication.getSessions` is called.
   async getSessions(): Promise<readonly AuthenticationSession[]> {
     const session = readSessionFromStorage()
+    console.log('session', session)
     return session ? [session] : []
   }
 
@@ -129,7 +153,15 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         scopes: [],
       }
 
-      vaultService.set(SESSION_KEY_NAME, JSON.stringify(session))
+      const configSession: Session = {
+        sessionId: session.id,
+        consoleAuthToken: accessToken,
+        account: { label: email, userId: id },
+        scopes: [],
+      }
+
+      credentialsVaultService.setSession(configSession)
+      configVaultService.setCurrentUserID(session.account.id)
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -139,7 +171,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
       return session
     } catch (error: unknown) {
-      logger.error(error, authMessage.unableToCreateSession)
+      logger.error(error, 'Failed to create a session')
       notifyError(error)
       throw error
     }
@@ -166,7 +198,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const session = readSessionFromStorage()
 
     if (session) {
-      vaultService.delete(SESSION_KEY_NAME)
+      credentialsVaultService.clear()
       this._onDidChangeSessions.fire({
         added: [],
         removed: [session],
@@ -181,6 +213,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
     // If it's the same session ID we consider it a change
     if (oldSession && newSession && oldSession?.id === newSession?.id) {
+      configVaultService.setCurrentUserID(newSession.account.id)
       this._onDidChangeSessions.fire({
         added: [],
         removed: [],
@@ -194,10 +227,18 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const removed = []
     if (oldSession) removed.push(oldSession)
     if (newSession) added.push(newSession)
+    if (newSession) configVaultService.setCurrentUserID(newSession.account.id)
     this._onDidChangeSessions.fire({
       added,
       removed,
       changed: [],
+    })
+  }
+
+  handleExternalChangeActiveProject = (): void => {
+    this._onDidChangeActiveProject.fire({
+      type: FileChangeType.Changed,
+      uri: Uri.file(path.join(os.homedir(), '.affinidi/config/config.json')),
     })
   }
 }
