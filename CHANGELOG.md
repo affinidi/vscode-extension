@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/affinidi/vscode-extension/compare/v1.1.0...v1.2.0) (2022-12-05)
+
+
+### Bug Fixes
+
+* **FTL-8016:** added semantic-release-vsce ([#46](https://github.com/affinidi/vscode-extension/issues/46)) ([4d4bb78](https://github.com/affinidi/vscode-extension/commit/4d4bb78d8fed41c37892dbdf56881a4d641c4f8e))
+
+
+### Features
+
+* **FTL-8292:** Schema forking functionality ([#44](https://github.com/affinidi/vscode-extension/issues/44)) ([e7d94ed](https://github.com/affinidi/vscode-extension/commit/e7d94edc47cbdee06b9206a845a01a8e2a9ec283))
+* **housekeeping:** Tree view re-iteration ([#29](https://github.com/affinidi/vscode-extension/issues/29)) ([34c7370](https://github.com/affinidi/vscode-extension/commit/34c73708b3bf250097c47d689157e9592b6859a8))
+
 # [1.1.0](https://github.com/affinidi/vscode-extension/compare/v1.0.0...v1.1.0) (2022-12-02)
 
 
