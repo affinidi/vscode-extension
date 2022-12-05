@@ -4,12 +4,28 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
+      "semantic-release-vsce",
+      {
+        "packageVsix": true,
+        "publish": true
+      }
+    ],
+    [
       "@semantic-release/changelog",
       {
         "changelogFile": "./CHANGELOG.md"
       }
     ],
-    "@semantic-release/github",
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "*.vsix"
+          }
+        ]
+      }
+    ],
     [
       "@semantic-release/npm", 
       { 
