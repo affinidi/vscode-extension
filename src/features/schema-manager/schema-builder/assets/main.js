@@ -184,7 +184,7 @@ function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
             class="add-attribute-button"
             data-parent-id="${parentId || ''}"
             style="margin-left: ${level * NESTED_MARGIN_PX}px;"
-          >Add attribute</vscode-button>
+          >${nbsp('Add attribute')}</vscode-button>
         </div>
       </section>
     `)
@@ -202,9 +202,11 @@ function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
       function update() {
         if (parentTypeSelect.value === 'object') {
           actionsSection.style.display = ''
-          addAttributeButton.innerText = parentNameInput.value
-            ? `Add nested attribute to "${parentNameInput.value}"`
-            : 'Add nested attribute'
+          addAttributeButton.innerHTML = nbsp(
+            parentNameInput.value
+              ? `Add nested attribute to "${parentNameInput.value}"`
+              : 'Add nested attribute'
+          )
         } else {
           actionsSection.style.display = 'none'
         }
@@ -217,7 +219,9 @@ function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
   attributesSection.innerHTML = ''
   renderAttributes()
 
-  document.querySelector(SUBMIT_BUTTON_SELECTOR).innerText = schema.parentId ? 'Fork the schema' : 'Publish the schema'
+  document.querySelector(SUBMIT_BUTTON_SELECTOR).innerHTML = nbsp(
+    schema.parentId ? 'Fork the schema' : 'Publish the schema'
+  )
 
   for (const button of document.querySelectorAll(REMOVE_ATTRIBUTE_BUTTON_SELECTOR)) {
     button.addEventListener('click', () => onRemoveAttribute(button.dataset.id))
@@ -235,12 +239,12 @@ function createAttributeElement(attribute, level) {
     <section class="wrapper" style="margin-left: ${level * NESTED_MARGIN_PX}px;" id="${attribute.id}"> 
       <div class="box-row">
         <div class="box" style="width: calc(250px - ${level * NESTED_MARGIN_PX}px);">
-          <label>${isNested ? 'Nested&nbsp;attribute&nbsp;name' : 'Attribute&nbsp;name'}</label>
+          <label>${nbsp(isNested ? 'Nested attribute name' : 'Attribute name')}</label>
           <vscode-text-field size="40" class="attribute__name"></vscode-text-field>
         </div>
 
         <div class="box" style="width: 250px;">
-          <label>Description&nbsp;(optional)</label>
+          <label>${nbsp('Description (optional)')}</label>
           <vscode-text-field size="40" class="attribute__description"></vscode-text-field>
         </div>
         
@@ -278,6 +282,10 @@ function createAttributeElement(attribute, level) {
 }
 
 // --- UTILS
+
+function nbsp(string) {
+  return string.replaceAll(' ', '&nbsp;')
+}
 
 function createElement(html) {
   const element = document.createElement('stub')
