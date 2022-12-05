@@ -31,22 +31,23 @@ export function generateConsoleAuthToken(values?: { userId?: string; username?: 
   )
 }
 
-export const generateSchema = ({
-  id = 'fake-schema-id',
-  jsonSchemaUrl = 'https://schema.affinidi.com/MySchemaV1-0.json',
-  jsonLdContextUrl = 'https://schema.affinidi.com/MySchemaV1-0.jsonld',
-} = {}): SchemaDto => ({
-  id,
+export const generateSchema = (input?: {
+  id?: string
+  description?: string
+  jsonSchemaUrl?: string
+  jsonLdContextUrl?: string
+}): SchemaDto => ({
+  id: input?.id ?? 'fake-schema-id',
   parentId: null,
   authorDid: 'did:fake:user',
-  description: null,
+  description: input?.description ?? null,
   createdAt: '2020-01-01T12:00:00.000Z',
   namespace: null,
   type: 'MySchema',
   version: 1,
   revision: 0,
-  jsonSchemaUrl,
-  jsonLdContextUrl,
+  jsonSchemaUrl: input?.jsonSchemaUrl ?? 'https://schema.affinidi.com/MySchemaV1-0.json',
+  jsonLdContextUrl: input?.jsonLdContextUrl ?? 'https://schema.affinidi.com/MySchemaV1-0.jsonld',
 })
 
 export const generateIssuance = ({

@@ -7,6 +7,7 @@ export const labels = {
   issuances: l10n.t('Issuances'),
   schemas: l10n.t('VC Schemas'),
   schemaBuilder: l10n.t('Schema Builder'),
+  schemaBuilderFork: (type: string) => l10n.t('Fork "{0}" schema', type),
   digitalIdentities: l10n.t('Digital Identities'),
   select: l10n.t('Select'),
   empty: l10n.t('(empty)'),

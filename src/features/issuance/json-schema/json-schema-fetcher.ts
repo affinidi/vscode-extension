@@ -3,6 +3,7 @@ import { validate } from 'jsonschema'
 import { JsonSchema } from './json-schema.dto'
 import { DRAFT_07_SCHEMA, DRAFT_07_URL } from './json-schema-draft-07.schema'
 import { parseJsonSchemaUrl } from '../../../utils/parseJsonSchemaUrl'
+import { VcJsonSchemaFetcher } from './vc-json-schema-fetcher'
 
 export class JsonSchemaFetcher {
   constructor(
@@ -58,3 +59,7 @@ export class JsonSchemaFetcher {
     }
   }
 }
+
+export const vcJsonSchemaFetcher = new VcJsonSchemaFetcher(
+  new JsonSchemaFetcher(['affinity-project.org', 'affinidi.com'], fetch),
+)

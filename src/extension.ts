@@ -437,6 +437,24 @@ export async function activateInternal(context: ExtensionContext) {
     },
   )
 
+  commands.registerCommand(
+    'affinidiExplorer.forkSchema',
+    async (element: SchemaTreeItem) => {
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.forkSchema',
+        },
+      })
+
+      openSchemaBuilder({
+        parentSchemaId: element.schemaId,
+        projectId: element.projectId,
+      })
+    },
+  )
+
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,

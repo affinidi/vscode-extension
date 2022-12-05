@@ -1,9 +1,14 @@
-import { ViewColumn, WebviewPanel, window } from 'vscode'
+import { parseSchema, SchemaField } from '@affinidi/affinidi-vc-schemas'
+import { nanoid } from 'nanoid'
+import { ProgressLocation, ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
-import { errorMessage, labels } from '../../../messages/messages'
+import { errorMessage, labels, schemaMessage } from '../../../messages/messages'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
 import { logger } from '../../../utils/logger'
+import { vcJsonSchemaFetcher } from '../../issuance/json-schema/json-schema-fetcher'
+import { schemaManagerState } from '../schemaManagerState'
 import { SubmitHandler } from './handlers/SubmitHandler'
+import { createBuilderSchemaFork } from './helpers/createBuilderSchemaFork'
 
 export type BuilderAttribute = {
   id: string
@@ -15,6 +20,7 @@ export type BuilderAttribute = {
 }
 
 export type BuilderSchema = {
+  parentId?: string
   type: string
   description: string
   isPublic: boolean
@@ -23,20 +29,32 @@ export type BuilderSchema = {
 
 type IngoingMessage = { command: 'submit'; data: { schema: BuilderSchema } }
 type OutgoingMessage =
-  | { command: 'init' }
+  | { command: 'init'; data?: { schema?: BuilderSchema } }
   | { command: 'enableSubmit' }
   | { command: 'setScope'; data: { scope: string } }
 
 export class SchemaBuilderWebview {
   private panel: WebviewPanel | undefined
 
-  constructor(readonly projectId: string, private readonly submitHandler: SubmitHandler) {}
+  constructor(
+    readonly projectId: string,
+    readonly parentSchemaId: string | undefined,
+    private readonly submitHandler: SubmitHandler,
+  ) {}
 
-  open() {
+  async open() {
+    let parentBuilderSchema: BuilderSchema | undefined
+    if (this.parentSchemaId) {
+      parentBuilderSchema = await createBuilderSchemaFork({
+        projectId: this.projectId,
+        schemaId: this.parentSchemaId,
+      })
+    }
+
     if (!this.panel) {
       this.panel = window.createWebviewPanel(
         'schemaBuilderView',
-        labels.schemaBuilder,
+        parentBuilderSchema ? labels.schemaBuilderFork(parentBuilderSchema.type) : labels.schemaBuilder,
         ViewColumn.One,
         {
           enableScripts: true,
@@ -53,7 +71,10 @@ export class SchemaBuilderWebview {
     }
 
     this.render()
-    this.sendMessage({ command: 'init' })
+    this.sendMessage({
+      command: 'init',
+      data: { schema: parentBuilderSchema },
+    })
 
     this.panel.reveal()
   }
@@ -142,7 +163,7 @@ export class SchemaBuilderWebview {
             <div class="divider"></div>
     
             <section> 
-              <vscode-button class="schema__submit-button">Publish the schema</vscode-button>
+              <vscode-button class="schema__submit-button"></vscode-button>
             </section>
           </form>
         </body>
