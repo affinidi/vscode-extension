@@ -238,7 +238,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   handleExternalChangeActiveProject = (): void => {
     this._onDidChangeActiveProject.fire({
       type: FileChangeType.Changed,
-      uri: Uri.file(path.join(os.homedir(), '.affinidi/config/config.json')),
+      uri: Uri.file(path.join(os.homedir(), '.affinidi/config.json')),
     })
   }
 }

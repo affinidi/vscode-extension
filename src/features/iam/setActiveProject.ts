@@ -6,7 +6,7 @@ import { configVaultService } from '../../auth/authentication-provider/configVau
 
 import { activeProjectSummaryState } from '../../states/activeProjectSummaryState'
 
-import { fetchProjectSummary } from './fetchProjectSummary'
+import { iamState } from './iamState'
 
 export async function setActiveProject(projectId: string): Promise<void> {
   const projectSummary = await window.withProgress(
@@ -14,7 +14,7 @@ export async function setActiveProject(projectId: string): Promise<void> {
       location: ProgressLocation.Notification,
       title: l10n.t('Setting active project...'),
     },
-    () => fetchProjectSummary(projectId, {}),
+    () => iamState.requireProjectSummary(projectId),
   )
 
   const storedSession = credentialsVaultService.getSession()
