@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/affinidi/vscode-extension/compare/v1.2.0...v1.3.0) (2022-12-05)
+
+
+### Features
+
+* [FTL-8013] - Add missing tests ([#45](https://github.com/affinidi/vscode-extension/issues/45)) ([efc7ee8](https://github.com/affinidi/vscode-extension/commit/efc7ee878afbb561e8891d4e0fb990509cdf1c45))
+
 # [1.2.0](https://github.com/affinidi/vscode-extension/compare/v1.1.0...v1.2.0) (2022-12-05)
 
 
