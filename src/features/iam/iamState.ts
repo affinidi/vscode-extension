@@ -62,8 +62,10 @@ export class IamState {
     )
 
     await ext.context.globalState.update(key, projects)
-
-    return projects
+    const sortedProjects = projects.sort(
+      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+    )
+    return sortedProjects
   }
 }
 

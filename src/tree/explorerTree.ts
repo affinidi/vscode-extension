@@ -45,10 +45,7 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
       return
     }
     const projects = await iamState.listProjects()
-    const sortedProjects = projects.sort(
-      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
-    )
-    setActiveProject(sortedProjects[0].projectId)
+    setActiveProject(projects[0].projectId)
   }
 
   public getTreeItem(element: BasicTreeItem): TreeItem {
