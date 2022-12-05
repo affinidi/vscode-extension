@@ -1,5 +1,8 @@
 import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
+import { credentialsVaultService } from '../auth/authentication-provider/credentialsVault'
+import { affinidiActiveProjectChangeProvider } from '../auth/handleActiveProjectChange'
 import { ext } from '../extensionVariables'
+import { setActiveProject } from '../features/iam/setActiveProject'
 import { labels } from '../messages/messages'
 import { BasicTreeItem } from './basicTreeItem'
 

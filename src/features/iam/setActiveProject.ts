@@ -4,7 +4,7 @@ import { credentialsVaultService } from '../../auth/authentication-provider/cred
 
 import { configVaultService } from '../../auth/authentication-provider/configVault'
 
-import { activeProjectSummaryState } from '../../states/activeProjectSummaryState'
+import { activeProjectState } from './activeProjectState'
 
 import { iamState } from './iamState'
 
@@ -22,14 +22,14 @@ export async function setActiveProject(projectId: string): Promise<void> {
   const configs = configVaultService.getConfigs()
 
   if (configs) {
-    activeProjectSummaryState.setActiveProjectSummary(projectSummary)
+    activeProjectState.setActiveProjectSummary(projectSummary)
     credentialsVaultService.setActiveProjectSummary(projectSummary)
   } else {
     const newConfigs = {
       [userId]: { activeProjectId: projectSummary.project.projectId },
     }
 
-    activeProjectSummaryState.setActiveProjectSummary(projectSummary)
+    activeProjectState.setActiveProjectSummary(projectSummary)
     credentialsVaultService.setActiveProjectSummary(projectSummary)
     configVaultService.setConfigs(newConfigs)
   }
