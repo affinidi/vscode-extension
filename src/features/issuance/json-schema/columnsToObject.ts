@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
-import { l10n, ProgressLocation, window } from 'vscode'
+import { ProgressLocation, window } from 'vscode'
+import { csvMessage } from '../../../messages/messages'
 import { parseJsonSchemaUrl } from '../../../utils/parseJsonSchemaUrl'
 import { Schema } from '../../../utils/types'
 import { ColumnSpec, generateColumnSpecs } from './generate-empty-json-specs'
@@ -47,7 +48,7 @@ export async function generateCredentialSubjectSample(schema: Schema) {
   return window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: l10n.t('Generating sample credential subject...'),
+      title: csvMessage.generatingCredentialSubjectSample,
     },
     async () => {
       const parsedJsonSchemaUrl = parseJsonSchemaUrl(schema.jsonSchemaUrl)

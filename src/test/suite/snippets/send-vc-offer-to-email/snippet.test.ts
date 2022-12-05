@@ -7,8 +7,8 @@ import {
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
-import { generateProjectSummary } from '../../testUtils'
 import { iamState } from '../../../../features/iam/iamState'
+import { generateProjectSummary } from '../../helpers'
 
 describe('insertSendVcOfferToEmailSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {

@@ -6,14 +6,9 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
-import { csvMessage, errorMessage, snippetMessage, labels } from '../../messages/messages'
+import { csvMessage, errorMessage, snippetMessage, labels, projectMessage } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 import { iamState } from '../iam/iamState'
-
-interface TemplateInput {
-  projectId: string
-  schema: Schema
-}
 
 export enum CSVImplementation {
   openCsvTemplate,
@@ -25,18 +20,13 @@ export const implementationLabels = {
   [CSVImplementation.uploadCsvFile]: csvMessage.uploadCsvFile,
 }
 
-const openCsvTemplate = async (input: TemplateInput) => {
-  const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
-  if (!projectId) {
-    return
-  }
-
+const openCsvTemplate = async (input: { schema: Schema; projectId: string }) => {
   const {
     apiKey: { apiKeyHash },
-  } = await iamState.requireProjectSummary(projectId)
+  } = await iamState.requireProjectSummary(input.projectId)
 
   const template = await window.withProgress(
-    { location: ProgressLocation.Notification, title: l10n.t('Downloading CSV template...') },
+    { location: ProgressLocation.Notification, title: csvMessage.downloadingCsvTemplate },
     () =>
       issuanceClient.getCsvTemplate(
         {
@@ -55,7 +45,7 @@ const openCsvTemplate = async (input: TemplateInput) => {
   )
 }
 
-const uploadCsvFile = async (input: TemplateInput) => {
+const uploadCsvFile = async (input: { schema: Schema; projectId: string }) => {
   const options: OpenDialogOptions = {
     canSelectMany: false,
     openLabel: labels.select,
@@ -74,6 +64,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
     apiKey: { apiKeyHash },
     wallet: { did },
   } = await iamState.requireProjectSummary(input.projectId)
+
   const schema =
     input.schema ??
     (await schemaManagerHelpers.askForAuthoredSchema({
@@ -84,7 +75,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
 
   try {
     const { issuance } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: l10n.t('Uploading CSV file...') },
+      { location: ProgressLocation.Notification, title: csvMessage.uploadingCsvFile },
       () =>
         issuanceClient.createFromCsv(
           {
@@ -103,7 +94,7 @@ const uploadCsvFile = async (input: TemplateInput) => {
     )
 
     if (issuance) {
-      ext.outputChannel.appendLine(l10n.t(`${csvMessage.issaunceCreationMessage} {0}`, issuance.id))
+      ext.outputChannel.appendLine(l10n.t(`${csvMessage.issuanceCreationMessage} {0}`, issuance.id))
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
@@ -120,7 +111,12 @@ const uploadCsvFile = async (input: TemplateInput) => {
   }
 }
 
-const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
+const initiateIssuanceCsvFlow = async (input: { schema: Schema; projectId?: string }): Promise<void> => {
+  const projectId = input.projectId ?? (await iamHelpers.askForProjectId())
+  if (!projectId) {
+    return
+  }
+
   const supported = [CSVImplementation.openCsvTemplate, CSVImplementation.uploadCsvFile]
 
   const selectedValue = await showQuickPick(
@@ -130,13 +126,11 @@ const initiateIssuanceCsvFlow = async (input: TemplateInput): Promise<void> => {
 
   switch (selectedValue) {
     case CSVImplementation.openCsvTemplate:
-      await openCsvTemplate(input)
+      await csvCreationService.openCsvTemplate({ projectId, schema: input.schema })
       break
     case CSVImplementation.uploadCsvFile:
-      await uploadCsvFile(input)
+      await csvCreationService.uploadCsvFile({ projectId, schema: input.schema })
       break
-    default:
-      throw new Error(`${errorMessage.unknownValue} ${selectedValue}`)
   }
 }
 

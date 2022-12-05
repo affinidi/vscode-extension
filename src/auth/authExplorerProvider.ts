@@ -1,15 +1,14 @@
-import { ThemeIcon } from 'vscode'
+import { l10n, ThemeIcon } from 'vscode'
 import { ext } from '../extensionVariables'
 import { authMessage, labels } from '../messages/messages'
-import { ExplorerTree } from '../tree/explorerTree'
-import { ExplorerTreeItem } from '../tree/explorerTreeItem'
-import { ExplorerProvider, ExplorerResourceTypes } from '../tree/types'
+import { BasicTreeItem } from '../tree/basicTreeItem'
+import { ExplorerProvider, ExplorerTree } from '../tree/explorerTree'
 
 export class AuthExplorerProvider implements ExplorerProvider {
   async getChildren(
-    element: ExplorerTreeItem | undefined,
+    element: BasicTreeItem | undefined,
     context: { tree: ExplorerTree },
-  ): Promise<ExplorerTreeItem[] | undefined> {
+  ): Promise<BasicTreeItem[] | undefined> {
     const isLoggedIn = await ext.authProvider.isLoggedIn()
     if (isLoggedIn) return undefined
 
@@ -20,8 +19,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
     }
 
     return [
-      new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.signup,
+      new BasicTreeItem({
         label: labels.createAnAccountWithAffinidi,
         icon: new ThemeIcon('sign-in'),
         command: {
@@ -29,8 +27,7 @@ export class AuthExplorerProvider implements ExplorerProvider {
           command: 'affinidi.signUp',
         },
       }),
-      new ExplorerTreeItem({
-        resourceType: ExplorerResourceTypes.login,
+      new BasicTreeItem({
         label: labels.signIn,
         icon: new ThemeIcon('sign-in'),
         command: { title: labels.signIn, command: 'affinidi.login' },
