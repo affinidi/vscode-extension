@@ -18,21 +18,9 @@ export async function setActiveProject(projectId: string): Promise<void> {
   )
 
   const storedSession = credentialsVaultService.getSession()
-  const userId = storedSession?.account?.userId ?? null
-  const configs = configVaultService.getConfigs()
-  console.log('configs', configs)
-  if (configs) {
-    console.log('inbetween', projectId)
-    activeProjectState.setActiveProjectSummary(projectSummary)
-    console.log('inbetween')
-    credentialsVaultService.setActiveProjectSummary(projectSummary)
-  } else {
-    const newConfigs = {
-      [userId]: { activeProjectId: projectSummary.project.projectId },
-    }
+  const userId = storedSession ? storedSession.account.userId : null
 
-    activeProjectState.setActiveProjectSummary(projectSummary)
-    credentialsVaultService.setActiveProjectSummary(projectSummary)
-    configVaultService.setConfigs(newConfigs)
-  }
+  activeProjectState.setActiveProjectSummary(projectSummary)
+  configVaultService.setConfigs(userId, projectId)
+  credentialsVaultService.setActiveProjectSummary(projectSummary)
 }

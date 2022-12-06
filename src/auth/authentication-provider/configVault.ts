@@ -28,23 +28,20 @@ class VaultService {
 
   public getActiveProjectId = (userId: string): string | null => {
     const value = this.store.get(CONFIGS_KEY_NAME)
-    return value[userId] ? value[userId].activeProjectId : null
+    return (value && value[userId]) ? value[userId].activeProjectId : null
   }
 
-  public getConfigs = (): Configs | null => {
-    const value = this.store.get(CONFIGS_KEY_NAME)
+  public setConfigs = (userId: string, projectId: string): void => {
+    const newConfigs = {
+      [userId]: { activeProjectId: projectId },
+    }
 
-    return value ? (value as Configs) : null
+    this.store.set(CONFIGS_KEY_NAME, newConfigs)
   }
 
-  public setConfigs = (value: Configs): void => {
-    this.store.set(CONFIGS_KEY_NAME, value)
-  } 
-
-  public getCurrentUserID = (): string | null => {
+  public getCurrentUserID = (): string => {
     const value = this.store.get(CURRENT_USER_ID_KEY_NAME)
-    console.log('getCurrentUserID', typeof value === 'string' ? value : null)
-    return typeof value === 'string' ? value : null
+    return value as string
   }
 
   public setCurrentUserID = (value: string): void => {
