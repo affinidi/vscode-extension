@@ -28,7 +28,7 @@ export class IamState {
   }
 
   async clear() {
-    await state.clear(PREFIX)
+    await state.clearByPrefix(PREFIX)
   }
 
   private async fetchProjectSummary(projectId: string): Promise<ProjectSummary | undefined> {

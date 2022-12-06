@@ -80,8 +80,6 @@ async function logoutHandler(): Promise<void> {
     createIfNone: false,
   })
 
-  await state.clear()
-
   if (session) {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,

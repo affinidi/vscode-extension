@@ -94,18 +94,20 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string }) => {
     )
 
     if (issuance) {
-      ext.outputChannel.appendLine(l10n.t(`${csvMessage.issuanceCreationMessage} {0}`, issuance.id))
+      window.showInformationMessage(csvMessage.issuanceCreationMessage)
+      ext.outputChannel.appendLine(csvMessage.issuanceCreationMessage)
+      ext.outputChannel.appendLine(l10n.t(`Issuance ID: {0}`, issuance.id))
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
     const parsedCsvUploadError = parseUploadError(error)
 
     if (parsedCsvUploadError) {
-      ext.outputChannel.appendLine(
-        l10n.t(
-          `${csvMessage.csvValidationError} {0} ${JSON.stringify(parsedCsvUploadError, null, 2)}`,
-        ),
+      window.showErrorMessage(
+        l10n.t(`${csvMessage.csvValidationError} Check Affinidi Output for more details.`),
       )
+      ext.outputChannel.appendLine(l10n.t(csvMessage.csvValidationError))
+      ext.outputChannel.appendLine(JSON.stringify(parsedCsvUploadError, null, 2))
       ext.outputChannel.show()
     }
   }

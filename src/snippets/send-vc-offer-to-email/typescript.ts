@@ -35,8 +35,8 @@ const issuanceResponse = await fetch('${input.issuanceApiUrl}/issuances', {
         // claim link will be sent by email
         method: 'email',
       },
-      // set walletUrl if you have implemented your own wallet with claim flow support
-      // walletUrl: "https://my.wallet.com/claim",
+      // set walletUrl to your wallet URL with claim flow support
+      walletUrl: "http://localhost:3000/holder/claim",
     }
   })
 });
@@ -60,7 +60,9 @@ const offerResponse = await fetch(\`${
     'Cache-Control': 'no-store, max-age=0',
   },
   body: JSON.stringify({
-    // should match fields in VC Schema, specified in the Issuance template
+    // should match fields in VC Schema
+    // read more about JSON schema specification formats:
+    // https://json-schema.org/draft/2020-12/json-schema-validation.html#name-defined-formats
     credentialSubject: ${formatObject(input.credentialSubject, { indent: 2 })},
     verification: {
       target: {
