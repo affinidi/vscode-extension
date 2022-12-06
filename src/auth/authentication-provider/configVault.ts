@@ -28,7 +28,8 @@ class VaultService {
 
   public getActiveProjectId = (userId: string): string | null => {
     const value = this.store.get(CONFIGS_KEY_NAME)
-    return (value && value[userId]) ? value[userId].activeProjectId : null
+    // @ts-ignore
+    return value && value[userId] ? value[userId].activeProjectId : null
   }
 
   public setConfigs = (userId: string, projectId: string): void => {

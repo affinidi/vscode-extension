@@ -14,7 +14,7 @@ export async function setActiveProject(projectId: string): Promise<void> {
   )
 
   const storedSession = credentialsVaultService.getSession()
-  const userId = storedSession ? storedSession.account.userId : null
+  const userId = storedSession ? storedSession.account.userId : ''
 
   activeProjectState.setActiveProjectSummary(projectSummary)
   configVaultService.setConfigs(userId, projectId)

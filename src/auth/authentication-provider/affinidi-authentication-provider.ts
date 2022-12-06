@@ -42,8 +42,8 @@ const convertSession = (session: Session) => {
   return convertedSession
 }
 
-const assertSession = (sessionValue: unknown): AuthenticationSession | undefined => {
-  return sessionValue === null ? null : convertSession(sessionValue)
+const assertSession = (sessionValue: Session | null): AuthenticationSession | undefined => {
+  return sessionValue ? convertSession(sessionValue) : undefined
 }
 
 const readSessionFromStorage = (): AuthenticationSession | undefined => {
@@ -207,7 +207,9 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   }
 
   handleExternalChangeSession = (newValue: unknown, oldValue: unknown): void => {
+    //@ts-ignore
     const oldSession = oldValue ? assertSession(oldValue) : null
+    //@ts-ignore
     const newSession = newValue ? assertSession(newValue) : null
 
     // If it's the same session ID we consider it a change
