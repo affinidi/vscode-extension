@@ -414,7 +414,7 @@
               "altText": "Affinidi"
             },
             "completionEvents": [
-              "onCommand:affinidiExplorer.initiateIssuanceCsvFlow"
+              "onCommand:affinidi.initiateIssuanceCsvFlow"
             ]
           },
           {
