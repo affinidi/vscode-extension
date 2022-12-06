@@ -104,22 +104,12 @@ export class SchemaBuilderWebview {
     const { webview } = this.requirePanel()
     const { extensionUri } = ext.context
 
-    const toolkitUri = getWebviewUri(webview, extensionUri, [
-      'node_modules',
-      '@vscode',
-      'webview-ui-toolkit',
-      'dist',
-      'toolkit.js',
-    ])
-
+    const toolkitUri = getWebviewUri(webview, extensionUri, ['media', 'vendor', 'toolkit.js'])
     const styleUri = getWebviewUri(webview, extensionUri, ['media', 'style.css'])
     const scriptUri = getWebviewUri(webview, extensionUri, [
-      'src',
-      'features',
+      'media',
       'schema-manager',
-      'schema-builder',
-      'assets',
-      'main.js',
+      'schema-builder.js',
     ])
 
     webview.html = `
