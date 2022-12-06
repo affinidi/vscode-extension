@@ -1,11 +1,7 @@
 import { window, ProgressLocation, l10n } from 'vscode'
-
 import { credentialsVaultService } from '../../auth/authentication-provider/credentialsVault'
-
 import { configVaultService } from '../../auth/authentication-provider/configVault'
-
 import { activeProjectState } from './activeProjectState'
-
 import { iamState } from './iamState'
 
 export async function setActiveProject(projectId: string): Promise<void> {

@@ -1,7 +1,5 @@
-import { config } from '@vscode/l10n'
 import { ThemeIcon } from 'vscode'
 import { configVaultService } from '../../../auth/authentication-provider/configVault'
-import { credentialsVaultService } from '../../../auth/authentication-provider/credentialsVault'
 import { ext } from '../../../extensionVariables'
 import { labels } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
