@@ -286,11 +286,6 @@
           "group": "inline@1"
         },
         {
-          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
-          "when": "view == affinidiExplorer && viewItem == schema",
-          "group": "1"
-        },
-        {
           "command": "affinidiExplorer.openSchemaBuilder",
           "when": "view == affinidiExplorer && viewItem == schemas || view == affinidiExplorer && viewItem == scopedSchemas",
           "group": "inline"
@@ -298,7 +293,7 @@
         {
           "command": "affinidiExplorer.forkSchema",
           "when": "view == affinidiExplorer && viewItem == schema",
-          "group": "inline"
+          "group": "inline@2"
         },
         {
           "command": "affinidi.copyJsonURL",
@@ -311,9 +306,19 @@
           "group": "6_copypath"
         },
         {
+          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "inline@1"
+        },
+        {
+          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "1"
+        },
+        {
           "command": "affinidiExplorer.viewProperties",
           "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance || view == affinidiExplorer && viewItem == schema",
-          "group": "inline"
+          "group": "inline@3"
         },
         {
           "command": "affinidiExplorer.showJsonSchema",
