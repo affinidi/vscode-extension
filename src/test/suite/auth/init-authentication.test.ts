@@ -90,7 +90,6 @@ describe('initAuthentication()', () => {
       await commands.executeCommand('affinidi.me')
 
       expect(userManagementClient.me).calledWith({ consoleAuthToken })
-      expect(ext.outputChannel.appendLine).calledWith(JSON.stringify({ userId, username }))
     })
   })
 })

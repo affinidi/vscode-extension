@@ -1,4 +1,4 @@
-import { authentication, commands, window, l10n } from 'vscode'
+import { authentication, commands, window, l10n, ProgressLocation } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
 import { authMessage, errorMessage, labels } from '../messages/messages'
@@ -70,8 +70,8 @@ async function loginHandler(): Promise<void> {
     },
   })
 
-  window.showInformationMessage(authMessage.signedIn)
-  ext.outputChannel.appendLine(authMessage.signedIn)
+  window.showInformationMessage(authMessage.loggedIn)
+  ext.outputChannel.appendLine(authMessage.loggedIn)
   await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
 }
 
@@ -93,19 +93,22 @@ async function logoutHandler(): Promise<void> {
 
     await ext.authProvider.handleRemoveSession()
 
-    await window.showInformationMessage(authMessage.signedOut)
-    ext.outputChannel.appendLine(authMessage.signedOut)
+    await window.showInformationMessage(authMessage.loggedOut)
+    ext.outputChannel.appendLine(authMessage.loggedOut)
   } else {
     await window.showInformationMessage(authMessage.notLoggedIn)
   }
 }
 
 async function userDetailsHandler(): Promise<void> {
-  const userDetails = await userManagementClient.me({
-    consoleAuthToken: await authHelper.getConsoleAuthToken(),
-  })
+  const userDetails = await window.withProgress(
+    { location: ProgressLocation.Notification, title: authMessage.fetchingAccountDetails },
+    async () =>
+      userManagementClient.me({
+        consoleAuthToken: await authHelper.getConsoleAuthToken(),
+      }),
+  )
 
-  ext.outputChannel.appendLine(JSON.stringify(userDetails))
   readOnlyContentViewer.open({
     node: { label: 'AccountDetails', id: userDetails.userId },
     content: userDetails,
