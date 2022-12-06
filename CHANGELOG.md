@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/affinidi/vscode-extension/compare/v1.3.0...v1.4.0) (2022-12-06)
+
+
+### Bug Fixes
+
+* **FTL-8016:** fixed semantic-release order ([#47](https://github.com/affinidi/vscode-extension/issues/47)) ([0785da2](https://github.com/affinidi/vscode-extension/commit/0785da2bd6ca358491b0ca5adeeef061b2eecb89))
+
+
+### Features
+
+* added help and feedback view ([#48](https://github.com/affinidi/vscode-extension/issues/48)) ([fd8e124](https://github.com/affinidi/vscode-extension/commit/fd8e124be8f7ad3ffaf9579a105e37788621c3b7))
+
 # [1.3.0](https://github.com/affinidi/vscode-extension/compare/v1.2.0...v1.3.0) (2022-12-05)
 
 
