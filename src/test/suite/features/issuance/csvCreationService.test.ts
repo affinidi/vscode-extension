@@ -77,9 +77,7 @@ describe('csvCreationService()', () => {
     it('should create issuance', async () => {
       await csvCreationService.uploadCsvFile({ projectId, schema })
 
-      expect(ext.outputChannel.appendLine).calledWith(
-        `${csvMessage.issuanceCreationMessage} ${issuance.id}`,
-      )
+      expect(ext.outputChannel.appendLine).calledWithMatch(csvMessage.issuanceCreationMessage)
     })
 
     it('should show an error if some upload error', async () => {
