@@ -1,4 +1,4 @@
-import { l10n, ThemeIcon } from 'vscode'
+import { ThemeIcon } from 'vscode'
 import { ext } from '../extensionVariables'
 import { authMessage, labels } from '../messages/messages'
 import { BasicTreeItem } from '../tree/basicTreeItem'
@@ -28,9 +28,9 @@ export class AuthExplorerProvider implements ExplorerProvider {
         },
       }),
       new BasicTreeItem({
-        label: labels.signIn,
+        label: labels.login,
         icon: new ThemeIcon('sign-in'),
-        command: { title: labels.signIn, command: 'affinidi.login' },
+        command: { title: labels.login, command: 'affinidi.login' },
       }),
     ]
   }

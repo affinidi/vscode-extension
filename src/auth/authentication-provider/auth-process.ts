@@ -59,7 +59,7 @@ export const executeAuthProcess = async ({
   const { consoleAuthToken } = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: `${l10n.t('Signing in to')} Affinidi`,
+      title: authMessage.loggingIn,
     },
     async () => {
       return isSignUp

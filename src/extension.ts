@@ -30,7 +30,7 @@ import { showSchemaDetails } from './features/schema-manager/schema-details/show
 import { issuanceState } from './features/issuance/issuanceState'
 import { schemaManagerState } from './features/schema-manager/schemaManagerState'
 import { state } from './state'
-import { CodegenTree } from './tree/codegenTree'
+import { DevToolsTree } from './tree/devToolsTree'
 import { FeedbackTree } from './tree/feedbackTree'
 import { IamExplorerProvider } from './features/iam/tree/iamExplorerProvider'
 import { BasicTreeItem } from './tree/basicTreeItem'
@@ -40,9 +40,12 @@ import { iamState } from './features/iam/iamState'
 import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager/tree/treeItems'
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
+import { notifyError } from './utils/notifyError'
 
-const CONSOLE_URL = 'https://console.affinidi.com'
-const GITHUB_URL = 'https://github.com/affinidi/vscode-extension/issues'
+const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
+const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
+const API_DOCS_URL = 'https://build.affinidi.com/docs/api'
+const DISCORD_URL = 'https://discord.com/invite/jx2hGBk5xE'
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -62,7 +65,7 @@ export async function activateInternal(context: ExtensionContext) {
     new IssuanceExplorerProvider(),
     new SchemaManagerExplorerProvider(),
   ])
-  ext.codegenTree = new CodegenTree()
+  ext.devToolsTree = new DevToolsTree()
   ext.feedbackTree = new FeedbackTree()
 
   const treeView = window.createTreeView('affinidiExplorer', {
@@ -71,8 +74,8 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  window.createTreeView('affinidiCodeGeneration', {
-    treeDataProvider: ext.codegenTree,
+  window.createTreeView('affinidiDevTools', {
+    treeDataProvider: ext.devToolsTree,
     canSelectMany: false,
     showCollapseAll: true,
   })
@@ -283,6 +286,27 @@ export async function activateInternal(context: ExtensionContext) {
     ),
   )
 
+  context.subscriptions.push(
+    commands.registerCommand('affinidi.initiateIssuanceCsvFlow', async () => {
+      const projectId = await iamHelpers.askForProjectId()
+      if (!projectId) return
+      const schema = await schemaManagerHelpers.askForAuthoredSchema({ projectId })
+      if (!schema) return
+      await csvCreationService.initiateIssuanceCsvFlow({
+        schema,
+        projectId,
+      })
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidi.initiateIssuanceCsvFlow',
+        },
+      })
+    }),
+  )
+
   commands.registerCommand('affinidiExplorer.showJsonSchema', async (element: SchemaTreeItem) => {
     sendEventToAnalytics({
       name: EventNames.commandExecuted,
@@ -300,66 +324,6 @@ export async function activateInternal(context: ExtensionContext) {
     if (!schema) return
 
     await schemaManagerHelpers.showSchemaFile(schema, 'json')
-  })
-
-  commands.registerCommand('affinidiExplorer.openCreateSchemaUrl', (element: BasicTreeItem) => {
-    const createSchemaURL = buildURL(CONSOLE_URL, '/schema-manager/builder')
-
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiExplorer.openCreateSchemaUrl',
-        projectId: element instanceof BasicTreeItemWithProject ? element.projectId : undefined,
-      },
-    })
-
-    commands.executeCommand('vscode.open', createSchemaURL)
-  })
-
-  commands.registerCommand('affinidiExplorer.createIssuance', async (element: SchemaTreeItem) => {
-    const schema = await schemaManagerState.getAuthoredSchemaById({
-      projectId: element.projectId,
-      schemaId: element.schemaId,
-    })
-
-    if (schema) {
-      const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
-        schemaUrl: schema.jsonSchemaUrl,
-      })
-
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: EventSubCategory.command,
-        metadata: {
-          commandId: 'affinidiExplorer.createIssuance',
-          projectId: element.projectId,
-        },
-      })
-
-      commands.executeCommand('vscode.open', createIssuanceURL)
-    }
-  })
-
-  commands.registerCommand('affinidiExplorer.createIssuanceWithSchema', async () => {
-    const projectId = await iamHelpers.askForProjectId()
-    if (!projectId) return
-
-    const jsonSchemaUrl = await schemaManagerHelpers.fetchSchemaUrl(projectId)
-    const createIssuanceURL = buildURL(CONSOLE_URL, '/bulk-issuance', {
-      schemaUrl: jsonSchemaUrl,
-    })
-
-    commands.executeCommand('vscode.open', createIssuanceURL)
-
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiExplorer.createIssuanceWithSchema',
-        projectId,
-      },
-    })
   })
 
   commands.registerCommand(
@@ -395,29 +359,43 @@ export async function activateInternal(context: ExtensionContext) {
       })
 
       await createProjectProcess()
+      await iamState.clear()
       ext.explorerTree.refresh()
     }),
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidiFeedback.redirectToGithub', () => {
-      commands.executeCommand('vscode.open', GITHUB_URL)
+    commands.registerCommand('affinidiFeedback.reportIssue', () => {
+      commands.executeCommand('vscode.open', GITHUB_NEW_ISSUE_URL)
     }),
   )
 
-  commands.registerCommand('affinidiDevTools.issueCredential', () => {
-    const issueCredentialURL = buildURL(CONSOLE_URL, '/bulk-issuance')
+  context.subscriptions.push(
+    commands.registerCommand('affinidiFeedback.reviewIssues', () => {
+      commands.executeCommand('vscode.open', GITHUB_ISSUES_URL)
+    }),
+  )
 
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidiDevTools.issueCredential',
-      },
-    })
+  context.subscriptions.push(
+    commands.registerCommand('affinidiFeedback.openAPIDocs', () => {
+      commands.executeCommand('vscode.open', API_DOCS_URL)
+    }),
+  )
 
-    commands.executeCommand('vscode.open', issueCredentialURL)
-  })
+  context.subscriptions.push(
+    commands.registerCommand('affinidiFeedback.openDiscord', () => {
+      commands.executeCommand('vscode.open', DISCORD_URL)
+    }),
+  )
+
+  context.subscriptions.push(
+    commands.registerCommand('affinidiFeedback.openWalkthrough', () => {
+      commands.executeCommand(
+        'workbench.action.openWalkthrough',
+        'Affinidi.affinidi#affinidi-walkthrough',
+      )
+    }),
+  )
 
   commands.registerCommand(
     'affinidiExplorer.openSchemaBuilder',
@@ -437,23 +415,20 @@ export async function activateInternal(context: ExtensionContext) {
     },
   )
 
-  commands.registerCommand(
-    'affinidiExplorer.forkSchema',
-    async (element: SchemaTreeItem) => {
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: EventSubCategory.command,
-        metadata: {
-          commandId: 'affinidiExplorer.forkSchema',
-        },
-      })
+  commands.registerCommand('affinidiExplorer.forkSchema', async (element: SchemaTreeItem) => {
+    sendEventToAnalytics({
+      name: EventNames.commandExecuted,
+      subCategory: EventSubCategory.command,
+      metadata: {
+        commandId: 'affinidiExplorer.forkSchema',
+      },
+    })
 
-      openSchemaBuilder({
-        parentSchemaId: element.schemaId,
-        projectId: element.projectId,
-      })
-    },
-  )
+    openSchemaBuilder({
+      parentSchemaId: element.schemaId,
+      projectId: element.projectId,
+    })
+  })
 
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {
     sendEventToAnalytics({
@@ -464,7 +439,11 @@ export async function activateInternal(context: ExtensionContext) {
       },
     })
 
-    openSchemaBuilder({ projectId: await iamHelpers.askForProjectId() })
+    try {
+      openSchemaBuilder({ projectId: await iamHelpers.askForProjectId() })
+    } catch (error) {
+      notifyError(error)
+    }
   })
 
   askUserForTelemetryConsent()
