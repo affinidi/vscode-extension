@@ -26,18 +26,24 @@ class VaultService {
     this.store.delete(key)
   }
 
+  public getActiveProjectId = (userId: string): string | null => {
+    const value = this.store.get(CONFIGS_KEY_NAME)
+    return value[userId] ? value[userId].activeProjectId : null
+  }
+
   public getConfigs = (): Configs | null => {
     const value = this.store.get(CONFIGS_KEY_NAME)
-    console.log(value ? (value['108a297e-8e32-46b8-ba5b-0390b958219a'].activeProjectId) : null)
+
     return value ? (value as Configs) : null
   }
 
   public setConfigs = (value: Configs): void => {
     this.store.set(CONFIGS_KEY_NAME, value)
-  }
+  } 
 
   public getCurrentUserID = (): string | null => {
     const value = this.store.get(CURRENT_USER_ID_KEY_NAME)
+    console.log('getCurrentUserID', typeof value === 'string' ? value : null)
     return typeof value === 'string' ? value : null
   }
 

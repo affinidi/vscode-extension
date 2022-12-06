@@ -39,13 +39,12 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
 
   private readonly activeProjectListener = async () => {
     const currentUserId = configVaultService.getCurrentUserID()
-    console.log('currentUserId', currentUserId)
-    const activeProject = configVaultService.getConfigs()
-    console.log('activeProject', activeProject)
+    const activeProjectId = currentUserId
+      ? configVaultService.getActiveProjectId(currentUserId)
+      : null
     this.refresh()
-    if (activeProject) {
-      console.log('heyy')
-      setActiveProject(activeProject[currentUserId].activeProjectId)
+    if (activeProjectId) {
+      setActiveProject(activeProjectId)
       return
     }
     const projects = await iamState.listProjects()
