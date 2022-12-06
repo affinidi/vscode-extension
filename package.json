@@ -466,6 +466,7 @@
     "clean": "rimraf ./out",
     "dev": "nodemon -x 'npm run compile'",
     "generate-translation": "npx @vscode/l10n-dev export -o ./l10n ./src",
+    "update-toolkit": "cp ./node_modules/@vscode/webview-ui-toolkit/dist/toolkit.js ./media/vendor",
     "prepare": "husky install"
   },
   "devDependencies": {

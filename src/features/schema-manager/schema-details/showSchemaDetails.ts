@@ -10,13 +10,7 @@ function renderSchemaDetails(input: { webview: Webview; extensionUri: Uri; schem
   const { webview, extensionUri, schema } = input
 
   const styleUri = getWebviewUri(webview, extensionUri, ['media', 'style.css'])
-  const toolkitUri = getWebviewUri(webview, extensionUri, [
-    'node_modules',
-    '@vscode',
-    'webview-ui-toolkit',
-    'dist',
-    'toolkit.js',
-  ])
+  const toolkitUri = getWebviewUri(webview, extensionUri, ['media', 'vendor', 'toolkit.js'])
 
   return /* html */ `
     <!DOCTYPE html>
@@ -75,14 +69,9 @@ function renderSchemaDetails(input: { webview: Webview; extensionUri: Uri; schem
 
 export function showSchemaDetails(schema: SchemaDto) {
   if (!panel) {
-    panel = window.createWebviewPanel(
-      'schemaDetailsView',
-      '',
-      ViewColumn.One,
-      {
-        enableScripts: true,
-      },
-    )
+    panel = window.createWebviewPanel('schemaDetailsView', '', ViewColumn.One, {
+      enableScripts: true,
+    })
 
     panel.onDidDispose(() => (panel = undefined), null, ext.context.subscriptions)
   }
