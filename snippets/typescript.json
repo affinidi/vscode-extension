@@ -3,7 +3,7 @@
     "description": "Create bulk issuance entity (using fetch)",
     "prefix": "affinidi-create-issuance",
     "body": [
-      "const apiKeyHash = '${1:Paste your API key here}';",
+      "const apiKeyHash = '${1:Paste your API key hash here}';",
       "const projectId = '${2:Paste your Project ID here}';",
       "const issuerDid = '${3:Paste your Wallet DID here}';",
       "// use Schema Manager to find or create a schema for your VC",
@@ -49,7 +49,7 @@
     "description": "Create & send bulk issuance offer (using fetch)",
     "prefix": "affinidi-create-offer",
     "body": [
-      "const apiKeyHash = '${1:Paste your API key here}';",
+      "const apiKeyHash = '${1:Paste your API key hash here}';",
       "const issuanceId = '${2:Paste your Issuance ID here}';",
       "",
       "type CreateOfferResponse = { id: string };",
@@ -58,7 +58,7 @@
       "const response = await fetch(`https://console-vc-issuance.apse1.affinidi.com/api/v1/issuances/\\${issuanceId}/offers`, {",
       "  method: 'POST',",
       "  headers: {",
-      "    'Api-Key': '${2:Paste your API key here}',",
+      "    'Api-Key': apiKeyHash,",
       "    'Content-Type': 'application/json',",
       "    'Referrer-Policy': 'no-referrer',",
       "    'Cache-Control': 'no-store, max-age=0',",

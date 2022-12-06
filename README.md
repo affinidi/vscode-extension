@@ -35,7 +35,7 @@ Affinidi collects usage data to improve our products and services. For informati
 
 ## Feedback, Support, and Community
 
-[Click here](https://github.com/affinityproject/vscode-extension/issues) to create a ticket and we will get on it right away. If you are facing technical or other issues, you can reach out to us on [Discord](https://discord.com/invite/jx2hGBk5xE).  
+[Click here](https://github.com/affinidi/vscode-extension/issues) to create a ticket and we will get on it right away. If you are facing technical or other issues, you can reach out to us on [Discord](https://discord.com/invite/jx2hGBk5xE).  
 
 ## FAQ
 

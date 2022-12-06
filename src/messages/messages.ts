@@ -1,13 +1,14 @@
 import { l10n } from 'vscode'
 
 export const labels = {
-  signIn: l10n.t('Sign in to Affinidi'),
+  login: l10n.t('Log in to Affinidi'),
   createAnAccountWithAffinidi: l10n.t('Create an Account with Affinidi'),
   createProject: l10n.t('Create Project'),
   issuances: l10n.t('Issuances'),
   schemas: l10n.t('VC Schemas'),
   schemaBuilder: l10n.t('Schema Builder'),
   schemaBuilderFork: (type: string) => l10n.t('Fork "{0}" schema', type),
+  initiateIssuanceCsvFlow: l10n.t('Initiate CSV Issuance'),
   digitalIdentities: l10n.t('Digital Identities'),
   select: l10n.t('Select'),
   empty: l10n.t('(empty)'),
@@ -17,11 +18,16 @@ export const labels = {
   appGenerators: l10n.t('App Generators'),
   scriptGenerators: l10n.t('Script Generators'),
   intelliSenseSnippets: l10n.t('IntelliSense Snippets'),
+  helperTools: l10n.t('Helper Tools'),
   sendVCOfferToEmail: l10n.t('Send a VC Offer to an email'),
   getIssuanceOffers: l10n.t('Get Issuance Offers'),
   signCloudWalletVc: l10n.t('Sign a VC with Cloud Wallet'),
   certificationAndVerification: l10n.t('Certification & Verification'),
-  giveFeedback: l10n.t('Give Feedback'),
+  reviewIssues: l10n.t('Review Issues'),
+  reportIssue: l10n.t('Report Issue'),
+  openWalkthrough: l10n.t('Extension Walkthrough'),
+  openAPIDocs: l10n.t('API Documentation'),
+  openDiscord: l10n.t('Discord Server'),
 }
 
 export const errorMessage = {
@@ -39,9 +45,10 @@ export const errorMessage = {
 }
 
 export const authMessage = {
-  signedIn: l10n.t('Signed in to Affinidi'),
-  signedUp: l10n.t('Signed up in to Affinidi'),
-  signedOut: l10n.t('Signed out of Affinidi'),
+  loggedIn: l10n.t('Logged in to Affinidi'),
+  loggedOut: l10n.t('Logged out of Affinidi'),
+  signedUp: l10n.t('Signed up to Affinidi'),
+  loggingIn: l10n.t('Logging in to Affinidi'),
   accept: l10n.t('Accept'),
   reject: l10n.t('Reject'),
   enterEmail: l10n.t('Enter Email'),
@@ -66,6 +73,7 @@ export const authMessage = {
   termsAndConditions: l10n.t(
     'Please read and accept the [Terms of Use](https://build.affinidi.com/dev-tools/terms-of-use.pdf) and [Privacy Policy](https://build.affinidi.com/dev-tools/privacy-policy.pdf)',
   ),
+  fetchingAccountDetails: l10n.t('Fetching account details...'),
 }
 
 export const projectMessage = {
@@ -77,7 +85,7 @@ export const projectMessage = {
   fetchingProjectSummary: l10n.t('Fetching project details...'),
   successfulProjectCreation: l10n.t('Project created successfully'),
   projectRequired: l10n.t('You need to have a project to perform this operation'),
-  projectNameRequired: l10n.t('project name is required'),
+  projectNameRequired: l10n.t('Project name is required'),
   projectNotCreated: l10n.t('Project could not be created'),
   noProjectSummary: l10n.t('Could not find project summary: {0}'),
   missingProjectID: l10n.t('Project ID is not provided'),

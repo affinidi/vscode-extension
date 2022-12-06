@@ -32,26 +32,26 @@
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.createProject",
     "onCommand:affinidi.openSchemaBuilder",
+    "onCommand:affinidi.initiateIssuanceCsvFlow",
     "onCommand:affinidi.docs.availableSnippets",
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
     "onCommand:affinidi.openMarkDown",
     "onCommand:affinidi.signUp",
-    "onCommand:affinidiDevTools.issueCredential",
-    "onCommand:affinidiExplorer.createIssuance",
-    "onCommand:affinidiExplorer.openCreateSchemaUrl",
     "onCommand:affinidiExplorer.openSchemaBuilder",
     "onCommand:affinidiExplorer.forkSchema",
-    "onCommand:affinidiExplorer.createIssuanceWithSchema",
     "onCommand:affinidiExplorer.refresh",
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
     "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
-    "onCommand:affinidiFeedback.redirectToGithub",
+    "onCommand:affinidiFeedback.reportIssue",
+    "onCommand:affinidiFeedback.reviewIssues",
+    "onCommand:affinidiFeedback.openWalkthrough",
+    "onCommand:affinidiFeedback.openAPIDocs",
+    "onCommand:affinidiFeedback.openDiscord",
     "onStartupFinished",
-    "onView:affinidiCodeGeneration",
     "onView:affinidiDevTools",
     "onView:affinidiExplorer",
     "onView:affinidiFeedback"
@@ -88,7 +88,7 @@
       },
       {
         "command": "affinidi.logout",
-        "title": "%affinidi.signOut%",
+        "title": "%affinidi.logout%",
         "category": "Affinidi"
       },
       {
@@ -156,19 +156,9 @@
         "category": "%commands.category.explorer%"
       },
       {
-        "command": "affinidiExplorer.openCreateSchemaUrl",
-        "title": "%affinidiExplorer.openCreateSchemaUrl%",
-        "category": "%commands.category.explorer%"
-      },
-      {
         "command": "affinidi.openSchemaBuilder",
         "title": "%affinidi.openSchemaBuilder%",
         "category": "Affinidi"
-      },
-      {
-        "command": "affinidiExplorer.createIssuance",
-        "title": "%affinidiExplorer.createIssuance%",
-        "category": "%commands.category.explorer%"
       },
       {
         "command": "affinidiExplorer.openSchemaBuilder",
@@ -180,17 +170,7 @@
         "command": "affinidiExplorer.forkSchema",
         "title": "%affinidiExplorer.forkSchema%",
         "category": "%commands.category.explorer%",
-        "icon": "$(file-add)"
-      },
-      {
-        "command": "affinidiExplorer.createIssuanceWithSchema",
-        "title": "%affinidiExplorer.createIssuanceWithSchema%",
-        "category": "%commands.category.explorer%"
-      },
-      {
-        "command": "affinidiDevTools.issueCredential",
-        "title": "%affinidiDevTools.issueCredential%",
-        "category": "%commands.category.devTool%"
+        "icon": "$(gist-fork)"
       },
       {
         "command": "affinidi.docs.availableSnippets",
@@ -203,14 +183,34 @@
         "category": "%commands.category.generators%"
       },
       {
+        "command": "affinidi.initiateIssuanceCsvFlow",
+        "title": "%affinidi.initiateIssuanceCsvFlow%",
+        "category": "Affinidi"
+      },
+      {
         "command": "affinidiExplorer.initiateIssuanceCsvFlow",
         "title": "%affinidiExplorer.initiateIssuanceCsvFlow%",
         "category": "%commands.category.explorer%",
         "icon": "$(plus)"
       },
       {
-        "command": "affinidiFeedback.redirectToGithub",
-        "title": "%affinidiFeedback.redirectToGithub%",
+        "command": "affinidiFeedback.reportIssue",
+        "title": "%affinidiFeedback.reportIssue%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidiFeedback.reviewIssues",
+        "title": "%affinidiFeedback.reviewIssues%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidiFeedback.openAPIDocs",
+        "title": "%affinidiFeedback.openAPIDocs%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidiFeedback.openDiscord",
+        "title": "%affinidiFeedback.openDiscord%",
         "category": "Affinidi"
       }
     ],
@@ -249,23 +249,11 @@
           "when": "never"
         },
         {
-          "command": "affinidiExplorer.openCreateSchemaUrl",
-          "when": "never"
-        },
-        {
           "command": "affinidiExplorer.openSchemaBuilder",
           "when": "never"
         },
         {
           "command": "affinidiExplorer.forkSchema",
-          "when": "never"
-        },
-        {
-          "command": "affinidiExplorer.createIssuance",
-          "when": "never"
-        },
-        {
-          "command": "affinidiDevTools.issueCredential",
           "when": "never"
         }
       ],
@@ -298,6 +286,11 @@
           "group": "inline@1"
         },
         {
+          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "view == affinidiExplorer && viewItem == schema",
+          "group": "1"
+        },
+        {
           "command": "affinidiExplorer.openSchemaBuilder",
           "when": "view == affinidiExplorer && viewItem == schemas || view == affinidiExplorer && viewItem == scopedSchemas",
           "group": "inline"
@@ -318,19 +311,9 @@
           "group": "6_copypath"
         },
         {
-          "command": "affinidiExplorer.createIssuance",
-          "when": "view == affinidiExplorer && viewItem == schema",
-          "group": "z_commands"
-        },
-        {
-          "command": "affinidiExplorer.initiateIssuanceCsvFlow",
-          "when": "view == affinidiExplorer && viewItem == schema || view == affinidiExplorer && viewItem == issuance",
-          "group": "1"
-        },
-        {
           "command": "affinidiExplorer.viewProperties",
           "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance || view == affinidiExplorer && viewItem == schema",
-          "group": "z_commands"
+          "group": "inline"
         },
         {
           "command": "affinidiExplorer.showJsonSchema",
@@ -351,11 +334,6 @@
           "command": "affinidi.codegen.sendVcOfferToEmail",
           "when": "view == affinidiExplorer && viewItem == schema",
           "group": "1"
-        },
-        {
-          "command": "affinidiExplorer.viewProperties",
-          "when": "view == affinidiExplorer && viewItem == project",
-          "group": "inline"
         }
       ]
     },
@@ -364,10 +342,6 @@
         {
           "id": "affinidiExplorer",
           "name": "%views.affinidi.affinidiExplorer%"
-        },
-        {
-          "id": "affinidiCodeGeneration",
-          "name": "%views.affinidi.affinidiCodeGeneration%"
         },
         {
           "id": "affinidiDevTools",
@@ -388,12 +362,6 @@
         }
       ]
     },
-    "viewsWelcome": [
-      {
-        "view": "affinidiDevTools",
-        "contents": "%viewsWelcome.affinidiDevTools%"
-      }
-    ],
     "walkthroughs": [
       {
         "id": "affinidi-walkthrough",
@@ -406,7 +374,7 @@
             "title": "%walkthroughs.steps.0.title%",
             "description": "%walkthroughs.steps.0.description%",
             "media": {
-              "image": "media/affinidi-logo.png",
+              "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
@@ -418,7 +386,7 @@
             "title": "%walkthroughs.steps.1.title%",
             "description": "%walkthroughs.steps.1.description%",
             "media": {
-              "image": "media/affinidi-logo.png",
+              "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
@@ -430,23 +398,23 @@
             "title": "%walkthroughs.steps.2.title%",
             "description": "%walkthroughs.steps.2.description%",
             "media": {
-              "image": "media/affinidi-logo.png",
+              "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
-              "onCommand:affinidiExplorer.createSchema"
+              "onCommand:affinidi.openSchemaBuilder"
             ]
           },
           {
-            "id": "createIssuanceWithSchema",
+            "id": "initiateIssuanceCsvFlow",
             "title": "%walkthroughs.steps.3.title%",
             "description": "%walkthroughs.steps.3.description%",
             "media": {
-              "image": "media/affinidi-logo.png",
+              "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
-              "onCommand:affinidiExplorer.createIssuanceWithSchema"
+              "onCommand:affinidi.initiateIssuanceCsvFlow"
             ]
           },
           {
@@ -454,7 +422,7 @@
             "title": "%walkthroughs.steps.4.title%",
             "description": "%walkthroughs.steps.4.description%",
             "media": {
-              "image": "media/affinidi-logo.png",
+              "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
             },
             "completionEvents": [
