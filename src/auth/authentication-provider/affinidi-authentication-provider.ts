@@ -24,7 +24,7 @@ import {
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
 import { credentialsVaultService, Session, SESSION_KEY_NAME } from './credentialsVault'
-import { configVaultService, CONFIGS_KEY_NAME } from './configVault'
+import { configVaultService, CONFIGS_KEY_NAME, CURRENT_USER_ID_KEY_NAME } from './configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 
@@ -196,6 +196,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const session = readSessionFromStorage()
 
     if (session) {
+      configVaultService.delete(CURRENT_USER_ID_KEY_NAME)
       credentialsVaultService.clear()
       this._onDidChangeSessions.fire({
         added: [],
