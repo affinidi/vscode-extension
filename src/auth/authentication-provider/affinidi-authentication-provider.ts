@@ -97,7 +97,6 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   ): Promise<AuthenticationSession | undefined> {
     try {
       const session = await authentication.getSession(AUTH_PROVIDER_ID, scopes, options)
-      console.log('getActiveSession', session)
 
       if (session) {
         const token = parseJwt(session.accessToken)
@@ -133,7 +132,6 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   // This function is called first when `vscode.authentication.getSessions` is called.
   async getSessions(): Promise<readonly AuthenticationSession[]> {
     const session = readSessionFromStorage()
-    console.log('session', session)
     return session ? [session] : []
   }
 

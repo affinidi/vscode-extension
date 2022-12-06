@@ -36,6 +36,7 @@ class VaultService {
   }
 
   public setActiveProjectSummary = (value: ProjectSummary): void => {
+    console.log(value)
     this.store.set(ACTIVE_PROJECT_SUMMARY_KEY_NAME, value)
   }
 

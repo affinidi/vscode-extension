@@ -19,6 +19,7 @@ export class IamState {
   }
 
   async requireProjectSummary(projectId: string): Promise<ProjectSummary> {
+    console.log('requireProjectSummary', projectId)
     const projectSummary = await this.fetchProjectSummary(projectId)
     if (!projectSummary) {
       throw new Error(projectMessage.projectNotFound(projectId))

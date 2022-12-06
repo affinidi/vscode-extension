@@ -1,4 +1,6 @@
+import { config } from '@vscode/l10n'
 import { ThemeIcon } from 'vscode'
+import { configVaultService } from '../../../auth/authentication-provider/configVault'
 import { credentialsVaultService } from '../../../auth/authentication-provider/credentialsVault'
 import { ext } from '../../../extensionVariables'
 import { labels } from '../../../messages/messages'
@@ -40,9 +42,11 @@ export class IamExplorerProvider implements ExplorerProvider {
 
   private async getProjects() {
     const projects = await iamState.listProjects()
-    const activeProject = credentialsVaultService.getActiveProjectSummary()
+    const currentUserId = configVaultService.getCurrentUserID()
+    const configs = configVaultService.getConfigs()
+    const activeProject1 = configs[currentUserId].activeProjectId
 
-    setActiveProject(activeProject ? activeProject.project.projectId : projects[0].projectId)
+    setActiveProject(activeProject1 ?? projects[0].projectId)
 
     return projects.map(
       (project) =>

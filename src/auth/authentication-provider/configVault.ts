@@ -28,7 +28,8 @@ class VaultService {
 
   public getConfigs = (): Configs | null => {
     const value = this.store.get(CONFIGS_KEY_NAME)
-    return typeof value === 'string' ? (value as Configs) : null
+    console.log(value ? (value['108a297e-8e32-46b8-ba5b-0390b958219a'].activeProjectId) : null)
+    return value ? (value as Configs) : null
   }
 
   public setConfigs = (value: Configs): void => {

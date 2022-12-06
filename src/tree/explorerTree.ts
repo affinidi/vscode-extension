@@ -1,4 +1,5 @@
 import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
+import { configVaultService } from '../auth/authentication-provider/configVault'
 import { credentialsVaultService } from '../auth/authentication-provider/credentialsVault'
 import { affinidiActiveProjectChangeProvider } from '../auth/handleActiveProjectChange'
 import { ext } from '../extensionVariables'
@@ -37,11 +38,14 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
   }
 
   private readonly activeProjectListener = async () => {
-    this.refresh()
-    const activeProject = credentialsVaultService.getActiveProjectSummary()
+    const currentUserId = configVaultService.getCurrentUserID()
+    console.log('currentUserId', currentUserId)
+    const activeProject = configVaultService.getConfigs()
     console.log('activeProject', activeProject)
+    this.refresh()
     if (activeProject) {
-      setActiveProject(activeProject.project.projectId)
+      console.log('heyy')
+      setActiveProject(activeProject[currentUserId].activeProjectId)
       return
     }
     const projects = await iamState.listProjects()
