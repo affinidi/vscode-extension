@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/affinidi/vscode-extension/compare/v1.4.0...v1.4.1) (2022-12-06)
+
+
+### Bug Fixes
+
+* move main.js file and toolkit to media/ directory ([#50](https://github.com/affinidi/vscode-extension/issues/50)) ([1df6eab](https://github.com/affinidi/vscode-extension/commit/1df6eabe122710661d7cfb3bbce766d4b6a874f7))
+
 # [1.4.0](https://github.com/affinidi/vscode-extension/compare/v1.3.0...v1.4.0) (2022-12-06)
 
 
