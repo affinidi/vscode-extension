@@ -48,7 +48,7 @@ const readSessionFromStorage = (): AuthenticationSession | undefined => {
 export class AffinidiAuthenticationProvider implements AuthenticationProvider, Disposable {
   private readonly _disposable: Disposable
 
-  private readonly _onSessionChange =
+  private readonly _onDidChangeSessions =
     new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>()
 
   constructor() {
@@ -60,8 +60,8 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     )
   }
 
-  get onSessionChange(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
-    return this._onSessionChange.event
+  get onDidChangeSessions(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
+    return this._onDidChangeSessions.event
   }
 
   dispose(): void {
@@ -140,7 +140,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       })
       configVault.setCurrentUserId(session.account.id)
 
-      this._onSessionChange.fire({
+      this._onDidChangeSessions.fire({
         added: [session],
         removed: [],
         changed: [],
@@ -177,7 +177,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     if (session) {
       configVault.deleteCurrentUserId()
       credentialsVault.clear()
-      this._onSessionChange.fire({
+      this._onDidChangeSessions.fire({
         added: [],
         removed: [session],
         changed: [],
@@ -187,13 +187,13 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
   handleExternalChangeSession = (newSession: Session | undefined, oldSession: Session | undefined): void => {
     if (oldSession && newSession && oldSession.sessionId === newSession.sessionId) {
-      this._onSessionChange.fire({
+      this._onDidChangeSessions.fire({
         added: [],
         removed: [],
         changed: [convertToVsCodeSession(newSession)],
       })
     } else {
-      this._onSessionChange.fire({
+      this._onDidChangeSessions.fire({
         added: newSession ? [convertToVsCodeSession(newSession)] : [],
         removed: oldSession ? [convertToVsCodeSession(oldSession)] : [],
         changed: [],

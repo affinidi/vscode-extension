@@ -69,7 +69,7 @@ export async function activateInternal(context: ExtensionContext) {
   ext.feedbackTree = new FeedbackTree()
 
   ext.context.subscriptions.push(
-    ext.authProvider.onSessionChange(async () => {
+    ext.authProvider.onDidChangeSessions(async () => {
       await state.clear()
       ext.explorerTree.refresh()
     }),
