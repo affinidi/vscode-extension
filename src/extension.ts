@@ -9,7 +9,6 @@ import { showElementProperties } from './features/showElementProperties'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { getFeatureMarkdownUri } from './features/getFeatureMarkdownUri'
-import { buildURL } from './api-client/api-fetch'
 import {
   EventNames,
   EventSubCategory,
@@ -41,6 +40,7 @@ import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager/tree/treeItems'
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
+import { configVault } from './config/configVault'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -69,6 +69,13 @@ export async function activateInternal(context: ExtensionContext) {
   ])
   ext.devToolsTree = new DevToolsTree()
   ext.feedbackTree = new FeedbackTree()
+
+  ext.context.subscriptions.push(
+    ext.authProvider.onDidChangeSessions(() => ext.explorerTree.refresh()),
+  )
+  ext.context.subscriptions.push(
+    { dispose: configVault.onDidChange('configs', () => ext.explorerTree.refresh()) },
+  )
 
   const treeView = window.createTreeView('affinidiExplorer', {
     treeDataProvider: ext.explorerTree,

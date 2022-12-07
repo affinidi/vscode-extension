@@ -22,8 +22,8 @@ import {
   EventNames,
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
-import { credentialsVaultService, Session } from './credentialsVault'
-import { configVaultService } from './configVault'
+import { credentialsVault, Session } from '../../config/credentialsVault'
+import { configVault } from '../../config/configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { authMessage } from '../../messages/messages'
@@ -45,7 +45,7 @@ const assertSession = (sessionValue: Session | undefined): AuthenticationSession
 }
 
 const readSessionFromStorage = (): AuthenticationSession | undefined => {
-  const storageValue = credentialsVaultService.getSession()
+  const storageValue = credentialsVault.getSession()
   return assertSession(storageValue)
 }
 
@@ -57,27 +57,20 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   private readonly _onDidChangeSessions =
     new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>()
 
-  private readonly _onDidChangeActiveProject = new EventEmitter<FileChangeEvent>()
-
   constructor() {
     this._disposable = Disposable.from(
       authentication.registerAuthenticationProvider(AUTH_PROVIDER_ID, AUTH_NAME, this, {
         supportsMultipleAccounts: false,
       }),
     )
-    this._confUnsubscribe = credentialsVaultService.onDidChange(
+    this._confUnsubscribe = credentialsVault.onDidChange(
       'session',
       this.handleExternalChangeSession,
     )
-    configVaultService.onDidChange('configs', this.handleExternalChangeActiveProject)
   }
 
   get onDidChangeSessions(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
     return this._onDidChangeSessions.event
-  }
-
-  get onDidChangeActiveProject(): Event<FileChangeEvent> {
-    return this._onDidChangeActiveProject.event
   }
 
   dispose(): void {
@@ -149,13 +142,13 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         scopes: [],
       }
 
-      credentialsVaultService.setSession({
+      credentialsVault.setSession({
         sessionId: session.id,
         consoleAuthToken: accessToken,
         account: { label: email, userId: id },
         scopes: [],
       })
-      configVaultService.setCurrentUserId(session.account.id)
+      configVault.setCurrentUserId(session.account.id)
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -192,8 +185,8 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const session = readSessionFromStorage()
 
     if (session) {
-      configVaultService.deleteCurrentUserId()
-      credentialsVaultService.clear()
+      configVault.deleteCurrentUserId()
+      credentialsVault.clear()
       this._onDidChangeSessions.fire({
         added: [],
         removed: [session],
@@ -208,7 +201,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
     // If it's the same session ID we consider it a change
     if (oldSession && newSession && oldSession?.id === newSession?.id) {
-      configVaultService.setCurrentUserId(newSession.account.id)
+      configVault.setCurrentUserId(newSession.account.id)
       this._onDidChangeSessions.fire({
         added: [],
         removed: [],
@@ -223,19 +216,12 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     if (oldSession) removed.push(oldSession)
     if (newSession) {
       added.push(newSession)
-      configVaultService.setCurrentUserId(newSession.account.id)
+      configVault.setCurrentUserId(newSession.account.id)
     }
     this._onDidChangeSessions.fire({
       added,
       removed,
       changed: [],
-    })
-  }
-
-  handleExternalChangeActiveProject = (): void => {
-    this._onDidChangeActiveProject.fire({
-      type: FileChangeType.Changed,
-      uri: Uri.file(path.join(os.homedir(), '.affinidi/config.json')),
     })
   }
 }

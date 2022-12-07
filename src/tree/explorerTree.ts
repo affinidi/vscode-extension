@@ -1,10 +1,4 @@
-import { Event, EventEmitter, l10n, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
-import { configVaultService } from '../auth/authentication-provider/configVault'
-import { credentialsVaultService } from '../auth/authentication-provider/credentialsVault'
-import { affinidiActiveProjectChangeProvider } from '../features/iam/handleActiveProjectChange'
-import { ext } from '../extensionVariables'
-import { iamState } from '../features/iam/iamState'
-import { setActiveProject } from '../features/iam/setActiveProject'
+import { Event, EventEmitter, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
 import { labels } from '../messages/messages'
 import { BasicTreeItem } from './basicTreeItem'
 
@@ -22,23 +16,10 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
   readonly onDidChangeTreeData: Event<BasicTreeItem | undefined | void> =
     this.onDidChangeTreeDataEmitter.event
 
-  constructor(private readonly providers: ExplorerProvider[]) {
-    ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(this.authListener))
-    ext.context.subscriptions.push(
-      affinidiActiveProjectChangeProvider.onDidChangeActiveProject(this.activeProjectListener),
-    )
-  }
+  constructor(private readonly providers: ExplorerProvider[]) {}
 
   refresh(data?: BasicTreeItem | undefined | void): void {
     this.onDidChangeTreeDataEmitter.fire(data)
-  }
-
-  private readonly authListener = async () => {
-    this.refresh()
-  }
-
-  private readonly activeProjectListener = async () => {
-    this.refresh()
   }
 
   public getTreeItem(element: BasicTreeItem): TreeItem {

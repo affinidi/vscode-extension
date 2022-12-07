@@ -16,15 +16,11 @@ export type Session = {
   scopes: []
 }
 
-class VaultService {
+class CredentialsVault {
   constructor(private readonly store: Conf<ConfigType>) {}
 
   public clear = (): void => {
     this.store.clear()
-  }
-
-  public delete = (key: keyof ConfigType): void => {
-    this.store.delete(key)
   }
 
   public setActiveProjectSummary = (value: ProjectSummary): void => {
@@ -39,9 +35,7 @@ class VaultService {
     this.store.set('session', value)
   }
 
-  public onDidChange = this.store.onDidChange
-
-  public onDidAnyChange = this.store.onDidAnyChange
+  public onDidChange = this.store.onDidChange.bind(this.store)
 }
 
 const credentialConf = new Conf<ConfigType>({
@@ -50,4 +44,4 @@ const credentialConf = new Conf<ConfigType>({
   watch: true,
 })
 
-export const credentialsVaultService = new VaultService(credentialConf)
+export const credentialsVault = new CredentialsVault(credentialConf)

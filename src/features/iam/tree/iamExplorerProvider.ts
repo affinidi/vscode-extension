@@ -1,12 +1,11 @@
 import { ThemeIcon } from 'vscode'
-import { configVaultService } from '../../../auth/authentication-provider/configVault'
+import { configVault } from '../../../config/configVault'
 import { ext } from '../../../extensionVariables'
 import { labels } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
 import { Feature } from '../../feature'
 import { iamState } from '../iamState'
-import { setActiveProject } from '../setActiveProject'
 import { ProjectTreeItem, ProjectFeatureTreeItem, DigitalIdentityTreeItem } from './treeItems'
 
 export class IamExplorerProvider implements ExplorerProvider {
@@ -40,7 +39,6 @@ export class IamExplorerProvider implements ExplorerProvider {
 
   private async getProjects() {
     const projects = await iamState.listProjects()
-    await configVaultService.getActiveProjectId()
 
     return projects.map(
       (project) =>
