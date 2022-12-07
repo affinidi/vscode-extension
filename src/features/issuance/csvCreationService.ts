@@ -103,10 +103,8 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string }) => {
     const parsedCsvUploadError = parseUploadError(error)
 
     if (parsedCsvUploadError) {
-      window.showErrorMessage(
-        l10n.t(`${csvMessage.csvValidationError} Check Affinidi Output for more details.`),
-      )
-      ext.outputChannel.appendLine(l10n.t(csvMessage.csvValidationError))
+      window.showErrorMessage(`${csvMessage.csvValidationError} ${csvMessage.checkOutputChannel}`)
+      ext.outputChannel.appendLine(csvMessage.csvValidationError)
       ext.outputChannel.appendLine(JSON.stringify(parsedCsvUploadError, null, 2))
       ext.outputChannel.show()
     }
