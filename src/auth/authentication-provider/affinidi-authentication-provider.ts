@@ -155,7 +155,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         account: { label: email, userId: id },
         scopes: [],
       })
-      configVaultService.setCurrentUserID(session.account.id)
+      configVaultService.setCurrentUserId(session.account.id)
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -210,7 +210,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
     // If it's the same session ID we consider it a change
     if (oldSession && newSession && oldSession?.id === newSession?.id) {
-      configVaultService.setCurrentUserID(newSession.account.id)
+      configVaultService.setCurrentUserId(newSession.account.id)
       this._onDidChangeSessions.fire({
         added: [],
         removed: [],
@@ -225,7 +225,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     if (oldSession) removed.push(oldSession)
     if (newSession) {
       added.push(newSession)
-      configVaultService.setCurrentUserID(newSession.account.id)
+      configVaultService.setCurrentUserId(newSession.account.id)
     }
     this._onDidChangeSessions.fire({
       added,

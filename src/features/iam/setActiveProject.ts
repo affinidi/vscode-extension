@@ -13,10 +13,7 @@ export async function setActiveProject(projectId: string): Promise<void> {
     () => iamState.requireProjectSummary(projectId),
   )
 
-  const storedSession = credentialsVaultService.getSession()
-  const userId = storedSession ? storedSession.account.userId : ''
-
   await iamState.setActiveProjectSummary(projectSummary)
-  configVaultService.setConfigs(userId, projectId)
+  configVaultService.setConfigs(projectId)
   credentialsVaultService.setActiveProjectSummary(projectSummary)
 }

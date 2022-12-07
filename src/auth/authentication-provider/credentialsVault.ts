@@ -30,12 +30,6 @@ class VaultService {
     this.store.delete(key)
   }
 
-  public getActiveProjectSummary = (): ProjectSummary | null => {
-    const value = this.store.get(ACTIVE_PROJECT_SUMMARY_KEY_NAME)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return value ? (value as ProjectSummary) : null
-  }
-
   public setActiveProjectSummary = (value: ProjectSummary): void => {
     this.store.set(ACTIVE_PROJECT_SUMMARY_KEY_NAME, value)
   }

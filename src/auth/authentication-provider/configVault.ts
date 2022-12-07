@@ -2,6 +2,7 @@ import Conf from 'conf'
 import { Unsubscribe, OnDidChangeCallback, OnDidAnyChangeCallback } from 'conf/dist/source/types'
 import * as os from 'os'
 import * as path from 'path'
+import { ext } from '../../extensionVariables'
 
 export const CONFIGS_KEY_NAME = 'configs'
 export const CURRENT_USER_ID_KEY_NAME = 'currentUserId'
@@ -26,26 +27,29 @@ class VaultService {
     this.store.delete(key)
   }
 
-  public getActiveProjectId = (userId: string): string | null => {
+  public async getActiveProjectId(): Promise<string | null> {
     const value = this.store.get(CONFIGS_KEY_NAME)
+    const session = await ext.authProvider.getActiveSession()
     // @ts-ignore
-    return value && value[userId] ? value[userId].activeProjectId : null
+    return value && value[session?.account.id] ? value[session?.account.id].activeProjectId : null
   }
 
-  public setConfigs = (userId: string, projectId: string): void => {
+  public async setConfigs(projectId: string): Promise<void> {
+    const session = await ext.authProvider.getActiveSession()
+
     const newConfigs = {
-      [userId]: { activeProjectId: projectId },
+      [session.account.id]: { activeProjectId: projectId },
     }
 
     this.store.set(CONFIGS_KEY_NAME, newConfigs)
   }
 
-  public getCurrentUserID = (): string => {
+  public getCurrentUserId = (): string => {
     const value = this.store.get(CURRENT_USER_ID_KEY_NAME)
     return value as string
   }
 
-  public setCurrentUserID = (value: string): void => {
+  public setCurrentUserId = (value: string): void => {
     this.store.set(CURRENT_USER_ID_KEY_NAME, value)
   }
 

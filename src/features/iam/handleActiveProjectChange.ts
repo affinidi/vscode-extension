@@ -1,10 +1,9 @@
-import { Event, EventEmitter, FileChangeEvent, FileChangeType, Uri } from 'vscode'
-import * as path from 'path'
-import * as os from 'os'
+import { Event, EventEmitter, FileChangeEvent } from 'vscode'
 import {
   configVaultService,
   CONFIGS_KEY_NAME,
 } from '../../auth/authentication-provider/configVault'
+import { setActiveProject } from './setActiveProject'
 
 export class AffinidiActiveProjectProvider {
   private readonly _onDidChangeActiveProject = new EventEmitter<FileChangeEvent>()
@@ -17,11 +16,9 @@ export class AffinidiActiveProjectProvider {
     return this._onDidChangeActiveProject.event
   }
 
-  handleExternalChangeActiveProject = (): void => {
-    this._onDidChangeActiveProject.fire({
-      type: FileChangeType.Changed,
-      uri: Uri.file(path.join(os.homedir(), '.affinidi/config.json')),
-    })
+  async handleExternalChangeActiveProject(): Promise<void> {
+    const activeProjectId = await configVaultService.getActiveProjectId()
+    setActiveProject(activeProjectId)
   }
 }
 
