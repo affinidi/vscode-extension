@@ -1,7 +1,6 @@
-import { window, ProgressLocation, l10n } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { credentialsVaultService } from '../../auth/authentication-provider/credentialsVault'
 import { configVaultService } from '../../auth/authentication-provider/configVault'
-import { activeProjectState } from './activeProjectState'
 import { iamState } from './iamState'
 import { projectMessage } from '../../messages/messages'
 
@@ -17,7 +16,7 @@ export async function setActiveProject(projectId: string): Promise<void> {
   const storedSession = credentialsVaultService.getSession()
   const userId = storedSession ? storedSession.account.userId : ''
 
-  activeProjectState.setActiveProjectSummary(projectSummary)
+  await iamState.setActiveProjectSummary(projectSummary)
   configVaultService.setConfigs(userId, projectId)
   credentialsVaultService.setActiveProjectSummary(projectSummary)
 }

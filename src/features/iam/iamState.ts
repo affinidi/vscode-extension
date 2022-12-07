@@ -1,5 +1,6 @@
 import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
 import { window, ProgressLocation, l10n } from 'vscode'
+import { configVaultService } from '../../auth/authentication-provider/configVault'
 import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'
@@ -25,6 +26,14 @@ export class IamState {
     }
 
     return projectSummary
+  }
+
+  getActiveProjectSummary = (): ProjectSummary | undefined => {
+    return ext.context.globalState.get(storageKey('activeProjectSummary'))
+  }
+
+  public async setActiveProjectSummary(projectSummary: ProjectSummary): Promise<void> {
+    await ext.context.globalState.update(storageKey('activeProjectSummary'), projectSummary)
   }
 
   async clear() {
