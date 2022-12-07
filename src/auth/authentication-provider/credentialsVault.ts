@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import Conf from 'conf'
 import { Unsubscribe, OnDidChangeCallback, OnDidAnyChangeCallback } from 'conf/dist/source/types'
 import * as os from 'os'
@@ -33,6 +32,7 @@ class VaultService {
 
   public getActiveProjectSummary = (): ProjectSummary | null => {
     const value = this.store.get(ACTIVE_PROJECT_SUMMARY_KEY_NAME)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return value ? (value as ProjectSummary) : null
   }
 
@@ -42,6 +42,7 @@ class VaultService {
 
   public getSession = (): Session | null => {
     const value = this.store.get(SESSION_KEY_NAME)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return value ? (value as Session) : null
   }
 
