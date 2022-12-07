@@ -1,6 +1,7 @@
 import { SchemaDto } from '@affinidi/client-schema-manager'
 import { commands } from 'vscode'
 import { ext } from '../extensionVariables'
+import { issuanceState } from '../features/issuance/issuanceState'
 import { IssuanceTreeItem } from '../features/issuance/tree/treeItems'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
 import { SchemaTreeItem } from '../features/schema-manager/tree/treeItems'
@@ -48,6 +49,7 @@ export const initSnippets = () => {
     commands.registerCommand(
       'affinidi.codegen.getIssuanceOffers',
       async (element?: IssuanceTreeItem) => {
+        if (!element) issuanceState.clear()
         await insertGetIssuanceOffersSnippet({
           projectId: element?.projectId,
           issuanceId: element?.issuanceId,

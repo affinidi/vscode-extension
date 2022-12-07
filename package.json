@@ -8,7 +8,7 @@
   "icon": "media/affinidi-icon-large.png",
   "preview": true,
   "repository": "https://github.com/affinidi/vscode-extension",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "engines": {
     "vscode": "^1.73.0"
   },
@@ -67,7 +67,19 @@
             "null"
           ],
           "default": null,
-          "markdownDescription": "%contributes.configuration.markdownDescription%",
+          "markdownDescription": "%contributes.configuration.sendTelemetryDescription%",
+          "scope": "window",
+          "tags": [
+            "telemetry"
+          ]
+        },
+        "affinidi.walkthrough.opened": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "markdownDescription": "%contributes.configuration.walkthroughOpened%",
           "scope": "window",
           "tags": [
             "telemetry"
@@ -376,10 +388,7 @@
             "media": {
               "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
-            },
-            "completionEvents": [
-              "onCommand:affinidi.signUp"
-            ]
+            }
           },
           {
             "id": "createProject",
@@ -388,46 +397,34 @@
             "media": {
               "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
-            },
-            "completionEvents": [
-              "onCommand:affinidi.createProject"
-            ]
+            }
           },
           {
-            "id": "createSchema",
+            "id": "buildApp",
             "title": "%walkthroughs.steps.2.title%",
             "description": "%walkthroughs.steps.2.description%",
             "media": {
               "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
-            },
-            "completionEvents": [
-              "onCommand:affinidi.openSchemaBuilder"
-            ]
+            }
           },
           {
-            "id": "initiateIssuanceCsvFlow",
+            "id": "createSchema",
             "title": "%walkthroughs.steps.3.title%",
             "description": "%walkthroughs.steps.3.description%",
             "media": {
               "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
-            },
-            "completionEvents": [
-              "onCommand:affinidi.initiateIssuanceCsvFlow"
-            ]
+            }
           },
           {
-            "id": "buildCertification",
+            "id": "initiateIssuanceCsvFlow",
             "title": "%walkthroughs.steps.4.title%",
             "description": "%walkthroughs.steps.4.description%",
             "media": {
               "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
-            },
-            "completionEvents": [
-              "onCommand:affinidi.codegen.app"
-            ]
+            }
           }
         ]
       }

@@ -2,7 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import { commands, ExtensionContext, Uri, window, env, l10n } from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, l10n, workspace } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
@@ -56,6 +56,8 @@ export async function activateInternal(context: ExtensionContext) {
   ext.outputChannel = window.createOutputChannel('Affinidi')
   ext.authProvider = initAuthentication()
 
+  ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(state.clear))
+
   initSnippets()
   initGenerators()
 
@@ -80,10 +82,22 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  window.createTreeView('affinidiFeedback', {
+  const feedbackTreeView = window.createTreeView('affinidiFeedback', {
     treeDataProvider: ext.feedbackTree,
     canSelectMany: false,
     showCollapseAll: true,
+  })
+
+  feedbackTreeView.onDidChangeVisibility((ev) => {
+    const walkthroughOpened = workspace.getConfiguration().get('affinidi.walkthrough.opened')
+
+    if (!walkthroughOpened && ev.visible) {
+      commands.executeCommand(
+        'workbench.action.openWalkthrough',
+        'Affinidi.affinidi#affinidi-walkthrough',
+      )
+      workspace.getConfiguration().update('affinidi.walkthrough.opened', true, true)
+    }
   })
 
   commands.registerCommand('affinidiExplorer.refresh', async (element: BasicTreeItem) => {
@@ -129,7 +143,7 @@ export async function activateInternal(context: ExtensionContext) {
       },
     })
 
-    showSchemaDetails(schema)
+    showSchemaDetails({ schema, projectId: element.projectId })
   })
 
   context.subscriptions.push(openSchema)

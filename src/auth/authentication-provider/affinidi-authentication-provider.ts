@@ -27,6 +27,7 @@ import { configVaultService, CONFIGS_KEY_NAME } from './configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { authMessage } from '../../messages/messages'
+import { state } from '../../state'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
@@ -102,7 +103,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         // subtract 1 minute in case of lag
         if (Date.now() / 1000 >= token.exp - 60) {
           // TODO: we might want to log an analytics event here
-          this.handleRemoveSession()
+          await this.handleRemoveSession()
           return this.getActiveSession(options, scopes) // try again
         }
       }
@@ -110,7 +111,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       return session
     } catch (error) {
       logger.error(error, authMessage.noValidSessionFound)
-      this.handleRemoveSession()
+      await this.handleRemoveSession()
       return undefined
     }
   }
@@ -185,10 +186,10 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       },
     })
 
-    this.handleRemoveSession()
+    await this.handleRemoveSession()
   }
 
-  handleRemoveSession = (): void => {
+  handleRemoveSession = async (): Promise<void> => {
     const session = readSessionFromStorage()
 
     if (session) {

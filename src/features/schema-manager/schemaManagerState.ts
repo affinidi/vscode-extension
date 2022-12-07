@@ -34,7 +34,7 @@ export class SchemaManagerState {
   }
 
   async clear() {
-    await state.clear(PREFIX)
+    await state.clearByPrefix(PREFIX)
   }
 
   private async fetchAuthoredSchemas(projectId: string): Promise<SchemaDto[]> {
