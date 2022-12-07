@@ -40,11 +40,7 @@ export class IamExplorerProvider implements ExplorerProvider {
 
   private async getProjects() {
     const projects = await iamState.listProjects()
-    const activeProjectId = await configVaultService.getActiveProjectId()
-
-    if (projects.length > 0) {
-      setActiveProject(activeProjectId ?? projects[0].projectId)
-    }
+    await configVaultService.getActiveProjectId()
 
     return projects.map(
       (project) =>

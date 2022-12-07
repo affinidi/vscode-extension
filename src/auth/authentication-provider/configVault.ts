@@ -4,6 +4,8 @@ import * as os from 'os'
 import * as path from 'path'
 import { AuthenticationSession } from 'vscode'
 import { ext } from '../../extensionVariables'
+import { iamState } from '../../features/iam/iamState'
+import { setActiveProject } from '../../features/iam/setActiveProject'
 
 export const CONFIGS_KEY_NAME = 'configs'
 export const CURRENT_USER_ID_KEY_NAME = 'currentUserId'
@@ -32,7 +34,20 @@ class VaultService {
     const value = this.store.get(CONFIGS_KEY_NAME)
     const session = await ext.authProvider.getActiveSession()
     // @ts-ignore
-    return value && value[session?.account.id] ? value[session?.account.id].activeProjectId : null
+    if (value && value[session?.account.id]) {
+      // @ts-ignore
+      setActiveProject(value[session?.account.id].activeProjectId)
+      // @ts-ignore
+      return value[session.account.id].activeProjectId
+    }
+
+    const projects = await iamState.listProjects()
+
+    if (projects.length > 0) {
+      setActiveProject(projects[0].projectId)
+      return projects[0].projectId
+    }
+    return null
   }
 
   public async setConfigs(projectId: string): Promise<void> {
