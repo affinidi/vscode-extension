@@ -129,7 +129,7 @@ export async function activateInternal(context: ExtensionContext) {
       },
     })
 
-    showSchemaDetails(schema)
+    showSchemaDetails({ schema, projectId: element.projectId })
   })
 
   context.subscriptions.push(openSchema)

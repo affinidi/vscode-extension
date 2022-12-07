@@ -1,14 +1,24 @@
 import { SchemaDto } from '@affinidi/client-schema-manager'
 import { l10n, Uri, ViewColumn, Webview, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
+import { labels } from '../../../messages/messages'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
+import { csvCreationService } from '../../issuance/csvCreationService'
 import { schemaManagerHelpers } from '../schemaManagerHelpers'
 
 let panel: WebviewPanel | undefined
 
-function renderSchemaDetails(input: { webview: Webview; extensionUri: Uri; schema: SchemaDto }) {
-  const { webview, extensionUri, schema } = input
+const issuanceButtonId = 'initiate-issuance'
 
+function renderSchemaDetails({
+  webview,
+  extensionUri,
+  schema,
+}: {
+  webview: Webview
+  extensionUri: Uri
+  schema: SchemaDto
+}) {
   const styleUri = getWebviewUri(webview, extensionUri, ['media', 'style.css'])
   const toolkitUri = getWebviewUri(webview, extensionUri, ['media', 'vendor', 'toolkit.js'])
 
@@ -44,6 +54,10 @@ function renderSchemaDetails(input: { webview: Webview; extensionUri: Uri; schem
               <div class="title">DESCRIPTION</div>
               <div class="description">${schema.description}</div>
             </div>
+
+            <div class="box issuance-button-box">
+              <vscode-button id="${issuanceButtonId}">${labels.initiateIssuanceCsvFlow}</vscode-button>
+            </div>
           </div>
 
           <vscode-divider></vscode-divider>
@@ -62,18 +76,41 @@ function renderSchemaDetails(input: { webview: Webview; extensionUri: Uri; schem
             </div>
           </div>
         </section>
+
+        <script>
+          const issuanceButton = document.getElementById("${issuanceButtonId}");
+          const vscode = acquireVsCodeApi();
+
+          issuanceButton.addEventListener('click', () => {
+            vscode.postMessage({})
+          })
+        </script>
       </body>
     </html>
   `
 }
 
-export function showSchemaDetails(schema: SchemaDto) {
+export function showSchemaDetails({ projectId, schema }: { schema: SchemaDto; projectId: string }) {
   if (!panel) {
     panel = window.createWebviewPanel('schemaDetailsView', '', ViewColumn.One, {
       enableScripts: true,
     })
 
-    panel.onDidDispose(() => (panel = undefined), null, ext.context.subscriptions)
+    panel.onDidDispose(
+      () => {
+        panel = undefined
+      },
+      null,
+      ext.context.subscriptions,
+    )
+
+    panel.webview.onDidReceiveMessage(
+      () => {
+        csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
+      },
+      undefined,
+      ext.context.subscriptions,
+    )
   }
 
   panel.title = l10n.t('Schema: {0}', schemaManagerHelpers.getSchemaName(schema))
