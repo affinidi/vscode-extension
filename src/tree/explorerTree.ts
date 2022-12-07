@@ -43,7 +43,7 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
     const projects = await iamState.listProjects()
 
     if (projects.length > 0) {
-      setActiveProject(activeProjectId ?? projects[0]?.projectId)
+      setActiveProject(activeProjectId ?? projects[0].projectId)
     }
     this.refresh()
   }

@@ -46,7 +46,7 @@ export class IamExplorerProvider implements ExplorerProvider {
       : null
 
     if (projects.length > 0) {
-      setActiveProject(activeProjectId ?? projects[0]?.projectId)
+      setActiveProject(activeProjectId ?? projects[0].projectId)
     }
 
     return projects.map(
