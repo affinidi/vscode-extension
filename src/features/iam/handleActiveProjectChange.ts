@@ -1,7 +1,6 @@
 import { Event, EventEmitter, FileChangeEvent } from 'vscode'
 import {
   configVaultService,
-  CONFIGS_KEY_NAME,
 } from '../../auth/authentication-provider/configVault'
 import { setActiveProject } from './setActiveProject'
 
@@ -9,7 +8,7 @@ export class AffinidiActiveProjectProvider {
   private readonly _onDidChangeActiveProject = new EventEmitter<FileChangeEvent>()
 
   constructor() {
-    configVaultService.onDidChange(CONFIGS_KEY_NAME, this.handleExternalChangeActiveProject)
+    configVaultService.onDidChange('configs', this.handleExternalChangeActiveProject)
   }
 
   get onDidChangeActiveProject(): Event<FileChangeEvent> {

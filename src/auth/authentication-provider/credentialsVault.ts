@@ -1,12 +1,13 @@
 import Conf from 'conf'
-import { Unsubscribe, OnDidChangeCallback, OnDidAnyChangeCallback } from 'conf/dist/source/types'
 import * as os from 'os'
 import * as path from 'path'
 
 import { ProjectSummary } from '@affinidi/client-iam'
 
-export const SESSION_KEY_NAME = 'session'
-export const ACTIVE_PROJECT_SUMMARY_KEY_NAME = 'activeProjectSummary'
+export type ConfigType = {
+  activeProjectSummary: ProjectSummary
+  session: Session
+}
 
 export type Session = {
   sessionId: string
@@ -16,46 +17,34 @@ export type Session = {
 }
 
 class VaultService {
-  private readonly store: Conf
-
-  constructor(store: Conf) {
-    this.store = store
-  }
+  constructor(private readonly store: Conf<ConfigType>) {}
 
   public clear = (): void => {
     this.store.clear()
   }
 
-  public delete = (key: string): void => {
+  public delete = (key: keyof ConfigType): void => {
     this.store.delete(key)
   }
 
   public setActiveProjectSummary = (value: ProjectSummary): void => {
-    this.store.set(ACTIVE_PROJECT_SUMMARY_KEY_NAME, value)
+    this.store.set('activeProjectSummary', value)
   }
 
-  public getSession = (): Session | null => {
-    const value = this.store.get(SESSION_KEY_NAME)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return value ? (value as Session) : null
+  public getSession = (): Session | undefined => {
+    return this.store.get('session')
   }
 
   public setSession = (value: Session): void => {
-    this.store.set(SESSION_KEY_NAME, value)
+    this.store.set('session', value)
   }
 
-  public onDidChange = (key: string, callback: OnDidChangeCallback<unknown>): Unsubscribe => {
-    return this.store.onDidChange(key, callback)
-  }
+  public onDidChange = this.store.onDidChange
 
-  public onDidAnyChange = (
-    callback: OnDidAnyChangeCallback<Record<string, unknown>>,
-  ): Unsubscribe => {
-    return this.store.onDidAnyChange(callback)
-  }
+  public onDidAnyChange = this.store.onDidAnyChange
 }
 
-const credentialConf = new Conf({
+const credentialConf = new Conf<ConfigType>({
   configName: 'credentials',
   cwd: path.join(os.homedir(), '.affinidi'),
   watch: true,

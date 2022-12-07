@@ -22,12 +22,11 @@ import {
   EventNames,
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
-import { credentialsVaultService, Session, SESSION_KEY_NAME } from './credentialsVault'
-import { configVaultService, CONFIGS_KEY_NAME } from './configVault'
+import { credentialsVaultService, Session } from './credentialsVault'
+import { configVaultService } from './configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { authMessage } from '../../messages/messages'
-import { state } from '../../state'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
@@ -41,7 +40,7 @@ const convertSession = (session: Session) => {
   }
 }
 
-const assertSession = (sessionValue: Session | null): AuthenticationSession | undefined => {
+const assertSession = (sessionValue: Session | undefined): AuthenticationSession | undefined => {
   return sessionValue ? convertSession(sessionValue) : undefined
 }
 
@@ -67,10 +66,10 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       }),
     )
     this._confUnsubscribe = credentialsVaultService.onDidChange(
-      SESSION_KEY_NAME,
+      'session',
       this.handleExternalChangeSession,
     )
-    configVaultService.onDidChange(CONFIGS_KEY_NAME, this.handleExternalChangeActiveProject)
+    configVaultService.onDidChange('configs', this.handleExternalChangeActiveProject)
   }
 
   get onDidChangeSessions(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
@@ -203,10 +202,8 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     }
   }
 
-  handleExternalChangeSession = (newValue: unknown, oldValue: unknown): void => {
-    // @ts-ignore
+  handleExternalChangeSession = (newValue: Session | undefined, oldValue: Session | undefined): void => {
     const oldSession = oldValue ? assertSession(oldValue) : null
-    // @ts-ignore
     const newSession = newValue ? assertSession(newValue) : null
 
     // If it's the same session ID we consider it a change

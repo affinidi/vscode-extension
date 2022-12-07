@@ -1,5 +1,4 @@
 import Conf from 'conf'
-import { Unsubscribe, OnDidChangeCallback, OnDidAnyChangeCallback } from 'conf/dist/source/types'
 import * as os from 'os'
 import * as path from 'path'
 import { AuthenticationSession } from 'vscode'
@@ -7,37 +6,27 @@ import { ext } from '../../extensionVariables'
 import { iamState } from '../../features/iam/iamState'
 import { setActiveProject } from '../../features/iam/setActiveProject'
 
-export const CONFIGS_KEY_NAME = 'configs'
-export const CURRENT_USER_ID_KEY_NAME = 'currentUserId'
-
-export type Configs = {
+export type ConfigType = {
   currentUserId: string
   configs: Record<string, { activeProjectId: string }>
 }
 
 class VaultService {
-  private readonly store: Conf
-
-  constructor(store: Conf) {
-    this.store = store
-  }
+  constructor(private readonly store: Conf<ConfigType>) {}
 
   public clear = (): void => {
     this.store.clear()
   }
 
-  public delete = (key: string): void => {
+  public delete = (key: keyof ConfigType): void => {
     this.store.delete(key)
   }
 
   public async getActiveProjectId(): Promise<string | null> {
-    const value = this.store.get(CONFIGS_KEY_NAME)
+    const value = this.store.get('configs')
     const session = await ext.authProvider.getActiveSession()
-    // @ts-ignore
-    if (value && value[session?.account.id]) {
-      // @ts-ignore
-      setActiveProject(value[session?.account.id].activeProjectId)
-      // @ts-ignore
+    if (value && session && value[session.account.id]) {
+      setActiveProject(value[session.account.id].activeProjectId)
       return value[session.account.id].activeProjectId
     }
 
@@ -51,42 +40,33 @@ class VaultService {
   }
 
   public async setConfigs(projectId: string): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const session = (await ext.authProvider.getActiveSession()) as AuthenticationSession
+    const session = await ext.authProvider.getActiveSession()
 
     const newConfigs = {
-      [session.account.id]: { activeProjectId: projectId },
+      ...session && { [session.account.id]: { activeProjectId: projectId } },
     }
 
-    this.store.set(CONFIGS_KEY_NAME, newConfigs)
+    this.store.set('configs', newConfigs)
   }
 
   public getCurrentUserId = (): string => {
-    const value = this.store.get(CURRENT_USER_ID_KEY_NAME)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return value as string
+    return this.store.get('currentUserId')
   }
 
   public setCurrentUserId = (value: string): void => {
-    this.store.set(CURRENT_USER_ID_KEY_NAME, value)
+    this.store.set('currentUserId', value)
   }
 
   public deleteCurrentUserId = (): void => {
-    this.store.delete(CURRENT_USER_ID_KEY_NAME)
+    this.store.delete('currentUserId')
   }
 
-  public onDidChange = (key: string, callback: OnDidChangeCallback<unknown>): Unsubscribe => {
-    return this.store.onDidChange(key, callback)
-  }
+  public onDidChange = this.store.onDidChange
 
-  public onDidAnyChange = (
-    callback: OnDidAnyChangeCallback<Record<string, unknown>>,
-  ): Unsubscribe => {
-    return this.store.onDidAnyChange(callback)
-  }
+  public onDidAnyChange = this.store.onDidAnyChange
 }
 
-const configConf = new Conf({
+const configConf = new Conf<ConfigType>({
   configName: 'config',
   cwd: path.join(os.homedir(), '.affinidi'),
   watch: true,
