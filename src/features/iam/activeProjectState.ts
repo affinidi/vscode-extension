@@ -1,6 +1,5 @@
 import { ProjectSummary } from '@affinidi/client-iam'
 import { ext } from '../../extensionVariables'
-import { state } from '../../state'
 
 const storageKey = 'activeProjectSummary'
 
@@ -11,10 +10,6 @@ export class ActiveProject {
 
   setActiveProjectSummary = (projectSummary: ProjectSummary): void => {
     ext.context.globalState.get(storageKey, projectSummary)
-  }
-
-  async clear() {
-    await state.clear(storageKey)
   }
 }
 
