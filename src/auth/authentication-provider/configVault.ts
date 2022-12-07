@@ -2,6 +2,7 @@ import Conf from 'conf'
 import { Unsubscribe, OnDidChangeCallback, OnDidAnyChangeCallback } from 'conf/dist/source/types'
 import * as os from 'os'
 import * as path from 'path'
+import { AuthenticationSession } from 'vscode'
 import { ext } from '../../extensionVariables'
 
 export const CONFIGS_KEY_NAME = 'configs'
@@ -35,7 +36,8 @@ class VaultService {
   }
 
   public async setConfigs(projectId: string): Promise<void> {
-    const session = await ext.authProvider.getActiveSession()
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const session = (await ext.authProvider.getActiveSession()) as AuthenticationSession
 
     const newConfigs = {
       [session.account.id]: { activeProjectId: projectId },
@@ -46,6 +48,7 @@ class VaultService {
 
   public getCurrentUserId = (): string => {
     const value = this.store.get(CURRENT_USER_ID_KEY_NAME)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return value as string
   }
 

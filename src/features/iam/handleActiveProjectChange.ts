@@ -18,7 +18,9 @@ export class AffinidiActiveProjectProvider {
 
   async handleExternalChangeActiveProject(): Promise<void> {
     const activeProjectId = await configVaultService.getActiveProjectId()
-    setActiveProject(activeProjectId)
+    if (activeProjectId) {
+      setActiveProject(activeProjectId)
+    }
   }
 }
 
