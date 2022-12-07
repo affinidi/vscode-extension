@@ -44,7 +44,10 @@ export class IamExplorerProvider implements ExplorerProvider {
     const activeProjectId = currentUserId
       ? configVaultService.getActiveProjectId(currentUserId)
       : null
-    setActiveProject(activeProjectId ?? projects[0]?.projectId)
+
+    if (projects) {
+      setActiveProject(activeProjectId ?? projects[0]?.projectId)
+    }
 
     return projects.map(
       (project) =>
