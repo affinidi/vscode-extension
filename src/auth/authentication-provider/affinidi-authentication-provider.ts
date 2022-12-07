@@ -31,7 +31,7 @@ import { authMessage } from '../../messages/messages'
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
 
-const convertSession = (session: Session) => {
+const convertToVsCodeSession = (session: Session): AuthenticationSession => {
   return {
     id: session.sessionId,
     accessToken: session.consoleAuthToken,
@@ -40,13 +40,9 @@ const convertSession = (session: Session) => {
   }
 }
 
-const assertSession = (sessionValue: Session | undefined): AuthenticationSession | undefined => {
-  return sessionValue ? convertSession(sessionValue) : undefined
-}
-
 const readSessionFromStorage = (): AuthenticationSession | undefined => {
   const storageValue = credentialsVault.getSession()
-  return assertSession(storageValue)
+  return storageValue ? convertToVsCodeSession(storageValue) : undefined
 }
 
 export class AffinidiAuthenticationProvider implements AuthenticationProvider, Disposable {
@@ -189,33 +185,23 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     }
   }
 
-  handleExternalChangeSession = (newValue: Session | undefined, oldValue: Session | undefined): void => {
-    const oldSession = oldValue ? assertSession(oldValue) : null
-    const newSession = newValue ? assertSession(newValue) : null
-
-    // If it's the same session ID we consider it a change
-    if (oldSession && newSession && oldSession?.id === newSession?.id) {
-      configVault.setCurrentUserId(newSession.account.id)
+  handleExternalChangeSession = (newSession: Session | undefined, oldSession: Session | undefined): void => {
+    if (oldSession && newSession && oldSession.sessionId === newSession.sessionId) {
       this._onSessionChange.fire({
         added: [],
         removed: [],
-        changed: [newSession],
+        changed: [convertToVsCodeSession(newSession)],
       })
-      return
+    } else {
+      this._onSessionChange.fire({
+        added: newSession ? [convertToVsCodeSession(newSession)] : [],
+        removed: oldSession ? [convertToVsCodeSession(oldSession)] : [],
+        changed: [],
+      })
     }
 
-    // If not then we remove old session and add new session
-    const added = []
-    const removed = []
-    if (oldSession) removed.push(oldSession)
     if (newSession) {
-      added.push(newSession)
-      configVault.setCurrentUserId(newSession.account.id)
+      configVault.setCurrentUserId(newSession.account.userId)
     }
-    this._onSessionChange.fire({
-      added,
-      removed,
-      changed: [],
-    })
   }
 }
