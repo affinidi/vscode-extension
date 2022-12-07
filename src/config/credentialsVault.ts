@@ -3,6 +3,7 @@ import * as os from 'os'
 import * as path from 'path'
 
 import { ProjectSummary } from '@affinidi/client-iam'
+import { OnDidChangeCallback } from 'conf/dist/source/types'
 
 export type ConfigType = {
   activeProjectSummary: ProjectSummary
@@ -19,23 +20,25 @@ export type Session = {
 class CredentialsVault {
   constructor(private readonly store: Conf<ConfigType>) {}
 
-  public clear = (): void => {
+  clear(): void {
     this.store.clear()
   }
 
-  public setActiveProjectSummary = (value: ProjectSummary): void => {
+  setActiveProjectSummary(value: ProjectSummary): void {
     this.store.set('activeProjectSummary', value)
   }
 
-  public getSession = (): Session | undefined => {
+  getSession(): Session | undefined {
     return this.store.get('session')
   }
 
-  public setSession = (value: Session): void => {
+  setSession(value: Session): void {
     this.store.set('session', value)
   }
 
-  public onDidChange = this.store.onDidChange.bind(this.store)
+  onSessionChange(callback: OnDidChangeCallback<Session>) {
+    return this.store.onDidChange('session', callback)
+  }
 }
 
 const credentialConf = new Conf<ConfigType>({

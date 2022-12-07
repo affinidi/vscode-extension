@@ -52,9 +52,7 @@ const readSessionFromStorage = (): AuthenticationSession | undefined => {
 export class AffinidiAuthenticationProvider implements AuthenticationProvider, Disposable {
   private readonly _disposable: Disposable
 
-  private readonly _confUnsubscribe: Unsubscribe
-
-  private readonly _onDidChangeSessions =
+  private readonly _onSessionChange =
     new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>()
 
   constructor() {
@@ -62,19 +60,15 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       authentication.registerAuthenticationProvider(AUTH_PROVIDER_ID, AUTH_NAME, this, {
         supportsMultipleAccounts: false,
       }),
-    )
-    this._confUnsubscribe = credentialsVault.onDidChange(
-      'session',
-      this.handleExternalChangeSession,
+      { dispose: credentialsVault.onSessionChange(this.handleExternalChangeSession) }
     )
   }
 
-  get onDidChangeSessions(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
-    return this._onDidChangeSessions.event
+  get onSessionChange(): Event<AuthenticationProviderAuthenticationSessionsChangeEvent> {
+    return this._onSessionChange.event
   }
 
   dispose(): void {
-    this._confUnsubscribe()
     this._disposable.dispose()
   }
 
@@ -150,7 +144,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       })
       configVault.setCurrentUserId(session.account.id)
 
-      this._onDidChangeSessions.fire({
+      this._onSessionChange.fire({
         added: [session],
         removed: [],
         changed: [],
@@ -187,7 +181,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     if (session) {
       configVault.deleteCurrentUserId()
       credentialsVault.clear()
-      this._onDidChangeSessions.fire({
+      this._onSessionChange.fire({
         added: [],
         removed: [session],
         changed: [],
@@ -202,7 +196,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     // If it's the same session ID we consider it a change
     if (oldSession && newSession && oldSession?.id === newSession?.id) {
       configVault.setCurrentUserId(newSession.account.id)
-      this._onDidChangeSessions.fire({
+      this._onSessionChange.fire({
         added: [],
         removed: [],
         changed: [newSession],
@@ -218,7 +212,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       added.push(newSession)
       configVault.setCurrentUserId(newSession.account.id)
     }
-    this._onDidChangeSessions.fire({
+    this._onSessionChange.fire({
       added,
       removed,
       changed: [],

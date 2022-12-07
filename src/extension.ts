@@ -56,8 +56,6 @@ export async function activateInternal(context: ExtensionContext) {
   ext.outputChannel = window.createOutputChannel('Affinidi')
   ext.authProvider = initAuthentication()
 
-  ext.context.subscriptions.push(ext.authProvider.onDidChangeSessions(state.clear))
-
   initSnippets()
   initGenerators()
 
@@ -71,10 +69,11 @@ export async function activateInternal(context: ExtensionContext) {
   ext.feedbackTree = new FeedbackTree()
 
   ext.context.subscriptions.push(
-    ext.authProvider.onDidChangeSessions(() => ext.explorerTree.refresh()),
-  )
-  ext.context.subscriptions.push(
-    { dispose: configVault.onDidChange('configs', () => ext.explorerTree.refresh()) },
+    ext.authProvider.onSessionChange(async () => {
+      await state.clear()
+      ext.explorerTree.refresh()
+    }),
+    { dispose: configVault.onUserConfigChange(() => ext.explorerTree.refresh()) },
   )
 
   const treeView = window.createTreeView('affinidiExplorer', {
