@@ -92,6 +92,7 @@ export const projectMessage = {
   pleaseTryAgain: l10n.t('Please try again later.'),
   projectDoesNotExist: l10n.t('Project does not exist.'),
   projectNotFound: (projectId: string) => l10n.t('Project not found: {0}', projectId),
+  activeProject: l10n.t('Setting active project...'),
 }
 
 export const issuanceMessage = {

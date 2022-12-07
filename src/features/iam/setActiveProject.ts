@@ -3,12 +3,13 @@ import { credentialsVaultService } from '../../auth/authentication-provider/cred
 import { configVaultService } from '../../auth/authentication-provider/configVault'
 import { activeProjectState } from './activeProjectState'
 import { iamState } from './iamState'
+import { projectMessage } from '../../messages/messages'
 
 export async function setActiveProject(projectId: string): Promise<void> {
   const projectSummary = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: l10n.t('Setting active project...'),
+      title: projectMessage.activeProject,
     },
     () => iamState.requireProjectSummary(projectId),
   )
