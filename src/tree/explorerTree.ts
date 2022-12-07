@@ -42,7 +42,7 @@ export class ExplorerTree implements TreeDataProvider<BasicTreeItem> {
     const activeProjectId = configVaultService.getActiveProjectId(currentUserId)
     const projects = await iamState.listProjects()
 
-    if (projects) {
+    if (projects.length > 0) {
       setActiveProject(activeProjectId ?? projects[0]?.projectId)
     }
     this.refresh()

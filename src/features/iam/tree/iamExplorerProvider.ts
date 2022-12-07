@@ -45,7 +45,7 @@ export class IamExplorerProvider implements ExplorerProvider {
       ? configVaultService.getActiveProjectId(currentUserId)
       : null
 
-    if (projects) {
+    if (projects.length > 0) {
       setActiveProject(activeProjectId ?? projects[0]?.projectId)
     }
 
