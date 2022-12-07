@@ -73,7 +73,12 @@ export async function activateInternal(context: ExtensionContext) {
       await state.clear()
       ext.explorerTree.refresh()
     }),
-    { dispose: configVault.onUserConfigChange(() => ext.explorerTree.refresh()) },
+    {
+      dispose: configVault.onUserConfigChange(async () => {
+        await state.clear()
+        ext.explorerTree.refresh()
+      }),
+    },
   )
 
   const treeView = window.createTreeView('affinidiExplorer', {
