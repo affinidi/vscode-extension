@@ -23,7 +23,7 @@ import {
   EventSubCategory,
 } from '../../services/analyticsStreamApiService'
 import { credentialsVaultService, Session, SESSION_KEY_NAME } from './credentialsVault'
-import { configVaultService, CONFIGS_KEY_NAME, CURRENT_USER_ID_KEY_NAME } from './configVault'
+import { configVaultService, CONFIGS_KEY_NAME } from './configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { authMessage } from '../../messages/messages'
@@ -32,14 +32,12 @@ export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
 
 const convertSession = (session: Session) => {
-  const convertedSession: AuthenticationSession = {
+  return {
     id: session.sessionId,
     accessToken: session.consoleAuthToken,
     account: { label: session.account.label, id: session.account.userId },
     scopes: [],
   }
-
-  return convertedSession
 }
 
 const assertSession = (sessionValue: Session | null): AuthenticationSession | undefined => {
@@ -151,14 +149,12 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         scopes: [],
       }
 
-      const configSession: Session = {
+      credentialsVaultService.setSession({
         sessionId: session.id,
         consoleAuthToken: accessToken,
         account: { label: email, userId: id },
         scopes: [],
-      }
-
-      credentialsVaultService.setSession(configSession)
+      })
       configVaultService.setCurrentUserID(session.account.id)
 
       this._onDidChangeSessions.fire({
@@ -196,7 +192,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const session = readSessionFromStorage()
 
     if (session) {
-      configVaultService.delete(CURRENT_USER_ID_KEY_NAME)
+      configVaultService.deleteCurrentUserId()
       credentialsVaultService.clear()
       this._onDidChangeSessions.fire({
         added: [],
@@ -207,9 +203,9 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
   }
 
   handleExternalChangeSession = (newValue: unknown, oldValue: unknown): void => {
-    //@ts-ignore
+    // @ts-ignore
     const oldSession = oldValue ? assertSession(oldValue) : null
-    //@ts-ignore
+    // @ts-ignore
     const newSession = newValue ? assertSession(newValue) : null
 
     // If it's the same session ID we consider it a change
@@ -227,8 +223,10 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const added = []
     const removed = []
     if (oldSession) removed.push(oldSession)
-    if (newSession) added.push(newSession)
-    if (newSession) configVaultService.setCurrentUserID(newSession.account.id)
+    if (newSession) {
+      added.push(newSession)
+      configVaultService.setCurrentUserID(newSession.account.id)
+    }
     this._onDidChangeSessions.fire({
       added,
       removed,

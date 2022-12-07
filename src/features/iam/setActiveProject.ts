@@ -9,7 +9,7 @@ export async function setActiveProject(projectId: string): Promise<void> {
   const projectSummary = await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: projectMessage.activeProject,
+      title: projectMessage.settingActiveProject,
     },
     () => iamState.requireProjectSummary(projectId),
   )

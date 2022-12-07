@@ -49,6 +49,10 @@ class VaultService {
     this.store.set(CURRENT_USER_ID_KEY_NAME, value)
   }
 
+  public deleteCurrentUserId = (): void => {
+    this.store.delete(CURRENT_USER_ID_KEY_NAME)
+  }
+
   public onDidChange = (key: string, callback: OnDidChangeCallback<unknown>): Unsubscribe => {
     return this.store.onDidChange(key, callback)
   }
