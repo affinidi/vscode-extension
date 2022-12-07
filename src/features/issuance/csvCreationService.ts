@@ -45,7 +45,7 @@ const openCsvTemplate = async (input: { schema: Schema; projectId: string }) => 
   )
 }
 
-const uploadCsvFile = async (input: { schema: Schema; projectId: string }) => {
+const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletUrl: string }) => {
   const options: OpenDialogOptions = {
     canSelectMany: false,
     openLabel: labels.select,
@@ -87,6 +87,7 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string }) => {
                 method: 'email',
               },
             },
+            walletUrl: input.walletUrl,
           },
           fs.createReadStream(selectedFilePath),
           { apiKeyHash },
@@ -114,11 +115,13 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string }) => {
 const initiateIssuanceCsvFlow = async (input: {
   schema: Schema
   projectId?: string
+  walletUrl?: string
 }): Promise<void> => {
   const projectId = input.projectId ?? (await iamHelpers.askForProjectId())
-  if (!projectId) {
-    return
-  }
+  if (!projectId) return
+
+  const walletUrl = input.walletUrl ?? (await iamHelpers.enterWallet())
+  if (!walletUrl) return
 
   const supported = [CSVImplementation.openCsvTemplate, CSVImplementation.uploadCsvFile]
 
@@ -132,8 +135,9 @@ const initiateIssuanceCsvFlow = async (input: {
       await csvCreationService.openCsvTemplate({ projectId, schema: input.schema })
       break
     case CSVImplementation.uploadCsvFile:
-      await csvCreationService.uploadCsvFile({ projectId, schema: input.schema })
+      await csvCreationService.uploadCsvFile({ projectId, schema: input.schema, walletUrl })
       break
+    default:
   }
 }
 

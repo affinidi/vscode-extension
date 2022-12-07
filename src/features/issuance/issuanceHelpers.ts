@@ -1,5 +1,5 @@
 import { window, ProgressLocation } from 'vscode'
-import { IssuanceDto, Options } from '@affinidi/client-issuance'
+import { IssuanceDto } from '@affinidi/client-issuance'
 import { format } from 'date-fns'
 
 import { showQuickPick } from '../../utils/showQuickPick'

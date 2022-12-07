@@ -290,9 +290,12 @@ export async function activateInternal(context: ExtensionContext) {
     commands.registerCommand('affinidi.initiateIssuanceCsvFlow', async () => {
       const projectId = await iamHelpers.askForProjectId()
       if (!projectId) return
+      const walletUrl = await iamHelpers.enterWallet()
+      if (!walletUrl) return
       const schema = await schemaManagerHelpers.askForAuthoredSchema({ projectId })
       if (!schema) return
       await csvCreationService.initiateIssuanceCsvFlow({
+        walletUrl,
         schema,
         projectId,
       })
