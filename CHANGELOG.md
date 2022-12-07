@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/affinidi/vscode-extension/compare/v1.4.1...v1.5.0) (2022-12-07)
+
+
+### Bug Fixes
+
+* multiple usability fixes ([#53](https://github.com/affinidi/vscode-extension/issues/53)) ([57081c2](https://github.com/affinidi/vscode-extension/commit/57081c24c5f3af8813449975edca23a935498c27))
+
+
+### Features
+
+* Add a button on schema details to issue VCs with schema ([#54](https://github.com/affinidi/vscode-extension/issues/54)) ([8bd14b1](https://github.com/affinidi/vscode-extension/commit/8bd14b1ca26a2f96b5dc2e00ba7282b7ed1215aa))
+
 ## [1.4.1](https://github.com/affinidi/vscode-extension/compare/v1.4.0...v1.4.1) (2022-12-06)
 
 
