@@ -22,6 +22,7 @@ describe('csvCreationService()', () => {
   const apiKeyHash = 'fake-api-hash-key'
   const csvTemplate = 'fake-csv-template'
   const walletUrl = 'fake-wallet-url'
+  const anotherProjectId = 'another-project-id'
   const issuance = generateIssuance({ projectId, issuerDid: did })
   const schema = generateSchema()
   const projectSummary = generateProjectSummary({ did, projectId, apiKeyHash })
@@ -30,6 +31,7 @@ describe('csvCreationService()', () => {
   let openTextDocument: sinon.SinonStub
   let askForProjectId: sinon.SinonStub
   let showOpenDialog: sinon.SinonStub
+  let enterWallet: sinon.SinonStub
 
   beforeEach(() => {
     sandbox.stub(ext.outputChannel, 'appendLine')
@@ -42,10 +44,13 @@ describe('csvCreationService()', () => {
     showTextDocument = sandbox.stub(window, 'showTextDocument')
     openTextDocument = sandbox.stub(workspace, 'openTextDocument')
     askForProjectId = sandbox.stub(iamHelpers, 'askForProjectId')
+    enterWallet = sandbox.stub(iamHelpers, 'enterWallet')
   })
 
   describe('openCsvTemplate()', () => {
     it('should open text document', async () => {
+      askForProjectId.resolves(projectId)
+
       await csvCreationService.openCsvTemplate({ projectId, schema })
 
       expect(openTextDocument).calledWith({
@@ -68,6 +73,8 @@ describe('csvCreationService()', () => {
     })
 
     it('should return undefined if file not selected', async () => {
+      enterWallet.resolves(walletUrl)
+
       showOpenDialog.resolves(undefined)
 
       const result = await csvCreationService.uploadCsvFile({ projectId: '', schema, walletUrl })
@@ -76,6 +83,7 @@ describe('csvCreationService()', () => {
     })
 
     it('should create issuance', async () => {
+      enterWallet.resolves(walletUrl)
       await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
 
       expect(ext.outputChannel.appendLine).calledWith(
@@ -84,6 +92,7 @@ describe('csvCreationService()', () => {
     })
 
     it('should show an error if some upload error', async () => {
+      enterWallet.resolves(walletUrl)
       createFromCsv.throws({ code: 'VIS-1', message: 'messageTest' })
 
       await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
@@ -104,8 +113,8 @@ describe('csvCreationService()', () => {
     })
 
     it('should ask for a project when projectId is not provided', async () => {
-      const anotherProjectId = 'another-project-id'
       askForProjectId.resolves(anotherProjectId)
+      enterWallet.resolves(walletUrl)
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
       await csvCreationService.initiateIssuanceCsvFlow({ schema, walletUrl })
