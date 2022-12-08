@@ -50,7 +50,6 @@ describe('csvCreationService()', () => {
   describe('openCsvTemplate()', () => {
     it('should open text document', async () => {
       askForProjectId.resolves(projectId)
-
       await csvCreationService.openCsvTemplate({ projectId, schema })
 
       expect(openTextDocument).calledWith({
@@ -74,7 +73,6 @@ describe('csvCreationService()', () => {
 
     it('should return undefined if file not selected', async () => {
       enterWallet.resolves(walletUrl)
-
       showOpenDialog.resolves(undefined)
 
       const result = await csvCreationService.uploadCsvFile({ projectId: '', schema, walletUrl })
