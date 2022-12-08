@@ -24,7 +24,7 @@ export class IamExplorerProvider implements ExplorerProvider {
 
     if (parent === undefined) {
       return [
-        ...(await this.getProjectsByGroup()),
+        ...(await this.getProjectItems()),
         new BasicTreeItem({
           label: labels.createProject,
           icon: new ThemeIcon('file-directory-create'),
@@ -56,12 +56,12 @@ export class IamExplorerProvider implements ExplorerProvider {
     return undefined
   }
 
-  async getProjectsByGroup() {
+  async getProjectItems() {
     const projectsCount = (await iamState.listProjects()).length
     if (projectsCount === 0) {
       return []
     }
-    const activeProject = await iamState.getActiveProject()
+    const activeProject = await iamState.requireActiveProject()
 
     const activeProjectTreeItem = new ProjectTreeItem({
       label: activeProject.name,

@@ -42,7 +42,7 @@ import { DevToolsTree } from './tree/devToolsTree'
 import { FeedbackTree } from './tree/feedbackTree'
 import { IamExplorerProvider } from './features/iam/tree/iamExplorerProvider'
 import { BasicTreeItem } from './tree/basicTreeItem'
-import { ProjectFeatureTreeItem } from './features/iam/tree/treeItems'
+import { InactiveProjectTreeItem, ProjectFeatureTreeItem } from './features/iam/tree/treeItems'
 import { Feature } from './features/feature'
 import { iamState } from './features/iam/iamState'
 import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
@@ -271,7 +271,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand(
     'affinidiExplorer.activateProject',
-    async (element: BasicTreeItemWithProject) => {
+    async (element: InactiveProjectTreeItem) => {
       await window.withProgress(
         { location: ProgressLocation.Notification, title: projectMessage.settingActiveProject },
         () => configVault.setUserConfig({ activeProjectId: element.projectId }),
@@ -288,7 +288,6 @@ export async function activateInternal(context: ExtensionContext) {
         metadata: {
           commandId: 'affinidiExplorer.activateProject',
           projectId: element.projectId,
-          resource: element.contextValue,
         },
       })
     },

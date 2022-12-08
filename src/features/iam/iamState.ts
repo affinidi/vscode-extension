@@ -19,7 +19,7 @@ export class IamState {
     return (await this.fetchProjects()).find((p) => p.projectId === projectId)
   }
 
-  async getActiveProject(): Promise<ProjectDto> {
+  async requireActiveProject(): Promise<ProjectDto> {
     const activeProjectId = await configVault.requireActiveProjectId()
     const activeProject = await this.getProjectById(activeProjectId)
     if (!activeProject) {
