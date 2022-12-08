@@ -24,6 +24,10 @@ class CredentialsVault {
     this.store.clear()
   }
 
+  delete(key: keyof ConfigType): void {
+    this.store.delete(key)
+  }
+
   setActiveProjectSummary(value: ProjectSummary): void {
     this.store.set('activeProjectSummary', value)
   }

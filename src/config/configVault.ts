@@ -32,12 +32,13 @@ class ConfigVault {
 
     const projects = await iamState.listProjects()
     if (projects.length === 0) {
+      await this.setUserConfig({ activeProjectId: undefined })
       throw new NoProjectsError()
     }
 
     const activeProjectId = projects[0].projectId
 
-    this.setUserConfig({ activeProjectId })
+    await this.setUserConfig({ activeProjectId })
 
     return activeProjectId
   }
@@ -46,10 +47,12 @@ class ConfigVault {
     const session = await ext.authProvider.getActiveSession()
     const existingConfigs = this.store.get('configs')
 
-    if (userConfig?.activeProjectId) {
+    if (userConfig.activeProjectId) {
       credentialsVault.setActiveProjectSummary(
         await iamState.requireProjectSummary(userConfig.activeProjectId),
       )
+    } else {
+      credentialsVault.delete('activeProjectSummary')
     }
 
     const newConfigs = {
