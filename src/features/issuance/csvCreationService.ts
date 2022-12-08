@@ -94,6 +94,8 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
         ),
     )
 
+    console.log('issuance', issuance)
+
     if (issuance) {
       ext.outputChannel.appendLine(l10n.t(`${csvMessage.issuanceCreationMessage} {0}`, issuance.id))
       ext.outputChannel.show()

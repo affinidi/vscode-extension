@@ -21,6 +21,7 @@ describe('csvCreationService()', () => {
   const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
   const csvTemplate = 'fake-csv-template'
+  const walletUrl = 'fake-wallet-url'
   const issuance = generateIssuance({ projectId, issuerDid: did })
   const schema = generateSchema()
   const projectSummary = generateProjectSummary({ did, projectId, apiKeyHash })
@@ -69,13 +70,13 @@ describe('csvCreationService()', () => {
     it('should return undefined if file not selected', async () => {
       showOpenDialog.resolves(undefined)
 
-      const result = await csvCreationService.uploadCsvFile({ projectId: '', schema })
+      const result = await csvCreationService.uploadCsvFile({ projectId: '', schema, walletUrl })
 
       expect(result).equal(undefined)
     })
 
     it('should create issuance', async () => {
-      await csvCreationService.uploadCsvFile({ projectId, schema })
+      await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
 
       expect(ext.outputChannel.appendLine).calledWith(
         `${csvMessage.issuanceCreationMessage} ${issuance.id}`,
@@ -85,7 +86,7 @@ describe('csvCreationService()', () => {
     it('should show an error if some upload error', async () => {
       createFromCsv.throws({ code: 'VIS-1', message: 'messageTest' })
 
-      await csvCreationService.uploadCsvFile({ projectId, schema })
+      await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
 
       expect(ext.outputChannel.appendLine).calledWithMatch(csvMessage.csvValidationError)
     })
@@ -107,12 +108,12 @@ describe('csvCreationService()', () => {
       askForProjectId.resolves(anotherProjectId)
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
-      await csvCreationService.initiateIssuanceCsvFlow({ schema })
+      await csvCreationService.initiateIssuanceCsvFlow({ schema, walletUrl })
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.openCsvTemplate])
       await csvCreationService.initiateIssuanceCsvFlow({ schema })
 
-      expect(uploadCsvFile).calledWith({ projectId: anotherProjectId, schema })
+      expect(uploadCsvFile).calledWith({ projectId: anotherProjectId, schema, walletUrl })
       expect(openCsvTemplate).calledWith({ projectId: anotherProjectId, schema })
     })
 
@@ -127,9 +128,9 @@ describe('csvCreationService()', () => {
     it('should upload a CSV file', async () => {
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
 
-      await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
+      await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema, walletUrl })
 
-      expect(uploadCsvFile).calledWith({ projectId, schema })
+      expect(uploadCsvFile).calledWith({ projectId, schema, walletUrl })
     })
 
     it('should stop when cancelled', async () => {

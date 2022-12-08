@@ -54,6 +54,7 @@ export const generateIssuance = ({
   id = 'fake-issuance-id',
   projectId = 'fake-project-id',
   issuerDid = 'fake-did',
+  walletUrl = 'fake-wallet-url',
 }): IssuanceDto => ({
   id,
   createdAt: 'Wed Nov 30 2022 13:27:11',
@@ -65,6 +66,7 @@ export const generateIssuance = ({
     issuerDid,
   },
   projectId,
+  walletUrl,
 })
 
 export const generateProjectSummary = ({
