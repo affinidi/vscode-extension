@@ -47,6 +47,12 @@ class ConfigVault {
     const session = await ext.authProvider.getActiveSession()
     const existingConfigs = this.store.get('configs')
 
+    if (userConfig?.activeProjectId) {
+      credentialsVault.setActiveProjectSummary(
+        await iamState.requireProjectSummary(userConfig.activeProjectId),
+      )
+    }
+
     const newConfigs = {
       ...existingConfigs,
       ...session && { [session.account.id]: userConfig },
