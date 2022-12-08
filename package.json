@@ -45,6 +45,7 @@
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
+    "onCommand:affinidiExplorer.activateProject",
     "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
     "onCommand:affinidiFeedback.reportIssue",
     "onCommand:affinidiFeedback.reviewIssues",
@@ -156,6 +157,12 @@
         "title": "%affinidiExplorer.viewProperties%",
         "category": "%commands.category.explorer%",
         "icon": "$(info)"
+      },
+      {
+        "command": "affinidiExplorer.activateProject",
+        "title": "%affinidiExplorer.activateProject%",
+        "category": "%commands.category.explorer%",
+        "icon": "$(check)"
       },
       {
         "command": "affinidiExplorer.showJsonSchema",
@@ -324,7 +331,12 @@
         },
         {
           "command": "affinidiExplorer.viewProperties",
-          "when": "view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == issuance || view == affinidiExplorer && viewItem == schema",
+          "when": "view == affinidiExplorer && viewItem == inactiveProject || viewItem == project || view == affinidiExplorer && viewItem == issuance || view == affinidiExplorer && viewItem == schema",
+          "group": "inline"
+        },
+        {
+          "command": "affinidiExplorer.activateProject",
+          "when": "view == affinidiExplorer && viewItem == inactiveProject",
           "group": "inline"
         },
         {

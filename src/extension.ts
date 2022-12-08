@@ -2,7 +2,16 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import { commands, ExtensionContext, Uri, window, env, l10n, workspace } from 'vscode'
+import {
+  commands,
+  ExtensionContext,
+  Uri,
+  window,
+  env,
+  l10n,
+  workspace,
+  ProgressLocation,
+} from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
@@ -41,6 +50,7 @@ import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
+import { projectMessage } from './messages/messages'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -252,6 +262,31 @@ export async function activateInternal(context: ExtensionContext) {
         subCategory: EventSubCategory.command,
         metadata: {
           commandId: 'affinidiExplorer.viewProperties',
+          projectId: element.projectId,
+          resource: element.contextValue,
+        },
+      })
+    },
+  )
+
+  commands.registerCommand(
+    'affinidiExplorer.activateProject',
+    async (element: BasicTreeItemWithProject) => {
+      await window.withProgress(
+        { location: ProgressLocation.Notification, title: projectMessage.settingActiveProject },
+        () => configVault.setUserConfig({ activeProjectId: element.projectId }),
+      )
+
+      await iamState.clear()
+      ext.explorerTree.refresh()
+
+      window.showInformationMessage(projectMessage.activatedProject)
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.activateProject',
           projectId: element.projectId,
           resource: element.contextValue,
         },
