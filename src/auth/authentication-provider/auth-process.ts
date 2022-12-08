@@ -76,5 +76,5 @@ export const executeAuthProcess = async ({
 
   const { userId } = parseJwt(consoleAuthToken)
 
-  return { email, id: userId, accessToken: `console_authtoken=${consoleAuthToken}` }
+  return { email, id: userId, accessToken: consoleAuthToken }
 }

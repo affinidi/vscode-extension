@@ -1,5 +1,6 @@
 import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
 import { window, ProgressLocation, l10n } from 'vscode'
+import { configVault } from '../../config/configVault'
 import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'

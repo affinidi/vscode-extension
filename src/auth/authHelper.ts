@@ -5,7 +5,7 @@ async function getConsoleAuthToken() {
     createIfNone: true,
   })
 
-  return session.accessToken.slice(`console_authtoken=`.length)
+  return session.accessToken
 }
 
 export const authHelper = {
