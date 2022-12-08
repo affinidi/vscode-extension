@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .box-row {
@@ -14,6 +14,12 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.issuance-button-box {
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .title {
@@ -28,6 +34,5 @@
 .divider {
   width: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-
   margin: 20px 0px;
 }

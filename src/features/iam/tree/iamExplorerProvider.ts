@@ -1,4 +1,5 @@
 import { ThemeIcon } from 'vscode'
+import { configVault } from '../../../config/configVault'
 import { ext } from '../../../extensionVariables'
 import { labels } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'

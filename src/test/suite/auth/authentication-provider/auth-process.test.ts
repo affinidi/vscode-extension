@@ -36,7 +36,7 @@ describe('executeAuthProcess()', () => {
     expect(await executeAuthProcess({ isSignUp: false })).to.deep.eq({
       email,
       id: userId,
-      accessToken: `console_authtoken=${consoleAuthToken}`,
+      accessToken: consoleAuthToken,
     })
 
     expect(userManagementClient.login).calledWith({ username: email })
@@ -47,7 +47,7 @@ describe('executeAuthProcess()', () => {
     expect(await executeAuthProcess({ isSignUp: true })).to.deep.eq({
       email,
       id: userId,
-      accessToken: `console_authtoken=${consoleAuthToken}`,
+      accessToken: consoleAuthToken,
     })
 
     expect(userManagementClient.signup).calledWith({ username: email })
