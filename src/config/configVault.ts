@@ -38,7 +38,6 @@ class ConfigVault {
     const activeProjectId = projects[0].projectId
 
     this.setUserConfig({ activeProjectId })
-    credentialsVault.setActiveProjectSummary(await iamState.requireProjectSummary(activeProjectId))
 
     return activeProjectId
   }
@@ -55,7 +54,7 @@ class ConfigVault {
 
     const newConfigs = {
       ...existingConfigs,
-      ...session && { [session.account.id]: userConfig },
+      ...(session && { [session.account.id]: userConfig }),
     }
 
     this.store.set('configs', newConfigs)
