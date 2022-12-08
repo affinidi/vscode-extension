@@ -1,7 +1,9 @@
 import { expect } from 'chai'
 import { authHelper } from '../../../../auth/authHelper'
+import { configVault } from '../../../../config/configVault'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { IamState } from '../../../../features/iam/iamState'
+import { projectMessage } from '../../../../messages/messages'
 import { state } from '../../../../state'
 import { sandbox } from '../../setup'
 
@@ -18,6 +20,7 @@ describe('IamState', () => {
   beforeEach(async () => {
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
     sandbox.stub(iamClient, 'listProjects').resolves({ projects })
+    sandbox.stub(configVault, 'requireActiveProjectId').resolves('fake-project-1')
     sandbox
       .stub(iamClient, 'getProjectSummary')
       .withArgs({ projectId: 'fake-project-1' })
@@ -54,6 +57,36 @@ describe('IamState', () => {
       await iamState.clear()
 
       await expect(iamState.getProjectById('fake-project-1')).to.eventually.deep.eq(project1)
+      expect(iamClient.listProjects).calledTwice
+    })
+  })
+
+  describe('getActiveProject()', () => {
+    it('should fetch projects once and then reuse the cached value', async () => {
+      await expect(iamState.getActiveProject()).to.eventually.deep.eq(projects[0])
+      expect(iamClient.listProjects).calledOnce
+
+      await iamState.clear()
+
+      await expect(iamState.getActiveProject()).to.eventually.deep.eq(projects[0])
+      expect(iamClient.listProjects).calledTwice
+    })
+    it('should throw error when active project could not be fetched', async () => {
+      sandbox.stub(iamState, 'getProjectById').resolves(undefined)
+      await expect(iamState.getActiveProject()).to.eventually.be.rejectedWith(
+        projectMessage.errorFetchingActiveProject,
+      )
+    })
+  })
+
+  describe('getInactiveProjects()', () => {
+    it('should fetch projects once and then reuse the cached value', async () => {
+      await expect(iamState.getInactiveProjects()).to.eventually.deep.eq([projects[1]])
+      expect(iamClient.listProjects).calledOnce
+
+      await iamState.clear()
+
+      await expect(iamState.getInactiveProjects()).to.eventually.deep.eq([projects[1]])
       expect(iamClient.listProjects).calledTwice
     })
   })
