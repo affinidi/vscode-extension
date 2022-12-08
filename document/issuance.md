@@ -14,7 +14,7 @@ In order to finalise the credential issuance process, emails are sent out to the
 
 ### Where can I find a schema URL?
 
-Issuance works best with the schemas stored under VC Schemas. You can use either JSON schema URL or JSON-LD context URL of the selected schema. Here are examples of both URLs for a PartyInvite credential: 
+Issuance works best with the schemas stored under VC Schemas. You can use either JSON schema URL or JSON-LD context URL of the selected schema. Here are examples of both URLs for a credential: 
 
 - JSON schema URL: `https://schema.affinidi.com/MySchemaV1-0.json`
 - JSON-LD context URL: `https://schema.affinidi.com/MySchemaV1-0.jsonld`
