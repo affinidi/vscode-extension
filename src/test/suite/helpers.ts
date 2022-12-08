@@ -59,6 +59,7 @@ export const generateIssuance = ({
   id,
   createdAt: 'Wed Nov 30 2022 13:27:11',
   template: {
+    walletUrl,
     verification: {
       method: 'email',
     },
@@ -66,7 +67,6 @@ export const generateIssuance = ({
     issuerDid,
   },
   projectId,
-  walletUrl,
 })
 
 export const generateProjectSummary = ({

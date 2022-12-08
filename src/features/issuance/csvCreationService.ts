@@ -81,20 +81,18 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
           {
             projectId: input.projectId,
             template: {
+              walletUrl: input.walletUrl,
               issuerDid: did,
               schema,
               verification: {
                 method: 'email',
               },
             },
-            walletUrl: input.walletUrl,
           },
           fs.createReadStream(selectedFilePath),
           { apiKeyHash },
         ),
     )
-
-    console.log('issuance', issuance)
 
     if (issuance) {
       ext.outputChannel.appendLine(l10n.t(`${csvMessage.issuanceCreationMessage} {0}`, issuance.id))
