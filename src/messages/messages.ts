@@ -95,6 +95,7 @@ export const projectMessage = {
   pleaseTryAgain: l10n.t('Please try again later.'),
   projectDoesNotExist: l10n.t('Project does not exist.'),
   projectNotFound: (projectId: string) => l10n.t('Project not found: {0}', projectId),
+  settingActiveProject: l10n.t('Setting active project...'),
 }
 
 export const issuanceMessage = {
@@ -173,8 +174,9 @@ export const csvMessage = {
   openCsvTemplate: l10n.t('Open a CSV template'),
   uploadCsvFile: l10n.t('Upload a CSV file'),
   commaSeparatorMessage: l10n.t('Make sure to use comma (,) as separator. '),
-  csvValidationError: 'Could not create issuance due to validation errors in the CSV file:',
-  issuanceCreationMessage: 'Issuance has been created and the offers were sent. Issuance ID:',
+  csvValidationError: l10n.t('Could not create issuance due to validation errors in the CSV.'),
+  checkOutputChannel: l10n.t('Check Affinidi Output for more details.'),
+  issuanceCreationMessage: l10n.t('Issuance has been created and the offers were sent.'),
   invalidCsvFile: l10n.t('Invalid CSV file'),
   invalidDataInRow: l10n.t('Invalid data in row #'),
   couldNotFindAllColumns: l10n.t('Could not find all required columns'),

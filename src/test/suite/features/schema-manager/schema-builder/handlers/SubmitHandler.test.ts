@@ -85,7 +85,7 @@ describe('handleSubmit()', () => {
         attributes: [
           createBuilderAttribute({ name: 'test' }),
           createBuilderAttribute({ name: 'test' }), // duplicate attribute
-        ]
+        ],
       }),
     })
 
@@ -103,7 +103,7 @@ describe('handleSubmit()', () => {
     await handler.handle(webviewMock, { schema })
 
     expect(builderSchemaPublisherMock.publish).calledWith(schema, projectId)
-    expect(showSchemaDetails.showSchemaDetails).calledWith(createdSchema)
+    expect(showSchemaDetails.showSchemaDetails).calledWith({ schema: createdSchema, projectId })
     expect(schemaManagerState.clear).called
     expect(ext.explorerTree.refresh).called
     expect(webviewMock.dispose).called

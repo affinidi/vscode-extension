@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file, no-underscore-dangle */
+/* eslint-disable max-classes-per-file */
 import {
   Event,
   EventEmitter,

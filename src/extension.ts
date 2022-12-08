@@ -2,14 +2,13 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import { commands, ExtensionContext, Uri, window, env, l10n } from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, l10n, workspace } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { getFeatureMarkdownUri } from './features/getFeatureMarkdownUri'
-import { buildURL } from './api-client/api-fetch'
 import {
   EventNames,
   EventSubCategory,
@@ -41,6 +40,7 @@ import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager/tree/treeItems'
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
+import { configVault } from './config/configVault'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -68,6 +68,19 @@ export async function activateInternal(context: ExtensionContext) {
   ext.devToolsTree = new DevToolsTree()
   ext.feedbackTree = new FeedbackTree()
 
+  ext.context.subscriptions.push(
+    ext.authProvider.onDidChangeSessions(async () => {
+      await state.clear()
+      ext.explorerTree.refresh()
+    }),
+    {
+      dispose: configVault.onUserConfigChange(async () => {
+        await state.clear()
+        ext.explorerTree.refresh()
+      }),
+    },
+  )
+
   const treeView = window.createTreeView('affinidiExplorer', {
     treeDataProvider: ext.explorerTree,
     canSelectMany: false,
@@ -80,10 +93,22 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  window.createTreeView('affinidiFeedback', {
+  const feedbackTreeView = window.createTreeView('affinidiFeedback', {
     treeDataProvider: ext.feedbackTree,
     canSelectMany: false,
     showCollapseAll: true,
+  })
+
+  feedbackTreeView.onDidChangeVisibility((ev) => {
+    const walkthroughOpened = workspace.getConfiguration().get('affinidi.walkthrough.opened')
+
+    if (!walkthroughOpened && ev.visible) {
+      commands.executeCommand(
+        'workbench.action.openWalkthrough',
+        'Affinidi.affinidi#affinidi-walkthrough',
+      )
+      workspace.getConfiguration().update('affinidi.walkthrough.opened', true, true)
+    }
   })
 
   commands.registerCommand('affinidiExplorer.refresh', async (element: BasicTreeItem) => {
@@ -129,7 +154,7 @@ export async function activateInternal(context: ExtensionContext) {
       },
     })
 
-    showSchemaDetails(schema)
+    showSchemaDetails({ schema, projectId: element.projectId })
   })
 
   context.subscriptions.push(openSchema)

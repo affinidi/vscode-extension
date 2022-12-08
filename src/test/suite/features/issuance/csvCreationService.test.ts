@@ -84,9 +84,7 @@ describe('csvCreationService()', () => {
       enterWallet.resolves(walletUrl)
       await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
 
-      expect(ext.outputChannel.appendLine).calledWith(
-        `${csvMessage.issuanceCreationMessage} ${issuance.id}`,
-      )
+      expect(ext.outputChannel.appendLine).calledWithMatch(csvMessage.issuanceCreationMessage)
     })
 
     it('should show an error if some upload error', async () => {

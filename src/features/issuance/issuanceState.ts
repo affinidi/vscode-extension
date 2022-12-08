@@ -24,7 +24,7 @@ export class IssuanceState {
   }
 
   async clear() {
-    await state.clear(PREFIX)
+    await state.clearByPrefix(PREFIX)
   }
 
   private async fetchIssuancesByProject(projectId: string): Promise<IssuanceDto[]> {
