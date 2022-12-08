@@ -24,10 +24,6 @@ class ConfigVault {
     this.store.clear()
   }
 
-  delete(key: keyof ConfigType): void {
-    this.store.delete(key)
-  }
-
   async requireActiveProjectId(): Promise<string> {
     const userConfig = await this.getUserConfig()
     if (userConfig && userConfig.activeProjectId) {
