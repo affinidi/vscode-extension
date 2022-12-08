@@ -2,6 +2,8 @@ import { ProjectDto } from '@affinidi/client-iam'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { projectMessage } from '../../messages/messages'
 import { iamState } from './iamState'
+import { createProjectProcess } from './createProjectProcess'
+import { configVault } from '../../config/configVault'
 
 async function askForProjectId(): Promise<string | undefined> {
   const projects = await iamState.listProjects()
@@ -22,6 +24,14 @@ async function askForProjectId(): Promise<string | undefined> {
   return project?.projectId
 }
 
+async function setupInitialProject() {
+  const project = await createProjectProcess('Default Project')
+  if (project) {
+    configVault.setUserConfig({ activeProjectId: project.projectId })
+  }
+}
+
 export const iamHelpers = {
   askForProjectId,
+  setupInitialProject,
 }
