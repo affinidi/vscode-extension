@@ -5,7 +5,7 @@ import { projectMessage } from '../../messages/messages'
 import { iamState } from './iamState'
 import { authHelper } from '../../auth/authHelper'
 import { iamClient } from './iamClient'
-import { configVault } from '../../config/configVault'
+import { ext } from '../../extensionVariables'
 
 async function askForProjectId(): Promise<string | undefined> {
   const projects = await iamState.listProjects()
@@ -40,6 +40,7 @@ async function createDefaultProject(): Promise<void> {
   )
 
   await iamState.clear()
+  ext.explorerTree.refresh()
 }
 
 export const iamHelpers = {

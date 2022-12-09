@@ -27,6 +27,8 @@ describe('initAuthentication()', () => {
       expect(authentication.getSession).calledWith(AUTH_PROVIDER_ID, ['signup'], {
         forceNewSession: true,
       })
+
+      expect(iamHelpers.createDefaultProject).called
     })
 
     it('should fail signup', async () => {
