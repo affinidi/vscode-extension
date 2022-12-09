@@ -9,12 +9,12 @@ import {
   CSVImplementation,
   implementationLabels,
 } from '../../../../features/issuance/csvCreationService'
-import { iamHelpers } from '../../../../features/iam/iamHelpers'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
 import { csvMessage } from '../../../../messages/messages'
 import { iamState } from '../../../../features/iam/iamState'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../../helpers'
+import { configVault } from '../../../../config/configVault'
 
 describe('csvCreationService()', () => {
   const projectId = 'fake-project-id'
@@ -27,7 +27,7 @@ describe('csvCreationService()', () => {
 
   let showTextDocument: sinon.SinonStub
   let openTextDocument: sinon.SinonStub
-  let askForProjectId: sinon.SinonStub
+  let requireActiveProjectId: sinon.SinonStub
   let showOpenDialog: sinon.SinonStub
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('csvCreationService()', () => {
 
     showTextDocument = sandbox.stub(window, 'showTextDocument')
     openTextDocument = sandbox.stub(workspace, 'openTextDocument')
-    askForProjectId = sandbox.stub(iamHelpers, 'askForProjectId')
+    requireActiveProjectId = sandbox.stub(configVault, 'requireActiveProjectId')
   })
 
   describe('openCsvTemplate()', () => {
@@ -102,7 +102,7 @@ describe('csvCreationService()', () => {
 
     it('should ask for a project when projectId is not provided', async () => {
       const anotherProjectId = 'another-project-id'
-      askForProjectId.resolves(anotherProjectId)
+      requireActiveProjectId.resolves(anotherProjectId)
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
       await csvCreationService.initiateIssuanceCsvFlow({ schema })
