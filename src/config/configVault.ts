@@ -27,7 +27,7 @@ class ConfigVault {
   async requireActiveProjectId(): Promise<string> {
     const userConfig = await this.getUserConfig()
     if (userConfig && userConfig.activeProjectId) {
-      await this.setUserConfig({ activeProjectId: userConfig.activeProjectId })
+      await this.setActiveProjectSummary(userConfig.activeProjectId)
       return userConfig.activeProjectId
     }
 
@@ -49,9 +49,7 @@ class ConfigVault {
     const existingConfigs = this.store.get('configs')
 
     if (userConfig.activeProjectId) {
-      credentialsVault.setActiveProjectSummary(
-        await iamState.requireProjectSummary(userConfig.activeProjectId),
-      )
+      await this.setActiveProjectSummary(userConfig.activeProjectId)
     } else {
       credentialsVault.delete('activeProjectSummary')
     }
@@ -62,6 +60,10 @@ class ConfigVault {
     }
 
     this.store.set('configs', newConfigs)
+  }
+
+  private async setActiveProjectSummary(projectId: string): Promise<void> {
+    credentialsVault.setActiveProjectSummary(await iamState.requireProjectSummary(projectId))
   }
 
   async getUserConfig(): Promise<UserConfig | undefined> {
