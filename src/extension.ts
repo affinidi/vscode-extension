@@ -512,6 +512,7 @@ export async function activateInternal(context: ExtensionContext) {
   })
 
   askUserForTelemetryConsent()
+  updateCredentialsActiveProjectSummary()
 
   logger.info({}, 'Affinidi extension is now active!')
 }
