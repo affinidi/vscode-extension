@@ -33,7 +33,6 @@ import { IssuanceExplorerProvider } from './features/issuance/tree/issuanceExplo
 import { SchemaManagerExplorerProvider } from './features/schema-manager/tree/schemaManagerExplorerProvider'
 import { openSchemaBuilder } from './features/schema-manager/schema-builder/openSchemaBuilder'
 import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
-import { iamHelpers } from './features/iam/iamHelpers'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
 import { issuanceState } from './features/issuance/issuanceState'
 import { schemaManagerState } from './features/schema-manager/schemaManagerState'
