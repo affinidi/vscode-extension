@@ -1,4 +1,3 @@
-import { ProjectDto } from '@affinidi/client-iam'
 import { ProgressLocation, window } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
 import { logger } from '../../utils/logger'

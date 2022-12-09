@@ -1,8 +1,11 @@
 import { ProjectDto } from '@affinidi/client-iam'
-import { window } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { labels, projectMessage } from '../../messages/messages'
 import { iamState } from './iamState'
+import { authHelper } from '../../auth/authHelper'
+import { iamClient } from './iamClient'
+import { ext } from '../../extensionVariables'
 
 async function askForProjectId(): Promise<string | undefined> {
   const projects = await iamState.listProjects()
@@ -32,7 +35,25 @@ async function askForWalletUrl(): Promise<string | undefined> {
   return wallet
 }
 
+async function createDefaultProject(): Promise<void> {
+  await window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      title: projectMessage.creatingDefaultProject,
+    },
+    async () =>
+      iamClient.createProject(
+        { name: 'Default Project' },
+        { consoleAuthToken: await authHelper.getConsoleAuthToken() },
+      ),
+  )
+
+  await iamState.clear()
+  ext.explorerTree.refresh()
+}
+
 export const iamHelpers = {
   askForProjectId,
   askForWalletUrl,
+  createDefaultProject,
 }
