@@ -27,6 +27,7 @@ class ConfigVault {
   async requireActiveProjectId(): Promise<string> {
     const userConfig = await this.getUserConfig()
     if (userConfig && userConfig.activeProjectId) {
+      await this.setUserConfig({ activeProjectId: userConfig.activeProjectId })
       return userConfig.activeProjectId
     }
 

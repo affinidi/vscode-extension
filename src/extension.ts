@@ -347,7 +347,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.initiateIssuanceCsvFlow', async () => {
-      const projectId = await iamHelpers.askForProjectId()
+      const projectId = await configVault.requireActiveProjectId()
       if (!projectId) return
       const schema = await schemaManagerHelpers.askForAuthoredSchema({ projectId })
       if (!schema) return
@@ -499,7 +499,7 @@ export async function activateInternal(context: ExtensionContext) {
     })
 
     try {
-      openSchemaBuilder({ projectId: await iamHelpers.askForProjectId() })
+      openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
     } catch (error) {
       notifyError(error)
     }

@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import { l10n, OpenDialogOptions, ProgressLocation, window, workspace } from 'vscode'
 import { Schema } from '../../utils/types'
-import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
@@ -9,6 +8,7 @@ import { ext } from '../../extensionVariables'
 import { csvMessage, snippetMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 import { iamState } from '../iam/iamState'
+import { configVault } from '../../config/configVault'
 
 export enum CSVImplementation {
   openCsvTemplate,
@@ -115,7 +115,7 @@ const initiateIssuanceCsvFlow = async (input: {
   schema: Schema
   projectId?: string
 }): Promise<void> => {
-  const projectId = input.projectId ?? (await iamHelpers.askForProjectId())
+  const projectId = input.projectId ?? (await configVault.requireActiveProjectId())
   if (!projectId) {
     return
   }

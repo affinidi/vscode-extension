@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid'
 import { Schema } from '../../utils/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
@@ -10,6 +9,7 @@ import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
 import { snippetMessage } from '../../messages/messages'
 import { iamState } from '../../features/iam/iamState'
+import { configVault } from '../../config/configVault'
 
 export interface SnippetInput {
   iamUrl: string
@@ -39,7 +39,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
+    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
     if (!projectId) {
       return undefined
     }
