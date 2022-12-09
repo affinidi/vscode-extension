@@ -23,7 +23,7 @@ async function askForProjectId(): Promise<string | undefined> {
   return project?.projectId
 }
 
-async function enterWallet(): Promise<string | undefined> {
+async function askForWalletUrl(): Promise<string | undefined> {
   const wallet = await window.showInputBox({
     value: 'http://localhost:3000/holder/claim',
     prompt: labels.selectWallet,
@@ -34,5 +34,5 @@ async function enterWallet(): Promise<string | undefined> {
 
 export const iamHelpers = {
   askForProjectId,
-  enterWallet,
+  askForWalletUrl,
 }

@@ -120,7 +120,7 @@ const initiateIssuanceCsvFlow = async (input: {
   const projectId = input.projectId ?? (await iamHelpers.askForProjectId())
   if (!projectId) return
 
-  const walletUrl = input.walletUrl ?? (await iamHelpers.enterWallet())
+  const walletUrl = input.walletUrl ?? (await iamHelpers.askForWalletUrl())
   if (!walletUrl) return
 
   const supported = [CSVImplementation.openCsvTemplate, CSVImplementation.uploadCsvFile]
