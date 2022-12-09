@@ -97,6 +97,7 @@ export const projectMessage = {
   settingActiveProject: l10n.t('Setting active project...'),
   errorFetchingActiveProject: l10n.t('Error while fetching the active project.'),
   activatedProject: l10n.t('Successfully activated the project'),
+  creatingDefaultProject: l10n.t('Creating default project...'),
 }
 
 export const issuanceMessage = {

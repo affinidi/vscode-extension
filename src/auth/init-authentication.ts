@@ -1,20 +1,20 @@
-import { authentication, commands, window, l10n, ProgressLocation } from 'vscode'
+import { authentication, commands, window, ProgressLocation } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
-import { authMessage, errorMessage, labels } from '../messages/messages'
+import { authMessage, errorMessage } from '../messages/messages'
 import {
   sendEventToAnalytics,
   EventNames,
   EventSubCategory,
 } from '../services/analyticsStreamApiService'
 import { cliHelper } from '../utils/cliHelper'
-import { state } from '../state'
 import {
   AffinidiAuthenticationProvider,
   AUTH_PROVIDER_ID,
 } from './authentication-provider/affinidi-authentication-provider'
 import { authHelper } from './authHelper'
 import { readOnlyContentViewer } from '../utils/openReadOnlyContent'
+import { iamHelpers } from '../features/iam/iamHelpers'
 
 const CONSENT = {
   accept: authMessage.accept,
@@ -46,6 +46,9 @@ async function signUpHandler(): Promise<void> {
 
       window.showInformationMessage(authMessage.signedUp)
       ext.outputChannel.appendLine(authMessage.signedUp)
+
+      await iamHelpers.createDefaultProject()
+
       await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
       break
 
