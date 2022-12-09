@@ -1,4 +1,4 @@
-import { l10n, ThemeIcon } from 'vscode'
+import { ThemeIcon } from 'vscode'
 import { labels, schemaMessage } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
@@ -7,6 +7,10 @@ import { ProjectFeatureTreeItem } from '../../iam/tree/treeItems'
 import { schemaManagerHelpers } from '../schemaManagerHelpers'
 import { schemaManagerState } from '../schemaManagerState'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './treeItems'
+
+function simplifySchemaDescription(value: string) {
+  return value.split('\n')[0]
+}
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -52,7 +56,7 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
       (schema) =>
         new SchemaTreeItem({
           label: schemaManagerHelpers.getSchemaName(schema),
-          description: schema.description || '',
+          description: simplifySchemaDescription(schema.description || ''),
           icon: new ThemeIcon('bracket'),
           schemaId: schema.id,
           projectId: parent.projectId,
