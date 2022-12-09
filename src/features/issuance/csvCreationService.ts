@@ -113,15 +113,15 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
 }
 
 const initiateIssuanceCsvFlow = async (input: {
-  schema: Schema
+  schema?: Schema
   projectId?: string
   walletUrl?: string
 }): Promise<void> => {
   const projectId = input.projectId ?? (await iamHelpers.askForProjectId())
   if (!projectId) return
 
-  const walletUrl = input.walletUrl ?? (await iamHelpers.askForWalletUrl())
-  if (!walletUrl) return
+  const schema = input.schema ?? (await schemaManagerHelpers.askForAuthoredSchema({ projectId }))
+  if (!schema) return
 
   const supported = [CSVImplementation.openCsvTemplate, CSVImplementation.uploadCsvFile]
 
@@ -132,10 +132,14 @@ const initiateIssuanceCsvFlow = async (input: {
 
   switch (selectedValue) {
     case CSVImplementation.openCsvTemplate:
-      await csvCreationService.openCsvTemplate({ projectId, schema: input.schema })
+      await csvCreationService.openCsvTemplate({ projectId, schema })
       break
     case CSVImplementation.uploadCsvFile:
-      await csvCreationService.uploadCsvFile({ projectId, schema: input.schema, walletUrl })
+      {
+        const walletUrl = input.walletUrl ?? (await iamHelpers.askForWalletUrl())
+        if (!walletUrl) return
+        await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
+      }
       break
     default:
   }
