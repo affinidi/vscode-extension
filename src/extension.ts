@@ -353,13 +353,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.initiateIssuanceCsvFlow', async () => {
-      const projectId = await configVault.requireActiveProjectId()
-      const schema = await schemaManagerHelpers.askForAuthoredSchema({ projectId })
-      if (!schema) return
-      await csvCreationService.initiateIssuanceCsvFlow({
-        schema,
-        projectId,
-      })
+      await csvCreationService.initiateIssuanceCsvFlow({})
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
