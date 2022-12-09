@@ -45,9 +45,6 @@ async function getOrCreateBuilder(input?: {
     builder?.dispose()
 
     const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
-    if (!projectId) {
-      throw new Error(schemaMessage.selectProjectToCreateSchema)
-    }
 
     builder = new SchemaBuilderWebview(
       projectId,
