@@ -331,7 +331,7 @@
         },
         {
           "command": "affinidiExplorer.viewProperties",
-          "when": "view == affinidiExplorer && viewItem == inactiveProject || viewItem == project || viewItem == schema || viewItem == issuance",
+          "when": "view == affinidiExplorer && viewItem == inactiveProject || view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == schema || view == affinidiExplorer && viewItem == issuance",
           "group": "inline"
         },
         {
