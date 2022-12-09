@@ -21,6 +21,8 @@ describe('csvCreationService()', () => {
   const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
   const csvTemplate = 'fake-csv-template'
+  const walletUrl = 'fake-wallet-url'
+  const anotherProjectId = 'another-project-id'
   const issuance = generateIssuance({ projectId, issuerDid: did })
   const schema = generateSchema()
   const projectSummary = generateProjectSummary({ did, projectId, apiKeyHash })
@@ -29,6 +31,7 @@ describe('csvCreationService()', () => {
   let openTextDocument: sinon.SinonStub
   let askForProjectId: sinon.SinonStub
   let showOpenDialog: sinon.SinonStub
+  let askForWalletUrl: sinon.SinonStub
 
   beforeEach(() => {
     sandbox.stub(ext.outputChannel, 'appendLine')
@@ -41,10 +44,12 @@ describe('csvCreationService()', () => {
     showTextDocument = sandbox.stub(window, 'showTextDocument')
     openTextDocument = sandbox.stub(workspace, 'openTextDocument')
     askForProjectId = sandbox.stub(iamHelpers, 'askForProjectId')
+    askForWalletUrl = sandbox.stub(iamHelpers, 'askForWalletUrl')
   })
 
   describe('openCsvTemplate()', () => {
     it('should open text document', async () => {
+      askForProjectId.resolves(projectId)
       await csvCreationService.openCsvTemplate({ projectId, schema })
 
       expect(openTextDocument).calledWith({
@@ -67,23 +72,26 @@ describe('csvCreationService()', () => {
     })
 
     it('should return undefined if file not selected', async () => {
+      askForWalletUrl.resolves(walletUrl)
       showOpenDialog.resolves(undefined)
 
-      const result = await csvCreationService.uploadCsvFile({ projectId: '', schema })
+      const result = await csvCreationService.uploadCsvFile({ projectId: '', schema, walletUrl })
 
       expect(result).equal(undefined)
     })
 
     it('should create issuance', async () => {
-      await csvCreationService.uploadCsvFile({ projectId, schema })
+      askForWalletUrl.resolves(walletUrl)
+      await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
 
       expect(ext.outputChannel.appendLine).calledWithMatch(csvMessage.issuanceCreationMessage)
     })
 
     it('should show an error if some upload error', async () => {
+      askForWalletUrl.resolves(walletUrl)
       createFromCsv.throws({ code: 'VIS-1', message: 'messageTest' })
 
-      await csvCreationService.uploadCsvFile({ projectId, schema })
+      await csvCreationService.uploadCsvFile({ projectId, schema, walletUrl })
 
       expect(ext.outputChannel.appendLine).calledWithMatch(csvMessage.csvValidationError)
     })
@@ -101,16 +109,16 @@ describe('csvCreationService()', () => {
     })
 
     it('should ask for a project when projectId is not provided', async () => {
-      const anotherProjectId = 'another-project-id'
       askForProjectId.resolves(anotherProjectId)
+      askForWalletUrl.resolves(walletUrl)
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
-      await csvCreationService.initiateIssuanceCsvFlow({ schema })
+      await csvCreationService.initiateIssuanceCsvFlow({ schema, walletUrl })
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.openCsvTemplate])
       await csvCreationService.initiateIssuanceCsvFlow({ schema })
 
-      expect(uploadCsvFile).calledWith({ projectId: anotherProjectId, schema })
+      expect(uploadCsvFile).calledWith({ projectId: anotherProjectId, schema, walletUrl })
       expect(openCsvTemplate).calledWith({ projectId: anotherProjectId, schema })
     })
 
@@ -125,9 +133,9 @@ describe('csvCreationService()', () => {
     it('should upload a CSV file', async () => {
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
 
-      await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
+      await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema, walletUrl })
 
-      expect(uploadCsvFile).calledWith({ projectId, schema })
+      expect(uploadCsvFile).calledWith({ projectId, schema, walletUrl })
     })
 
     it('should stop when cancelled', async () => {

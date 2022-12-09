@@ -28,6 +28,10 @@ export const labels = {
   openWalkthrough: l10n.t('Extension Walkthrough'),
   openAPIDocs: l10n.t('API Documentation'),
   openDiscord: l10n.t('Discord Server'),
+  exampleWallet: l10n.t('Use Example Wallet'),
+  selectWallet: l10n.t('Enter A Wallet'),
+  activeProject: l10n.t('Active'),
+  inactiveProjects: l10n.t('Inactive Projects'),
 }
 
 export const errorMessage = {
@@ -42,6 +46,7 @@ export const errorMessage = {
   unexpectedResourceType: l10n.t('Unexpected resource type:'),
   webPanelNotOpen: l10n.t('Webview panel is not opened'),
   unexpectedError: l10n.t('Unexpected error'),
+  walletNotFound: l10n.t('Wallet Not Found'),
 }
 
 export const authMessage = {
@@ -93,6 +98,9 @@ export const projectMessage = {
   projectDoesNotExist: l10n.t('Project does not exist.'),
   projectNotFound: (projectId: string) => l10n.t('Project not found: {0}', projectId),
   settingActiveProject: l10n.t('Setting active project...'),
+  errorFetchingActiveProject: l10n.t('Error while fetching the active project.'),
+  activatedProject: l10n.t('Successfully activated the project'),
+  creatingDefaultProject: l10n.t('Creating default project...'),
 }
 
 export const issuanceMessage = {

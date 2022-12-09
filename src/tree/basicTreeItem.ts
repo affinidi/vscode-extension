@@ -17,9 +17,12 @@ export class BasicTreeItem extends TreeItem {
     this.description = input.description
     this.contextValue = input.contextValue
     this.tooltip = input.label
-    this.command = typeof input.command === 'string' ? {
-      title: input.label,
-      command: input.command,
-    } : input.command
+    this.command =
+      typeof input.command === 'string'
+        ? {
+            title: input.label,
+            command: input.command,
+          }
+        : input.command
   }
 }

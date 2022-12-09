@@ -2,7 +2,16 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import { commands, ExtensionContext, Uri, window, env, l10n, workspace } from 'vscode'
+import {
+  commands,
+  ExtensionContext,
+  Uri,
+  window,
+  env,
+  l10n,
+  workspace,
+  ProgressLocation,
+} from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
@@ -33,7 +42,7 @@ import { DevToolsTree } from './tree/devToolsTree'
 import { FeedbackTree } from './tree/feedbackTree'
 import { IamExplorerProvider } from './features/iam/tree/iamExplorerProvider'
 import { BasicTreeItem } from './tree/basicTreeItem'
-import { ProjectFeatureTreeItem } from './features/iam/tree/treeItems'
+import { InactiveProjectTreeItem, ProjectFeatureTreeItem } from './features/iam/tree/treeItems'
 import { Feature } from './features/feature'
 import { iamState } from './features/iam/iamState'
 import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
@@ -41,6 +50,7 @@ import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
+import { projectMessage } from './messages/messages'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -259,6 +269,30 @@ export async function activateInternal(context: ExtensionContext) {
     },
   )
 
+  commands.registerCommand(
+    'affinidiExplorer.activateProject',
+    async (element: InactiveProjectTreeItem) => {
+      await window.withProgress(
+        { location: ProgressLocation.Notification, title: projectMessage.settingActiveProject },
+        () => configVault.setUserConfig({ activeProjectId: element.projectId }),
+      )
+
+      await iamState.clear()
+      ext.explorerTree.refresh()
+
+      window.showInformationMessage(projectMessage.activatedProject)
+
+      sendEventToAnalytics({
+        name: EventNames.commandExecuted,
+        subCategory: EventSubCategory.command,
+        metadata: {
+          commandId: 'affinidiExplorer.activateProject',
+          projectId: element.projectId,
+        },
+      })
+    },
+  )
+
   context.subscriptions.push(
     commands.registerCommand(
       'affinidiExplorer.initiateIssuanceCsvFlow',
@@ -313,14 +347,7 @@ export async function activateInternal(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.initiateIssuanceCsvFlow', async () => {
-      const projectId = await iamHelpers.askForProjectId()
-      if (!projectId) return
-      const schema = await schemaManagerHelpers.askForAuthoredSchema({ projectId })
-      if (!schema) return
-      await csvCreationService.initiateIssuanceCsvFlow({
-        schema,
-        projectId,
-      })
+      await csvCreationService.initiateIssuanceCsvFlow({})
 
       sendEventToAnalytics({
         name: EventNames.commandExecuted,
