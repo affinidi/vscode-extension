@@ -21,6 +21,7 @@
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",
   "affinidiExplorer.openSchemaBuilder": "Create VC Schema",
   "affinidiExplorer.forkSchema": "Fork this VC Schema",
+  "affinidiExplorer.activateProject": "Activate",
 
   "affinidiFeedback.reportIssue": "Report Issue",
   "affinidiFeedback.reviewIssues": "Review Issues",
