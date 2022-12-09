@@ -1,12 +1,19 @@
-import { ThemeIcon } from 'vscode'
-import { configVault } from '../../../config/configVault'
+import { ThemeIcon, TreeItemCollapsibleState } from 'vscode'
+
 import { ext } from '../../../extensionVariables'
 import { labels } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
 import { Feature } from '../../feature'
 import { iamState } from '../iamState'
-import { ProjectTreeItem, ProjectFeatureTreeItem, DigitalIdentityTreeItem } from './treeItems'
+
+import {
+  ProjectTreeItem,
+  ProjectFeatureTreeItem,
+  DigitalIdentityTreeItem,
+  InactiveProjectsFolderTreeItem,
+  InactiveProjectTreeItem,
+} from './treeItems'
 
 export class IamExplorerProvider implements ExplorerProvider {
   public async getChildren(
@@ -17,13 +24,25 @@ export class IamExplorerProvider implements ExplorerProvider {
 
     if (parent === undefined) {
       return [
-        ...(await this.getProjects()),
+        ...(await this.getProjectItems()),
         new BasicTreeItem({
           label: labels.createProject,
           icon: new ThemeIcon('file-directory-create'),
           command: 'affinidi.createProject',
         }),
       ]
+    }
+
+    if (parent instanceof InactiveProjectsFolderTreeItem) {
+      const inactiveProjects = await iamState.getInactiveProjects()
+
+      return inactiveProjects.map(
+        (project) =>
+          new InactiveProjectTreeItem({
+            label: project.name,
+            projectId: project.projectId,
+          }),
+      )
     }
 
     if (parent instanceof ProjectTreeItem) {
@@ -37,16 +56,32 @@ export class IamExplorerProvider implements ExplorerProvider {
     return undefined
   }
 
-  private async getProjects() {
-    const projects = await iamState.listProjects()
+  async getProjectItems() {
+    const projectsCount = (await iamState.listProjects()).length
+    if (projectsCount === 0) {
+      return []
+    }
+    const activeProject = await iamState.requireActiveProject()
 
-    return projects.map(
-      (project) =>
-        new ProjectTreeItem({
-          label: project.name,
-          projectId: project.projectId,
-        }),
-    )
+    const activeProjectTreeItem = new ProjectTreeItem({
+      label: activeProject.name,
+      projectId: activeProject.projectId,
+      state: TreeItemCollapsibleState.Expanded,
+      description: labels.activeProject,
+    })
+
+    if (projectsCount === 1) {
+      return [activeProjectTreeItem]
+    }
+
+    return [
+      activeProjectTreeItem,
+      new InactiveProjectsFolderTreeItem({
+        label: labels.inactiveProjects,
+        state: TreeItemCollapsibleState.Collapsed,
+        icon: new ThemeIcon('folder'),
+      }),
+    ]
   }
 
   private async getProjectFeatures(parent: ProjectTreeItem) {
