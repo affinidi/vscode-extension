@@ -22,18 +22,18 @@ describe('IssuanceState', () => {
     await state.clear()
   })
 
-  // describe('listIssuances()', () => {
-  //   it('should fetch issuances once and then reuse the cached value', async () => {
-  //     await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
-  //     await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
-  //     expect(issuanceClient.searchIssuances).calledOnce
+  describe('listIssuances()', () => {
+    it('should fetch issuances once and then reuse the cached value', async () => {
+      await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
+      await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
+      expect(issuanceClient.searchIssuances).calledOnce
 
-  //     await issuanceState.clear()
+      await issuanceState.clear()
 
-  //     await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
-  //     expect(issuanceClient.searchIssuances).calledTwice
-  //   })
-  // })
+      await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
+      expect(issuanceClient.searchIssuances).calledTwice
+    })
+  })
 
   describe('getIssuanceById()', () => {
     it('should fetch issuances once and then reuse the cached value', async () => {
