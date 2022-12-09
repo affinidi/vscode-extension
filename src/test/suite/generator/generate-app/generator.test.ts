@@ -9,7 +9,7 @@ import { ext } from '../../../../extensionVariables'
 import { cliHelper, buildAppGenerateCommand } from '../../../../utils/cliHelper'
 import { cliMessage, generatorMessage } from '../../../../messages/messages'
 import { generateAffinidiAppWithCLI } from '../../../../generators/create-app/generator'
-import { iamHelpers } from '../../../../features/iam/iamHelpers'
+import { configVault } from '../../../../config/configVault'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
@@ -33,7 +33,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
     sandbox.stub(cliHelper, 'setActiveProject')
-    sandbox.stub(iamHelpers, 'askForProjectId').resolves(PROJECT_ID)
+    sandbox.stub(configVault, 'requireActiveProjectId').resolves(PROJECT_ID)
   })
 
   it('should show error message when CLI is not installed', async () => {

@@ -1,7 +1,6 @@
 import { window } from 'vscode'
 import { Schema } from '../../utils/types'
 import { Implementations } from '../shared/createSnippetTools'
-import { iamHelpers } from '../../features/iam/iamHelpers'
 import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { createSnippetCommand } from '../shared/createSnippetCommand'
@@ -10,6 +9,7 @@ import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
 import { authMessage, snippetMessage } from '../../messages/messages'
 import { iamState } from '../../features/iam/iamState'
+import { configVault } from '../../config/configVault'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -38,7 +38,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
   'sendVcOfferToEmail',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
+    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
     if (!projectId) {
       return undefined
     }

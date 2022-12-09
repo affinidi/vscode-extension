@@ -33,7 +33,6 @@ import { IssuanceExplorerProvider } from './features/issuance/tree/issuanceExplo
 import { SchemaManagerExplorerProvider } from './features/schema-manager/tree/schemaManagerExplorerProvider'
 import { openSchemaBuilder } from './features/schema-manager/schema-builder/openSchemaBuilder'
 import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHelpers'
-import { iamHelpers } from './features/iam/iamHelpers'
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
 import { issuanceState } from './features/issuance/issuanceState'
 import { schemaManagerState } from './features/schema-manager/schemaManagerState'
@@ -51,6 +50,8 @@ import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
 import { projectMessage } from './messages/messages'
+import { credentialsVault } from './config/credentialsVault'
+import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -84,11 +85,16 @@ export async function activateInternal(context: ExtensionContext) {
       ext.explorerTree.refresh()
     }),
     {
-      dispose: configVault.onUserConfigChange(async () => {
+      dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
+        if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
+          await updateCredentialsActiveProjectSummary()
+        }
+
         await state.clear()
         ext.explorerTree.refresh()
       }),
     },
+    { dispose: configVault.onCurrentUserIdChange(() => updateCredentialsActiveProjectSummary()) },
   )
 
   const treeView = window.createTreeView('affinidiExplorer', {
@@ -492,13 +498,14 @@ export async function activateInternal(context: ExtensionContext) {
     })
 
     try {
-      openSchemaBuilder({ projectId: await iamHelpers.askForProjectId() })
+      openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
     } catch (error) {
       notifyError(error)
     }
   })
 
   askUserForTelemetryConsent()
+  updateCredentialsActiveProjectSummary()
 
   logger.info({}, 'Affinidi extension is now active!')
 }

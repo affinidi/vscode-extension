@@ -9,12 +9,13 @@ import {
   CSVImplementation,
   implementationLabels,
 } from '../../../../features/issuance/csvCreationService'
-import { iamHelpers } from '../../../../features/iam/iamHelpers'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
 import { csvMessage } from '../../../../messages/messages'
 import { iamState } from '../../../../features/iam/iamState'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../../helpers'
+import { configVault } from '../../../../config/configVault'
+import { iamHelpers } from '../../../../features/iam/iamHelpers'
 
 describe('csvCreationService()', () => {
   const projectId = 'fake-project-id'
@@ -29,7 +30,7 @@ describe('csvCreationService()', () => {
 
   let showTextDocument: sinon.SinonStub
   let openTextDocument: sinon.SinonStub
-  let askForProjectId: sinon.SinonStub
+  let requireActiveProjectId: sinon.SinonStub
   let showOpenDialog: sinon.SinonStub
   let askForWalletUrl: sinon.SinonStub
 
@@ -43,13 +44,12 @@ describe('csvCreationService()', () => {
 
     showTextDocument = sandbox.stub(window, 'showTextDocument')
     openTextDocument = sandbox.stub(workspace, 'openTextDocument')
-    askForProjectId = sandbox.stub(iamHelpers, 'askForProjectId')
+    requireActiveProjectId = sandbox.stub(configVault, 'requireActiveProjectId')
     askForWalletUrl = sandbox.stub(iamHelpers, 'askForWalletUrl')
   })
 
   describe('openCsvTemplate()', () => {
     it('should open text document', async () => {
-      askForProjectId.resolves(projectId)
       await csvCreationService.openCsvTemplate({ projectId, schema })
 
       expect(openTextDocument).calledWith({
@@ -109,7 +109,7 @@ describe('csvCreationService()', () => {
     })
 
     it('should ask for a project when projectId is not provided', async () => {
-      askForProjectId.resolves(anotherProjectId)
+      requireActiveProjectId.resolves(anotherProjectId)
       askForWalletUrl.resolves(walletUrl)
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
