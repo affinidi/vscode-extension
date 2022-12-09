@@ -7,6 +7,7 @@ import { sandbox } from '../setup'
 import { generateSession } from '../helpers'
 import { userManagementClient } from '../../../features/user-management/userManagementClient'
 import { authHelper } from '../../../auth/authHelper'
+import { iamHelpers } from '../../../features/iam/iamHelpers'
 
 describe('initAuthentication()', () => {
   beforeEach(() => {
@@ -17,6 +18,7 @@ describe('initAuthentication()', () => {
   describe('#affinidi.signUp', () => {
     it('should signup', async () => {
       sandbox.stub(authentication, 'getSession')
+      sandbox.stub(iamHelpers, 'createDefaultProject')
 
       sandbox.stub(window, 'showWarningMessage').resolves('Accept' as any)
 
