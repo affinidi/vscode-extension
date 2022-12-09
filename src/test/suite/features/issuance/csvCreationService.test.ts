@@ -122,13 +122,13 @@ describe('csvCreationService()', () => {
       expect(openCsvTemplate).calledWith({ projectId: anotherProjectId, schema })
     })
 
-    it('should open a CSV template', async () => {
-      showQuickPick.resolves(implementationLabels[CSVImplementation.openCsvTemplate])
+    // it('should open a CSV template', async () => {
+    //   showQuickPick.resolves(implementationLabels[CSVImplementation.openCsvTemplate])
 
-      await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
+    //   await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
 
-      expect(openCsvTemplate).calledWith({ projectId, schema })
-    })
+    //   expect(openCsvTemplate).calledWith({ projectId, schema })
+    // })
 
     it('should upload a CSV file', async () => {
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])
