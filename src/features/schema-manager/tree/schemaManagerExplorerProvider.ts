@@ -9,7 +9,7 @@ import { schemaManagerState } from '../schemaManagerState'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './treeItems'
 
 function simplifySchemaDescription(value: string) {
-  return value.split('\n')[0]
+  return value.replace(/(\n|\r|\t)+/g, ' ')
 }
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
