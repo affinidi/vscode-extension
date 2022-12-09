@@ -32,10 +32,6 @@ class CredentialsVault {
     this.store.set('activeProjectSummary', value)
   }
 
-  getActiveProjectSummary(): ProjectSummary | undefined {
-    return this.store.get('activeProjectSummary')
-  }
-
   getSession(): Session | undefined {
     return this.store.get('session')
   }

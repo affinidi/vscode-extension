@@ -51,6 +51,7 @@ import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
 import { projectMessage } from './messages/messages'
+import { credentialsVault } from './config/credentialsVault'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -78,17 +79,33 @@ export async function activateInternal(context: ExtensionContext) {
   ext.devToolsTree = new DevToolsTree()
   ext.feedbackTree = new FeedbackTree()
 
+  async function updateCredentialsActiveProjectSummary() {
+    const activeProjectId = await configVault.getActiveProjectId()
+    if (activeProjectId) {
+      credentialsVault.setActiveProjectSummary(
+        await iamState.requireProjectSummary(activeProjectId),
+      )
+    } else {
+      credentialsVault.delete('activeProjectSummary')
+    }
+  }
+
   ext.context.subscriptions.push(
     ext.authProvider.onDidChangeSessions(async () => {
       await state.clear()
       ext.explorerTree.refresh()
     }),
     {
-      dispose: configVault.onUserConfigChange(async () => {
+      dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
+        if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
+          await updateCredentialsActiveProjectSummary()
+        }
+
         await state.clear()
         ext.explorerTree.refresh()
       }),
     },
+    { dispose: configVault.onCurrentUserIdChange(updateCredentialsActiveProjectSummary) },
   )
 
   const treeView = window.createTreeView('affinidiExplorer', {

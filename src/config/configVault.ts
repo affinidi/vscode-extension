@@ -5,7 +5,6 @@ import * as path from 'path'
 import * as deepEqual from 'fast-deep-equal'
 import { ext } from '../extensionVariables'
 import { iamState } from '../features/iam/iamState'
-import { credentialsVault } from './credentialsVault'
 import { NoProjectsError } from './NoProjectsError'
 
 export type UserConfig = {
@@ -24,11 +23,13 @@ class ConfigVault {
     this.store.clear()
   }
 
+  delete(key: keyof ConfigType): void {
+    this.store.delete(key)
+  }
+
   async requireActiveProjectId(): Promise<string> {
     const userConfig = await this.getUserConfig()
-    if (userConfig && userConfig.activeProjectId) {
-      await this.updateActiveProjectSummary(userConfig.activeProjectId)
-
+    if (userConfig?.activeProjectId) {
       return userConfig.activeProjectId
     }
 
@@ -44,16 +45,22 @@ class ConfigVault {
 
     return activeProjectId
   }
+  
+  async getActiveProjectId(): Promise<string | undefined> {
+    try {
+      return await this.requireActiveProjectId()
+    } catch (error) {
+      if (error instanceof NoProjectsError) {
+        return undefined
+      }
+
+      throw error
+    }
+  }
 
   async setUserConfig(userConfig: UserConfig): Promise<void> {
     const session = await ext.authProvider.getActiveSession()
     const existingConfigs = this.store.get('configs')
-
-    if (userConfig.activeProjectId) {
-      await this.updateActiveProjectSummary(userConfig.activeProjectId)
-    } else {
-      credentialsVault.delete('activeProjectSummary')
-    }
 
     const newConfigs = {
       ...existingConfigs,
@@ -61,10 +68,6 @@ class ConfigVault {
     }
 
     this.store.set('configs', newConfigs)
-  }
-
-  private async updateActiveProjectSummary(projectId: string): Promise<void> {
-    credentialsVault.setActiveProjectSummary(await iamState.requireProjectSummary(projectId))
   }
 
   async getUserConfig(): Promise<UserConfig | undefined> {
@@ -80,14 +83,8 @@ class ConfigVault {
     this.store.set('currentUserId', value)
   }
 
-  deleteCurrentUserId(): void {
-    this.store.delete('currentUserId')
-  }
-
-  onCurrentUserIdChange() {
-    return this.store.onDidChange('currentUserId', () =>
-      this.updateActiveProjectSummary(this.getCurrentUserId()),
-    )
+  onCurrentUserIdChange(callback: OnDidChangeCallback<string>) {
+    return this.store.onDidChange('currentUserId', callback)
   }
 
   onUserConfigChange(callback: OnDidChangeCallback<UserConfig>) {
