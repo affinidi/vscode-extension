@@ -30,6 +30,8 @@ export const labels = {
   openDiscord: l10n.t('Discord Server'),
   exampleWallet: l10n.t('Use Example Wallet'),
   selectWallet: l10n.t('Enter A Wallet'),
+  activeProject: l10n.t('Active'),
+  inactiveProjects: l10n.t('Inactive Projects'),
 }
 
 export const errorMessage = {
@@ -96,6 +98,8 @@ export const projectMessage = {
   projectDoesNotExist: l10n.t('Project does not exist.'),
   projectNotFound: (projectId: string) => l10n.t('Project not found: {0}', projectId),
   settingActiveProject: l10n.t('Setting active project...'),
+  errorFetchingActiveProject: l10n.t('Error while fetching the active project.'),
+  activatedProject: l10n.t('Successfully activated the project'),
 }
 
 export const issuanceMessage = {

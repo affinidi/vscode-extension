@@ -1,5 +1,5 @@
 import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
-import { window, ProgressLocation, l10n } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
@@ -17,6 +17,20 @@ export class IamState {
 
   async getProjectById(projectId: string): Promise<ProjectDto | undefined> {
     return (await this.fetchProjects()).find((p) => p.projectId === projectId)
+  }
+
+  async requireActiveProject(): Promise<ProjectDto> {
+    const activeProjectId = await configVault.requireActiveProjectId()
+    const activeProject = await this.getProjectById(activeProjectId)
+    if (!activeProject) {
+      throw new Error(projectMessage.errorFetchingActiveProject)
+    }
+    return activeProject
+  }
+
+  async getInactiveProjects(): Promise<ProjectDto[]> {
+    const activeProjectId = await configVault.requireActiveProjectId()
+    return (await this.fetchProjects()).filter((project) => project.projectId !== activeProjectId)
   }
 
   async requireProjectSummary(projectId: string): Promise<ProjectSummary> {
