@@ -1,8 +1,10 @@
 import { ProjectDto } from '@affinidi/client-iam'
+import { window, ProgressLocation } from 'vscode'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { projectMessage } from '../../messages/messages'
 import { iamState } from './iamState'
-import { createProjectProcess } from './createProjectProcess'
+import { authHelper } from '../../auth/authHelper'
+import { iamClient } from './iamClient'
 import { configVault } from '../../config/configVault'
 
 async function askForProjectId(): Promise<string | undefined> {
@@ -24,14 +26,23 @@ async function askForProjectId(): Promise<string | undefined> {
   return project?.projectId
 }
 
-async function setupInitialProject() {
-  const project = await createProjectProcess('Default Project')
-  if (project) {
-    configVault.setUserConfig({ activeProjectId: project.projectId })
-  }
+async function createDefaultProject(): Promise<void> {
+  await window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      title: projectMessage.creatingDefaultProject,
+    },
+    async () =>
+      iamClient.createProject(
+        { name: 'Default Project' },
+        { consoleAuthToken: await authHelper.getConsoleAuthToken() },
+      ),
+  )
+
+  await iamState.clear()
 }
 
 export const iamHelpers = {
   askForProjectId,
-  setupInitialProject,
+  createDefaultProject,
 }

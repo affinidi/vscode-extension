@@ -1,18 +1,15 @@
-import { ProjectDto } from '@affinidi/client-iam'
 import { ProgressLocation, window } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
 import { logger } from '../../utils/logger'
 import { iamClient } from './iamClient'
 import { projectMessage } from '../../messages/messages'
 
-export const createProjectProcess = async (name?: string): Promise<ProjectDto | undefined> => {
-  const projectName =
-    name ||
-    (await window.showInputBox({
-      ignoreFocusOut: true,
-      placeHolder: projectMessage.projectName,
-      prompt: projectMessage.enterProjectName,
-    }))
+export const createProjectProcess = async (): Promise<void> => {
+  const projectName = await window.showInputBox({
+    ignoreFocusOut: true,
+    placeHolder: projectMessage.projectName,
+    prompt: projectMessage.enterProjectName,
+  })
 
   if (!projectName) {
     window.showErrorMessage(projectMessage.projectNameRequired)
@@ -21,7 +18,7 @@ export const createProjectProcess = async (name?: string): Promise<ProjectDto | 
 
   try {
     const consoleAuthToken = await authHelper.getConsoleAuthToken()
-    const project = await window.withProgress(
+    await window.withProgress(
       {
         location: ProgressLocation.Notification,
         title: projectMessage.creatingProject,
@@ -30,7 +27,6 @@ export const createProjectProcess = async (name?: string): Promise<ProjectDto | 
     )
 
     window.showInformationMessage(projectMessage.successfulProjectCreation)
-    return project
   } catch (error) {
     logger.error(error, projectMessage.projectNotCreated)
     window.showErrorMessage(`${projectMessage.projectNotCreated} ${projectMessage.pleaseTryAgain}`)

@@ -47,7 +47,8 @@ async function signUpHandler(): Promise<void> {
       window.showInformationMessage(authMessage.signedUp)
       ext.outputChannel.appendLine(authMessage.signedUp)
 
-      await iamHelpers.setupInitialProject()
+      await iamHelpers.createDefaultProject()
+      ext.explorerTree.refresh()
 
       await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
       break
