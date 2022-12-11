@@ -1,5 +1,5 @@
 import { IssuanceDto } from '@affinidi/client-issuance'
-import { l10n, ProgressLocation, window } from 'vscode'
+import { ProgressLocation, window } from 'vscode'
 import { ext } from '../../extensionVariables'
 import { issuanceMessage } from '../../messages/messages'
 import { state } from '../../state'

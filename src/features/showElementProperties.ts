@@ -1,5 +1,5 @@
 import { iamState } from './iam/iamState'
-import { ProjectTreeItem } from './iam/tree/treeItems'
+import { InactiveProjectTreeItem, ProjectTreeItem } from './iam/tree/treeItems'
 import { issuanceHelpers } from './issuance/issuanceHelpers'
 import { issuanceState } from './issuance/issuanceState'
 import { IssuanceTreeItem } from './issuance/tree/treeItems'
@@ -15,7 +15,7 @@ export const showElementProperties = async (element: BasicTreeItem) => {
   let id: string = ''
   let content: any = {}
 
-  if (element instanceof ProjectTreeItem) {
+  if (element instanceof ProjectTreeItem || element instanceof InactiveProjectTreeItem) {
     const projectSummary = await iamState.requireProjectSummary(element.projectId)
 
     label = projectSummary.project.name

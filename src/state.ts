@@ -2,11 +2,7 @@ import { ext } from './extensionVariables'
 
 export const state = {
   async clear() {
-    await Promise.all(
-      ext.context.globalState.keys().map(async (key) => {
-        await ext.context.globalState.update(key, undefined)
-      }),
-    )
+    await this.clearByPrefix()
   },
   async clearByPrefix(prefix: string = '') {
     await Promise.all(
@@ -16,5 +12,5 @@ export const state = {
         }
       }),
     )
-  }
+  },
 }

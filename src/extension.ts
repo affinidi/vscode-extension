@@ -2,16 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import {
-  commands,
-  ExtensionContext,
-  Uri,
-  window,
-  env,
-  l10n,
-  workspace,
-  ProgressLocation,
-} from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, workspace, ProgressLocation } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
@@ -278,10 +269,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand(
     'affinidiExplorer.activateProject',
     async (element: InactiveProjectTreeItem) => {
-      await window.withProgress(
-        { location: ProgressLocation.Notification, title: projectMessage.settingActiveProject },
-        () => configVault.setUserConfig({ activeProjectId: element.projectId }),
-      )
+      await configVault.setUserConfig({ activeProjectId: element.projectId })
 
       await iamState.clear()
       ext.explorerTree.refresh()
@@ -512,5 +500,5 @@ export async function activateInternal(context: ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export async function deactivateInternal() {
-  window.showInformationMessage(l10n.t('Goodbye!!!'))
+  logger.info({}, 'Affinidi extension was deactivated!')
 }
