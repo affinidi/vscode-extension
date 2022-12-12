@@ -2,6 +2,25 @@
 
 ## Getting started
 
+Clone the repository and run `npm install` command
+
+Some useful commands:
+- Run `npm test` to run integrated tests
+   > You can find them in the `src/test/suite` directory.  
+   > `npm run coverage` can be used to calculate per-file test coverage
+- Use `npm run compile` or `npm run dev` to build the extension
+   > You don't need to run these to test the extension.  
+   > These are useful when you want to check for compile errors.
+- `npm run lint` can be used to check for linting errors
+- Run `npm run esbuild` to compile a single-file output to `out/main.js`, which represents the final build that will be published to VS Code extension marketplace
+- Use `npm run generate-translation` to update translation files using `@vscode/l10n-dev` tool
+- `npm run update-toolkit` can be used to update the WebView UI toolkit to the latest version in the `media/vendor` directory – this is used in web views to render VS Code UI components
+
+To debug the extension, just open the repository in your VS Code application and press `F5` (or `Run Extension` in the `Run in Debug` sidebar view).  
+This will open a new "Extension Host" VS Code window with the extension loaded in it.
+
+## Implementing a new feature
+
 If you want to implement a new feature, create a corresponding folder in the `src/features/` directory.
 
 As an example, let's say you want to implement a `wallet` feature: 
@@ -38,7 +57,44 @@ To add custom tree items to the Explorer View, you need to implement `ExplorerPr
     new WalletExplorerProvider(),
   ])
   ```
+## Creating a custom tree view for the feature
 
+In case if it's absolutely necessary, you may add a new tree view to the sidebar.
+
+To do that, implement a `TreeDataProvider` interface (provided by the `vscode` package) in the `src/tree` directory:
+```ts
+import { TreeDataProvider } from 'vscode'
+import { BasicTreeItem } from './basicTreeItem'
+
+export class CustomTree implements TreeDataProvider<BasicTreeItem> {
+  getTreeItem = (element: BasicTreeItem) => element
+
+  async getChildren(): Promise<BasicTreeItem[]> {
+    // ...
+  }
+}
+```
+
+> Note: Use `BasicTreeItem` or `BasicTreeItemWithProject` as a base for your tree items instead of `TreeItem` provided by the `vscode` package.
+
+Then add the tree to `src/extensionVariables.ts`:
+```ts
+export namespace ext {
+  // ...
+  export let customTree: CustomTree
+}
+```
+
+Finally, instantiate your tree in the `extension.ts` file and create a tree view for it:
+```ts
+ext.customTree = new CustomTree()
+
+window.createTreeView('affinidiCustom', {
+  treeDataProvider: ext.customTree,
+  canSelectMany: false,
+  showCollapseAll: true,
+})
+```
 
 ## Implementing a custom command
 
@@ -71,6 +127,8 @@ export function createWallet() {
   await walletClient.createWallet({ type, name })
 }
 ```
+
+Don't forget to add your new command to the `activationEvents` section in `package.json` file.
 
 > We have a lot of useful tools that you can use:
 > - `src/utils/logger.ts` for logging
@@ -168,6 +226,62 @@ export const initSnippets = () => {
   )
 }
 ```
+
+## State management
+
+In some cases, you might want to save the loaded data into the local storage to avoid fetching it every time.
+
+This is mostly useful for the items, that are shown in the sidebar tree view: projects, issuances, schemas, etc.
+
+> Note: Do NOT use state management to store frequently updated data or user input-dependent data (like search results, for example).
+
+To do that, implement a `src/features/wallet/walletState.ts` file:
+```ts
+import { WalletDto } from '@affinidi/client-wallet'
+import { state } from '../../state'
+import { walletClient } from './walletClient'
+
+const PREFIX = 'wallet:'
+const storageKey = (input: string) => PREFIX + input
+
+export class WalletState {
+  async listWallets(): Promise<WalletDto[]> {
+    return this.fetchWallets()
+  }
+
+  async getWalletById(walletId: string): Promise<WalletDto | undefined> {
+    return (await this.fetchWallets()).find((p) => p.walletId === walletId)
+  }
+
+  async clear() {
+    await state.clearByPrefix(PREFIX)
+  }
+
+  private async fetchWallets(): Promise<WalletDto[]> {
+    const key = storageKey('list')
+    const stored = ext.context.globalState.get<WalletDto[]>(key)
+    if (stored) return stored
+
+    const { wallets } = await walletClient.listWallets()
+    await ext.context.globalState.update(key, wallets)
+
+    return wallets
+  }
+}
+
+export const walletState = new WalletState()
+```
+
+Now you can access wallet list like this:
+```ts
+import { walletState } from './features/wallet/walletState.ts'
+
+const wallet = await walletState.getWalletById('wallet-id')
+```
+
+If you know that the cached data is no longer valid, call `walletState.clear()` method! For example, when new wallet has been added or existing one has been edited, etc.
+
+Clearing the state is also necessary when user manually clicks on 'Refresh' button in the sidebar tree view. Otherwise, you don't need to update the cached data.
 
 ## Analytics & telemetry
 
