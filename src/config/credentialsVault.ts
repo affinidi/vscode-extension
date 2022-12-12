@@ -44,7 +44,7 @@ class CredentialsVault {
     this.store.set('session', value)
   }
 
-  onSessionChange(callback: OnDidChangeCallback<Session>) {
+  onSessionChange(callback: OnDidChangeCallback<Session | undefined>) {
     return this.store.onDidChange('session', callback)
   }
 }

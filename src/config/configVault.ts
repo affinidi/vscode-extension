@@ -92,7 +92,7 @@ class ConfigVault {
     this.store.set('currentUserId', value)
   }
 
-  onCurrentUserIdChange(callback: OnDidChangeCallback<string>) {
+  onCurrentUserIdChange(callback: OnDidChangeCallback<string | undefined>) {
     return this.store.onDidChange('currentUserId', callback)
   }
 
