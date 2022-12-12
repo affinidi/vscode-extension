@@ -1,7 +1,7 @@
+import { configVault } from '../../../config/configVault'
 import { schemaMessage } from '../../../messages/messages'
 import { logger } from '../../../utils/logger'
 import { notifyError } from '../../../utils/notifyError'
-import { iamHelpers } from '../../iam/iamHelpers'
 import { BuilderSchemaPublisher } from './BuilderSchemaPublisher'
 import { SubmitHandler } from './handlers/SubmitHandler'
 import { SchemaBuilderWebview } from './SchemaBuilderWebview'
@@ -44,10 +44,7 @@ async function getOrCreateBuilder(input?: {
   ) {
     builder?.dispose()
 
-    const projectId = input?.projectId ?? (await iamHelpers.askForProjectId())
-    if (!projectId) {
-      throw new Error(schemaMessage.selectProjectToCreateSchema)
-    }
+    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
 
     builder = new SchemaBuilderWebview(
       projectId,

@@ -7,7 +7,6 @@ import {
   Disposable,
   Event,
   EventEmitter,
-  l10n,
   FileChangeEvent,
   FileChangeType,
   Uri,
@@ -85,7 +84,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         // subtract 1 minute in case of lag
         if (Date.now() / 1000 >= token.exp - 60) {
           // TODO: we might want to log an analytics event here
-          await this.handleRemoveSession()
+          this.handleRemoveSession()
           return this.getActiveSession(options, scopes) // try again
         }
       }
@@ -93,7 +92,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       return session
     } catch (error) {
       logger.error(error, authMessage.noValidSessionFound)
-      await this.handleRemoveSession()
+      this.handleRemoveSession()
       return undefined
     }
   }
@@ -168,14 +167,14 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       },
     })
 
-    await this.handleRemoveSession()
+    this.handleRemoveSession()
   }
 
-  handleRemoveSession = async (): Promise<void> => {
+  handleRemoveSession = (): void => {
     const session = readSessionFromStorage()
 
     if (session) {
-      configVault.deleteCurrentUserId()
+      configVault.delete('currentUserId')
       credentialsVault.clear()
       this._onDidChangeSessions.fire({
         added: [],

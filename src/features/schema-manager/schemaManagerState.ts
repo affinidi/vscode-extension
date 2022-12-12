@@ -1,5 +1,5 @@
 import { SchemaDto, SchemaSearchScope } from '@affinidi/client-schema-manager'
-import { window, ProgressLocation, l10n } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { ext } from '../../extensionVariables'
 import { schemaMessage } from '../../messages/messages'
 import { state } from '../../state'

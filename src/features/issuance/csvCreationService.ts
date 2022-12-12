@@ -1,7 +1,6 @@
 import * as fs from 'fs'
-import { l10n, OpenDialogOptions, ProgressLocation, window, workspace } from 'vscode'
+import { OpenDialogOptions, ProgressLocation, window, workspace } from 'vscode'
 import { Schema } from '../../utils/types'
-import { iamHelpers } from '../iam/iamHelpers'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
@@ -9,6 +8,8 @@ import { ext } from '../../extensionVariables'
 import { csvMessage, snippetMessage, labels } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 import { iamState } from '../iam/iamState'
+import { configVault } from '../../config/configVault'
+import { iamHelpers } from '../iam/iamHelpers'
 
 export enum CSVImplementation {
   openCsvTemplate,
@@ -97,7 +98,7 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
     if (issuance) {
       window.showInformationMessage(csvMessage.issuanceCreationMessage)
       ext.outputChannel.appendLine(csvMessage.issuanceCreationMessage)
-      ext.outputChannel.appendLine(l10n.t(`Issuance ID: {0}`, issuance.id))
+      ext.outputChannel.appendLine(`${labels.issuanceID}: ${issuance.id}`)
       ext.outputChannel.show()
     }
   } catch (error: unknown) {
@@ -117,8 +118,10 @@ const initiateIssuanceCsvFlow = async (input: {
   projectId?: string
   walletUrl?: string
 }): Promise<void> => {
-  const projectId = input.projectId ?? (await iamHelpers.askForProjectId())
-  if (!projectId) return
+  const projectId = input.projectId ?? (await configVault.requireActiveProjectId())
+  if (!projectId) {
+    return
+  }
 
   const schema = input.schema ?? (await schemaManagerHelpers.askForAuthoredSchema({ projectId }))
   if (!schema) return

@@ -3,19 +3,21 @@ import { OnDidChangeCallback } from 'conf/dist/source/types'
 import * as os from 'os'
 import * as path from 'path'
 import * as deepEqual from 'fast-deep-equal'
-import { ext } from '../extensionVariables'
 import { iamState } from '../features/iam/iamState'
-import { credentialsVault } from './credentialsVault'
 import { NoProjectsError } from './NoProjectsError'
+import { NoCurrentUser } from './NoCurrentUser'
 
 export type UserConfig = {
   activeProjectId?: string
 }
 
 export type ConfigType = {
-  currentUserId: string
-  configs: Record<string, UserConfig>
+  version: number
+  currentUserId?: string
+  configs?: Record<string, UserConfig>
 }
+
+export const VERSION = 1
 
 class ConfigVault {
   constructor(private readonly store: Conf<ConfigType>) {}
@@ -24,9 +26,17 @@ class ConfigVault {
     this.store.clear()
   }
 
+  delete(key: keyof ConfigType): void {
+    this.store.delete(key)
+  }
+
   async requireActiveProjectId(): Promise<string> {
+    if (!this.getCurrentUserId()) {
+      throw new NoCurrentUser()
+    }
+
     const userConfig = await this.getUserConfig()
-    if (userConfig && userConfig.activeProjectId) {
+    if (userConfig?.activeProjectId) {
       return userConfig.activeProjectId
     }
 
@@ -42,33 +52,39 @@ class ConfigVault {
 
     return activeProjectId
   }
+  
+  async getActiveProjectId(): Promise<string | undefined> {
+    try {
+      return await this.requireActiveProjectId()
+    } catch (error) {
+      if (error instanceof NoProjectsError || error instanceof NoCurrentUser) {
+        return undefined
+      }
+
+      throw error
+    }
+  }
 
   async setUserConfig(userConfig: UserConfig): Promise<void> {
-    const session = await ext.authProvider.getActiveSession()
+    const userId = this.getCurrentUserId()
     const existingConfigs = this.store.get('configs')
-
-    if (userConfig.activeProjectId) {
-      credentialsVault.setActiveProjectSummary(
-        await iamState.requireProjectSummary(userConfig.activeProjectId),
-      )
-    } else {
-      credentialsVault.delete('activeProjectSummary')
-    }
 
     const newConfigs = {
       ...existingConfigs,
-      ...(session && { [session.account.id]: userConfig }),
+      ...(userId && { [userId]: userConfig }),
     }
 
     this.store.set('configs', newConfigs)
   }
 
   async getUserConfig(): Promise<UserConfig | undefined> {
-    const session = await ext.authProvider.getActiveSession()
-    return session && this.store.get('configs')?.[session.account.id]
+    const userId = this.getCurrentUserId()
+    if (!userId) return undefined
+
+    return this.store.get('configs')?.[userId]
   }
 
-  getCurrentUserId(): string {
+  getCurrentUserId(): string | undefined {
     return this.store.get('currentUserId')
   }
 
@@ -76,21 +92,17 @@ class ConfigVault {
     this.store.set('currentUserId', value)
   }
 
-  deleteCurrentUserId(): void {
-    this.store.delete('currentUserId')
-  }
-
-  onCurrentUserIdChange(callback: OnDidChangeCallback<string>) {
+  onCurrentUserIdChange(callback: OnDidChangeCallback<string | undefined>) {
     return this.store.onDidChange('currentUserId', callback)
   }
 
   onUserConfigChange(callback: OnDidChangeCallback<UserConfig>) {
     return this.store.onDidChange('configs', async (newValue, oldValue) => {
-      const session = await ext.authProvider.getActiveSession()
-      if (!session) return
+      const userId = this.getCurrentUserId()
+      if (!userId) return
 
-      const oldConfig = oldValue?.[session.account.id]
-      const newConfig = newValue?.[session.account.id]
+      const oldConfig = oldValue?.[userId]
+      const newConfig = newValue?.[userId]
 
       if (!deepEqual(newConfig, oldConfig)) {
         callback(newConfig, oldConfig)
@@ -104,6 +116,7 @@ class ConfigVault {
 const configConf = new Conf<ConfigType>({
   configName: 'config',
   cwd: path.join(os.homedir(), '.affinidi'),
+  defaults: { version: VERSION },
   watch: true,
 })
 

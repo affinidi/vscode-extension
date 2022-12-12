@@ -92,7 +92,7 @@ async function logoutHandler(): Promise<void> {
       },
     })
 
-    await ext.authProvider.handleRemoveSession()
+    ext.authProvider.handleRemoveSession()
 
     await window.showInformationMessage(authMessage.loggedOut)
     ext.outputChannel.appendLine(authMessage.loggedOut)

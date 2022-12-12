@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { ProgressLocation, window, Uri } from 'vscode'
+import { configVault } from '../../config/configVault'
 import { ext } from '../../extensionVariables'
-import { iamHelpers } from '../../features/iam/iamHelpers'
 import { generatorMessage, labels } from '../../messages/messages'
 import { cliHelper } from '../../utils/cliHelper'
 import { notifyError } from '../../utils/notifyError'
@@ -22,7 +22,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
       return
     }
 
-    const projectId = await iamHelpers.askForProjectId()
+    const projectId = await configVault.requireActiveProjectId()
     if (!projectId) {
       return
     }

@@ -1,4 +1,4 @@
-import { window, workspace, l10n } from 'vscode'
+import { window, workspace } from 'vscode'
 import { errorMessage, telemetryMessage } from '../messages/messages'
 import {
   sendEventToAnalytics,

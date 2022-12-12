@@ -8,9 +8,9 @@
   "icon": "media/affinidi-icon-large.png",
   "preview": true,
   "repository": "https://github.com/affinidi/vscode-extension",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "engines": {
-    "vscode": "^1.73.0"
+    "vscode": "^1.70.0"
   },
   "categories": [
     "Snippets",
@@ -403,7 +403,7 @@
             }
           },
           {
-            "id": "createProject",
+            "id": "buildApp",
             "title": "%walkthroughs.steps.1.title%",
             "description": "%walkthroughs.steps.1.description%",
             "media": {
@@ -412,7 +412,7 @@
             }
           },
           {
-            "id": "buildApp",
+            "id": "createSchema",
             "title": "%walkthroughs.steps.2.title%",
             "description": "%walkthroughs.steps.2.description%",
             "media": {
@@ -421,18 +421,9 @@
             }
           },
           {
-            "id": "createSchema",
+            "id": "initiateIssuanceCsvFlow",
             "title": "%walkthroughs.steps.3.title%",
             "description": "%walkthroughs.steps.3.description%",
-            "media": {
-              "image": "media/affinidi-icon.png",
-              "altText": "Affinidi"
-            }
-          },
-          {
-            "id": "initiateIssuanceCsvFlow",
-            "title": "%walkthroughs.steps.4.title%",
-            "description": "%walkthroughs.steps.4.description%",
             "media": {
               "image": "media/affinidi-icon.png",
               "altText": "Affinidi"
@@ -497,7 +488,7 @@
     "@types/sinon": "^10.0.13",
     "@types/sinon-chai": "^3.2.8",
     "@types/source-map-support": "^0.5.6",
-    "@types/vscode": "^1.73.0",
+    "@types/vscode": "^1.70.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "@vscode/l10n-dev": "^0.0.18",
