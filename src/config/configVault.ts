@@ -16,6 +16,8 @@ export type ConfigType = {
   configs: Record<string, UserConfig>
 }
 
+export const VERSION = 1
+
 class ConfigVault {
   constructor(private readonly store: Conf<ConfigType>) {}
 
@@ -25,6 +27,10 @@ class ConfigVault {
 
   delete(key: keyof ConfigType): void {
     this.store.delete(key)
+  }
+
+  setVersion(): void {
+    this.store.set('version', VERSION)
   }
 
   async requireActiveProjectId(): Promise<string> {
@@ -117,3 +123,4 @@ const configConf = new Conf<ConfigType>({
 })
 
 export const configVault = new ConfigVault(configConf)
+configVault.setVersion()

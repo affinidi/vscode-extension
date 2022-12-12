@@ -17,6 +17,8 @@ export type Session = {
   scopes: []
 }
 
+export const VERSION = 1
+
 class CredentialsVault {
   constructor(private readonly store: Conf<ConfigType>) {}
 
@@ -28,6 +30,10 @@ class CredentialsVault {
     this.store.delete(key)
   }
 
+  setVersion(): void {
+    this.store.set('version', VERSION)
+  }
+
   setActiveProjectSummary(value: ProjectSummary): void {
     this.store.set('activeProjectSummary', value)
   }
@@ -37,6 +43,7 @@ class CredentialsVault {
   }
 
   setSession(value: Session): void {
+    this.setVersion()
     this.store.set('session', value)
   }
 
