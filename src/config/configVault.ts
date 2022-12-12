@@ -12,9 +12,12 @@ export type UserConfig = {
 }
 
 export type ConfigType = {
-  currentUserId: string
-  configs: Record<string, UserConfig>
+  version: number
+  currentUserId?: string
+  configs?: Record<string, UserConfig>
 }
+
+export const VERSION = 1
 
 class ConfigVault {
   constructor(private readonly store: Conf<ConfigType>) {}
@@ -89,7 +92,7 @@ class ConfigVault {
     this.store.set('currentUserId', value)
   }
 
-  onCurrentUserIdChange(callback: OnDidChangeCallback<string>) {
+  onCurrentUserIdChange(callback: OnDidChangeCallback<string | undefined>) {
     return this.store.onDidChange('currentUserId', callback)
   }
 
@@ -113,6 +116,7 @@ class ConfigVault {
 const configConf = new Conf<ConfigType>({
   configName: 'config',
   cwd: path.join(os.homedir(), '.affinidi'),
+  defaults: { version: VERSION },
   watch: true,
 })
 
