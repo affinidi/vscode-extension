@@ -45,7 +45,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       authentication.registerAuthenticationProvider(AUTH_PROVIDER_ID, AUTH_NAME, this, {
         supportsMultipleAccounts: false,
       }),
-      { dispose: credentialsVault.onSessionChange(this.handleExternalChangeSession) }
+      { dispose: credentialsVault.onSessionChange(this.handleExternalChangeSession) },
     )
   }
 
@@ -167,7 +167,10 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     }
   }
 
-  handleExternalChangeSession = (newSession: Session | undefined, oldSession: Session | undefined): void => {
+  handleExternalChangeSession = (
+    newSession: Session | undefined,
+    oldSession: Session | undefined,
+  ): void => {
     if (oldSession && newSession && oldSession.sessionId === newSession.sessionId) {
       this._onDidChangeSessions.fire({
         added: [],

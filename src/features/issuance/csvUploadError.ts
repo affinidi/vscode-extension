@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { csvMessage } from '../../messages/messages'
 
 export type UploadError = {
@@ -8,6 +9,33 @@ export type UploadError = {
   }
 }
 
+const getVIS19ErrorData = (error: any) => ({
+  title: csvMessage.invalidCsvFile,
+  row: {
+    title: `${csvMessage.invalidDataInRow}${error.context.row}`,
+    errors: error.context.errors.map((e: any) =>
+      e.field ? `${csvMessage.field} "${e.field}" ${e.message}` : `${csvMessage.row} ${e.message}`,
+    ),
+  },
+})
+
+const getVIS20ErrorData = (error: any) => {
+  const formatErrorTitlePrefix = error.context.possibleFormatError
+    ? `${csvMessage.commaSeparatorMessage} `
+    : ''
+
+  return {
+    title: csvMessage.invalidCsvFile,
+    row: {
+      title: `${formatErrorTitlePrefix}${csvMessage.couldNotFindAllColumns}`,
+      errors:
+        error.context.missingColumns?.length > 0
+          ? [`${csvMessage.requiredColumns}: ${error.context.missingColumns.join(', ')}`]
+          : [],
+    },
+  }
+}
+
 export function parseUploadError(error: any): UploadError | undefined {
   switch (error.code) {
     case 'VIS-1':
@@ -15,32 +43,9 @@ export function parseUploadError(error: any): UploadError | undefined {
     case 'VIS-14':
       return { title: error.message }
     case 'VIS-19':
-      return {
-        title: csvMessage.invalidCsvFile,
-        row: {
-          title: `${csvMessage.invalidDataInRow}${error.context.row}`,
-          errors: error.context.errors.map((error: any) =>
-            error.field
-              ? `${csvMessage.field} "${error.field}" ${error.message}`
-              : `${csvMessage.row} ${error.message}`,
-          ),
-        },
-      }
+      return getVIS19ErrorData(error)
     case 'VIS-20': {
-      const formatErrorTitlePrefix = error.context.possibleFormatError
-        ? csvMessage.commaSeparatorMessage
-        : ''
-
-      return {
-        title: csvMessage.invalidCsvFile,
-        row: {
-          title: `${formatErrorTitlePrefix} ${csvMessage.couldNotFindAllColumns}`,
-          errors:
-            error.context.missingColumns?.length > 0
-              ? [`${csvMessage.requiredColumns}: ${error.context.missingColumns.join(', ')}`]
-              : [],
-        },
-      }
+      return getVIS20ErrorData(error)
     }
     default:
   }
