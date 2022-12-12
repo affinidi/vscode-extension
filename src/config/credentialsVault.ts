@@ -6,8 +6,9 @@ import { ProjectSummary } from '@affinidi/client-iam'
 import { OnDidChangeCallback } from 'conf/dist/source/types'
 
 export type ConfigType = {
-  activeProjectSummary: ProjectSummary
-  session: Session
+  version: number
+  activeProjectSummary?: ProjectSummary
+  session?: Session
 }
 
 export type Session = {
@@ -30,9 +31,6 @@ class CredentialsVault {
     this.store.delete(key)
   }
 
-  setVersion(): void {
-    this.store.set('version', VERSION)
-  }
 
   setActiveProjectSummary(value: ProjectSummary): void {
     this.store.set('activeProjectSummary', value)
@@ -43,7 +41,6 @@ class CredentialsVault {
   }
 
   setSession(value: Session): void {
-    this.setVersion()
     this.store.set('session', value)
   }
 
@@ -55,6 +52,7 @@ class CredentialsVault {
 const credentialConf = new Conf<ConfigType>({
   configName: 'credentials',
   cwd: path.join(os.homedir(), '.affinidi'),
+  defaults: { version: VERSION },
   watch: true,
 })
 

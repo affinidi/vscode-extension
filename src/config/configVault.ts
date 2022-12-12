@@ -12,8 +12,9 @@ export type UserConfig = {
 }
 
 export type ConfigType = {
-  currentUserId: string
-  configs: Record<string, UserConfig>
+  version: number
+  currentUserId?: string
+  configs?: Record<string, UserConfig>
 }
 
 export const VERSION = 1
@@ -27,10 +28,6 @@ class ConfigVault {
 
   delete(key: keyof ConfigType): void {
     this.store.delete(key)
-  }
-
-  setVersion(): void {
-    this.store.set('version', VERSION)
   }
 
   async requireActiveProjectId(): Promise<string> {
@@ -119,8 +116,8 @@ class ConfigVault {
 const configConf = new Conf<ConfigType>({
   configName: 'config',
   cwd: path.join(os.homedir(), '.affinidi'),
+  defaults: { version: VERSION },
   watch: true,
 })
 
 export const configVault = new ConfigVault(configConf)
-configVault.setVersion()
