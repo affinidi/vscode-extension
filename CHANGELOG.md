@@ -1,3 +1,21 @@
+# [1.6.0](https://github.com/affinidi/vscode-extension/compare/v1.5.0...v1.6.0) (2022-12-12)
+
+
+### Bug Fixes
+
+* added support for VS Code version 1.70 ([#62](https://github.com/affinidi/vscode-extension/issues/62)) ([5f0de30](https://github.com/affinidi/vscode-extension/commit/5f0de306117d44202a5eac318bf0aabc176aec9c))
+* added version to config and credential files ([#65](https://github.com/affinidi/vscode-extension/issues/65)) ([fed97f9](https://github.com/affinidi/vscode-extension/commit/fed97f982e13fe29514b724552a823205163f1f5))
+* Update README ([#60](https://github.com/affinidi/vscode-extension/issues/60)) ([d461200](https://github.com/affinidi/vscode-extension/commit/d4612002ac51e4f1aabfa207814d87b6ed0442cd))
+
+
+### Features
+
+* **FTL-8011:** introduce active project concept ([#51](https://github.com/affinidi/vscode-extension/issues/51)) ([7db5d9a](https://github.com/affinidi/vscode-extension/commit/7db5d9aef3b90c3625b3b803dfcddc07422e0c1e))
+* **FTL-8270:** implement initial Project creation on signup ([#58](https://github.com/affinidi/vscode-extension/issues/58)) ([381ebfc](https://github.com/affinidi/vscode-extension/commit/381ebfc6f3c4660273214981fec5701cb7c6dfb9))
+* **FTL-8311:** Add option to set walletURL on CSV issuance ([#55](https://github.com/affinidi/vscode-extension/issues/55)) ([b67712c](https://github.com/affinidi/vscode-extension/commit/b67712c46f15098ad8c29ff2c47d309fb9a9bf3a))
+* **FTL-8336:** removed quickpick for project ([#59](https://github.com/affinidi/vscode-extension/issues/59)) ([19ac34a](https://github.com/affinidi/vscode-extension/commit/19ac34a1562afd7035c9829cbbe7a0315b7c6de3))
+* implement active project UI changes ([#56](https://github.com/affinidi/vscode-extension/issues/56)) ([d5b7bd2](https://github.com/affinidi/vscode-extension/commit/d5b7bd248326b510ac3fd447ef0be7466f03bed6))
+
 # [1.5.0](https://github.com/affinidi/vscode-extension/compare/v1.4.1...v1.5.0) (2022-12-07)
 
 
