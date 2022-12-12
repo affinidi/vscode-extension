@@ -213,15 +213,8 @@ export const initSnippets = () => {
 
   ext.context.subscriptions.push(
     commands.registerCommand('affinidi.codegen.getWalletDetails', async () => {
+      telemetryHelpers.trackCommand('affinidi.codegen.getWalletDetails')
       await insertGetWalletDetailsSnippet()
-
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: EventSubCategory.command,
-        metadata: {
-          commandId: 'affinidi.codegen.getWalletDetails',
-        },
-      })
     }),
   )
 }
@@ -285,18 +278,18 @@ Clearing the state is also necessary when user manually clicks on 'Refresh' butt
 
 ## Analytics & telemetry
 
-In order to send an analytics event, use `sendEventToAnalytics()` method:
+In order to send an analytics event, use `telemetryHelpers.trackXYZ()` method:
 ```ts
-import { sendEventToAnalytics, EventNames, EventSubCategory } from './services/analyticsStreamApiService'
+import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
 
 // ...
 
-sendEventToAnalytics({
-  name: EventNames.someEventName,
-  subCategory: EventSubCategory.someEventSubCategory,
-  metadata: { /* arbitrary event metadata if necessary */ },
+telemetryHelpers.trackCommand('affinidi.customCommand', {
+  some: 'metadata',
 })
 ```
+
+New telemetry events & methods can be added to the `src/features/telemetry/telemetryHelpers.ts` file if necessary.
 
 ## Messages
 
