@@ -1,4 +1,4 @@
-import { ProgressLocation, window, l10n } from 'vscode'
+import { ProgressLocation, window } from 'vscode'
 import { authMessage } from '../../messages/messages'
 import { userManagementClient } from '../../features/user-management/userManagementClient'
 import { validateEmail, validateOTP } from './validators'

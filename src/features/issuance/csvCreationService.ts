@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { l10n, OpenDialogOptions, ProgressLocation, window, workspace } from 'vscode'
+import { OpenDialogOptions, ProgressLocation, window, workspace } from 'vscode'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
@@ -98,7 +98,7 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
     if (issuance) {
       window.showInformationMessage(csvMessage.issuanceCreationMessage)
       ext.outputChannel.appendLine(csvMessage.issuanceCreationMessage)
-      ext.outputChannel.appendLine(l10n.t(`Issuance ID: {0}`, issuance.id))
+      ext.outputChannel.appendLine(`${labels.issuanceID}: ${issuance.id}`)
       ext.outputChannel.show()
     }
   } catch (error: unknown) {

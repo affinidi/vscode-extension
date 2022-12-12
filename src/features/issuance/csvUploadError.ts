@@ -1,4 +1,3 @@
-import { l10n } from 'vscode'
 import { csvMessage } from '../../messages/messages'
 
 export type UploadError = {
@@ -22,8 +21,8 @@ export function parseUploadError(error: any): UploadError | undefined {
           title: `${csvMessage.invalidDataInRow}${error.context.row}`,
           errors: error.context.errors.map((error: any) =>
             error.field
-              ? l10n.t(`Field "${error.field}" ${error.message}`)
-              : l10n.t(`Row ${error.message}`),
+              ? `${csvMessage.field} "${error.field}" ${error.message}`
+              : `${csvMessage.row} ${error.message}`,
           ),
         },
       }
@@ -38,7 +37,7 @@ export function parseUploadError(error: any): UploadError | undefined {
           title: `${formatErrorTitlePrefix} ${csvMessage.couldNotFindAllColumns}`,
           errors:
             error.context.missingColumns?.length > 0
-              ? [`${l10n.t('Required columns: ')} ${error.context.missingColumns.join(', ')}`]
+              ? [`${csvMessage.requiredColumns}: ${error.context.missingColumns.join(', ')}`]
               : [],
         },
       }

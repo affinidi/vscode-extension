@@ -1,5 +1,5 @@
 import type { BuilderSchema, SchemaBuilderWebview } from '../SchemaBuilderWebview'
-import { window, l10n, ProgressLocation } from 'vscode'
+import { window, ProgressLocation } from 'vscode'
 import { ext } from '../../../../extensionVariables'
 import { showSchemaDetails } from '../../schema-details/showSchemaDetails'
 import { BuilderSchemaPublisher } from '../BuilderSchemaPublisher'
@@ -30,9 +30,7 @@ export class SubmitHandler {
 
         if (!isValidAttributeName(attribute.name)) {
           window.showErrorMessage(
-            l10n.t(
-              `Invalid attribute name: "${attribute.name}". Use camelCase and alphanumeric symbols (for example, "firstName")`,
-            ),
+            `${schemaMessage.invalidAttributeName}: "${attribute.name}". ${schemaMessage.invalidAttributeNameSuggestion}`,
           )
           return
         }
