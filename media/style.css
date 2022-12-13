@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -8,6 +12,18 @@
 .box-row {
   display: flex;
   gap: 40px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.text-bold {
+  font-weight: bold;
 }
 
 .box {
@@ -34,5 +50,73 @@
 .divider {
   width: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-  margin: 20px 0px;
+  margin: 20px 0;
+}
+
+/* -------- ATTRIBUTES -------- */
+
+.attribute-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.attribute-type {
+  width: 88px;
+}
+
+.attribute-required {
+  width: 60px;
+  text-align: right;
+}
+
+.parent-attribute {
+  height: 40px;
+}
+
+.parent-attribute-header {
+  height: 40px;
+  border: 1px solid rgb(193, 196, 204);
+}
+
+.parent-attribute > .attribute-details {
+  background: #2a2a2a;
+  border: 1px solid rgb(193, 196, 204);
+  z-index: 1;
+}
+
+.attribute-details {
+  min-height: 40px;
+  padding: 0 24px;
+  align-items: center;
+}
+
+.attribute {
+  position: relative;
+  margin-left: 33px;
+}
+
+.attribute:before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: -20px;
+  width: 1px;
+  height: 40px;
+  background-color: rgb(193, 196, 204);
+}
+
+.has-sibling:before {
+  top: 0;
+  bottom: 0;
+  height: auto;
+}
+
+.attribute:after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: -8px;
+  width: 27.5px;
+  height: 1px;
+  background-color: rgb(193, 196, 204);
 }
