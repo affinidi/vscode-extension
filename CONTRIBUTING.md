@@ -300,7 +300,7 @@ sendEventToAnalytics({
 
 ## Messages
 
-We store all of our messages (errors, labels, etc.) in `src/messages/messages.ts` file.
+We store all of our messages (errors, labels, etc.) in `src/messages/messages.ts` file. Additionally all of the user facing texts used in the `package.json` are stored in `package.nls.json`.
 
 ## Configuration & credentials
 
