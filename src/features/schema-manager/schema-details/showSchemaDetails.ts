@@ -1,4 +1,4 @@
-import { parseSchema } from '@affinidi/affinidi-vc-schemas'
+import { parseSchema, SchemaField } from '@affinidi/affinidi-vc-schemas'
 import { SchemaDto } from '@affinidi/client-schema-manager'
 import { Uri, ViewColumn, Webview, WebviewPanel, window } from 'vscode'
 import fetch from 'node-fetch'
@@ -14,19 +14,19 @@ let panel: WebviewPanel | undefined
 
 const issuanceButtonId = 'initiate-issuance'
 
-async function renderSchemaDetails({
+function renderSchemaDetails({
   webview,
   extensionUri,
   schema,
+  schemaFields,
 }: {
   webview: Webview
   extensionUri: Uri
   schema: SchemaDto
+  schemaFields: SchemaField[]
 }) {
   const styleUri = getWebviewUri(webview, extensionUri, ['media', 'style.css'])
   const toolkitUri = getWebviewUri(webview, extensionUri, ['media', 'vendor', 'toolkit.js'])
-  const jsonSchema = await (await fetch(schema.jsonSchemaUrl)).json()
-  const parsedSchema = parseSchema(jsonSchema)
 
   return /* html */ `
     <!DOCTYPE html>
@@ -103,7 +103,7 @@ async function renderSchemaDetails({
             </div>
 
             <div class="attribute-box flex-1">
-              ${renderTree(parsedSchema?.fields)}
+              ${renderTree(schemaFields)}
             </div>
           </div>
         </section>
@@ -151,9 +151,14 @@ export async function showSchemaDetails({
   }
 
   panel.title = `${labels.schema}: ${schemaManagerHelpers.getSchemaName(schema)}`
-  panel.webview.html = await renderSchemaDetails({
+
+  const jsonSchema = await (await fetch(schema.jsonSchemaUrl)).json()
+  const { fields } = parseSchema(jsonSchema)
+
+  panel.webview.html = renderSchemaDetails({
     webview: panel.webview,
     extensionUri: ext.context.extensionUri,
     schema,
+    schemaFields: fields,
   })
 }
