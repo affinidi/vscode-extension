@@ -5,6 +5,7 @@ import { projectMessage } from '../../messages/messages'
 import { readOnlyContentViewer } from '../../utils/openReadOnlyContent'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { telemetryHelpers } from '../telemetry/telemetryHelpers'
+import { IamStatusBar } from './IamStatusBar'
 import { createProjectProcess } from './createProjectProcess'
 import { iamState } from './iamState'
 import { InactiveProjectTreeItem } from './tree/treeItems'
@@ -59,6 +60,15 @@ async function createProject() {
 }
 
 export async function initIam() {
+  const iamStatusBar = new IamStatusBar()
+  iamStatusBar.update()
+
+  ext.context.subscriptions.push(
+    iamStatusBar,
+    { dispose: configVault.onUserConfigChange(() => iamStatusBar.update()) },
+    { dispose: configVault.onCurrentUserIdChange(() => iamStatusBar.update()) },
+  )
+
   ext.context.subscriptions.push(
     commands.registerCommand('affinidi.viewProjectProperties', viewProjectProperties),
     commands.registerCommand('affinidiExplorer.activateProject', activateProject),
