@@ -48,6 +48,7 @@ export const errorMessage = {
 }
 
 export const authMessage = {
+  chooseAuthenticationMethod: 'Authenticate in to Affinidi',
   loggedIn: 'Logged in to Affinidi',
   loggedOut: 'Logged out of Affinidi',
   signedUp: 'Signed up to Affinidi',

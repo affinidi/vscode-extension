@@ -38,7 +38,7 @@ async function signUpHandler(): Promise<void> {
       window.showInformationMessage(authMessage.signedUp)
       ext.outputChannel.appendLine(authMessage.signedUp)
 
-      // await iamHelpers.createDefaultProject()
+      await iamHelpers.createDefaultProject()
 
       await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
       break
@@ -98,18 +98,23 @@ async function userDetailsHandler(): Promise<void> {
 }
 
 export const initAuthentication = () => {
-  ext.context.subscriptions.push(commands.registerCommand('affinidi.authenticate', async () => {
-    const method = await showQuickPick([
-      [labels.createAnAccountWithAffinidi, 'signUp'],
-      [labels.login, 'login'],
-    ])
+  ext.context.subscriptions.push(
+    commands.registerCommand('affinidi.authenticate', async () => {
+      const method = await showQuickPick(
+        [
+          [labels.createAnAccountWithAffinidi, 'signUp'],
+          [labels.login, 'login'],
+        ],
+        { title: authMessage.chooseAuthenticationMethod },
+      )
 
-    if (method === 'login') {
-      await commands.executeCommand('affinidi.login')
-    } else if (method === 'signUp') {
-      await commands.executeCommand('affinidi.signUp')
-    }
-  }))
+      if (method === 'login') {
+        await commands.executeCommand('affinidi.login')
+      } else if (method === 'signUp') {
+        await commands.executeCommand('affinidi.signUp')
+      }
+    }),
+  )
 
   ext.context.subscriptions.push(commands.registerCommand('affinidi.signUp', signUpHandler))
   ext.context.subscriptions.push(commands.registerCommand('affinidi.login', loginHandler))
