@@ -15,7 +15,7 @@ export const apiFetch = async <T = unknown>({
   endpoint: string
   requestBody?: unknown
   headers?: Record<string, string>
-}): Promise<T> => {
+}): Promise<T | undefined> => {
   const response = await nodeFetch(endpoint, {
     method,
     body: requestBody ? JSON.stringify(requestBody) : undefined,
@@ -27,7 +27,6 @@ export const apiFetch = async <T = unknown>({
   const { status: statusCode } = response
 
   if (statusCode === 204 || statusCode === 201) {
-    // @ts-ignore
     return undefined
   }
 
@@ -49,20 +48,4 @@ export const apiFetch = async <T = unknown>({
   }
 
   return json
-}
-
-export function generateApiKeyHeader(apiKeyHash: string): Record<string, string> {
-  return { 'Api-Key': apiKeyHash }
-}
-
-export function buildURL(
-  baseUrl: string,
-  path: string,
-  qs?: string[][] | Record<string, string | undefined> | string | URLSearchParams,
-): string {
-  // @ts-ignore
-  const search = new URLSearchParams(qs).toString()
-  const url = `${baseUrl}${path}${search ? `?${search}` : ''}`
-
-  return new URL(url).toString()
 }
