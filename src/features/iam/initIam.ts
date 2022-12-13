@@ -65,8 +65,7 @@ export async function initIam() {
 
   ext.context.subscriptions.push(
     iamStatusBar,
-    { dispose: configVault.onUserConfigChange(() => iamStatusBar.update()) },
-    { dispose: configVault.onCurrentUserIdChange(() => iamStatusBar.update()) },
+    iamState.onDidUpdate(() => iamStatusBar.update())
   )
 
   ext.context.subscriptions.push(

@@ -3,7 +3,7 @@ import { ext } from './extensionVariables'
 
 const onDidClearEmitter = new EventEmitter<string | undefined>()
 
-export const state = {
+export const stateHelpers = {
   clear() {
     this.clearByPrefix()
   },
@@ -15,6 +15,12 @@ export const state = {
     }
 
     onDidClearEmitter.fire(prefix)
+  },
+  get<T>(key: string) {
+    return ext.context.globalState.get<T>(key)
+  },
+  update(key: string, value: any): void {
+    ext.context.globalState.update(key, value)
   },
   onDidClear(listener: (prefix: string | undefined) => unknown): Disposable {
     return onDidClearEmitter.event(listener)

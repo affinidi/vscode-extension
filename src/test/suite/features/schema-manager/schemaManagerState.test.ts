@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { iamState } from '../../../../features/iam/iamState'
 import { schemaManagerClient } from '../../../../features/schema-manager/schemaManagerClient'
 import { SchemaManagerState } from '../../../../features/schema-manager/schemaManagerState'
-import { state } from '../../../../state'
+import { stateHelpers } from '../../../../stateHelpers'
 import { sandbox } from '../../setup'
 
 describe('SchemaManagerState', () => {
@@ -24,7 +24,7 @@ describe('SchemaManagerState', () => {
 
     schemaManagerState = new SchemaManagerState()
 
-    state.clear()
+    stateHelpers.clear()
   })
 
   describe('listAuthoredSchemas()', () => {

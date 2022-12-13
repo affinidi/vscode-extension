@@ -4,7 +4,7 @@ import { configVault } from '../../../../config/configVault'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { IamState } from '../../../../features/iam/iamState'
 import { projectMessage } from '../../../../messages/messages'
-import { state } from '../../../../state'
+import { stateHelpers } from '../../../../stateHelpers'
 import { sandbox } from '../../setup'
 
 describe('IamState', () => {
@@ -30,7 +30,7 @@ describe('IamState', () => {
 
     iamState = new IamState()
 
-    state.clear()
+    stateHelpers.clear()
   })
 
   describe('listProjects()', () => {

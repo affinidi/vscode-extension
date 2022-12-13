@@ -254,11 +254,11 @@ export class WalletState {
 
   private async fetchWallets(): Promise<WalletDto[]> {
     const key = storageKey('list')
-    const stored = ext.context.globalState.get<WalletDto[]>(key)
+    const stored = state.get<WalletDto[]>(key)
     if (stored) return stored
 
     const { wallets } = await walletClient.listWallets()
-    ext.context.globalState.update(key, wallets)
+    state.update(key, wallets)
 
     return wallets
   }
