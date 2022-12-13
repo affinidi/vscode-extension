@@ -18,6 +18,7 @@
   "affinidi.copyJsonLdURL": "Copy JSON-LD Context URL",
 
   "affinidiExplorer.refresh": "Refresh",
+  "affinidiExplorer.refreshAll": "Refresh all",
   "affinidiExplorer.viewProperties": "View Properties",
   "affinidiExplorer.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidiExplorer.showJsonSchema": "Show JSON Schema",

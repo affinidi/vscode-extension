@@ -45,6 +45,7 @@
     "onCommand:affinidiExplorer.openSchemaBuilder",
     "onCommand:affinidiExplorer.forkSchema",
     "onCommand:affinidiExplorer.refresh",
+    "onCommand:affinidiExplorer.refreshAll",
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
@@ -151,6 +152,12 @@
       {
         "command": "affinidiExplorer.refresh",
         "title": "%affinidiExplorer.refresh%",
+        "category": "%commands.category.explorer%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "affinidiExplorer.refreshAll",
+        "title": "%affinidiExplorer.refreshAll%",
         "category": "%commands.category.explorer%",
         "icon": "$(refresh)"
       },
@@ -262,6 +269,10 @@
           "when": "never"
         },
         {
+          "command": "affinidiExplorer.refreshAll",
+          "when": "never"
+        },
+        {
           "command": "affinidi.openMarkDown",
           "when": "never"
         },
@@ -304,7 +315,7 @@
       ],
       "view/title": [
         {
-          "command": "affinidiExplorer.refresh",
+          "command": "affinidiExplorer.refreshAll",
           "when": "view == affinidiExplorer",
           "group": "navigation"
         },

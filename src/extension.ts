@@ -62,18 +62,19 @@ export async function activateInternal(context: ExtensionContext) {
   ext.context.subscriptions.push(
     {
       dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
+        state.clear()
+        ext.explorerTree.refresh()
+
         if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
           updateCredentialsActiveProjectSummary()
         }
-
-        state.clear()
-        ext.explorerTree.refresh()
       }),
     },
     {
       dispose: configVault.onCurrentUserIdChange(async () => {
         state.clear()
         ext.explorerTree.refresh()
+
         updateCredentialsActiveProjectSummary()
       }),
     },
@@ -97,55 +98,67 @@ export async function activateInternal(context: ExtensionContext) {
     showCollapseAll: true,
   })
 
-  feedbackTreeView.onDidChangeVisibility((ev) => {
-    const walkthroughOpened = workspace.getConfiguration().get('affinidi.walkthrough.opened')
+  context.subscriptions.push(
+    feedbackTreeView.onDidChangeVisibility((ev) => {
+      const walkthroughOpened = workspace.getConfiguration().get('affinidi.walkthrough.opened')
 
-    if (!walkthroughOpened && ev.visible) {
-      commands.executeCommand(
-        'workbench.action.openWalkthrough',
-        'Affinidi.affinidi#affinidi-walkthrough',
-      )
-      workspace.getConfiguration().update('affinidi.walkthrough.opened', true, true)
-    }
-  })
-
-  commands.registerCommand('affinidiExplorer.refresh', (element: BasicTreeItem) => {
-    telemetryHelpers.trackCommand('affinidiExplorer.refresh', {
-      feature: element instanceof ProjectFeatureTreeItem ? element.feature : undefined,
-      projectId: element instanceof BasicTreeItemWithProject ? element.projectId : undefined,
-    })
-
-    if (element instanceof ProjectFeatureTreeItem) {
-      if (element.feature === Feature.DIGITAL_IDENTITIES) {
-        iamState.clear()
-      } else if (element.feature === Feature.ISSUANCES) {
-        issuanceState.clear()
-      } else if (element.feature === Feature.SCHEMAS) {
-        schemaManagerState.clear()
+      if (!walkthroughOpened && ev.visible) {
+        commands.executeCommand(
+          'workbench.action.openWalkthrough',
+          'Affinidi.affinidi#affinidi-walkthrough',
+        )
+        workspace.getConfiguration().update('affinidi.walkthrough.opened', true, true)
       }
-    } else {
+    }),
+  )
+
+  context.subscriptions.push(
+    commands.registerCommand('affinidiExplorer.refreshAll', () => {
+      telemetryHelpers.trackCommand('affinidiExplorer.refreshAll')
       state.clear()
-    }
+      ext.explorerTree.refresh()
+    }),
+  )
 
-    ext.explorerTree.refresh(element)
-  })
+  context.subscriptions.push(
+    commands.registerCommand('affinidiExplorer.refresh', (element: BasicTreeItem) => {
+      telemetryHelpers.trackCommand('affinidiExplorer.refresh', {
+        feature: element instanceof ProjectFeatureTreeItem ? element.feature : undefined,
+        projectId: element instanceof BasicTreeItemWithProject ? element.projectId : undefined,
+      })
 
-  const openSchema = commands.registerCommand('schema.showSchemaDetails', async () => {
-    const element = treeView.selection[0] as SchemaTreeItem
-    telemetryHelpers.trackCommand('schema.showSchemaDetails', {
-      projectId: element.projectId,
-    })
+      if (element instanceof ProjectFeatureTreeItem) {
+        if (element.feature === Feature.DIGITAL_IDENTITIES) {
+          iamState.clear()
+        } else if (element.feature === Feature.ISSUANCES) {
+          issuanceState.clear()
+        } else if (element.feature === Feature.SCHEMAS) {
+          schemaManagerState.clear()
+        }
+      } else {
+        state.clear()
+      }
 
-    const schema = await schemaManagerState.getAuthoredSchemaById({
-      projectId: element.projectId,
-      schemaId: element.schemaId,
-    })
-    if (!schema) return
+      ext.explorerTree.refresh(element)
+    }),
+  )
 
-    showSchemaDetails({ schema, projectId: element.projectId })
-  })
+  context.subscriptions.push(
+    commands.registerCommand('schema.showSchemaDetails', async () => {
+      const element = treeView.selection[0] as SchemaTreeItem
+      telemetryHelpers.trackCommand('schema.showSchemaDetails', {
+        projectId: element.projectId,
+      })
 
-  context.subscriptions.push(openSchema)
+      const schema = await schemaManagerState.getAuthoredSchemaById({
+        projectId: element.projectId,
+        schemaId: element.schemaId,
+      })
+      if (!schema) return
+
+      showSchemaDetails({ schema, projectId: element.projectId })
+    }),
+  )
 
   context.subscriptions.push(
     commands.registerCommand('affinidi.docs.availableSnippets', async () => {
@@ -210,16 +223,18 @@ export async function activateInternal(context: ExtensionContext) {
     }),
   )
 
-  commands.registerCommand(
-    'affinidiExplorer.viewProperties',
-    (element: BasicTreeItemWithProject) => {
-      telemetryHelpers.trackCommand('affinidiExplorer.viewProperties', {
-        projectId: element.projectId,
-        resource: element.contextValue,
-      })
+  context.subscriptions.push(
+    commands.registerCommand(
+      'affinidiExplorer.viewProperties',
+      (element: BasicTreeItemWithProject) => {
+        telemetryHelpers.trackCommand('affinidiExplorer.viewProperties', {
+          projectId: element.projectId,
+          resource: element.contextValue,
+        })
 
-      showElementProperties(element)
-    },
+        showElementProperties(element)
+      },
+    ),
   )
 
   context.subscriptions.push(
@@ -276,24 +291,9 @@ export async function activateInternal(context: ExtensionContext) {
     }),
   )
 
-  commands.registerCommand('affinidiExplorer.showJsonSchema', async (element: SchemaTreeItem) => {
-    telemetryHelpers.trackCommand('affinidiExplorer.showJsonSchema', {
-      projectId: element.projectId,
-    })
-
-    const schema = await schemaManagerState.getAuthoredSchemaById({
-      projectId: element.projectId,
-      schemaId: element.schemaId,
-    })
-    if (!schema) return
-
-    await schemaManagerHelpers.showSchemaFile(schema, 'json')
-  })
-
-  commands.registerCommand(
-    'affinidiExplorer.showJsonLdContext',
-    async (element: SchemaTreeItem) => {
-      telemetryHelpers.trackCommand('affinidiExplorer.showJsonLdContext', {
+  context.subscriptions.push(
+    commands.registerCommand('affinidiExplorer.showJsonSchema', async (element: SchemaTreeItem) => {
+      telemetryHelpers.trackCommand('affinidiExplorer.showJsonSchema', {
         projectId: element.projectId,
       })
 
@@ -303,8 +303,27 @@ export async function activateInternal(context: ExtensionContext) {
       })
       if (!schema) return
 
-      await schemaManagerHelpers.showSchemaFile(schema, 'jsonld')
-    },
+      await schemaManagerHelpers.showSchemaFile(schema, 'json')
+    }),
+  )
+
+  context.subscriptions.push(
+    commands.registerCommand(
+      'affinidiExplorer.showJsonLdContext',
+      async (element: SchemaTreeItem) => {
+        telemetryHelpers.trackCommand('affinidiExplorer.showJsonLdContext', {
+          projectId: element.projectId,
+        })
+
+        const schema = await schemaManagerState.getAuthoredSchemaById({
+          projectId: element.projectId,
+          schemaId: element.schemaId,
+        })
+        if (!schema) return
+
+        await schemaManagerHelpers.showSchemaFile(schema, 'jsonld')
+      },
+    ),
   )
 
   context.subscriptions.push(
@@ -345,36 +364,42 @@ export async function activateInternal(context: ExtensionContext) {
     }),
   )
 
-  commands.registerCommand(
-    'affinidiExplorer.openSchemaBuilder',
-    async (element: BasicTreeItemWithProject) => {
-      telemetryHelpers.trackCommand('affinidiExplorer.openSchemaBuilder')
+  context.subscriptions.push(
+    commands.registerCommand(
+      'affinidiExplorer.openSchemaBuilder',
+      async (element: BasicTreeItemWithProject) => {
+        telemetryHelpers.trackCommand('affinidiExplorer.openSchemaBuilder')
 
-      openSchemaBuilder({
-        projectId: element.projectId,
-        scope: element instanceof ScopedSchemasTreeItem ? element.scope : 'public',
-      })
-    },
+        openSchemaBuilder({
+          projectId: element.projectId,
+          scope: element instanceof ScopedSchemasTreeItem ? element.scope : 'public',
+        })
+      },
+    ),
   )
 
-  commands.registerCommand('affinidiExplorer.forkSchema', async (element: SchemaTreeItem) => {
-    telemetryHelpers.trackCommand('affinidiExplorer.forkSchema')
+  context.subscriptions.push(
+    commands.registerCommand('affinidiExplorer.forkSchema', async (element: SchemaTreeItem) => {
+      telemetryHelpers.trackCommand('affinidiExplorer.forkSchema')
 
-    openSchemaBuilder({
-      parentSchemaId: element.schemaId,
-      projectId: element.projectId,
-    })
-  })
+      openSchemaBuilder({
+        parentSchemaId: element.schemaId,
+        projectId: element.projectId,
+      })
+    }),
+  )
 
-  commands.registerCommand('affinidi.openSchemaBuilder', async () => {
-    telemetryHelpers.trackCommand('affinidi.openSchemaBuilder')
+  context.subscriptions.push(
+    commands.registerCommand('affinidi.openSchemaBuilder', async () => {
+      telemetryHelpers.trackCommand('affinidi.openSchemaBuilder')
 
-    try {
-      openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
-    } catch (error) {
-      notifyError(error)
-    }
-  })
+      try {
+        openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
+      } catch (error) {
+        notifyError(error)
+      }
+    }),
+  )
 
   telemetryHelpers.askUserForTelemetryConsent()
   updateCredentialsActiveProjectSummary()
