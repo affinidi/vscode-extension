@@ -5,11 +5,7 @@ import { issuanceState } from '../features/issuance/issuanceState'
 import { IssuanceTreeItem } from '../features/issuance/tree/treeItems'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
 import { SchemaTreeItem } from '../features/schema-manager/tree/treeItems'
-import {
-  EventNames,
-  EventSubCategory,
-  sendEventToAnalytics,
-} from '../services/analyticsStreamApiService'
+import { telemetryHelpers } from '../features/telemetry/telemetryHelpers'
 import { insertGetIssuanceOffersSnippet } from './get-issuance-offers/snippet'
 import { insertSendVcOfferToEmailSnippet } from './send-vc-offer-to-email/snippet'
 import { insertSignVcWithCloudWalletSnippet } from './sign-vc-with-cloud-wallet/snippet'
@@ -19,6 +15,11 @@ export const initSnippets = () => {
     commands.registerCommand(
       'affinidi.codegen.sendVcOfferToEmail',
       async (element?: SchemaTreeItem) => {
+        telemetryHelpers.trackCommand('affinidi.codegen.sendVcOfferToEmail', {
+          projectId: element?.projectId,
+          schemaId: element?.schemaId,
+        })
+
         let schema: SchemaDto | undefined
         if (element?.schemaId) {
           schema = await schemaManagerState.getAuthoredSchemaById({
@@ -31,16 +32,6 @@ export const initSnippets = () => {
           projectId: element?.projectId,
           schema,
         })
-
-        sendEventToAnalytics({
-          name: EventNames.commandExecuted,
-          subCategory: EventSubCategory.command,
-          metadata: {
-            commandId: 'affinidi.codegen.sendVcOfferToEmail',
-            projectId: element?.projectId,
-            schemaId: element?.schemaId,
-          },
-        })
       },
     ),
   )
@@ -49,20 +40,16 @@ export const initSnippets = () => {
     commands.registerCommand(
       'affinidi.codegen.getIssuanceOffers',
       async (element?: IssuanceTreeItem) => {
-        if (!element) issuanceState.clear()
-        await insertGetIssuanceOffersSnippet({
+        telemetryHelpers.trackCommand('affinidi.codegen.getIssuanceOffers', {
           projectId: element?.projectId,
           issuanceId: element?.issuanceId,
         })
 
-        sendEventToAnalytics({
-          name: EventNames.commandExecuted,
-          subCategory: EventSubCategory.command,
-          metadata: {
-            commandId: 'affinidi.codegen.getIssuanceOffers',
-            projectId: element?.projectId,
-            issuanceId: element?.issuanceId,
-          },
+        if (!element) await issuanceState.clear()
+
+        await insertGetIssuanceOffersSnippet({
+          projectId: element?.projectId,
+          issuanceId: element?.issuanceId,
         })
       },
     ),
@@ -70,15 +57,9 @@ export const initSnippets = () => {
 
   ext.context.subscriptions.push(
     commands.registerCommand('affinidi.codegen.signVcWithCloudWallet', async () => {
-      await insertSignVcWithCloudWalletSnippet()
+      telemetryHelpers.trackCommand('affinidi.codegen.signVcWithCloudWallet')
 
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: EventSubCategory.command,
-        metadata: {
-          commandId: 'affinidi.codegen.signVcWithCloudWallet',
-        },
-      })
+      await insertSignVcWithCloudWalletSnippet()
     }),
   )
 }

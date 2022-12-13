@@ -1,10 +1,10 @@
 import { authentication } from 'vscode'
-import { apiFetch } from '../api-client/api-fetch'
-import { AUTH_PROVIDER_ID } from '../auth/authentication-provider/affinidi-authentication-provider'
-import { logger } from '../utils/logger'
-import { isTelemetryEnabled } from '../utils/telemetry'
+import { apiFetch } from './api-client/api-fetch'
+import { AUTH_PROVIDER_ID } from '../../auth/authentication-provider/affinidi-authentication-provider'
+import { logger } from '../../utils/logger'
+import { telemetryHelpers } from './telemetryHelpers'
 
-const affinidiPackage = require('../../package.json')
+const affinidiPackage = require('../../../package.json')
 
 // TODO: This JWT_TOKEN is valid only for 180 days(until 24-04-2023). We need to re-generate the new token by this date.
 const JWT_TOKEN =
@@ -40,7 +40,7 @@ function generateUserMetadata(userEmail: string | undefined) {
   }
 }
 
-export const sendEventToAnalytics = async ({
+export const sendRawAnalyticsEvent = async ({
   name,
   subCategory,
   metadata,
@@ -49,7 +49,7 @@ export const sendEventToAnalytics = async ({
   subCategory?: EventSubCategory
   metadata?: any
 }): Promise<void> => {
-  if (!isTelemetryEnabled()) {
+  if (!telemetryHelpers.isTelemetryEnabled()) {
     return
   }
 

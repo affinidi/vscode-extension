@@ -2,11 +2,6 @@ import { authentication, commands, window, ProgressLocation } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
 import { authMessage, errorMessage } from '../messages/messages'
-import {
-  sendEventToAnalytics,
-  EventNames,
-  EventSubCategory,
-} from '../services/analyticsStreamApiService'
 import { cliHelper } from '../utils/cliHelper'
 import {
   AffinidiAuthenticationProvider,
@@ -15,6 +10,7 @@ import {
 import { authHelper } from './authHelper'
 import { readOnlyContentViewer } from '../utils/openReadOnlyContent'
 import { iamHelpers } from '../features/iam/iamHelpers'
+import { telemetryHelpers } from '../features/telemetry/telemetryHelpers'
 
 const CONSENT = {
   accept: authMessage.accept,
@@ -22,6 +18,8 @@ const CONSENT = {
 }
 
 async function signUpHandler(): Promise<void> {
+  telemetryHelpers.trackCommand('affinidi.signUp')
+
   const selection = await window.showWarningMessage(
     authMessage.termsAndConditions,
     CONSENT.accept,
@@ -34,14 +32,6 @@ async function signUpHandler(): Promise<void> {
 
       await authentication.getSession(AUTH_PROVIDER_ID, ['signup'], {
         forceNewSession: true,
-      })
-
-      sendEventToAnalytics({
-        name: EventNames.commandExecuted,
-        subCategory: EventSubCategory.command,
-        metadata: {
-          commandId: 'affinidi.signUp',
-        },
       })
 
       window.showInformationMessage(authMessage.signedUp)
@@ -61,16 +51,10 @@ async function signUpHandler(): Promise<void> {
 }
 
 async function loginHandler(): Promise<void> {
+  telemetryHelpers.trackCommand('affinidi.login')
+
   await authentication.getSession(AUTH_PROVIDER_ID, ['login'], {
     forceNewSession: true,
-  })
-
-  sendEventToAnalytics({
-    name: EventNames.commandExecuted,
-    subCategory: EventSubCategory.command,
-    metadata: {
-      commandId: 'affinidi.login',
-    },
   })
 
   window.showInformationMessage(authMessage.loggedIn)
@@ -79,19 +63,13 @@ async function loginHandler(): Promise<void> {
 }
 
 async function logoutHandler(): Promise<void> {
+  telemetryHelpers.trackCommand('affinidi.logout')
+
   const session = await authentication.getSession(AUTH_PROVIDER_ID, [], {
     createIfNone: false,
   })
 
   if (session) {
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidi.logout',
-      },
-    })
-
     ext.authProvider.handleRemoveSession()
 
     await window.showInformationMessage(authMessage.loggedOut)
@@ -102,6 +80,8 @@ async function logoutHandler(): Promise<void> {
 }
 
 async function userDetailsHandler(): Promise<void> {
+  telemetryHelpers.trackCommand('affinidi.me')
+
   const userDetails = await window.withProgress(
     { location: ProgressLocation.Notification, title: authMessage.fetchingAccountDetails },
     async () =>
@@ -114,23 +94,12 @@ async function userDetailsHandler(): Promise<void> {
     node: { label: 'AccountDetails', id: userDetails.userId },
     content: userDetails,
   })
-
-  sendEventToAnalytics({
-    name: EventNames.commandExecuted,
-    subCategory: EventSubCategory.command,
-    metadata: {
-      commandId: 'affinidi.me',
-    },
-  })
 }
 
 export const initAuthentication = () => {
   ext.context.subscriptions.push(commands.registerCommand('affinidi.signUp', signUpHandler))
-
   ext.context.subscriptions.push(commands.registerCommand('affinidi.login', loginHandler))
-
   ext.context.subscriptions.push(commands.registerCommand('affinidi.logout', logoutHandler))
-
   ext.context.subscriptions.push(commands.registerCommand('affinidi.me', userDetailsHandler))
 
   const authProvider = new AffinidiAuthenticationProvider()

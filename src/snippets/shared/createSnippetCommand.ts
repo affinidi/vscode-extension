@@ -5,12 +5,8 @@ import * as javascript from '../boilerplates/javascript'
 import * as typescript from '../boilerplates/typescript'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
-import {
-  EventNames,
-  EventSubCategory,
-  sendEventToAnalytics,
-} from '../../services/analyticsStreamApiService'
 import { snippetMessage } from '../../messages/messages'
+import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
 
 export type SnippetCommand<CommandInput = unknown> = (
   input?: CommandInput,
@@ -121,15 +117,11 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         wasBoilerplateGenerated ? undefined : position,
       )
 
-      sendEventToAnalytics({
-        name: EventNames.snippetInserted,
-        subCategory: EventSubCategory.snippet,
-        metadata: {
-          snippetName: name,
-          language: languageId,
-          implementation,
-          projectId: snippetInput.projectId,
-        },
+      telemetryHelpers.trackSnippetInserted({
+        snippetName: name,
+        language: languageId,
+        implementation,
+        projectId: snippetInput.projectId,
       })
     } catch (error: unknown) {
       logger.error(error, snippetMessage.snippetGenerationFailed)

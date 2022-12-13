@@ -7,25 +7,15 @@ import {
   Disposable,
   Event,
   EventEmitter,
-  FileChangeEvent,
-  FileChangeType,
-  Uri,
 } from 'vscode'
 import { nanoid } from 'nanoid'
-import { Unsubscribe } from 'conf/dist/source/types'
-import * as path from 'path'
-import * as os from 'os'
 import { executeAuthProcess, parseJwt } from './auth-process'
-import {
-  sendEventToAnalytics,
-  EventNames,
-  EventSubCategory,
-} from '../../services/analyticsStreamApiService'
 import { credentialsVault, Session } from '../../config/credentialsVault'
 import { configVault } from '../../config/configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { authMessage } from '../../messages/messages'
+import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
@@ -159,14 +149,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
    * @deprecated Use `handleRemoveSession` instead
    */
   async removeSession(): Promise<void> {
-    sendEventToAnalytics({
-      name: EventNames.commandExecuted,
-      subCategory: EventSubCategory.command,
-      metadata: {
-        commandId: 'affinidi.logout',
-      },
-    })
-
+    telemetryHelpers.trackCommand('affinidi.logout')
     this.handleRemoveSession()
   }
 
