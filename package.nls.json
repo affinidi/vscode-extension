@@ -1,4 +1,5 @@
 {
+  "affinidi.authenticate": "Authenticate",
   "affinidi.signUp": "Create an Account",
   "affinidi.login": "Login",
   "affinidi.logout": "Logout",

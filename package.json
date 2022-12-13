@@ -34,6 +34,7 @@
     "onCommand:affinidi.openSchemaBuilder",
     "onCommand:affinidi.initiateIssuanceCsvFlow",
     "onCommand:affinidi.docs.availableSnippets",
+    "onCommand:affinidi.authenticate",
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
@@ -89,6 +90,11 @@
       }
     },
     "commands": [
+      {
+        "command": "affinidi.authenticate",
+        "title": "%affinidi.authenticate%",
+        "category": "Affinidi"
+      },
       {
         "command": "affinidi.signUp",
         "title": "%affinidi.signUp%",
@@ -235,6 +241,10 @@
     ],
     "menus": {
       "commandPalette": [
+        {
+          "command": "affinidi.authenticate",
+          "when": "never"
+        },
         {
           "command": "affinidiExplorer.refresh",
           "when": "never"
