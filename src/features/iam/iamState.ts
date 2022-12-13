@@ -6,7 +6,7 @@ import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'
 import { state } from '../../state'
 import { iamClient } from './iamClient'
-import { singletonPromise } from '../../utils/singletonPromise'
+import { reusePromise } from '../../utils/reusePromise'
 
 const PREFIX = 'iam:'
 const storageKey = (input: string) => PREFIX + input
@@ -47,7 +47,7 @@ export class IamState {
     state.clearByPrefix(PREFIX)
   }
 
-  private fetchProjectSummary = singletonPromise(
+  private fetchProjectSummary = reusePromise(
     async (projectId: string): Promise<ProjectSummary | undefined> => {
       const key = storageKey(`summary:${projectId}`)
       const stored = ext.context.globalState.get<ProjectSummary>(key)
@@ -68,7 +68,7 @@ export class IamState {
     },
   )
 
-  private fetchProjects = singletonPromise(async (): Promise<ProjectDto[]> => {
+  private fetchProjects = reusePromise(async (): Promise<ProjectDto[]> => {
     const key = storageKey('list')
     const stored = ext.context.globalState.get<ProjectDto[]>(key)
     if (stored) return stored

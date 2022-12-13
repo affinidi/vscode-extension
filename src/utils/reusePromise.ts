@@ -4,7 +4,7 @@
  * Until the promise is resolved, calling the same method with the same arguments will reuse the existing promise.
  * This method is not always guaranteed to work because it compares the arguments using `===`.
  */
-export function singletonPromise<T extends (...args: any[]) => any>(method: T) {
+export function reusePromise<T extends (...args: any[]) => any>(method: T) {
   const executions: { args: Parameters<T>; promise: Promise<ReturnType<T>> }[] = []
 
   return async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {

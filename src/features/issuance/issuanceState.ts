@@ -3,7 +3,7 @@ import { ProgressLocation, window } from 'vscode'
 import { ext } from '../../extensionVariables'
 import { issuanceMessage } from '../../messages/messages'
 import { state } from '../../state'
-import { singletonPromise } from '../../utils/singletonPromise'
+import { reusePromise } from '../../utils/reusePromise'
 import { iamState } from '../iam/iamState'
 import { issuanceClient } from './issuanceClient'
 
@@ -28,7 +28,7 @@ export class IssuanceState {
     state.clearByPrefix(PREFIX)
   }
 
-  private fetchIssuancesByProject = singletonPromise(
+  private fetchIssuancesByProject = reusePromise(
     async (projectId: string): Promise<IssuanceDto[]> => {
       const key = storageKey(`by-project:${projectId}`)
       const stored = ext.context.globalState.get<IssuanceDto[]>(key)

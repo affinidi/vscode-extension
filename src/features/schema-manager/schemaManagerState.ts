@@ -3,7 +3,7 @@ import { window, ProgressLocation } from 'vscode'
 import { ext } from '../../extensionVariables'
 import { schemaMessage } from '../../messages/messages'
 import { state } from '../../state'
-import { singletonPromise } from '../../utils/singletonPromise'
+import { reusePromise } from '../../utils/reusePromise'
 import { iamState } from '../iam/iamState'
 import { schemaManagerClient } from './schemaManagerClient'
 
@@ -38,7 +38,7 @@ export class SchemaManagerState {
     state.clearByPrefix(PREFIX)
   }
 
-  private fetchAuthoredSchemas = singletonPromise(
+  private fetchAuthoredSchemas = reusePromise(
     async (projectId: string): Promise<SchemaDto[]> => {
       const key = storageKey(`authored:by-project:${projectId}`)
       const stored = ext.context.globalState.get<SchemaDto[]>(key)
