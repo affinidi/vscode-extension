@@ -55,7 +55,7 @@ export class SubmitHandler {
 
       window.showInformationMessage(schemaMessage.schemaCreated)
       showSchemaDetails({ schema: createdSchema, projectId: webview.projectId })
-      await schemaManagerState.clear()
+      schemaManagerState.clear()
       ext.explorerTree.refresh()
       webview.dispose()
     } finally {

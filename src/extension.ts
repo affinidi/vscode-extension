@@ -65,21 +65,23 @@ export async function activateInternal(context: ExtensionContext) {
   ext.feedbackTree = new FeedbackTree()
 
   ext.context.subscriptions.push(
-    ext.authProvider.onDidChangeSessions(async () => {
-      await state.clear()
-      ext.explorerTree.refresh()
-    }),
     {
       dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
         if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
-          await updateCredentialsActiveProjectSummary()
+          updateCredentialsActiveProjectSummary()
         }
 
-        await state.clear()
+        state.clear()
         ext.explorerTree.refresh()
       }),
     },
-    { dispose: configVault.onCurrentUserIdChange(() => updateCredentialsActiveProjectSummary()) },
+    {
+      dispose: configVault.onCurrentUserIdChange(async () => {
+        state.clear()
+        ext.explorerTree.refresh()
+        updateCredentialsActiveProjectSummary()
+      }),
+    },
   )
 
   const treeView = window.createTreeView('affinidiExplorer', {
@@ -112,7 +114,7 @@ export async function activateInternal(context: ExtensionContext) {
     }
   })
 
-  commands.registerCommand('affinidiExplorer.refresh', async (element: BasicTreeItem) => {
+  commands.registerCommand('affinidiExplorer.refresh', (element: BasicTreeItem) => {
     telemetryHelpers.trackCommand('affinidiExplorer.refresh', {
       feature: element instanceof ProjectFeatureTreeItem ? element.feature : undefined,
       projectId: element instanceof BasicTreeItemWithProject ? element.projectId : undefined,
@@ -120,14 +122,14 @@ export async function activateInternal(context: ExtensionContext) {
 
     if (element instanceof ProjectFeatureTreeItem) {
       if (element.feature === Feature.DIGITAL_IDENTITIES) {
-        await iamState.clear()
+        iamState.clear()
       } else if (element.feature === Feature.ISSUANCES) {
-        await issuanceState.clear()
+        issuanceState.clear()
       } else if (element.feature === Feature.SCHEMAS) {
-        await schemaManagerState.clear()
+        schemaManagerState.clear()
       }
     } else {
-      await state.clear()
+      state.clear()
     }
 
     ext.explorerTree.refresh(element)

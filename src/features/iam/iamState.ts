@@ -1,11 +1,12 @@
 import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
-import { window, ProgressLocation } from 'vscode'
+import { window, ProgressLocation, EventEmitter, Disposable } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'
 import { state } from '../../state'
 import { iamClient } from './iamClient'
+import { singletonPromise } from '../../utils/singletonPromise'
 
 const PREFIX = 'iam:'
 const storageKey = (input: string) => PREFIX + input
@@ -42,30 +43,32 @@ export class IamState {
     return projectSummary
   }
 
-  async clear() {
-    await state.clearByPrefix(PREFIX)
+  clear() {
+    state.clearByPrefix(PREFIX)
   }
 
-  private async fetchProjectSummary(projectId: string): Promise<ProjectSummary | undefined> {
-    const key = storageKey(`summary:${projectId}`)
-    const stored = ext.context.globalState.get<ProjectSummary>(key)
-    if (stored) return stored
+  private fetchProjectSummary = singletonPromise(
+    async (projectId: string): Promise<ProjectSummary | undefined> => {
+      const key = storageKey(`summary:${projectId}`)
+      const stored = ext.context.globalState.get<ProjectSummary>(key)
+      if (stored) return stored
 
-    const projectSummary = await window.withProgress(
-      { location: ProgressLocation.Notification, title: projectMessage.fetchingProjectSummary },
-      async () =>
-        iamClient.getProjectSummary(
-          { projectId },
-          { consoleAuthToken: await authHelper.getConsoleAuthToken() },
-        ),
-    )
+      const projectSummary = await window.withProgress(
+        { location: ProgressLocation.Notification, title: projectMessage.fetchingProjectSummary },
+        async () =>
+          iamClient.getProjectSummary(
+            { projectId },
+            { consoleAuthToken: await authHelper.getConsoleAuthToken() },
+          ),
+      )
 
-    await ext.context.globalState.update(key, projectSummary)
+      await ext.context.globalState.update(key, projectSummary)
 
-    return projectSummary
-  }
+      return projectSummary
+    },
+  )
 
-  private async fetchProjects(): Promise<ProjectDto[]> {
+  private fetchProjects = singletonPromise(async (): Promise<ProjectDto[]> => {
     const key = storageKey('list')
     const stored = ext.context.globalState.get<ProjectDto[]>(key)
     if (stored) return stored
@@ -79,7 +82,7 @@ export class IamState {
     await ext.context.globalState.update(key, projects)
 
     return projects
-  }
+  })
 }
 
 export const iamState = new IamState()

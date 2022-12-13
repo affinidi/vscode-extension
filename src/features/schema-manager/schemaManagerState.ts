@@ -3,6 +3,7 @@ import { window, ProgressLocation } from 'vscode'
 import { ext } from '../../extensionVariables'
 import { schemaMessage } from '../../messages/messages'
 import { state } from '../../state'
+import { singletonPromise } from '../../utils/singletonPromise'
 import { iamState } from '../iam/iamState'
 import { schemaManagerClient } from './schemaManagerClient'
 
@@ -33,29 +34,31 @@ export class SchemaManagerState {
     )
   }
 
-  async clear() {
-    await state.clearByPrefix(PREFIX)
+  clear() {
+    state.clearByPrefix(PREFIX)
   }
 
-  private async fetchAuthoredSchemas(projectId: string): Promise<SchemaDto[]> {
-    const key = storageKey(`authored:by-project:${projectId}`)
-    const stored = ext.context.globalState.get<SchemaDto[]>(key)
-    if (stored) return stored
+  private fetchAuthoredSchemas = singletonPromise(
+    async (projectId: string): Promise<SchemaDto[]> => {
+      const key = storageKey(`authored:by-project:${projectId}`)
+      const stored = ext.context.globalState.get<SchemaDto[]>(key)
+      if (stored) return stored
 
-    const {
-      wallet: { did },
-      apiKey: { apiKeyHash },
-    } = await iamState.requireProjectSummary(projectId)
+      const {
+        wallet: { did },
+        apiKey: { apiKeyHash },
+      } = await iamState.requireProjectSummary(projectId)
 
-    const { schemas } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: schemaMessage.fetchingSchemas },
-      async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
-    )
+      const { schemas } = await window.withProgress(
+        { location: ProgressLocation.Notification, title: schemaMessage.fetchingSchemas },
+        async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
+      )
 
-    await ext.context.globalState.update(key, schemas)
+      await ext.context.globalState.update(key, schemas)
 
-    return schemas
-  }
+      return schemas
+    },
+  )
 }
 
 export const schemaManagerState = new SchemaManagerState()
