@@ -1,4 +1,7 @@
+import { Disposable, EventEmitter } from 'vscode'
 import { ext } from './extensionVariables'
+
+const onDidClearEmitter = new EventEmitter<string | undefined>()
 
 export const state = {
   clear() {
@@ -10,5 +13,10 @@ export const state = {
         ext.context.globalState.update(key, undefined)
       }
     }
+
+    onDidClearEmitter.fire(prefix)
   },
+  onDidClear(listener: (prefix: string | undefined) => unknown): Disposable {
+    return onDidClearEmitter.event(listener)
+  }
 }
