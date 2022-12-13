@@ -65,7 +65,7 @@ class ReadOnlyContentProvider implements TextDocumentContentProvider {
     options?: TextDocumentShowOptions,
   ): Promise<ReadOnlyContent> {
     const scheme = getScheme()
-    const idHash: string = randomUtils.getPseudoAnonymousStringHash(node.id, 'hex')
+    const idHash: string = randomUtils.getPseudonymousStringHash(node.id, 'hex')
     // Remove special characters which may prove troublesome when parsing the uri. We'll allow the same set as `encodeUriComponent`
     // eslint-disable-next-line no-useless-escape
     const fileName = node.label.replace(/[^a-z0-9\-\_\.\!\~\*\'\(\)]/gi, '_')

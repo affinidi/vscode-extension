@@ -1,7 +1,7 @@
 import * as crypto from 'crypto'
 
 export namespace randomUtils {
-  export function getPseudoAnonymousStringHash(
+  export function getPseudonymousStringHash(
     s: string,
     encoding: crypto.BinaryToTextEncoding = 'base64',
   ): string {

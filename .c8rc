@@ -1,17 +1,6 @@
 {
   "all": true,
   "include": ["out/**"],
-  "exclude": [
-    "**/node_modules/**",
-    "out/test/",
-    "out/api-client/",
-    "out/utils/env.js",
-    "out/utils/telemetry.js",
-    "out/utils/types.js",
-    "out/tree/",
-    "out/services/analyticsStreamApiService.js",
-    "out/features/issuance/json-schema",
-    "out/config/"
-  ],
+  "exclude": ["**/node_modules/**", "out/test/"],
   "reporter": ["html", "text"]
 }
