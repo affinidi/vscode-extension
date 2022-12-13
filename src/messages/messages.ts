@@ -94,7 +94,8 @@ export const projectMessage = {
   projectDoesNotExist: 'Project does not exist.',
   projectNotFound: (projectId: string) => `Project not found: ${projectId}`,
   errorFetchingActiveProject: 'Error while fetching the active project.',
-  activatedProject: 'Successfully activated the project',
+  selectActiveProject: 'Select a new active project',
+  activatedProject: (projectName: string) => `Successfully activated the project "${projectName}"`,
   creatingDefaultProject: 'Creating default project...',
 }
 

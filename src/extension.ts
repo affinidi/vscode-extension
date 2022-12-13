@@ -9,7 +9,6 @@ import { showElementProperties } from './features/showElementProperties'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { getFeatureMarkdownUri } from './features/getFeatureMarkdownUri'
-import { createProjectProcess } from './features/iam/createProjectProcess'
 import { csvCreationService } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
 import { ExplorerTree } from './tree/explorerTree'
@@ -34,9 +33,9 @@ import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
-import { projectMessage } from './messages/messages'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
+import { initIam } from './features/iam/initIam'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -51,18 +50,14 @@ export async function activateInternal(context: ExtensionContext) {
   ext.context = context
   ext.outputChannel = window.createOutputChannel('Affinidi')
   ext.authProvider = initAuthentication()
-
-  initSnippets()
-  initGenerators()
-
+  ext.devToolsTree = new DevToolsTree()
+  ext.feedbackTree = new FeedbackTree()
   ext.explorerTree = new ExplorerTree([
     new AuthExplorerProvider(),
     new IamExplorerProvider(),
     new IssuanceExplorerProvider(),
     new SchemaManagerExplorerProvider(),
   ])
-  ext.devToolsTree = new DevToolsTree()
-  ext.feedbackTree = new FeedbackTree()
 
   ext.context.subscriptions.push(
     {
@@ -227,22 +222,6 @@ export async function activateInternal(context: ExtensionContext) {
     },
   )
 
-  commands.registerCommand(
-    'affinidiExplorer.activateProject',
-    async (element: InactiveProjectTreeItem) => {
-      telemetryHelpers.trackCommand('affinidiExplorer.activateProject', {
-        projectId: element.projectId,
-      })
-
-      await configVault.setUserConfig({ activeProjectId: element.projectId })
-
-      await iamState.clear()
-      ext.explorerTree.refresh()
-
-      window.showInformationMessage(projectMessage.activatedProject)
-    },
-  )
-
   context.subscriptions.push(
     commands.registerCommand(
       'affinidiExplorer.initiateIssuanceCsvFlow',
@@ -292,7 +271,7 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand('affinidi.initiateIssuanceCsvFlow', async () => {
       telemetryHelpers.trackCommand('affinidi.initiateIssuanceCsvFlow')
-      
+
       await csvCreationService.initiateIssuanceCsvFlow({})
     }),
   )
@@ -326,16 +305,6 @@ export async function activateInternal(context: ExtensionContext) {
 
       await schemaManagerHelpers.showSchemaFile(schema, 'jsonld')
     },
-  )
-
-  context.subscriptions.push(
-    commands.registerCommand('affinidi.createProject', async () => {
-      telemetryHelpers.trackCommand('affinidi.createProject')
-
-      await createProjectProcess()
-      await iamState.clear()
-      ext.explorerTree.refresh()
-    }),
   )
 
   context.subscriptions.push(
@@ -409,6 +378,10 @@ export async function activateInternal(context: ExtensionContext) {
 
   telemetryHelpers.askUserForTelemetryConsent()
   updateCredentialsActiveProjectSummary()
+
+  initSnippets()
+  initGenerators()
+  initIam()
 
   logger.info({}, 'Affinidi extension is now active!')
 }

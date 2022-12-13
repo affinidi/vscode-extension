@@ -31,6 +31,8 @@
     "onCommand:affinidi.copyJsonLdURL",
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.createProject",
+    "onCommand:affinidi.viewProjectProperties",
+    "onCommand:affinidi.selectActiveProject",
     "onCommand:affinidi.openSchemaBuilder",
     "onCommand:affinidi.initiateIssuanceCsvFlow",
     "onCommand:affinidi.docs.availableSnippets",
@@ -113,6 +115,16 @@
       {
         "command": "affinidi.createProject",
         "title": "%affinidi.createProject%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidi.viewProjectProperties",
+        "title": "%affinidi.viewProjectProperties%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidi.selectActiveProject",
+        "title": "%affinidi.selectActiveProject%",
         "category": "Affinidi"
       },
       {
@@ -263,6 +275,10 @@
         },
         {
           "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.viewProjectProperties",
           "when": "never"
         },
         {

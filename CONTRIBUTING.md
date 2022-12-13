@@ -248,8 +248,8 @@ export class WalletState {
     return (await this.fetchWallets()).find((p) => p.walletId === walletId)
   }
 
-  async clear() {
-    await state.clearByPrefix(PREFIX)
+  clear() {
+    state.clearByPrefix(PREFIX)
   }
 
   private async fetchWallets(): Promise<WalletDto[]> {
