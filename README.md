@@ -1,5 +1,4 @@
 # Affinidi for Visual Studio Code
-_Build privacy-preserving apps in minutes_
 
 ## What is Affinidi?
 
