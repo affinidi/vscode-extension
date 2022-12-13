@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/affinidi/vscode-extension/compare/v1.6.0...v1.6.1) (2022-12-13)
+
+
+### Bug Fixes
+
+* Add CONTRIBUTING.md file ([#61](https://github.com/affinidi/vscode-extension/issues/61)) ([63433ec](https://github.com/affinidi/vscode-extension/commit/63433ecfcbf095001771e988e6e85ddf1287bdd9))
+* **housekeeping:** Telemetry & analytics improvements ([#66](https://github.com/affinidi/vscode-extension/issues/66)) ([59e59f9](https://github.com/affinidi/vscode-extension/commit/59e59f938deb50bcd293e65cb454f8746d9162a7))
+
 # [1.6.0](https://github.com/affinidi/vscode-extension/compare/v1.5.0...v1.6.0) (2022-12-12)
 
 
