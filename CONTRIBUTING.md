@@ -2,7 +2,7 @@
 
 ## Getting started
 
-Clone the repository and run `npm install` command
+Clone the repository and run `npm install` command.
 
 Some useful commands:
 - Run `npm test` to run integrated tests
@@ -18,6 +18,8 @@ Some useful commands:
 
 To debug the extension, just open the repository in your VS Code application and press `F5` (or `Run Extension` in the `Run in Debug` sidebar view).  
 This will open a new "Extension Host" VS Code window with the extension loaded in it.
+
+> Check out the in-depth instructions in the [vsc-extension-quickstart.md](vsc-extension-quickstart.md) file for running, debugging and testing the extension.
 
 ## Implementing a new feature
 
@@ -293,12 +295,15 @@ New telemetry events & methods can be added to the `src/features/telemetry/telem
 
 ## Messages
 
-We store all of our messages (errors, labels, etc.) in `src/messages/messages.ts` file.
+We store all of our messages (errors, labels, etc.) in `src/messages/messages.ts` file. Additionally all of the user facing texts used in the `package.json` are stored in `package.nls.json`.
 
 ## Configuration & credentials
 
-Configuration of the extension and CLI is stored in the `~/.affinidi/config.json` file.  
-Credentials and other sensitive data is stored in the `~/.affinidi/credentials.json` file.
+Configurations of the extension and CLI are stored in the `~/.affinidi/config.json` file.  
+This file persists even after user log out.
+
+Credentials and other sensitive data are stored in the `~/.affinidi/credentials.json` file.  
+This file is removed after user log out.
 
 You can access the data in these files by using `src/config/configVault.ts` and `src/config/credentialsVault.ts`:
 
