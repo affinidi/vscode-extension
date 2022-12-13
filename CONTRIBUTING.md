@@ -305,7 +305,7 @@ We store all of our messages (errors, labels, etc.) in `src/messages/messages.ts
 ## Configuration & credentials
 
 Configurations of the extension and CLI are stored in the `~/.affinidi/config.json` file.  This file persists even after user log out.
-Credentials and other sensitive data is stored in the `~/.affinidi/credentials.json` file.
+Credentials and other sensitive data are stored in the `~/.affinidi/credentials.json` file. This file is removed after user log out.
 
 You can access the data in these files by using `src/config/configVault.ts` and `src/config/credentialsVault.ts`:
 
