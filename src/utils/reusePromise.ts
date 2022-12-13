@@ -4,11 +4,19 @@ function areArraysStrictEqual(a: unknown[], b: unknown[]) {
   return (a.length === 0 && b.length === 0) || a.every((v, i) => v === b[i])
 }
 
+function removeFromArray<T>(array: T[], condition: (item: T) => boolean) {
+  const index = array.findIndex(condition)
+  if (index !== -1) {
+    array.splice(index, 1)
+  }
+}
+
 /**
- * Use this utility helps to avoid simultaneous duplicate requests.
- * It executes the method and stores the promise and execution arguments in memory.
- * Until the promise is resolved, calling the same method with the same arguments will reuse the existing promise.
- * This method is not always guaranteed to work because it compares the arguments using `===`.
+ * This utility helps to avoid simultaneous duplicate requests.
+ * It executes the method and stores the promise and arguments in memory.
+ * Until the promise is settled, calling the same method with the same arguments will reuse the existing promise.
+ * 
+ * This method is not always guaranteed to avoid duplicate requests because it compares the arguments using `===`.
  */
 export function reusePromise<T extends (...args: Parameters<T>) => Promisified<ReturnType<T>>>(method: T) {
   const executions: { args: Parameters<T>; promise: Promisified<ReturnType<T>> }[] = []
@@ -23,10 +31,7 @@ export function reusePromise<T extends (...args: Parameters<T>) => Promisified<R
     }
 
     const promise = method(...args).finally(() => {
-      const index = executions.findIndex((execution) => execution.promise === promise)
-      if (index !== -1) {
-        executions.splice(index, 1)
-      }
+      removeFromArray(executions, (execution) => execution.promise === promise)
     })
 
     executions.push({ args, promise })
