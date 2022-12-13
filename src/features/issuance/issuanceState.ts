@@ -44,7 +44,7 @@ export class IssuanceState {
           ),
       )
 
-      await ext.context.globalState.update(key, issuances)
+      ext.context.globalState.update(key, issuances)
 
       return issuances
     },

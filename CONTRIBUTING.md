@@ -258,7 +258,7 @@ export class WalletState {
     if (stored) return stored
 
     const { wallets } = await walletClient.listWallets()
-    await ext.context.globalState.update(key, wallets)
+    ext.context.globalState.update(key, wallets)
 
     return wallets
   }

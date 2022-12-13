@@ -62,7 +62,7 @@ export class IamState {
           ),
       )
 
-      await ext.context.globalState.update(key, projectSummary)
+      ext.context.globalState.update(key, projectSummary)
 
       return projectSummary
     },
@@ -79,7 +79,7 @@ export class IamState {
         iamClient.listProjects({ consoleAuthToken: await authHelper.getConsoleAuthToken() }),
     )
 
-    await ext.context.globalState.update(key, projects)
+    ext.context.globalState.update(key, projects)
 
     return projects
   })

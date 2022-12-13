@@ -54,7 +54,7 @@ export class SchemaManagerState {
         async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
       )
 
-      await ext.context.globalState.update(key, schemas)
+      ext.context.globalState.update(key, schemas)
 
       return schemas
     },
