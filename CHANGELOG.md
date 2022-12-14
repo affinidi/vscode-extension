@@ -1,3 +1,24 @@
+# [1.7.0](https://github.com/affinidi/vscode-extension/compare/v1.6.1...v1.7.0) (2022-12-14)
+
+
+### Bug Fixes
+
+* fixed Schema Builder UI attributes alignment styles ([#70](https://github.com/affinidi/vscode-extension/issues/70)) ([d027070](https://github.com/affinidi/vscode-extension/commit/d027070f1222e02442597ee2bd59991392ff0356))
+* use latest clients ([#71](https://github.com/affinidi/vscode-extension/issues/71)) ([4d40af0](https://github.com/affinidi/vscode-extension/commit/4d40af0c0e97f709642d071ae384894e42a0af85))
+
+
+### Features
+
+* add attributes for schema details webview ([#68](https://github.com/affinidi/vscode-extension/issues/68)) ([23b85dc](https://github.com/affinidi/vscode-extension/commit/23b85dc6b4b00c63824b1cc95616b0b68f40e9ef))
+
+## [1.6.1](https://github.com/affinidi/vscode-extension/compare/v1.6.0...v1.6.1) (2022-12-13)
+
+
+### Bug Fixes
+
+* Add CONTRIBUTING.md file ([#61](https://github.com/affinidi/vscode-extension/issues/61)) ([63433ec](https://github.com/affinidi/vscode-extension/commit/63433ecfcbf095001771e988e6e85ddf1287bdd9))
+* **housekeeping:** Telemetry & analytics improvements ([#66](https://github.com/affinidi/vscode-extension/issues/66)) ([59e59f9](https://github.com/affinidi/vscode-extension/commit/59e59f938deb50bcd293e65cb454f8746d9162a7))
+
 # [1.6.0](https://github.com/affinidi/vscode-extension/compare/v1.5.0...v1.6.0) (2022-12-12)
 
 

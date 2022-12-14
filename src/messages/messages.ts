@@ -125,6 +125,11 @@ export const schemaMessage = {
   invalidAttributeName: 'Invalid attribute name',
   invalidAttributeNameSuggestion:
     'Use camelCase and alphanumeric symbols (for example, "firstName")',
+  attributeName: 'Attribute name',
+  type: 'Type',
+  required: 'Required',
+  yes: 'Yes',
+  no: 'No',
 }
 
 export const snippetMessage = {

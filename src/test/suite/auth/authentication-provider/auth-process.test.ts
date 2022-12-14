@@ -11,7 +11,7 @@ describe('executeAuthProcess()', () => {
   const username = 'fake-username'
   const email = 'fake@example.com'
   const loginToken = 'fake-login-token'
-  const signupToken = 'fake-singup-token'
+  const signupToken = 'fake-signup-token'
   const confirmationCode = 'fake-confirmation-code'
   const consoleAuthToken = generateConsoleAuthToken({ userId, username })
 
