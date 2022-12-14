@@ -20,7 +20,7 @@ import { schemaManagerHelpers } from './features/schema-manager/schemaManagerHel
 import { showSchemaDetails } from './features/schema-manager/schema-details/showSchemaDetails'
 import { issuanceState } from './features/issuance/issuanceState'
 import { schemaManagerState } from './features/schema-manager/schemaManagerState'
-import { stateHelpers } from './stateHelpers'
+import { state } from './state'
 import { DevToolsTree } from './tree/devToolsTree'
 import { FeedbackTree } from './tree/feedbackTree'
 import { IamExplorerProvider } from './features/iam/tree/iamExplorerProvider'
@@ -61,9 +61,13 @@ export async function activateInternal(context: ExtensionContext) {
   ext.feedbackTree = new FeedbackTree()
 
   ext.context.subscriptions.push(
+    ext.authProvider.onDidChangeSessions(async () => {
+      state.clear()
+      ext.explorerTree.refresh()
+    }),
     {
       dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
-        stateHelpers.clear()
+        state.clear()
         ext.explorerTree.refresh()
 
         if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
@@ -73,7 +77,7 @@ export async function activateInternal(context: ExtensionContext) {
     },
     {
       dispose: configVault.onCurrentUserIdChange(async () => {
-        stateHelpers.clear()
+        state.clear()
         ext.explorerTree.refresh()
 
         updateCredentialsActiveProjectSummary()
@@ -114,7 +118,7 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand('affinidiExplorer.refreshAll', () => {
       telemetryHelpers.trackCommand('affinidiExplorer.refreshAll')
-      stateHelpers.clear()
+      state.clear()
       ext.explorerTree.refresh()
     }),
   )
@@ -134,7 +138,7 @@ export async function activateInternal(context: ExtensionContext) {
         schemaManagerState.clear()
       }
     } else {
-      stateHelpers.clear()
+      state.clear()
     }
 
     ext.explorerTree.refresh(element)

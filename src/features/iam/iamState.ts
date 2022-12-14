@@ -3,7 +3,7 @@ import { window, ProgressLocation, EventEmitter, Disposable } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { authHelper } from '../../auth/authHelper'
 import { projectMessage } from '../../messages/messages'
-import { stateHelpers } from '../../stateHelpers'
+import { state } from '../../state'
 import { iamClient } from './iamClient'
 
 const PREFIX = 'iam:'
@@ -44,13 +44,13 @@ export class IamState {
   }
 
   clear() {
-    stateHelpers.clearByPrefix(PREFIX)
+    state.clearByPrefix(PREFIX)
   }
 
   onDidUpdate(listener: () => unknown): Disposable {
     return Disposable.from(
       this.onDidUpdateEmitter.event(listener),
-      stateHelpers.onDidClear((prefix) => {
+      state.onDidClear((prefix) => {
         if (!prefix || prefix.startsWith(PREFIX)) {
           listener()
         }
@@ -60,7 +60,7 @@ export class IamState {
 
   private async fetchProjectSummary(projectId: string): Promise<ProjectSummary | undefined> {
     const key = storageKey(`summary:${projectId}`)
-    const stored = stateHelpers.get<ProjectSummary>(key)
+    const stored = state.get<ProjectSummary>(key)
     if (stored) return stored
 
     const projectSummary = await window.withProgress(
@@ -72,7 +72,7 @@ export class IamState {
         ),
     )
 
-    stateHelpers.update(key, projectSummary)
+    state.update(key, projectSummary)
     this.onDidUpdateEmitter.fire()
 
     return projectSummary
@@ -80,7 +80,7 @@ export class IamState {
 
   private async fetchProjects(): Promise<ProjectDto[]> {
     const key = storageKey('list')
-    const stored = stateHelpers.get<ProjectDto[]>(key)
+    const stored = state.get<ProjectDto[]>(key)
     if (stored) return stored
 
     const { projects } = await window.withProgress(
@@ -89,7 +89,7 @@ export class IamState {
         iamClient.listProjects({ consoleAuthToken: await authHelper.getConsoleAuthToken() }),
     )
 
-    stateHelpers.update(key, projects)
+    state.update(key, projects)
     this.onDidUpdateEmitter.fire()
 
     return projects

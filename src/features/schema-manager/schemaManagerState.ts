@@ -1,7 +1,7 @@
 import { SchemaDto, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { window, ProgressLocation } from 'vscode'
 import { schemaMessage } from '../../messages/messages'
-import { stateHelpers } from '../../stateHelpers'
+import { state } from '../../state'
 import { iamState } from '../iam/iamState'
 import { schemaManagerClient } from './schemaManagerClient'
 
@@ -33,12 +33,12 @@ export class SchemaManagerState {
   }
 
   clear() {
-    stateHelpers.clearByPrefix(PREFIX)
+    state.clearByPrefix(PREFIX)
   }
 
   private async fetchAuthoredSchemas(projectId: string): Promise<SchemaDto[]> {
     const key = storageKey(`authored:by-project:${projectId}`)
-    const stored = stateHelpers.get<SchemaDto[]>(key)
+    const stored = state.get<SchemaDto[]>(key)
     if (stored) return stored
 
     const {
@@ -51,7 +51,7 @@ export class SchemaManagerState {
       async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
     )
 
-    stateHelpers.update(key, schemas)
+    state.update(key, schemas)
 
     return schemas
   }

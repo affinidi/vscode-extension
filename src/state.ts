@@ -3,7 +3,7 @@ import { ext } from './extensionVariables'
 
 const onDidClearEmitter = new EventEmitter<string | undefined>()
 
-export const stateHelpers = {
+export const state = {
   clear() {
     this.clearByPrefix()
   },
@@ -24,5 +24,5 @@ export const stateHelpers = {
   },
   onDidClear(listener: (prefix: string | undefined) => unknown): Disposable {
     return onDidClearEmitter.event(listener)
-  }
+  },
 }

@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { iamState } from '../../../../features/iam/iamState'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { IssuanceState } from '../../../../features/issuance/issuanceState'
-import { stateHelpers } from '../../../../stateHelpers'
+import { state } from '../../../../state'
 import { sandbox } from '../../setup'
 
 describe('IssuanceState', () => {
@@ -19,7 +19,7 @@ describe('IssuanceState', () => {
 
     issuanceState = new IssuanceState()
 
-    stateHelpers.clear()
+    state.clear()
   })
 
   describe('listIssuances()', () => {
