@@ -79,7 +79,6 @@
 }
 
 .parent-attribute > .attribute-details {
-  background: #2a2a2a;
   border: 1px solid rgb(193, 196, 204);
   z-index: 1;
 }
@@ -109,6 +108,11 @@
   top: 0;
   bottom: 0;
   height: auto;
+}
+
+.no-siblings:before {
+  top: 0;
+  height: 20px;
 }
 
 .attribute:after {
