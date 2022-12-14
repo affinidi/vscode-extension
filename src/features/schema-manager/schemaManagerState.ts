@@ -1,9 +1,7 @@
 import { SchemaDto, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { window, ProgressLocation } from 'vscode'
-import { ext } from '../../extensionVariables'
 import { schemaMessage } from '../../messages/messages'
 import { stateHelpers } from '../../stateHelpers'
-import { reusePromise } from '../../utils/reusePromise'
 import { iamState } from '../iam/iamState'
 import { schemaManagerClient } from './schemaManagerClient'
 
@@ -38,27 +36,25 @@ export class SchemaManagerState {
     stateHelpers.clearByPrefix(PREFIX)
   }
 
-  private fetchAuthoredSchemas = reusePromise(
-    async (projectId: string): Promise<SchemaDto[]> => {
-      const key = storageKey(`authored:by-project:${projectId}`)
-      const stored = stateHelpers.get<SchemaDto[]>(key)
-      if (stored) return stored
+  private async fetchAuthoredSchemas(projectId: string): Promise<SchemaDto[]> {
+    const key = storageKey(`authored:by-project:${projectId}`)
+    const stored = stateHelpers.get<SchemaDto[]>(key)
+    if (stored) return stored
 
-      const {
-        wallet: { did },
-        apiKey: { apiKeyHash },
-      } = await iamState.requireProjectSummary(projectId)
+    const {
+      wallet: { did },
+      apiKey: { apiKeyHash },
+    } = await iamState.requireProjectSummary(projectId)
 
-      const { schemas } = await window.withProgress(
-        { location: ProgressLocation.Notification, title: schemaMessage.fetchingSchemas },
-        async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
-      )
+    const { schemas } = await window.withProgress(
+      { location: ProgressLocation.Notification, title: schemaMessage.fetchingSchemas },
+      async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
+    )
 
-      stateHelpers.update(key, schemas)
+    stateHelpers.update(key, schemas)
 
-      return schemas
-    },
-  )
+    return schemas
+  }
 }
 
 export const schemaManagerState = new SchemaManagerState()

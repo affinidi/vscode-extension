@@ -2,7 +2,6 @@ import { Disposable, StatusBarAlignment, StatusBarItem, window } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
-import { reusePromise } from '../../utils/reusePromise'
 import { iamState } from './iamState'
 
 export class IamStatusBar implements Disposable {
@@ -12,7 +11,7 @@ export class IamStatusBar implements Disposable {
     this.item = window.createStatusBarItem(StatusBarAlignment.Left, 0)
   }
 
-  update = reusePromise(async () => {
+  async update() {
     try {
       const { text, command } = await this._generateItem()
       this.item.text = text
@@ -23,7 +22,7 @@ export class IamStatusBar implements Disposable {
       notifyError(error)
       this.item.hide()
     }
-  })
+  }
 
   private async _generateItem(): Promise<{ text: string; command: string }> {
     const currentUserId = configVault.getCurrentUserId()

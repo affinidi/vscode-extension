@@ -5,7 +5,6 @@ import { authHelper } from '../../auth/authHelper'
 import { projectMessage } from '../../messages/messages'
 import { stateHelpers } from '../../stateHelpers'
 import { iamClient } from './iamClient'
-import { reusePromise } from '../../utils/reusePromise'
 
 const PREFIX = 'iam:'
 const storageKey = (input: string) => PREFIX + input
@@ -59,29 +58,27 @@ export class IamState {
     )
   }
 
-  private fetchProjectSummary = reusePromise(
-    async (projectId: string): Promise<ProjectSummary | undefined> => {
-      const key = storageKey(`summary:${projectId}`)
-      const stored = stateHelpers.get<ProjectSummary>(key)
-      if (stored) return stored
+  private async fetchProjectSummary(projectId: string): Promise<ProjectSummary | undefined> {
+    const key = storageKey(`summary:${projectId}`)
+    const stored = stateHelpers.get<ProjectSummary>(key)
+    if (stored) return stored
 
-      const projectSummary = await window.withProgress(
-        { location: ProgressLocation.Notification, title: projectMessage.fetchingProjectSummary },
-        async () =>
-          iamClient.getProjectSummary(
-            { projectId },
-            { consoleAuthToken: await authHelper.getConsoleAuthToken() },
-          ),
-      )
+    const projectSummary = await window.withProgress(
+      { location: ProgressLocation.Notification, title: projectMessage.fetchingProjectSummary },
+      async () =>
+        iamClient.getProjectSummary(
+          { projectId },
+          { consoleAuthToken: await authHelper.getConsoleAuthToken() },
+        ),
+    )
 
-      stateHelpers.update(key, projectSummary)
-      this.onDidUpdateEmitter.fire()
+    stateHelpers.update(key, projectSummary)
+    this.onDidUpdateEmitter.fire()
 
-      return projectSummary
-    },
-  )
+    return projectSummary
+  }
 
-  private fetchProjects = reusePromise(async (): Promise<ProjectDto[]> => {
+  private async fetchProjects(): Promise<ProjectDto[]> {
     const key = storageKey('list')
     const stored = stateHelpers.get<ProjectDto[]>(key)
     if (stored) return stored
@@ -96,7 +93,7 @@ export class IamState {
     this.onDidUpdateEmitter.fire()
 
     return projects
-  })
+  }
 }
 
 export const iamState = new IamState()
