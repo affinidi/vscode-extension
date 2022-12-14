@@ -79,7 +79,7 @@ function main() {
       render()
     }
   })
-  
+
   const submitButton = document.querySelector(SUBMIT_BUTTON_SELECTOR)
   submitButton.addEventListener('click', () => {
     submitButton.disabled = true;
@@ -229,26 +229,26 @@ function renderSchema(schema, { onRemoveAttribute, onAddAttribute }) {
 
   for (const button of document.querySelectorAll(ADD_ATTRIBUTE_BUTTON_SELECTOR)) {
     button.addEventListener('click', () => onAddAttribute(button.dataset.parentId))
-  }  
+  }
 }
 
 function createAttributeElement(attribute, level) {
   const isNested = level > 0
 
   const attributeElement = createElement(`
-    <section class="wrapper" style="margin-left: ${level * NESTED_MARGIN_PX}px;" id="${attribute.id}"> 
+    <section class="wrapper" style="margin-left: ${level * NESTED_MARGIN_PX}px;" id="${attribute.id}">
       <div class="box-row">
-        <div class="box" style="width: calc(250px - ${level * NESTED_MARGIN_PX}px);">
+        <div class="box" style="min-width: calc(250px - ${level * NESTED_MARGIN_PX}px);">
           <label>${nbsp(isNested ? 'Nested attribute name' : 'Attribute name')}</label>
           <vscode-text-field size="40" class="attribute__name"></vscode-text-field>
         </div>
 
-        <div class="box" style="width: 250px;">
+        <div class="box" style="min-width: 250px;">
           <label>${nbsp('Description (optional)')}</label>
           <vscode-text-field size="40" class="attribute__description"></vscode-text-field>
         </div>
-        
-        <div class="box" style="width: 150px;">
+
+        <div class="box" style="min-width: 150px;">
           <label>Type</label>
           <vscode-dropdown class="attribute__type">
             ${ATTRIBUTE_TYPE_OPTIONS.map(
