@@ -28,7 +28,7 @@ export class IamStatusBar implements Disposable {
     const currentUserId = configVault.getCurrentUserId()
     if (!currentUserId) {
       return {
-        text: '$(account) Affinidi: Not authenticated',
+        text: 'Affinidi',
         command: 'affinidi.authenticate',
       }
     }
@@ -36,7 +36,7 @@ export class IamStatusBar implements Disposable {
     const activeProjectId = await configVault.getActiveProjectId()
     if (!activeProjectId) {
       return {
-        text: '$(file-directory-create) Affinidi: Create a project',
+        text: 'Affinidi',
         command: 'affinidi.createProject',
       }
     }
@@ -45,7 +45,7 @@ export class IamStatusBar implements Disposable {
     const projects = await iamState.listProjects()
 
     return {
-      text: `$(project) Affinidi: ${activeProject.name}`,
+      text: `Affinidi: ${activeProject.name}`,
       command:
         projects.length > 1 ? 'affinidi.selectActiveProject' : 'affinidi.viewProjectProperties',
     }
