@@ -25,6 +25,7 @@ export const renderTree = (subFields?: SchemaField[], nestedLevel = 0): string |
             ${nestedLevel === 0 ? 'parent-attribute' : ''}
             ${nestedLevel > 0 ? 'attribute' : ''}
             ${hasSibling ? 'has-sibling' : ''}
+            ${nestedLevel > 0 && subFields.length === 1 ? 'no-siblings' : ''}
           "
         >
           <div class="flex flex-1 attribute-details">
