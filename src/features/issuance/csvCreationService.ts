@@ -123,15 +123,15 @@ const initiateIssuanceCsvFlow = async (input: {
     return
   }
 
-  const schema = input.schema ?? (await schemaManagerHelpers.askForAuthoredSchema({ projectId }))
-  if (!schema) return
-
   const supported = [CSVImplementation.openCsvTemplate, CSVImplementation.uploadCsvFile]
 
   const selectedValue = await showQuickPick(
     supported.map((implementation) => [implementationLabels[implementation], implementation]),
     { title: snippetMessage.selectImplementation },
   )
+
+  const schema = input.schema ?? (await schemaManagerHelpers.askForAuthoredSchema({ projectId }))
+  if (!schema) return
 
   switch (selectedValue) {
     case CSVImplementation.openCsvTemplate:
