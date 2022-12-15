@@ -1,8 +1,8 @@
 import { window, Uri, commands } from 'vscode'
-import * as path from 'path'
+import path from 'path'
 import { expect } from 'chai'
-import * as sinon from 'sinon'
-import * as fs from 'fs'
+import sinon from 'sinon'
+import fs from 'fs'
 import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
 

@@ -1,5 +1,5 @@
 import nodeFetch from 'node-fetch'
-import * as path from 'path'
+import path from 'path'
 import { window, ProgressLocation } from 'vscode'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'

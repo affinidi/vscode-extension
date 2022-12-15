@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as path from 'path'
+import path from 'path'
 import { commands, ExtensionContext, Uri, window, env, workspace, ProgressLocation } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'

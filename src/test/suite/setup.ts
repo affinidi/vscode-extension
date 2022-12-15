@@ -1,9 +1,9 @@
-import * as sourceMapSupport from 'source-map-support'
-import * as sinon from 'sinon'
-import * as chai from 'chai'
-import * as sinonChai from 'sinon-chai'
-import * as chaiAsPromised from 'chai-as-promised'
-import * as deepEqualInAnyOrder from 'deep-equal-in-any-order'
+import sourceMapSupport from 'source-map-support'
+import sinon from 'sinon'
+import chai from 'chai'
+import sinonChai from 'sinon-chai'
+import chaiAsPromised from 'chai-as-promised'
+import deepEqualInAnyOrder from 'deep-equal-in-any-order'
 
 sourceMapSupport.install()
 
