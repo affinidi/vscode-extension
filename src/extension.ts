@@ -290,7 +290,7 @@ export async function activateInternal(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand('affinidi.initiateIssuanceCsvFlow', async () => {
       telemetryHelpers.trackCommand('affinidi.initiateIssuanceCsvFlow')
-      
+
       await csvCreationService.initiateIssuanceCsvFlow({})
     }),
   )
