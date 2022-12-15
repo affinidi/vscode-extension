@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/affinidi/vscode-extension/compare/v1.8.0...v1.8.1) (2022-12-15)
+
+
+### Bug Fixes
+
+* IAM status bar item fix (fast-deep-equal import) ([#75](https://github.com/affinidi/vscode-extension/issues/75)) ([7f88686](https://github.com/affinidi/vscode-extension/commit/7f88686a44c27e5ebc26ab66443682808117b781))
+
 # [1.8.0](https://github.com/affinidi/vscode-extension/compare/v1.7.0...v1.8.0) (2022-12-15)
 
 
