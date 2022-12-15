@@ -30,7 +30,7 @@ describe('IamState', () => {
 
     iamState = new IamState()
 
-    await state.clear()
+    state.clear()
   })
 
   describe('listProjects()', () => {
@@ -39,7 +39,7 @@ describe('IamState', () => {
       await expect(iamState.listProjects()).to.eventually.deep.eq(projects)
       expect(iamClient.listProjects).calledOnce
 
-      await iamState.clear()
+      iamState.clear()
 
       await expect(iamState.listProjects()).to.eventually.deep.eq(projects)
       expect(iamClient.listProjects).calledTwice
@@ -54,7 +54,7 @@ describe('IamState', () => {
       await expect(iamState.getProjectById('fake-project-2')).to.eventually.deep.eq(project2)
       expect(iamClient.listProjects).calledOnce
 
-      await iamState.clear()
+      iamState.clear()
 
       await expect(iamState.getProjectById('fake-project-1')).to.eventually.deep.eq(project1)
       expect(iamClient.listProjects).calledTwice
@@ -66,7 +66,7 @@ describe('IamState', () => {
       await expect(iamState.requireActiveProject()).to.eventually.deep.eq(projects[0])
       expect(iamClient.listProjects).calledOnce
 
-      await iamState.clear()
+      iamState.clear()
 
       await expect(iamState.requireActiveProject()).to.eventually.deep.eq(projects[0])
       expect(iamClient.listProjects).calledTwice
@@ -84,7 +84,7 @@ describe('IamState', () => {
       await expect(iamState.getInactiveProjects()).to.eventually.deep.eq([projects[1]])
       expect(iamClient.listProjects).calledOnce
 
-      await iamState.clear()
+      iamState.clear()
 
       await expect(iamState.getInactiveProjects()).to.eventually.deep.eq([projects[1]])
       expect(iamClient.listProjects).calledTwice
@@ -109,7 +109,7 @@ describe('IamState', () => {
       )
       expect(iamClient.getProjectSummary).calledTwice
 
-      await iamState.clear()
+      iamState.clear()
 
       await expect(iamState.requireProjectSummary('fake-project-1')).to.eventually.deep.eq(
         project1Summary,

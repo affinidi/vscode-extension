@@ -65,12 +65,6 @@ const showSchemaFile = async (
       const fetchedData = await fetch(url)
       const schemaContent = await fetchedData.json()
 
-      console.log({
-        node: { label: schemaManagerHelpers.getSchemaName(schema), id: schema.id },
-        content: schemaContent,
-        fileExtension: path.extname(url),
-      })
-
       await readOnlyContentViewer.open({
         node: { label: schemaManagerHelpers.getSchemaName(schema), id: schema.id },
         content: schemaContent,

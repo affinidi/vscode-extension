@@ -9,7 +9,6 @@ import { showElementProperties } from './features/showElementProperties'
 import { initSnippets } from './snippets/initSnippets'
 import { initGenerators } from './generators/initGenerators'
 import { getFeatureMarkdownUri } from './features/getFeatureMarkdownUri'
-import { createProjectProcess } from './features/iam/createProjectProcess'
 import { csvCreationService } from './features/issuance/csvCreationService'
 import { logger } from './utils/logger'
 import { ExplorerTree } from './tree/explorerTree'
@@ -26,7 +25,7 @@ import { DevToolsTree } from './tree/devToolsTree'
 import { FeedbackTree } from './tree/feedbackTree'
 import { IamExplorerProvider } from './features/iam/tree/iamExplorerProvider'
 import { BasicTreeItem } from './tree/basicTreeItem'
-import { InactiveProjectTreeItem, ProjectFeatureTreeItem } from './features/iam/tree/treeItems'
+import { ProjectFeatureTreeItem } from './features/iam/tree/treeItems'
 import { Feature } from './features/feature'
 import { iamState } from './features/iam/iamState'
 import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
@@ -34,9 +33,9 @@ import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
-import { projectMessage } from './messages/messages'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
+import { initIam } from './features/iam/initIam'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -52,9 +51,6 @@ export async function activateInternal(context: ExtensionContext) {
   ext.outputChannel = window.createOutputChannel('Affinidi')
   ext.authProvider = initAuthentication()
 
-  initSnippets()
-  initGenerators()
-
   ext.explorerTree = new ExplorerTree([
     new AuthExplorerProvider(),
     new IamExplorerProvider(),
@@ -66,20 +62,27 @@ export async function activateInternal(context: ExtensionContext) {
 
   ext.context.subscriptions.push(
     ext.authProvider.onDidChangeSessions(async () => {
-      await state.clear()
+      state.clear()
       ext.explorerTree.refresh()
     }),
     {
       dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
-        if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
-          await updateCredentialsActiveProjectSummary()
-        }
-
-        await state.clear()
+        state.clear()
         ext.explorerTree.refresh()
+
+        if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
+          updateCredentialsActiveProjectSummary()
+        }
       }),
     },
-    { dispose: configVault.onCurrentUserIdChange(() => updateCredentialsActiveProjectSummary()) },
+    {
+      dispose: configVault.onCurrentUserIdChange(async () => {
+        state.clear()
+        ext.explorerTree.refresh()
+
+        updateCredentialsActiveProjectSummary()
+      }),
+    },
   )
 
   const treeView = window.createTreeView('affinidiExplorer', {
@@ -112,7 +115,15 @@ export async function activateInternal(context: ExtensionContext) {
     }
   })
 
-  commands.registerCommand('affinidiExplorer.refresh', async (element: BasicTreeItem) => {
+  context.subscriptions.push(
+    commands.registerCommand('affinidiExplorer.refreshAll', () => {
+      telemetryHelpers.trackCommand('affinidiExplorer.refreshAll')
+      state.clear()
+      ext.explorerTree.refresh()
+    }),
+  )
+
+  commands.registerCommand('affinidiExplorer.refresh', (element: BasicTreeItem) => {
     telemetryHelpers.trackCommand('affinidiExplorer.refresh', {
       feature: element instanceof ProjectFeatureTreeItem ? element.feature : undefined,
       projectId: element instanceof BasicTreeItemWithProject ? element.projectId : undefined,
@@ -120,14 +131,14 @@ export async function activateInternal(context: ExtensionContext) {
 
     if (element instanceof ProjectFeatureTreeItem) {
       if (element.feature === Feature.DIGITAL_IDENTITIES) {
-        await iamState.clear()
+        iamState.clear()
       } else if (element.feature === Feature.ISSUANCES) {
-        await issuanceState.clear()
+        issuanceState.clear()
       } else if (element.feature === Feature.SCHEMAS) {
-        await schemaManagerState.clear()
+        schemaManagerState.clear()
       }
     } else {
-      await state.clear()
+      state.clear()
     }
 
     ext.explorerTree.refresh(element)
@@ -225,22 +236,6 @@ export async function activateInternal(context: ExtensionContext) {
     },
   )
 
-  commands.registerCommand(
-    'affinidiExplorer.activateProject',
-    async (element: InactiveProjectTreeItem) => {
-      telemetryHelpers.trackCommand('affinidiExplorer.activateProject', {
-        projectId: element.projectId,
-      })
-
-      await configVault.setUserConfig({ activeProjectId: element.projectId })
-
-      await iamState.clear()
-      ext.explorerTree.refresh()
-
-      window.showInformationMessage(projectMessage.activatedProject)
-    },
-  )
-
   context.subscriptions.push(
     commands.registerCommand(
       'affinidiExplorer.initiateIssuanceCsvFlow',
@@ -327,16 +322,6 @@ export async function activateInternal(context: ExtensionContext) {
   )
 
   context.subscriptions.push(
-    commands.registerCommand('affinidi.createProject', async () => {
-      telemetryHelpers.trackCommand('affinidi.createProject')
-
-      await createProjectProcess()
-      await iamState.clear()
-      ext.explorerTree.refresh()
-    }),
-  )
-
-  context.subscriptions.push(
     commands.registerCommand('affinidiFeedback.reportIssue', () => {
       telemetryHelpers.trackCommand('affinidiFeedback.reportIssue')
       commands.executeCommand('vscode.open', GITHUB_NEW_ISSUE_URL)
@@ -407,6 +392,10 @@ export async function activateInternal(context: ExtensionContext) {
 
   telemetryHelpers.askUserForTelemetryConsent()
   updateCredentialsActiveProjectSummary()
+
+  initSnippets()
+  initGenerators()
+  initIam()
 
   logger.info({}, 'Affinidi extension is now active!')
 }

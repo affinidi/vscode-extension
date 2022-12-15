@@ -27,7 +27,7 @@ async function createDefaultProject(): Promise<void> {
       ),
   )
 
-  await iamState.clear()
+  iamState.clear()
   ext.explorerTree.refresh()
 }
 

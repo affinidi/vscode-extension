@@ -19,7 +19,7 @@ describe('IssuanceState', () => {
 
     issuanceState = new IssuanceState()
 
-    await state.clear()
+    state.clear()
   })
 
   describe('listIssuances()', () => {
@@ -28,7 +28,7 @@ describe('IssuanceState', () => {
       await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
       expect(issuanceClient.searchIssuances).calledOnce
 
-      await issuanceState.clear()
+      issuanceState.clear()
 
       await expect(issuanceState.listIssuances({ projectId })).to.eventually.deep.eq(issuances)
       expect(issuanceClient.searchIssuances).calledTwice
@@ -47,7 +47,7 @@ describe('IssuanceState', () => {
       ).to.eventually.deep.eq(issuance2)
       expect(issuanceClient.searchIssuances).calledOnce
 
-      await issuanceState.clear()
+      issuanceState.clear()
 
       await expect(
         issuanceState.getIssuanceById({ projectId, issuanceId: 'fake-issuance-1' }),

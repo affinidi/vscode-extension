@@ -109,8 +109,6 @@ class ConfigVault {
       }
     })
   }
-
-  onDidChange = this.store.onDidChange.bind(this.store)
 }
 
 const configConf = new Conf<ConfigType>({
