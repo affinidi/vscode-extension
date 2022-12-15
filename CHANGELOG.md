@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/affinidi/vscode-extension/compare/v1.7.0...v1.8.0) (2022-12-15)
+
+
+### Bug Fixes
+
+* fix styles form schema detail attributes ([#72](https://github.com/affinidi/vscode-extension/issues/72)) ([2a76f23](https://github.com/affinidi/vscode-extension/commit/2a76f233a5b458625677e55404d9bb1dcf3d06f3))
+
+
+### Features
+
+* Add IAM status bar item & minor improvements ([#73](https://github.com/affinidi/vscode-extension/issues/73)) ([db14eb3](https://github.com/affinidi/vscode-extension/commit/db14eb3cca84dc9665a05ae2a05f921bc2a6dc8d))
+* **FTL-8448:** Moving inplementation quickpick to start of flow command ([#74](https://github.com/affinidi/vscode-extension/issues/74)) ([8db6972](https://github.com/affinidi/vscode-extension/commit/8db6972bb9754a4f52016998fce2b8330ed732d4))
+
 # [1.7.0](https://github.com/affinidi/vscode-extension/compare/v1.6.1...v1.7.0) (2022-12-14)
 
 
