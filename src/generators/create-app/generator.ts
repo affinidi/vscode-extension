@@ -1,4 +1,4 @@
-import * as path from 'path'
+import path from 'path'
 import { ProgressLocation, window, Uri } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { ext } from '../../extensionVariables'

@@ -1,7 +1,7 @@
 import { ProjectSummary } from '@affinidi/client-iam'
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { SchemaDto } from '@affinidi/client-schema-manager'
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { AuthenticationSession } from 'vscode'
 import { EXAMPLE_SCHEMA } from '../../features/schema-manager/schemaManagerHelpers'
 
