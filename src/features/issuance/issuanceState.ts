@@ -1,6 +1,5 @@
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { ProgressLocation, window } from 'vscode'
-import { ext } from '../../extensionVariables'
 import { issuanceMessage } from '../../messages/messages'
 import { state } from '../../state'
 import { iamState } from '../iam/iamState'
@@ -23,13 +22,13 @@ export class IssuanceState {
     )
   }
 
-  async clear() {
-    await state.clearByPrefix(PREFIX)
+  clear() {
+    state.clearByPrefix(PREFIX)
   }
 
   private async fetchIssuancesByProject(projectId: string): Promise<IssuanceDto[]> {
     const key = storageKey(`by-project:${projectId}`)
-    const stored = ext.context.globalState.get<IssuanceDto[]>(key)
+    const stored = state.get<IssuanceDto[]>(key)
     if (stored) return stored
 
     const projectSummary = await iamState.requireProjectSummary(projectId)
@@ -42,7 +41,7 @@ export class IssuanceState {
         ),
     )
 
-    await ext.context.globalState.update(key, issuances)
+    state.update(key, issuances)
 
     return issuances
   }

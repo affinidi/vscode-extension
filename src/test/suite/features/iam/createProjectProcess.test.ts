@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import * as sinon from 'sinon'
+import sinon from 'sinon'
 import { window } from 'vscode'
 
 import { sandbox } from '../../setup'

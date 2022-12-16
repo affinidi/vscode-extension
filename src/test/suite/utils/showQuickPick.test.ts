@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { window } from 'vscode'
-import * as sinon from 'sinon'
+import sinon from 'sinon'
 
 import { showQuickPick } from '../../../utils/showQuickPick'
 import { sandbox } from '../setup'

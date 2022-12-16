@@ -1,5 +1,5 @@
 import nodeFetch from 'node-fetch'
-import * as path from 'path'
+import path from 'path'
 import { window, ProgressLocation } from 'vscode'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
@@ -64,12 +64,6 @@ const showSchemaFile = async (
 
       const fetchedData = await fetch(url)
       const schemaContent = await fetchedData.json()
-
-      console.log({
-        node: { label: schemaManagerHelpers.getSchemaName(schema), id: schema.id },
-        content: schemaContent,
-        fileExtension: path.extname(url),
-      })
 
       await readOnlyContentViewer.open({
         node: { label: schemaManagerHelpers.getSchemaName(schema), id: schema.id },
