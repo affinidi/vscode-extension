@@ -391,7 +391,6 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand('affinidi.verifyAVC', async () => {
     telemetryHelpers.trackCommand('affinidi.verifyAVC')
-    console.log('hitting command in extension')
 
     verifyAVC()
   })

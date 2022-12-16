@@ -105,7 +105,9 @@ export const issuanceMessage = {
   fetchingIssuances: 'Fetching project issuances...',
   selectIssuance: 'Select an Issuance',
   noIssuances: "You don't have any issuances to choose from",
-  vcVerified: 'Successfully verified the VC',
+  vcBeingVerified: 'VC verification in progress...',
+  vcVerified: 'VC Verified',
+  vcNotVerified: 'VC Not Verified',
 }
 
 export const schemaMessage = {

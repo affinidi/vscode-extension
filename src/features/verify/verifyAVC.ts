@@ -6,80 +6,37 @@ import { iamState } from '../iam/iamState'
 import { verifierClient } from './verifyClient'
 import { verifyHelpers } from './verifyHelper'
 
-const exampleCredential = {
-  verifiableCredentials: [
-    {
-      '@context': 'content',
-      id: '123',
-      type: ['string'],
-      holder: null,
-      credentialSubject: {
-        id: 'string',
-      },
-      credentialStatus: null,
-      issuanceDate: 'string',
-      issuer: 'string',
-      expirationDate: 'string',
-      proof: {
-        type: 'string',
-        created: 'string',
-        verificationMethod: 'string',
-        proofPurpose: 'string',
-        jws: 'string',
-        proofValue: 'string',
-        nonce: 'string',
-      },
-      credentialSchema: {
-        type: 'string',
-        id: 'string',
-      },
-    },
-  ],
-  issuerDidDocument: {
-    freeFormObject: 'string',
-  },
-}
-
-const exampleCredReadbale = JSON.parse(JSON.stringify(exampleCredential, null, 2))
-console.log(exampleCredReadbale)
-
-export const verifyAVC = async (input: VerifyCredentialInput) => {
+export const verifyAVC = async (vc?: VerifyCredentialInput) => {
   const { projectId } = await iamState.requireActiveProject()
-  console.log('projectId', projectId)
-
-  console.log('called')
-
   const {
     apiKey: { apiKeyHash },
   } = await iamState.requireProjectSummary(projectId)
-  console.log(apiKeyHash)
-
-  const vcInput = input ?? (await verifyHelpers.verifyInput())
+  const vcInput = vc ?? (await verifyHelpers.verifyInput())
   if (!vcInput) return
-  console.log(vcInput)
 
   try {
-    const verifiableVC = await window.withProgress(
+    const data = await window.withProgress(
       {
         location: ProgressLocation.Notification,
-        title: issuanceMessage.vcVerified,
+        title: issuanceMessage.vcBeingVerified,
       },
       () => {
-        // return verifiableVC
-        return verifierClient.verifyCredentials(exampleCredReadbale, { apiKeyHash })
-        // check for the response from the verifier
+        return verifierClient.verifyCredentials({ verifiableCredentials: [vc] }, { apiKeyHash })
       },
     )
 
-    if (verifiableVC) {
+    if (data.isValid === true) {
       window.showInformationMessage(issuanceMessage.vcVerified)
-      ext.outputChannel.appendLine(issuanceMessage.vcVerified)
+      ext.outputChannel.appendLine(JSON.stringify(data, null, 2))
       ext.outputChannel.show()
     }
-  } catch (error) {
-    const verifyError = error.toString()
-    window.showInformationMessage(verifyError)
-    ext.outputChannel.appendLine(verifyError)
-    ext.outputChannel.show()
+
+    if (data.isValid === false) {
+      window.showInformationMessage(issuanceMessage.vcNotVerified)
+      ext.outputChannel.appendLine(JSON.stringify(data, null, 2))
+      ext.outputChannel.show()
+    }
+  } catch (error: unknown) {
+    console.log(error)
   }
 }
