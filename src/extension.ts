@@ -2,7 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as path from 'path'
-import { commands, ExtensionContext, Uri, window, env, workspace, ProgressLocation } from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, workspace } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
@@ -32,7 +32,6 @@ import { iamState } from './features/iam/iamState'
 import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager/tree/treeItems'
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
-import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
 import { projectMessage } from './messages/messages'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
@@ -398,11 +397,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {
     telemetryHelpers.trackCommand('affinidi.openSchemaBuilder')
 
-    try {
-      openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
-    } catch (error) {
-      notifyError(error)
-    }
+    openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
   })
 
   telemetryHelpers.askUserForTelemetryConsent()

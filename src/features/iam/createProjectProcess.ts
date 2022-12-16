@@ -28,8 +28,8 @@ export const createProjectProcess = async (): Promise<void> => {
     )
 
     window.showInformationMessage(projectMessage.successfulProjectCreation)
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error(error, projectMessage.projectNotCreated)
-    notifyError(error, `${projectMessage.projectNotCreated} ${projectMessage.pleaseTryAgain}`)
+    notifyError(error, projectMessage.projectNotCreated)
   }
 }

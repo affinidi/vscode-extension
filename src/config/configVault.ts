@@ -59,7 +59,7 @@ class ConfigVault {
   async getActiveProjectId(): Promise<string | undefined> {
     try {
       return await this.requireActiveProjectId()
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof NoProjectsError || error instanceof NoCurrentUser) {
         return undefined
       }

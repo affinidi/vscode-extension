@@ -90,7 +90,6 @@ export const projectMessage = {
   projectNotCreated: 'Project could not be created.',
   noProjectSummary: 'Could not find project summary: {0}',
   missingProjectID: 'Project ID is not provided',
-  pleaseTryAgain: 'Please try again later',
   projectDoesNotExist: 'Project does not exist.',
   projectNotFound: (projectId: string) => `Project not found: ${projectId}`,
   errorFetchingActiveProject: 'Error while fetching the active project.',
@@ -162,7 +161,7 @@ export const cliMessage = {
     'Affinidi CLI needs to be installed to proceed with this action: npm i -g @affinidi/cli',
   appIsGenerating: 'App is generating...',
   appGenerated: 'App successfully generated',
-  unableToGenerateApp: 'Unable to generate app. Check Affinidi Output for details.',
+  unableToGenerateApp: 'Unable to generate app.',
 }
 
 export const telemetryMessage = {
@@ -179,7 +178,6 @@ export const csvMessage = {
   uploadCsvFile: 'Upload a CSV file',
   commaSeparatorMessage: 'Make sure to use comma (,) as separator. ',
   csvValidationError: 'Could not create issuance due to validation errors in the CSV.',
-  checkOutputChannel: 'Check Affinidi Output for details.',
   issuanceCreationMessage: 'Issuance has been created and the offers were sent.',
   invalidCsvFile: 'Invalid CSV file',
   invalidDataInRow: 'Invalid data in row #',
@@ -187,4 +185,8 @@ export const csvMessage = {
   field: 'Field',
   row: 'Row',
   requiredColumns: 'Required columns',
+}
+
+export const genericMessage = {
+  checkOutputChannel: 'Check Affinidi Output for details.',
 }

@@ -80,7 +80,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       }
 
       return session
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(error, authMessage.noValidSessionFound)
       notifyError(error, authMessage.noValidSessionFound)
       this.handleRemoveSession()
