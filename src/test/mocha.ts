@@ -2,6 +2,7 @@ import { extensions } from 'vscode'
 import * as path from 'path'
 import * as Mocha from 'mocha'
 import * as glob from 'glob'
+import { logger } from '../utils/logger'
 
 export async function run(): Promise<void> {
   // wait for extension to be activate
@@ -39,7 +40,7 @@ export async function run(): Promise<void> {
           }
         })
       } catch (error) {
-        console.error('Failed to run tests:', error)
+        logger.error(error, 'Failed to run tests')
         reject(error)
       }
     })

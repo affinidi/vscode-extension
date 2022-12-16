@@ -5,11 +5,13 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { parseUploadError } from './csvUploadError'
 import { issuanceClient } from './issuanceClient'
 import { ext } from '../../extensionVariables'
-import { csvMessage, snippetMessage, labels } from '../../messages/messages'
+import { csvMessage, snippetMessage, labels, issuanceMessage } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 import { iamState } from '../iam/iamState'
 import { configVault } from '../../config/configVault'
 import { iamHelpers } from '../iam/iamHelpers'
+import { logger } from '../../utils/logger'
+import { notifyError } from '../../utils/notifyError'
 
 export enum CSVImplementation {
   openCsvTemplate,
@@ -105,10 +107,12 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
     const parsedCsvUploadError = parseUploadError(error)
 
     if (parsedCsvUploadError) {
-      window.showErrorMessage(`${csvMessage.csvValidationError} ${csvMessage.checkOutputChannel}`)
-      ext.outputChannel.appendLine(csvMessage.csvValidationError)
+      logger.error(error, csvMessage.csvValidationError)
+      notifyError(error, csvMessage.csvValidationError)
       ext.outputChannel.appendLine(JSON.stringify(parsedCsvUploadError, null, 2))
-      ext.outputChannel.show()
+    } else {
+      logger.error(error, issuanceMessage.failedToCreateIssuance)
+      notifyError(error, issuanceMessage.failedToCreateIssuance)
     }
   }
 }

@@ -16,6 +16,7 @@ import { iamState } from '../../../../features/iam/iamState'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../../helpers'
 import { configVault } from '../../../../config/configVault'
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
+import { logger } from '../../../../utils/logger'
 
 describe('csvCreationService()', () => {
   const projectId = 'fake-project-id'
@@ -36,6 +37,8 @@ describe('csvCreationService()', () => {
 
   beforeEach(() => {
     sandbox.stub(ext.outputChannel, 'appendLine')
+    sandbox.stub(ext.outputChannel, 'show')
+    sandbox.stub(logger, 'error')
     sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
     sandbox.stub(issuanceClient, 'getCsvTemplate').resolves(csvTemplate)
     showOpenDialog = sandbox

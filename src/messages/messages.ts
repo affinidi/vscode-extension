@@ -87,21 +87,24 @@ export const projectMessage = {
   successfulProjectCreation: 'Project created successfully',
   projectRequired: 'You need to have a project to perform this operation',
   projectNameRequired: 'Project name is required',
-  projectNotCreated: 'Project could not be created',
+  projectNotCreated: 'Project could not be created.',
   noProjectSummary: 'Could not find project summary: {0}',
   missingProjectID: 'Project ID is not provided',
   pleaseTryAgain: 'Please try again later',
   projectDoesNotExist: 'Project does not exist.',
   projectNotFound: (projectId: string) => `Project not found: ${projectId}`,
   errorFetchingActiveProject: 'Error while fetching the active project.',
+  errorFetchingActiveProjectId: 'Error while fetching the active project id.',
   activatedProject: 'Successfully activated the project',
   creatingDefaultProject: 'Creating default project...',
+  failedToFetchProjects: 'Failed to fetch projects',
 }
 
 export const issuanceMessage = {
   fetchingIssuances: 'Fetching project issuances...',
   selectIssuance: 'Select an Issuance',
   noIssuances: "You don't have any issuances to choose from",
+  failedToCreateIssuance: 'Failed to create issuance',
 }
 
 export const schemaMessage = {

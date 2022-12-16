@@ -20,13 +20,13 @@ export async function openSchemaBuilder(input?: {
   try {
     const builder = await getOrCreateBuilder(input)
     await builder.open()
-    
+
     if (!input?.parentSchemaId) {
       builder.setScope(input?.scope ?? 'public')
     }
   } catch (error) {
     logger.error(error, schemaMessage.couldNotCreateSchemaBuilder)
-    notifyError(error)
+    notifyError(error, schemaMessage.couldNotCreateSchemaBuilder)
   } finally {
     isLoading = false
   }

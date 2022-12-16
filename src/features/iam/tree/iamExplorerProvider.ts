@@ -1,9 +1,11 @@
 import { ThemeIcon, TreeItemCollapsibleState } from 'vscode'
 
 import { ext } from '../../../extensionVariables'
-import { labels } from '../../../messages/messages'
+import { labels, projectMessage } from '../../../messages/messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
+import { logger } from '../../../utils/logger'
+import { notifyError } from '../../../utils/notifyError'
 import { Feature } from '../../feature'
 import { iamState } from '../iamState'
 
@@ -57,31 +59,37 @@ export class IamExplorerProvider implements ExplorerProvider {
   }
 
   async getProjectItems() {
-    const projectsCount = (await iamState.listProjects()).length
-    if (projectsCount === 0) {
-      return []
+    try {
+      const projectsCount = (await iamState.listProjects()).length
+      if (projectsCount === 0) {
+        return []
+      }
+      const activeProject = await iamState.requireActiveProject()
+
+      const activeProjectTreeItem = new ProjectTreeItem({
+        label: activeProject.name,
+        projectId: activeProject.projectId,
+        state: TreeItemCollapsibleState.Expanded,
+        description: labels.activeProject,
+      })
+
+      if (projectsCount === 1) {
+        return [activeProjectTreeItem]
+      }
+
+      return [
+        activeProjectTreeItem,
+        new InactiveProjectsFolderTreeItem({
+          label: labels.inactiveProjects,
+          state: TreeItemCollapsibleState.Collapsed,
+          icon: new ThemeIcon('folder'),
+        }),
+      ]
+    } catch (error: unknown) {
+      logger.error(error, projectMessage.failedToFetchProjects)
+      notifyError(error, projectMessage.failedToFetchProjects)
+      throw error
     }
-    const activeProject = await iamState.requireActiveProject()
-
-    const activeProjectTreeItem = new ProjectTreeItem({
-      label: activeProject.name,
-      projectId: activeProject.projectId,
-      state: TreeItemCollapsibleState.Expanded,
-      description: labels.activeProject,
-    })
-
-    if (projectsCount === 1) {
-      return [activeProjectTreeItem]
-    }
-
-    return [
-      activeProjectTreeItem,
-      new InactiveProjectsFolderTreeItem({
-        label: labels.inactiveProjects,
-        state: TreeItemCollapsibleState.Collapsed,
-        icon: new ThemeIcon('folder'),
-      }),
-    ]
   }
 
   private async getProjectFeatures(parent: ProjectTreeItem) {

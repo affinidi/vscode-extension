@@ -1,5 +1,6 @@
 import * as path from 'path'
 import { runTests } from '@vscode/test-electron'
+import { logger } from '../utils/logger'
 
 async function main() {
   try {
@@ -18,7 +19,8 @@ async function main() {
       extensionTestsEnv: { NODE_ENV: 'test' },
     })
   } catch (error) {
-    console.error('Failed to run tests', error)
+    logger.error(error, 'Failed to run tests')
+
     process.exit(1)
   }
 }

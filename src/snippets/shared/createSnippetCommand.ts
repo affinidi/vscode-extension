@@ -125,7 +125,7 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
       })
     } catch (error: unknown) {
       logger.error(error, snippetMessage.snippetGenerationFailed)
-      notifyError(error)
+      notifyError(error, snippetMessage.snippetGenerationFailed)
     }
   }
 }

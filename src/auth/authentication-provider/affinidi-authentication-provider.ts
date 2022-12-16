@@ -82,6 +82,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       return session
     } catch (error) {
       logger.error(error, authMessage.noValidSessionFound)
+      notifyError(error, authMessage.noValidSessionFound)
       this.handleRemoveSession()
       return undefined
     }
@@ -138,7 +139,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       return session
     } catch (error: unknown) {
       logger.error(error, authMessage.unableToCreateSession)
-      notifyError(error)
+      notifyError(error, authMessage.unableToCreateSession)
       throw error
     }
   }

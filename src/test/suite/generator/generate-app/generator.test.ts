@@ -70,6 +70,7 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should render app with specified params', async () => {
+    progressWindow.resolves({ stdout: 'Application generated' })
     existsSync.restore()
     existsSync.resolves(false)
 

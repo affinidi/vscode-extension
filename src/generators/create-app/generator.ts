@@ -4,6 +4,7 @@ import { configVault } from '../../config/configVault'
 import { ext } from '../../extensionVariables'
 import { generatorMessage, labels } from '../../messages/messages'
 import { cliHelper } from '../../utils/cliHelper'
+import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 
 export async function generateAffinidiAppWithCLI(): Promise<void> {
@@ -54,8 +55,8 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
 
     await cliHelper.setActiveProject(projectId)
     await cliHelper.generateApp({ path: fullPath })
-  } catch (error) {
-    ext.outputChannel.appendLine(generatorMessage.failedToGenerateApp)
-    notifyError(error)
+  } catch (error: unknown) {
+    logger.error(error, generatorMessage.failedToGenerateApp)
+    notifyError(error, generatorMessage.failedToGenerateApp)
   }
 }
