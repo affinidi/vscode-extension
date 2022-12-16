@@ -1,6 +1,6 @@
 import { ProgressLocation, window, commands, Uri } from 'vscode'
-import * as fs from 'fs'
-import * as execa from 'execa'
+import fs from 'fs'
+import execa from 'execa'
 import { ext } from '../extensionVariables'
 import { cliMessage, generatorMessage } from '../messages/messages'
 import { notifyError } from './notifyError'

@@ -1,8 +1,11 @@
 {
+  "affinidi.authenticate": "Authenticate",
   "affinidi.signUp": "Create an Account",
   "affinidi.login": "Login",
   "affinidi.logout": "Logout",
   "affinidi.createProject": "Create Project",
+  "affinidi.viewProjectProperties": "View project properties",
+  "affinidi.selectActiveProject": "Select a new active project",
   "affinidi.openSchemaBuilder": "Create VC Schema",
   "affinidi.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidi.me": "Account Details",
@@ -15,6 +18,7 @@
   "affinidi.copyJsonLdURL": "Copy JSON-LD Context URL",
 
   "affinidiExplorer.refresh": "Refresh",
+  "affinidiExplorer.refreshAll": "Refresh all",
   "affinidiExplorer.viewProperties": "View Properties",
   "affinidiExplorer.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidiExplorer.showJsonSchema": "Show JSON Schema",

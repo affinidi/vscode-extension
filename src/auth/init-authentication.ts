@@ -1,7 +1,7 @@
 import { authentication, commands, window, ProgressLocation } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
-import { authMessage, errorMessage } from '../messages/messages'
+import { authMessage, errorMessage, labels } from '../messages/messages'
 import { cliHelper } from '../utils/cliHelper'
 import {
   AffinidiAuthenticationProvider,
@@ -11,6 +11,7 @@ import { authHelper } from './authHelper'
 import { readOnlyContentViewer } from '../utils/openReadOnlyContent'
 import { iamHelpers } from '../features/iam/iamHelpers'
 import { telemetryHelpers } from '../features/telemetry/telemetryHelpers'
+import { showQuickPick } from '../utils/showQuickPick'
 
 const CONSENT = {
   accept: authMessage.accept,
@@ -97,6 +98,24 @@ async function userDetailsHandler(): Promise<void> {
 }
 
 export const initAuthentication = () => {
+  ext.context.subscriptions.push(
+    commands.registerCommand('affinidi.authenticate', async () => {
+      const method = await showQuickPick(
+        [
+          [labels.createAnAccountWithAffinidi, 'signUp'],
+          [labels.login, 'login'],
+        ],
+        { title: authMessage.chooseAuthenticationMethod },
+      )
+
+      if (method === 'login') {
+        await commands.executeCommand('affinidi.login')
+      } else if (method === 'signUp') {
+        await commands.executeCommand('affinidi.signUp')
+      }
+    }),
+  )
+
   ext.context.subscriptions.push(commands.registerCommand('affinidi.signUp', signUpHandler))
   ext.context.subscriptions.push(commands.registerCommand('affinidi.login', loginHandler))
   ext.context.subscriptions.push(commands.registerCommand('affinidi.logout', logoutHandler))

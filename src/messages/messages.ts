@@ -48,6 +48,7 @@ export const errorMessage = {
 }
 
 export const authMessage = {
+  chooseAuthenticationMethod: 'Authenticate in to Affinidi',
   loggedIn: 'Logged in to Affinidi',
   loggedOut: 'Logged out of Affinidi',
   signedUp: 'Signed up to Affinidi',
@@ -94,9 +95,11 @@ export const projectMessage = {
   projectNotFound: (projectId: string) => `Project not found: ${projectId}`,
   errorFetchingActiveProject: 'Error while fetching the active project.',
   errorFetchingActiveProjectId: 'Error while fetching the active project id.',
-  activatedProject: 'Successfully activated the project',
+  selectActiveProject: 'Select a new active project',
+  activatedProject: (projectName: string) => `Successfully activated the project "${projectName}"`,
   creatingDefaultProject: 'Creating default project...',
   failedToFetchProjects: 'Failed to fetch projects',
+  failedToUpdateIamStatusBar: 'Could not update IAM status bar item',
 }
 
 export const issuanceMessage = {

@@ -1,6 +1,6 @@
 import { window } from 'vscode'
 import { expect } from 'chai'
-import * as sinon from 'sinon'
+import sinon from 'sinon'
 import { ext } from '../../../extensionVariables'
 
 import { sandbox } from '../setup'

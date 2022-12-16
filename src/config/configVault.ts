@@ -1,8 +1,8 @@
 import Conf from 'conf'
 import { OnDidChangeCallback } from 'conf/dist/source/types'
-import * as os from 'os'
-import * as path from 'path'
-import * as deepEqual from 'fast-deep-equal'
+import os from 'os'
+import path from 'path'
+import deepEqual from 'fast-deep-equal'
 import { iamState } from '../features/iam/iamState'
 import { NoProjectsError } from './NoProjectsError'
 import { NoCurrentUser } from './NoCurrentUser'
@@ -114,8 +114,6 @@ class ConfigVault {
       }
     })
   }
-
-  onDidChange = this.store.onDidChange.bind(this.store)
 }
 
 const configConf = new Conf<ConfigType>({

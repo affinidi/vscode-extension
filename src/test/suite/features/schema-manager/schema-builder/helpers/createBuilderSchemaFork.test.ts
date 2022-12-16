@@ -1,12 +1,12 @@
 import { assert, expect } from 'chai'
-import * as sinon from 'sinon'
+import sinon from 'sinon'
 import { vcJsonSchemaFetcher } from '../../../../../../features/issuance/json-schema/json-schema-fetcher'
 import { createBuilderSchemaFork } from '../../../../../../features/schema-manager/schema-builder/helpers/createBuilderSchemaFork'
 import { BuilderAttribute } from '../../../../../../features/schema-manager/schema-builder/SchemaBuilderWebview'
 import { schemaManagerState } from '../../../../../../features/schema-manager/schemaManagerState'
 import { generateSchema } from '../../../../helpers'
 import { sandbox } from '../../../../setup'
-import * as jsonSchema from './MySchemaV1-0.json'
+import jsonSchema from './MySchemaV1-0.json'
 
 describe('createBuilderSchemaFork()', () => {
   it('should create BuilderSchema', async () => {

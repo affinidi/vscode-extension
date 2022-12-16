@@ -8,7 +8,7 @@
   "icon": "media/affinidi-icon-large.png",
   "preview": true,
   "repository": "https://github.com/affinidi/vscode-extension",
-  "version": "1.7.0",
+  "version": "1.8.1",
   "engines": {
     "vscode": "^1.70.0"
   },
@@ -31,9 +31,12 @@
     "onCommand:affinidi.copyJsonLdURL",
     "onCommand:affinidi.copyJsonURL",
     "onCommand:affinidi.createProject",
+    "onCommand:affinidi.viewProjectProperties",
+    "onCommand:affinidi.selectActiveProject",
     "onCommand:affinidi.openSchemaBuilder",
     "onCommand:affinidi.initiateIssuanceCsvFlow",
     "onCommand:affinidi.docs.availableSnippets",
+    "onCommand:affinidi.authenticate",
     "onCommand:affinidi.login",
     "onCommand:affinidi.logout",
     "onCommand:affinidi.me",
@@ -42,6 +45,7 @@
     "onCommand:affinidiExplorer.openSchemaBuilder",
     "onCommand:affinidiExplorer.forkSchema",
     "onCommand:affinidiExplorer.refresh",
+    "onCommand:affinidiExplorer.refreshAll",
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
@@ -90,6 +94,11 @@
     },
     "commands": [
       {
+        "command": "affinidi.authenticate",
+        "title": "%affinidi.authenticate%",
+        "category": "Affinidi"
+      },
+      {
         "command": "affinidi.signUp",
         "title": "%affinidi.signUp%",
         "category": "Affinidi"
@@ -107,6 +116,16 @@
       {
         "command": "affinidi.createProject",
         "title": "%affinidi.createProject%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidi.viewProjectProperties",
+        "title": "%affinidi.viewProjectProperties%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidi.selectActiveProject",
+        "title": "%affinidi.selectActiveProject%",
         "category": "Affinidi"
       },
       {
@@ -133,6 +152,12 @@
       {
         "command": "affinidiExplorer.refresh",
         "title": "%affinidiExplorer.refresh%",
+        "category": "%commands.category.explorer%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "affinidiExplorer.refreshAll",
+        "title": "%affinidiExplorer.refreshAll%",
         "category": "%commands.category.explorer%",
         "icon": "$(refresh)"
       },
@@ -236,7 +261,15 @@
     "menus": {
       "commandPalette": [
         {
+          "command": "affinidi.authenticate",
+          "when": "never"
+        },
+        {
           "command": "affinidiExplorer.refresh",
+          "when": "never"
+        },
+        {
+          "command": "affinidiExplorer.refreshAll",
           "when": "never"
         },
         {
@@ -253,6 +286,10 @@
         },
         {
           "command": "affinidiExplorer.initiateIssuanceCsvFlow",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.viewProjectProperties",
           "when": "never"
         },
         {
@@ -278,7 +315,7 @@
       ],
       "view/title": [
         {
-          "command": "affinidiExplorer.refresh",
+          "command": "affinidiExplorer.refreshAll",
           "when": "view == affinidiExplorer",
           "group": "navigation"
         },
@@ -451,10 +488,10 @@
   },
   "l10n": "./l10n",
   "scripts": {
-    "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
-    "esbuild": "npm run esbuild-base -- --sourcemap",
-    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "vscode:prepublish": "npm run esbuild",
+    "esbuild": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild-dev": "npm run esbuild -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-dev -- --watch",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run clean && npm run compile",
