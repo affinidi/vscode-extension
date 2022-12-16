@@ -37,6 +37,7 @@ import { configVault } from './config/configVault'
 import { projectMessage } from './messages/messages'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
+import { verifyAVC } from './features/verify/verifyAVC'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -403,6 +404,13 @@ export async function activateInternal(context: ExtensionContext) {
     } catch (error) {
       notifyError(error)
     }
+  })
+
+  commands.registerCommand('affinidi.verifyAVC', async () => {
+    telemetryHelpers.trackCommand('affinidi.verifyAVC')
+    console.log('hitting command in extension')
+
+    verifyAVC()
   })
 
   telemetryHelpers.askUserForTelemetryConsent()

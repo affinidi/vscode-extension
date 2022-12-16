@@ -77,6 +77,11 @@ export class DevToolsTree implements TreeDataProvider<DevToolsTreeItem> {
         label: labels.initiateIssuanceCsvFlow,
         command: 'affinidi.initiateIssuanceCsvFlow',
       }),
+      new DevToolsTreeItem({
+        type: DevToolsType.tool,
+        label: labels.verifyAVC,
+        command: 'affinidi.verifyAVC',
+      }),
     ]
   }
 

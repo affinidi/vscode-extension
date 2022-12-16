@@ -32,6 +32,7 @@ export const labels = {
   selectWallet: 'Enter A Wallet',
   activeProject: 'Active',
   inactiveProjects: 'Inactive Projects',
+  verifyAVC: 'Verify a VC',
 }
 
 export const errorMessage = {
@@ -102,6 +103,7 @@ export const issuanceMessage = {
   fetchingIssuances: 'Fetching project issuances...',
   selectIssuance: 'Select an Issuance',
   noIssuances: "You don't have any issuances to choose from",
+  vcVerified: 'Successfully verified the VC',
 }
 
 export const schemaMessage = {
