@@ -1,16 +1,28 @@
+import { Disposable, EventEmitter } from 'vscode'
 import { ext } from './extensionVariables'
 
+const onDidClearEmitter = new EventEmitter<string | undefined>()
+
 export const state = {
-  async clear() {
-    await this.clearByPrefix()
+  clear() {
+    this.clearByPrefix()
   },
-  async clearByPrefix(prefix: string = '') {
-    await Promise.all(
-      ext.context.globalState.keys().map(async (key) => {
-        if (key.startsWith(prefix)) {
-          await ext.context.globalState.update(key, undefined)
-        }
-      }),
-    )
+  clearByPrefix(prefix?: string) {
+    for (const key of ext.context.globalState.keys()) {
+      if (!prefix || key.startsWith(prefix)) {
+        ext.context.globalState.update(key, undefined)
+      }
+    }
+
+    onDidClearEmitter.fire(prefix)
+  },
+  get<T>(key: string) {
+    return ext.context.globalState.get<T>(key)
+  },
+  update(key: string, value: any): void {
+    ext.context.globalState.update(key, value)
+  },
+  onDidClear(listener: (prefix: string | undefined) => unknown): Disposable {
+    return onDidClearEmitter.event(listener)
   },
 }

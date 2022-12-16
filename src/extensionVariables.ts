@@ -1,4 +1,4 @@
-import * as vscode from 'vscode'
+import vscode from 'vscode'
 import { AffinidiAuthenticationProvider } from './auth/authentication-provider/affinidi-authentication-provider'
 import { DevToolsTree } from './tree/devToolsTree'
 import { ExplorerTree } from './tree/explorerTree'

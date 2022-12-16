@@ -45,7 +45,7 @@ export const initSnippets = () => {
           issuanceId: element?.issuanceId,
         })
 
-        if (!element) await issuanceState.clear()
+        if (!element) issuanceState.clear()
 
         await insertGetIssuanceOffersSnippet({
           projectId: element?.projectId,

@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import fs from 'fs'
 import { OpenDialogOptions, ProgressLocation, window, workspace } from 'vscode'
 import { Schema } from '../../utils/types'
 import { showQuickPick } from '../../utils/showQuickPick'
