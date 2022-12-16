@@ -31,6 +31,9 @@ class CredentialsVault {
     this.store.delete(key)
   }
 
+  getObject() {
+    return this.store.store
+  }
 
   setActiveProjectSummary(value: ProjectSummary): void {
     this.store.set('activeProjectSummary', value)
@@ -42,6 +45,10 @@ class CredentialsVault {
 
   setSession(value: Session): void {
     this.store.set('session', value)
+  }
+
+  getVersion(): number | undefined {
+    return this.store.get('version')
   }
 
   onSessionChange(callback: OnDidChangeCallback<Session | undefined>) {

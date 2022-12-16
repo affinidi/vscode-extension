@@ -30,6 +30,10 @@ class ConfigVault {
     this.store.delete(key)
   }
 
+  getObject() {
+    return this.store.store
+  }
+
   async requireActiveProjectId(): Promise<string> {
     if (!this.getCurrentUserId()) {
       throw new NoCurrentUser()
@@ -90,6 +94,10 @@ class ConfigVault {
 
   setCurrentUserId(value: string): void {
     this.store.set('currentUserId', value)
+  }
+
+  getVersion(): number | undefined {
+    return this.store.get('version')
   }
 
   onCurrentUserIdChange(callback: OnDidChangeCallback<string | undefined>) {
