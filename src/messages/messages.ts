@@ -125,6 +125,7 @@ export const schemaMessage = {
   schemaCreated: 'Schema has been successfully created',
   couldNotCreateSchemaBuilder: 'Could not get or create Schema Builder',
   selectProjectToCreateSchema: 'You must select a project to create a schema',
+  unableToOpenSchemaBuilder: 'Unable to open schema builder',
   invalidAttributeName: 'Invalid attribute name',
   invalidAttributeNameSuggestion:
     'Use camelCase and alphanumeric symbols (for example, "firstName")',
