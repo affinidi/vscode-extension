@@ -3,7 +3,6 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { createSnippetTools, Implementations, SnippetImplementation } from './createSnippetTools'
 import * as javascript from '../boilerplates/javascript'
 import * as typescript from '../boilerplates/typescript'
-import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { snippetMessage } from '../../messages/messages'
 import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
@@ -124,7 +123,6 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         projectId: snippetInput.projectId,
       })
     } catch (error: unknown) {
-      logger.error(error, snippetMessage.snippetGenerationFailed)
       notifyError(error, snippetMessage.snippetGenerationFailed)
     }
   }

@@ -1,6 +1,5 @@
 import { ProgressLocation, window } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
-import { logger } from '../../utils/logger'
 import { iamClient } from './iamClient'
 import { projectMessage } from '../../messages/messages'
 import { notifyError } from '../../utils/notifyError'
@@ -29,7 +28,6 @@ export const createProjectProcess = async (): Promise<void> => {
 
     window.showInformationMessage(projectMessage.successfulProjectCreation)
   } catch (error: unknown) {
-    logger.error(error, projectMessage.projectNotCreated)
     notifyError(error, projectMessage.projectNotCreated)
   }
 }

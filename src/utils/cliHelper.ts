@@ -4,7 +4,6 @@ import execa from 'execa'
 import { ext } from '../extensionVariables'
 import { cliMessage, generatorMessage } from '../messages/messages'
 import { notifyError } from './notifyError'
-import { logger } from './logger'
 
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
@@ -84,7 +83,6 @@ export class CliHelper {
         forceNewWindow: true,
       })
     } catch (error) {
-      logger.error(error, cliMessage.unableToGenerateApp)
       notifyError(error, cliMessage.unableToGenerateApp)
     }
   }

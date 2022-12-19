@@ -1,6 +1,5 @@
 import { configVault } from '../../../config/configVault'
 import { schemaMessage } from '../../../messages/messages'
-import { logger } from '../../../utils/logger'
 import { notifyError } from '../../../utils/notifyError'
 import { BuilderSchemaPublisher } from './BuilderSchemaPublisher'
 import { SubmitHandler } from './handlers/SubmitHandler'
@@ -25,7 +24,6 @@ export async function openSchemaBuilder(input?: {
       builder.setScope(input?.scope ?? 'public')
     }
   } catch (error) {
-    logger.error(error, schemaMessage.couldNotCreateSchemaBuilder)
     notifyError(error, schemaMessage.couldNotCreateSchemaBuilder)
   } finally {
     isLoading = false

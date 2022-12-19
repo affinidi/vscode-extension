@@ -1,7 +1,6 @@
 import { Disposable, StatusBarAlignment, StatusBarItem, window } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { projectMessage } from '../../messages/messages'
-import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { iamState } from './iamState'
 
@@ -19,7 +18,6 @@ export class IamStatusBar implements Disposable {
       this.item.command = command
       this.item.show()
     } catch (error) {
-      logger.error(error, projectMessage.failedToUpdateIamStatusBar)
       notifyError(error, projectMessage.failedToUpdateIamStatusBar)
       this.item.hide()
     }

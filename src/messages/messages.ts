@@ -192,5 +192,6 @@ export const csvMessage = {
 }
 
 export const genericMessage = {
-  checkOutputChannel: 'Check Affinidi Output for details.',
+  unexpectedError: 'Unexpected error',
+  errorNotification: (message: string) => `${message}. Check Affinidi Output for details.`,
 }

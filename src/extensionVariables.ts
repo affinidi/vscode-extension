@@ -1,8 +1,8 @@
 import vscode from 'vscode'
-import { AffinidiAuthenticationProvider } from './auth/authentication-provider/affinidi-authentication-provider'
-import { DevToolsTree } from './tree/devToolsTree'
-import { ExplorerTree } from './tree/explorerTree'
-import { FeedbackTree } from './tree/feedbackTree'
+import type { AffinidiAuthenticationProvider } from './auth/authentication-provider/affinidi-authentication-provider'
+import type { DevToolsTree } from './tree/devToolsTree'
+import type { ExplorerTree } from './tree/explorerTree'
+import type { FeedbackTree } from './tree/feedbackTree'
 
 export namespace ext {
   export let context: vscode.ExtensionContext

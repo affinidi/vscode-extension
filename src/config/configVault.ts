@@ -64,7 +64,6 @@ class ConfigVault {
         return undefined
       }
 
-      logger.error(error, projectMessage.errorFetchingActiveProjectId)
       notifyError(error, projectMessage.errorFetchingActiveProjectId)
       throw error
     }

@@ -86,7 +86,6 @@ export class IamExplorerProvider implements ExplorerProvider {
         }),
       ]
     } catch (error: unknown) {
-      logger.error(error, projectMessage.failedToFetchProjects)
       notifyError(error, projectMessage.failedToFetchProjects)
       throw error
     }
