@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import Conf from 'conf'
 import os from 'os'
 import path from 'path'
@@ -18,41 +19,66 @@ export type Session = {
   scopes: []
 }
 
+const credentialsSchema = z.object({
+  version: z.number(),
+  activeProjectSummary: z.optional(
+    z.object({
+      apiKey: z.object({ apiKeyHash: z.string(), apiKeyName: z.string() }),
+      project: z.object({ createdAt: z.string(), name: z.string(), projectId: z.string() }),
+      wallet: z.object({
+        did: z.string(),
+        didUrl: z.string(),
+      }),
+    }),
+  ),
+  session: z.optional(
+    z.object({
+      sessionId: z.string(),
+      consoleAuthToken: z.string(),
+      account: z.object({
+        label: z.string(),
+        userId: z.string(),
+      }),
+      scopes: z.string().array(),
+    }),
+  ),
+})
+
 export const VERSION = 1
 
 class CredentialsVault {
-  constructor(private readonly store: Conf<ConfigType>) {}
+  constructor(private readonly conf: Conf<ConfigType>) {}
 
   clear(): void {
-    this.store.clear()
+    this.conf.clear()
   }
 
   delete(key: keyof ConfigType): void {
-    this.store.delete(key)
+    this.conf.delete(key)
   }
 
-  getObject() {
-    return this.store.store
+  isValid(): boolean {
+    return credentialsSchema.safeParse(this.conf.store).success
   }
 
   setActiveProjectSummary(value: ProjectSummary): void {
-    this.store.set('activeProjectSummary', value)
+    this.conf.set('activeProjectSummary', value)
   }
 
   getSession(): Session | undefined {
-    return this.store.get('session')
+    return this.conf.get('session')
   }
 
   setSession(value: Session): void {
-    this.store.set('session', value)
+    this.conf.set('session', value)
   }
 
   getVersion(): number | undefined {
-    return this.store.get('version')
+    return this.conf.get('version')
   }
 
   onSessionChange(callback: OnDidChangeCallback<Session | undefined>) {
-    return this.store.onDidChange('session', callback)
+    return this.conf.onDidChange('session', callback)
   }
 }
 
