@@ -14,13 +14,11 @@ describe('verifyVC())', () => {
   const { invalidVC } = vcExamples
 
   let showOpenDialog: sinon.SinonStub
-  let askForVCInput: sinon.SinonStub
   let verifyVC: sinon.SinonStub
 
   beforeEach(() => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(verifierClient, 'verifyCredentials').resolves(JSON.parse(vcTemplate))
-    verifyVC = sandbox.stub(verifyVC)
     showOpenDialog = sandbox
       .stub(window, 'showOpenDialog')
       .resolves([{ fsPath: 'fsPathTest' }] as any)
@@ -29,12 +27,12 @@ describe('verifyVC())', () => {
   describe('verifyAC()', () => {
     beforeEach(() => {
       showOpenDialog.resolves([{ fsPath: 'fsPathTest' }] as any)
-      verifyVC = sandbox.stub(verifyVC).resolves({ vcTemplate })
+      verifyVC = sandbox.stub(verifierClient, 'verifyCredentials').resolves(JSON.parse(vcTemplate))
       sandbox.stub(fs, 'createReadStream')
     })
 
     it('should return undefined if nothing is selected', async () => {
-      askForVCInput.resolves(vcTemplate)
+      verifyVC.resolves(vcTemplate)
       showOpenDialog.resolves(undefined)
 
       const result = await verifyVC()
@@ -42,7 +40,7 @@ describe('verifyVC())', () => {
     })
 
     it('if it is an invalid VC it should show and error', async () => {
-      askForVCInput.resolves(invalidVC)
+      verifyVC.resolves(invalidVC)
 
       await verifyVC({ verifiableCredentials: [invalidVC] })
       expect(window.showInformationMessage).calledWithMatch(issuanceMessage.vcNotVerified)
@@ -50,7 +48,7 @@ describe('verifyVC())', () => {
     })
 
     it('if it is a valid VC it should pass', async () => {
-      askForVCInput.resolves(validVC)
+      verifyVC.resolves(validVC)
 
       await verifyVC({ verifiableCredentials: [validVC] })
       expect(window.showInformationMessage).calledWithMatch(issuanceMessage.vcVerified)
@@ -58,7 +56,7 @@ describe('verifyVC())', () => {
     })
 
     it('it should throw and error if it fails  ', async () => {
-      askForVCInput.resolves(vcTemplate)
+      verifyVC.resolves(vcTemplate)
       verifyVC.throws({ code: 'VIS-1', message: 'messageTest' })
 
       await verifyVC()
