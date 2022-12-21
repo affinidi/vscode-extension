@@ -35,7 +35,7 @@
     "onCommand:affinidi.selectActiveProject",
     "onCommand:affinidi.openSchemaBuilder",
     "onCommand:affinidi.initiateIssuanceCsvFlow",
-    "onCommand:affinidi.verifyAVC",
+    "onCommand:affinidi.verifyVC",
     "onCommand:affinidi.docs.availableSnippets",
     "onCommand:affinidi.authenticate",
     "onCommand:affinidi.login",
@@ -233,8 +233,8 @@
         "category": "Affinidi"
       },
       {
-        "command": "affinidi.verifyAVC",
-        "title": "%affinidi.verifyAVC%",
+        "command": "affinidi.verifyVC",
+        "title": "%affinidi.verifyVC%",
         "category": "Affinidi"
       },
       {

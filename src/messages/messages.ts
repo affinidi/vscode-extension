@@ -32,7 +32,7 @@ export const labels = {
   selectWallet: 'Enter A Wallet',
   activeProject: 'Active',
   inactiveProjects: 'Inactive Projects',
-  verifyAVC: 'Verify a VC',
+  verifyVC: 'Verify a VC',
 }
 
 export const errorMessage = {
@@ -108,6 +108,7 @@ export const issuanceMessage = {
   vcBeingVerified: 'VC verification in progress...',
   vcVerified: 'VC Verified',
   vcNotVerified: 'VC Not Verified',
+  vcVerificaitonFailed: 'VC verification failed',
 }
 
 export const schemaMessage = {

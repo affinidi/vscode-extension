@@ -79,8 +79,8 @@ export class DevToolsTree implements TreeDataProvider<DevToolsTreeItem> {
       }),
       new DevToolsTreeItem({
         type: DevToolsType.tool,
-        label: labels.verifyAVC,
-        command: 'affinidi.verifyAVC',
+        label: labels.verifyVC,
+        command: 'affinidi.verifyVC',
       }),
     ]
   }

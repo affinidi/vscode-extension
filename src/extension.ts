@@ -33,7 +33,7 @@ import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
-import { verifyAVC } from './features/verify/verifyAVC'
+import { verifyVC } from './features/verify/verifyVC'
 import { initIam } from './features/iam/initIam'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -389,10 +389,10 @@ export async function activateInternal(context: ExtensionContext) {
     }
   })
 
-  commands.registerCommand('affinidi.verifyAVC', async () => {
-    telemetryHelpers.trackCommand('affinidi.verifyAVC')
+  commands.registerCommand('affinidi.verifyVC', async () => {
+    telemetryHelpers.trackCommand('affinidi.verifyVC')
 
-    verifyAVC()
+    verifyVC()
   })
 
   telemetryHelpers.askUserForTelemetryConsent()
