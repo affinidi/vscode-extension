@@ -6,18 +6,21 @@ import { BuilderAttribute, BuilderSchema } from './SchemaBuilderWebview'
 
 export class BuilderSchemaPublisher {
   async publish(schema: BuilderSchema, projectId: string): Promise<SchemaDto> {
-    const { apiKey: { apiKeyHash }, wallet: { did } } = await iamState.requireProjectSummary(projectId)
-  
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) {
+      throw new Error('Failed to fetch project summary')
+    }
+
     const scope = schema.isPublic ? 'public' : 'unlisted'
     const [version, revision] = await this.generateNextVersion({
       type: schema.type,
       scope,
-      did,
-      apiKeyHash,
+      did: projectSummary.wallet.did,
+      apiKeyHash: projectSummary.apiKey.apiKeyHash,
     })
 
     const schemaName = this.generateSchemaId({
-      namespace: schema.isPublic ? null : did,
+      namespace: schema.isPublic ? null : projectSummary.wallet.did,
       type: schema.type,
       version,
       revision,
@@ -49,7 +52,7 @@ export class BuilderSchemaPublisher {
     return schemaManagerClient.createSchema(
       {
         parentId: schema.parentId,
-        authorDid: did,
+        authorDid: projectSummary.wallet.did,
         scope,
         type,
         description,
@@ -58,7 +61,7 @@ export class BuilderSchemaPublisher {
         jsonSchema,
         jsonLdContext,
       },
-      { apiKeyHash },
+      { apiKeyHash: projectSummary.apiKey.apiKeyHash },
     )
   }
 

@@ -8,7 +8,6 @@ import { ext } from '../../extensionVariables'
 import { csvMessage, snippetMessage, labels, issuanceMessage } from '../../messages/messages'
 import { schemaManagerHelpers } from '../schema-manager/schemaManagerHelpers'
 import { iamState } from '../iam/iamState'
-import { configVault } from '../../config/configVault'
 import { iamHelpers } from '../iam/iamHelpers'
 import { notifyError } from '../../utils/notifyError'
 
@@ -23,9 +22,8 @@ export const implementationLabels = {
 }
 
 const openCsvTemplate = async (input: { schema: Schema; projectId: string }) => {
-  const {
-    apiKey: { apiKeyHash },
-  } = await iamState.requireProjectSummary(input.projectId)
+  const projectSummary = await iamState.getProjectSummary(input.projectId)
+  if (!projectSummary) return
 
   const template = await window.withProgress(
     { location: ProgressLocation.Notification, title: csvMessage.downloadingCsvTemplate },
@@ -35,7 +33,7 @@ const openCsvTemplate = async (input: { schema: Schema; projectId: string }) => 
           jsonSchemaUrl: input.schema.jsonSchemaUrl,
           verificationMethod: 'email',
         },
-        { apiKeyHash },
+        { apiKeyHash: projectSummary.apiKey.apiKeyHash },
       ),
   )
 
@@ -62,10 +60,8 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
     return
   }
 
-  const {
-    apiKey: { apiKeyHash },
-    wallet: { did },
-  } = await iamState.requireProjectSummary(input.projectId)
+  const projectSummary = await iamState.getProjectSummary(input.projectId)
+  if (!projectSummary) return
 
   const schema =
     input.schema ??
@@ -84,7 +80,7 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
             projectId: input.projectId,
             template: {
               walletUrl: input.walletUrl,
-              issuerDid: did,
+              issuerDid: projectSummary.wallet.did,
               schema,
               verification: {
                 method: 'email',
@@ -92,7 +88,7 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
             },
           },
           fs.createReadStream(selectedFilePath),
-          { apiKeyHash },
+          { apiKeyHash: projectSummary.apiKey.apiKeyHash },
         ),
     )
 
@@ -119,7 +115,7 @@ const initiateIssuanceCsvFlow = async (input: {
   projectId?: string
   walletUrl?: string
 }): Promise<void> => {
-  const projectId = input.projectId ?? (await configVault.requireActiveProjectId())
+  const projectId = input.projectId ?? (await ext.configuration.getActiveProjectId())
   if (!projectId) {
     return
   }

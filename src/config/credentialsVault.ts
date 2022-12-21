@@ -2,13 +2,12 @@ import { z } from 'zod'
 import Conf from 'conf'
 import os from 'os'
 import path from 'path'
-
 import { ProjectSummary } from '@affinidi/client-iam'
 import { OnDidChangeCallback } from 'conf/dist/source/types'
+import { BasicConfVault } from './basicConfVault'
 
 export type ConfigType = {
   version: number
-  activeProjectSummary?: ProjectSummary
   session?: Session
 }
 
@@ -19,18 +18,10 @@ export type Session = {
   scopes: []
 }
 
-const credentialsSchema = z.object({
+export const CREDENTIALS_VERSION = 1
+
+const schema = z.object({
   version: z.number(),
-  activeProjectSummary: z.optional(
-    z.object({
-      apiKey: z.object({ apiKeyHash: z.string(), apiKeyName: z.string() }),
-      project: z.object({ createdAt: z.string(), name: z.string(), projectId: z.string() }),
-      wallet: z.object({
-        did: z.string(),
-        didUrl: z.string(),
-      }),
-    }),
-  ),
   session: z.optional(
     z.object({
       sessionId: z.string(),
@@ -44,25 +35,11 @@ const credentialsSchema = z.object({
   ),
 })
 
-export const VERSION = 1
+const defaults: ConfigType = { version: CREDENTIALS_VERSION }
 
-class CredentialsVault {
-  constructor(private readonly conf: Conf<ConfigType>) {}
-
-  clear(): void {
-    this.conf.clear()
-  }
-
-  delete(key: keyof ConfigType): void {
-    this.conf.delete(key)
-  }
-
-  isValid(): boolean {
-    return credentialsSchema.safeParse(this.conf.store).success
-  }
-
-  setActiveProjectSummary(value: ProjectSummary): void {
-    this.conf.set('activeProjectSummary', value)
+export class CredentialsConfVault extends BasicConfVault<ConfigType> {
+  constructor(conf: Conf<ConfigType>) {
+    super(CREDENTIALS_VERSION, schema, conf, defaults)
   }
 
   getSession(): Session | undefined {
@@ -73,20 +50,18 @@ class CredentialsVault {
     this.conf.set('session', value)
   }
 
-  getVersion(): number | undefined {
-    return this.conf.get('version')
-  }
-
   onSessionChange(callback: OnDidChangeCallback<Session | undefined>) {
     return this.conf.onDidChange('session', callback)
   }
 }
 
-const credentialConf = new Conf<ConfigType>({
-  configName: 'credentials',
-  cwd: path.join(os.homedir(), '.affinidi'),
-  defaults: { version: VERSION },
-  watch: true,
-})
-
-export const credentialsVault = new CredentialsVault(credentialConf)
+export function createCredentialsVault() {
+  return new CredentialsConfVault(
+    new Conf<ConfigType>({
+      configName: 'credentials',
+      cwd: path.join(os.homedir(), '.affinidi'),
+      defaults,
+      watch: true,
+    }),
+  )
+}

@@ -31,7 +31,11 @@ export class IssuanceState {
     const stored = state.get<IssuanceDto[]>(key)
     if (stored) return stored
 
-    const projectSummary = await iamState.requireProjectSummary(projectId)
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) {
+      throw new Error('Failed to fetch project summary')
+    }
+
     const { issuances } = await window.withProgress(
       { location: ProgressLocation.Notification, title: issuanceMessage.fetchingIssuances },
       async () =>

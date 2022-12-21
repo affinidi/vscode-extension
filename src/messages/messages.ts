@@ -191,6 +191,11 @@ export const csvMessage = {
   requiredColumns: 'Required columns',
 }
 
+export const vaultMessage = {
+  invalidConfiguration:
+    'Your configuration is invalid, make sure to install the latest version and try again',
+}
+
 export const genericMessage = {
   unexpectedError: 'Unexpected error',
   errorNotification: (message: string) => `${message}. Check Affinidi Output for details.`,

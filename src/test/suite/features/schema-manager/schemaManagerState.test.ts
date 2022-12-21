@@ -18,7 +18,7 @@ describe('SchemaManagerState', () => {
 
   beforeEach(async () => {
     sandbox
-      .stub(iamState, 'requireProjectSummary')
+      .stub(iamState, 'getProjectSummary')
       .resolves({ wallet: { did: 'fake-did' }, apiKey: { apiKeyHash: 'fake-api-key-hash' } } as any)
     sandbox.stub(schemaManagerClient, 'searchSchemas').resolves({ schemas, count: 4 })
 

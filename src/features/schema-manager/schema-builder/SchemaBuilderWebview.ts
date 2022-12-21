@@ -1,6 +1,6 @@
 import { ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
-import { errorMessage, labels } from '../../../messages/messages'
+import { labels } from '../../../messages/messages'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
 import { logger } from '../../../utils/logger'
 import { SubmitHandler } from './handlers/SubmitHandler'
@@ -97,11 +97,15 @@ export class SchemaBuilderWebview {
   }
 
   sendMessage(message: OutgoingMessage) {
-    this.requirePanel().webview.postMessage(message)
+    if (this.panel) {
+      this.panel.webview.postMessage(message)
+    }
   }
 
   private render() {
-    const { webview } = this.requirePanel()
+    if (!this.panel) return
+
+    const { webview } = this.panel
     const { extensionUri } = ext.context
 
     const toolkitUri = getWebviewUri(webview, extensionUri, ['media', 'vendor', 'toolkit.js'])
@@ -157,14 +161,6 @@ export class SchemaBuilderWebview {
         </body>
       </html>
     `
-  }
-
-  private requirePanel() {
-    if (!this.panel) {
-      throw new Error(errorMessage.webPanelNotOpen)
-    }
-
-    return this.panel
   }
 
   isDisposed(): boolean {

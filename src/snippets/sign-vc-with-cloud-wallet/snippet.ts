@@ -9,7 +9,7 @@ import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
 import { snippetMessage } from '../../messages/messages'
 import { iamState } from '../../features/iam/iamState'
-import { configVault } from '../../config/configVault'
+import { ext } from '../../extensionVariables'
 
 export interface SnippetInput {
   iamUrl: string
@@ -39,22 +39,16 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
-    if (!projectId) {
-      return undefined
-    }
+    const projectId = input?.projectId ?? (await ext.configuration.getActiveProjectId())
+    if (!projectId) return undefined
 
-    const {
-      apiKey: { apiKeyHash },
-      wallet: { did },
-    } = await iamState.requireProjectSummary(projectId)
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) return undefined
 
     const schema =
       input?.schema ??
       (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
-    if (!schema) {
-      return undefined
-    }
+    if (!schema) return undefined
 
     const credentialSubject = await generateCredentialSubjectSample(schema)
     if (!credentialSubject) {
@@ -64,8 +58,8 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
     return {
       iamUrl: AFFINIDI_IAM_API_URL,
       cloudWalletApiUrl: CLOUD_WALLET_API_URL,
-      issuerDid: did,
-      apiKeyHash,
+      issuerDid: projectSummary.wallet.did,
+      apiKeyHash: projectSummary.apiKey.apiKeyHash,
       projectId,
       claimId: nanoid(),
       schema,

@@ -10,11 +10,12 @@ import {
 } from 'vscode'
 import { nanoid } from 'nanoid'
 import { executeAuthProcess, parseJwt } from './auth-process'
-import { credentialsVault, Session } from '../../config/credentialsVault'
-import { configVault } from '../../config/configVault'
+import { Session } from '../../config/credentialsVault'
 import { notifyError } from '../../utils/notifyError'
 import { authMessage } from '../../messages/messages'
 import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
+import { ext } from '../../extensionVariables'
+import { logger } from '../../utils/logger'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'
 const AUTH_NAME = 'Affinidi'
@@ -29,7 +30,7 @@ const convertToVsCodeSession = (session: Session): AuthenticationSession => {
 }
 
 const readSessionFromStorage = (): AuthenticationSession | undefined => {
-  const storageValue = credentialsVault.getSession()
+  const storageValue = ext.configuration.getSession()
   return storageValue ? convertToVsCodeSession(storageValue) : undefined
 }
 
@@ -44,7 +45,9 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       authentication.registerAuthenticationProvider(AUTH_PROVIDER_ID, AUTH_NAME, this, {
         supportsMultipleAccounts: false,
       }),
-      { dispose: credentialsVault.onSessionChange(this.handleExternalChangeSession) },
+      ext.configuration.onDidSessionChange((newSession, oldSession) => {
+        this.handleExternalChangeSession(newSession, oldSession)
+      }),
     )
   }
 
@@ -120,13 +123,12 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         scopes: [],
       }
 
-      credentialsVault.setSession({
+      ext.configuration.setSession({
         sessionId: session.id,
         consoleAuthToken: accessToken,
         account: { label: email, userId: id },
         scopes: [],
       })
-      configVault.setCurrentUserId(session.account.id)
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -155,8 +157,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const session = readSessionFromStorage()
 
     if (session) {
-      configVault.delete('currentUserId')
-      credentialsVault.clear()
+      ext.configuration.deleteSession()
       this._onDidChangeSessions.fire({
         added: [],
         removed: [session],
@@ -181,10 +182,6 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         removed: oldSession ? [convertToVsCodeSession(oldSession)] : [],
         changed: [],
       })
-    }
-
-    if (newSession) {
-      configVault.setCurrentUserId(newSession.account.userId)
     }
   }
 }

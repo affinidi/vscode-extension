@@ -1,5 +1,4 @@
 import { commands, window } from 'vscode'
-import { configVault } from '../../config/configVault'
 import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'
 import { readOnlyContentViewer } from '../../utils/openReadOnlyContent'
@@ -13,8 +12,11 @@ import { InactiveProjectTreeItem } from './tree/treeItems'
 async function viewProjectProperties() {
   telemetryHelpers.trackCommand('affinidi.viewProjectProperties')
 
-  const activeProject = await iamState.requireActiveProject()
-  const activeProjectSummary = await iamState.requireProjectSummary(activeProject.projectId)
+  const activeProject = await iamState.getActiveProject()
+  if (!activeProject) return
+
+  const activeProjectSummary = await iamState.getProjectSummary(activeProject.projectId)
+  if (!activeProjectSummary) return
 
   await readOnlyContentViewer.open({
     node: { label: activeProject.name, id: activeProject.projectId },
@@ -30,7 +32,7 @@ async function activateProject(element: InactiveProjectTreeItem) {
   const project = await iamState.getProjectById(element.projectId)
   if (!project) return
 
-  await configVault.setUserConfig({ activeProjectId: project.projectId })
+  ext.configuration.setActiveProjectId(project.projectId)
 
   window.showInformationMessage(projectMessage.activatedProject(project.name))
 }
@@ -45,7 +47,7 @@ async function selectActiveProject() {
   )
   if (!project) return
 
-  await configVault.setUserConfig({ activeProjectId: project.projectId })
+  ext.configuration.setActiveProjectId(project.projectId)
 
   window.showInformationMessage(projectMessage.activatedProject(project.name))
 }
@@ -65,7 +67,7 @@ export async function initIam() {
 
   ext.context.subscriptions.push(
     iamStatusBar,
-    iamState.onDidUpdate(() => iamStatusBar.update())
+    iamState.onDidUpdate(() => iamStatusBar.update()),
   )
 
   ext.context.subscriptions.push(

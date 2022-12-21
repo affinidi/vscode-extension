@@ -1,5 +1,5 @@
 import { Disposable, StatusBarAlignment, StatusBarItem, window } from 'vscode'
-import { configVault } from '../../config/configVault'
+import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'
 import { notifyError } from '../../utils/notifyError'
 import { iamState } from './iamState'
@@ -24,7 +24,7 @@ export class IamStatusBar implements Disposable {
   }
 
   private async _generateItem(): Promise<{ text: string; command: string }> {
-    const currentUserId = configVault.getCurrentUserId()
+    const currentUserId = ext.configuration.isAuthenticated()
     if (!currentUserId) {
       return {
         text: 'Affinidi',
@@ -32,15 +32,14 @@ export class IamStatusBar implements Disposable {
       }
     }
 
-    const activeProjectId = await configVault.getActiveProjectId()
-    if (!activeProjectId) {
+    const activeProject = await iamState.getActiveProject()
+    if (!activeProject) {
       return {
         text: 'Affinidi',
         command: 'affinidi.createProject',
       }
     }
 
-    const activeProject = await iamState.requireActiveProject()
     const projects = await iamState.listProjects()
 
     return {

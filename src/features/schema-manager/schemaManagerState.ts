@@ -41,14 +41,18 @@ export class SchemaManagerState {
     const stored = state.get<SchemaDto[]>(key)
     if (stored) return stored
 
-    const {
-      wallet: { did },
-      apiKey: { apiKeyHash },
-    } = await iamState.requireProjectSummary(projectId)
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) {
+      throw new Error('Failed to fetch project summary')
+    }
 
     const { schemas } = await window.withProgress(
       { location: ProgressLocation.Notification, title: schemaMessage.fetchingSchemas },
-      async () => schemaManagerClient.searchSchemas({ did, authorDid: did }, { apiKeyHash }),
+      async () =>
+        schemaManagerClient.searchSchemas(
+          { did: projectSummary.wallet.did, authorDid: projectSummary.wallet.did },
+          { apiKeyHash: projectSummary.apiKey.apiKeyHash },
+        ),
     )
 
     state.update(key, schemas)

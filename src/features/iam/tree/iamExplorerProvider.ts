@@ -64,7 +64,10 @@ export class IamExplorerProvider implements ExplorerProvider {
       if (projectsCount === 0) {
         return []
       }
-      const activeProject = await iamState.requireActiveProject()
+      const activeProject = await iamState.getActiveProject()
+      if (!activeProject) {
+        return []
+      }
 
       const activeProjectTreeItem = new ProjectTreeItem({
         label: activeProject.name,
@@ -115,7 +118,8 @@ export class IamExplorerProvider implements ExplorerProvider {
   }
 
   private async getDigitalIdentities(parent: ProjectFeatureTreeItem) {
-    const projectSummary = await iamState.requireProjectSummary(parent.projectId)
+    const projectSummary = await iamState.getProjectSummary(parent.projectId)
+    if (!projectSummary) return []
 
     return [
       new DigitalIdentityTreeItem({

@@ -1,7 +1,7 @@
 import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
 import { window, ProgressLocation, EventEmitter, Disposable } from 'vscode'
-import { configVault } from '../../config/configVault'
 import { authHelper } from '../../auth/authHelper'
+import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'
 import { state } from '../../state'
 import { iamClient } from './iamClient'
@@ -20,27 +20,20 @@ export class IamState {
     return (await this.fetchProjects()).find((p) => p.projectId === projectId)
   }
 
-  async requireActiveProject(): Promise<ProjectDto> {
-    const activeProjectId = await configVault.requireActiveProjectId()
-    const activeProject = await this.getProjectById(activeProjectId)
-    if (!activeProject) {
-      throw new Error(projectMessage.errorFetchingActiveProject)
-    }
-    return activeProject
+  async getActiveProject(): Promise<ProjectDto | undefined> {
+    const activeProjectId = await ext.configuration.getActiveProjectId()
+    if (!activeProjectId) return undefined
+
+    return this.getProjectById(activeProjectId)
   }
 
   async getInactiveProjects(): Promise<ProjectDto[]> {
-    const activeProjectId = await configVault.requireActiveProjectId()
+    const activeProjectId = await ext.configuration.getActiveProjectId()
     return (await this.fetchProjects()).filter((project) => project.projectId !== activeProjectId)
   }
 
-  async requireProjectSummary(projectId: string): Promise<ProjectSummary> {
-    const projectSummary = await this.fetchProjectSummary(projectId)
-    if (!projectSummary) {
-      throw new Error(projectMessage.projectNotFound(projectId))
-    }
-
-    return projectSummary
+  async getProjectSummary(projectId: string): Promise<ProjectSummary | undefined> {
+    return this.fetchProjectSummary(projectId)
   }
 
   clear() {

@@ -16,7 +16,8 @@ export const showElementProperties = async (element: BasicTreeItem) => {
   let content: any = {}
 
   if (element instanceof ProjectTreeItem || element instanceof InactiveProjectTreeItem) {
-    const projectSummary = await iamState.requireProjectSummary(element.projectId)
+    const projectSummary = await iamState.getProjectSummary(element.projectId)
+    if (!projectSummary) return
 
     label = projectSummary.project.name
     id = element.projectId
@@ -48,5 +49,3 @@ export const showElementProperties = async (element: BasicTreeItem) => {
 
   await readOnlyContentViewer.open({ node: { label, id }, content })
 }
-
-

@@ -312,7 +312,7 @@ import { configVault } from './config/configVault'
 
 // ...
 
-const activeProjectId = await configVault.requireActiveProjectId()
+const activeProjectId = await configVault.getActiveProjectId()
 console.log(activeProjectId)
 ```
 

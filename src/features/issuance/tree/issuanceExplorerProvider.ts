@@ -8,9 +8,7 @@ import { IssuanceTreeItem } from './treeItems'
 import { issuanceHelpers } from '../issuanceHelpers'
 
 export class IssuanceExplorerProvider implements ExplorerProvider {
-  async getChildren(
-    element: BasicTreeItem | undefined,
-  ): Promise<BasicTreeItem[] | undefined> {
+  async getChildren(element: BasicTreeItem | undefined): Promise<BasicTreeItem[] | undefined> {
     if (element === undefined) return undefined
 
     if (element instanceof ProjectFeatureTreeItem && element.feature === Feature.ISSUANCES) {
@@ -19,11 +17,12 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
   }
 
   private async getIssuanceItems(parent: ProjectFeatureTreeItem) {
-    const {
-      project: { projectId },
-    } = await iamState.requireProjectSummary(parent.projectId)
+    const projectSummary = await iamState.getProjectSummary(parent.projectId)
+    if (!projectSummary) {
+      return []
+    }
 
-    const issuances = await issuanceState.listIssuances({ projectId })
+    const issuances = await issuanceState.listIssuances({ projectId: parent.projectId })
 
     return issuances.map(
       (issuance) =>

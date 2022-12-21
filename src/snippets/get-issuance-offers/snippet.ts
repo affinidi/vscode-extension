@@ -6,7 +6,7 @@ import * as javascript from './javascript'
 import * as typescript from './typescript'
 import { iamState } from '../../features/iam/iamState'
 import { issuanceHelpers } from '../../features/issuance/issuanceHelpers'
-import { configVault } from '../../config/configVault'
+import { ext } from '../../extensionVariables'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -30,24 +30,19 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
   'getIssuanceOffers',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
-    if (!projectId) {
-      return undefined
-    }
+    const projectId = input?.projectId ?? (await ext.configuration.getActiveProjectId())
+    if (!projectId) return undefined
 
-    const {
-      apiKey: { apiKeyHash },
-    } = await iamState.requireProjectSummary(projectId)
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) return undefined
 
     const issuanceId =
       input?.issuanceId ?? (await issuanceHelpers.askForIssuance({ projectId }))?.id
-    if (!issuanceId) {
-      return undefined
-    }
+    if (!issuanceId) return undefined
 
     return {
       issuanceApiUrl: ISSUANCE_API_URL,
-      apiKeyHash,
+      apiKeyHash: projectSummary.apiKey.apiKeyHash,
       issuanceId,
       projectId,
     }

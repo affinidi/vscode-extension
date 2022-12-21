@@ -29,12 +29,13 @@ import { iamState } from './features/iam/iamState'
 import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager/tree/treeItems'
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
-import { configVault } from './config/configVault'
-import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
 import { initIam } from './features/iam/initIam'
 import { notifyError } from './utils/notifyError'
 import { schemaMessage } from './messages/messages'
+import { createCredentialsVault } from './config/credentialsVault'
+import { Configuration } from './config/configuration'
+import { createConfigVault } from './config/configVault'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -48,8 +49,10 @@ export async function activateInternal(context: ExtensionContext) {
 
   ext.context = context
   ext.outputChannel = window.createOutputChannel('Affinidi')
-  ext.authProvider = initAuthentication()
+  ext.configuration = new Configuration(createConfigVault(), createCredentialsVault())
+  ext.configuration.init()
 
+  ext.authProvider = initAuthentication()
   ext.explorerTree = new ExplorerTree([
     new AuthExplorerProvider(),
     new IamExplorerProvider(),
@@ -60,28 +63,19 @@ export async function activateInternal(context: ExtensionContext) {
   ext.feedbackTree = new FeedbackTree()
 
   ext.context.subscriptions.push(
+    ext.configuration,
     ext.authProvider.onDidChangeSessions(async () => {
       state.clear()
       ext.explorerTree.refresh()
     }),
-    {
-      dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
-        state.clear()
-        ext.explorerTree.refresh()
-
-        if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
-          updateCredentialsActiveProjectSummary()
-        }
-      }),
-    },
-    {
-      dispose: configVault.onCurrentUserIdChange(async () => {
-        state.clear()
-        ext.explorerTree.refresh()
-
-        updateCredentialsActiveProjectSummary()
-      }),
-    },
+    ext.configuration.onDidActiveProjectIdChange(() => {
+      state.clear()
+      ext.explorerTree.refresh()
+    }),
+    ext.configuration.onDidSessionChange(() => {
+      state.clear()
+      ext.explorerTree.refresh()
+    }),
   )
 
   const treeView = window.createTreeView('affinidiExplorer', {
@@ -382,14 +376,16 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {
     telemetryHelpers.trackCommand('affinidi.openSchemaBuilder')
     try {
-      await openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
+      const projectId = await ext.configuration.getActiveProjectId()
+      if (!projectId) return
+
+      await openSchemaBuilder({ projectId })
     } catch (error: unknown) {
       notifyError(error, schemaMessage.unableToOpenSchemaBuilder)
     }
   })
 
   telemetryHelpers.askUserForTelemetryConsent()
-  updateCredentialsActiveProjectSummary()
 
   initSnippets()
   initGenerators()

@@ -9,6 +9,10 @@ export function notifyError(error: any, customMessage?: string) {
 
   logger.error(error, message)
   window.showErrorMessage(genericMessage.errorNotification(message))
-  ext.outputChannel.appendLine(`${message}: ${error}`)
-  ext.outputChannel.show()
+
+  if (ext.outputChannel) {
+    ext.outputChannel.appendLine(message)
+    ext.outputChannel.appendLine(String(error))
+    ext.outputChannel.show()
+  }
 }

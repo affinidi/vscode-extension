@@ -1,4 +1,4 @@
-import { configVault } from '../../../config/configVault'
+import { ext } from '../../../extensionVariables'
 import { schemaMessage } from '../../../messages/messages'
 import { notifyError } from '../../../utils/notifyError'
 import { BuilderSchemaPublisher } from './BuilderSchemaPublisher'
@@ -42,7 +42,10 @@ async function getOrCreateBuilder(input?: {
   ) {
     builder?.dispose()
 
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
+    const projectId = input?.projectId ?? (await ext.configuration.getActiveProjectId())
+    if (!projectId) {
+      throw new Error('Active project is required, but none is provided')
+    }
 
     builder = new SchemaBuilderWebview(
       projectId,

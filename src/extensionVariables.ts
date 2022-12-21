@@ -1,5 +1,6 @@
 import vscode from 'vscode'
 import type { AffinidiAuthenticationProvider } from './auth/authentication-provider/affinidi-authentication-provider'
+import type { Configuration } from './config/configuration'
 import type { DevToolsTree } from './tree/devToolsTree'
 import type { ExplorerTree } from './tree/explorerTree'
 import type { FeedbackTree } from './tree/feedbackTree'
@@ -11,4 +12,5 @@ export namespace ext {
   export let explorerTree: ExplorerTree
   export let devToolsTree: DevToolsTree
   export let feedbackTree: FeedbackTree
+  export let configuration: Configuration
 }
