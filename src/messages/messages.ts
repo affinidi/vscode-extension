@@ -89,16 +89,18 @@ export const projectMessage = {
   successfulProjectCreation: 'Project created successfully',
   projectRequired: 'You need to have a project to perform this operation',
   projectNameRequired: 'Project name is required',
-  projectNotCreated: 'Project could not be created',
+  projectNotCreated: 'Project could not be created.',
   noProjectSummary: 'Could not find project summary: {0}',
   missingProjectID: 'Project ID is not provided',
-  pleaseTryAgain: 'Please try again later',
   projectDoesNotExist: 'Project does not exist.',
   projectNotFound: (projectId: string) => `Project not found: ${projectId}`,
   errorFetchingActiveProject: 'Error while fetching the active project.',
+  errorFetchingActiveProjectId: 'Error while fetching the active project id.',
   selectActiveProject: 'Select a new active project',
   activatedProject: (projectName: string) => `Successfully activated the project "${projectName}"`,
   creatingDefaultProject: 'Creating default project...',
+  failedToFetchProjects: 'Failed to fetch projects',
+  failedToUpdateIamStatusBar: 'Could not update IAM status bar item',
 }
 
 export const issuanceMessage = {
@@ -109,6 +111,7 @@ export const issuanceMessage = {
   vcVerified: 'VC Verified',
   vcNotVerified: 'VC Not Verified',
   vcVerificaitonFailed: 'VC verification failed',
+  failedToCreateIssuance: 'Failed to create issuance',
 }
 
 export const schemaMessage = {
@@ -127,6 +130,7 @@ export const schemaMessage = {
   schemaCreated: 'Schema has been successfully created',
   couldNotCreateSchemaBuilder: 'Could not get or create Schema Builder',
   selectProjectToCreateSchema: 'You must select a project to create a schema',
+  unableToOpenSchemaBuilder: 'Unable to open schema builder',
   invalidAttributeName: 'Invalid attribute name',
   invalidAttributeNameSuggestion:
     'Use camelCase and alphanumeric symbols (for example, "firstName")',
@@ -166,7 +170,7 @@ export const cliMessage = {
     'Affinidi CLI needs to be installed to proceed with this action: npm i -g @affinidi/cli',
   appIsGenerating: 'App is generating...',
   appGenerated: 'App successfully generated',
-  unableToGenerateApp: 'Unable to generate app. Check Affinidi Output for details.',
+  unableToGenerateApp: 'Unable to generate app.',
 }
 
 export const telemetryMessage = {
@@ -183,7 +187,6 @@ export const csvMessage = {
   uploadCsvFile: 'Upload a CSV file',
   commaSeparatorMessage: 'Make sure to use comma (,) as separator. ',
   csvValidationError: 'Could not create issuance due to validation errors in the CSV.',
-  checkOutputChannel: 'Check Affinidi Output for details.',
   issuanceCreationMessage: 'Issuance has been created and the offers were sent.',
   invalidCsvFile: 'Invalid CSV file',
   invalidDataInRow: 'Invalid data in row #',
@@ -191,4 +194,9 @@ export const csvMessage = {
   field: 'Field',
   row: 'Row',
   requiredColumns: 'Required columns',
+}
+
+export const genericMessage = {
+  unexpectedError: 'Unexpected error',
+  errorNotification: (message: string) => `${message}. Check Affinidi Output for details.`,
 }

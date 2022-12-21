@@ -12,7 +12,6 @@ import { nanoid } from 'nanoid'
 import { executeAuthProcess, parseJwt } from './auth-process'
 import { credentialsVault, Session } from '../../config/credentialsVault'
 import { configVault } from '../../config/configVault'
-import { logger } from '../../utils/logger'
 import { notifyError } from '../../utils/notifyError'
 import { authMessage } from '../../messages/messages'
 import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
@@ -80,8 +79,8 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
       }
 
       return session
-    } catch (error) {
-      logger.error(error, authMessage.noValidSessionFound)
+    } catch (error: unknown) {
+      notifyError(error, authMessage.noValidSessionFound)
       this.handleRemoveSession()
       return undefined
     }
@@ -137,8 +136,7 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
 
       return session
     } catch (error: unknown) {
-      logger.error(error, authMessage.unableToCreateSession)
-      notifyError(error)
+      notifyError(error, authMessage.unableToCreateSession)
       throw error
     }
   }
