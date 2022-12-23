@@ -27,17 +27,13 @@ export class ConfigConfVault extends BasicConfVault<ConfigType> {
     super(CONFIG_VERSION, schema, conf, defaults)
   }
 
-  setUserConfig(userId: string, userConfig: UserConfig): void {
+  amendUserConfig(userId: string, userConfig: UserConfig): void {
     this.conf.set('configs', {
       ...this.conf.get('configs'),
-      [userId]: userConfig,
-    })
-  }
-
-  amendUserConfig(userId: string, userConfig: UserConfig): void {
-    this.setUserConfig(userId, {
-      ...this.getUserConfig(userId),
-      ...userConfig,
+      [userId]: {
+        ...this.conf.get('configs')?.[userId],
+        userConfig,
+      },
     })
   }
 
