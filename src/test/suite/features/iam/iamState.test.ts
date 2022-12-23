@@ -71,11 +71,10 @@ describe('IamState', () => {
       await expect(iamState.getActiveProject()).to.eventually.deep.eq(projects[0])
       expect(iamClient.listProjects).calledTwice
     })
-    it('should throw error when active project could not be fetched', async () => {
+
+    it('should not throw error when active project could not be fetched', async () => {
       sandbox.stub(iamState, 'getProjectById').resolves(undefined)
-      await expect(iamState.getActiveProject()).to.eventually.be.rejectedWith(
-        projectMessage.errorFetchingActiveProject,
-      )
+      await expect(iamState.getActiveProject()).to.eventually.be.undefined
     })
   })
 
