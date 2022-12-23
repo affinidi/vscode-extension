@@ -30,7 +30,6 @@ import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager/tree/treeItems'
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { configVault } from './config/configVault'
-import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
 import { initIam } from './features/iam/initIam'
 import { notifyError } from './utils/notifyError'
@@ -65,21 +64,9 @@ export async function activateInternal(context: ExtensionContext) {
       ext.explorerTree.refresh()
     }),
     {
-      dispose: configVault.onUserConfigChange(async (newConfig, oldConfig) => {
+      dispose: configVault.onUserConfigChange(async () => {
         state.clear()
         ext.explorerTree.refresh()
-
-        if (newConfig?.activeProjectId !== oldConfig?.activeProjectId) {
-          updateCredentialsActiveProjectSummary()
-        }
-      }),
-    },
-    {
-      dispose: configVault.onCurrentUserIdChange(async () => {
-        state.clear()
-        ext.explorerTree.refresh()
-
-        updateCredentialsActiveProjectSummary()
       }),
     },
   )
@@ -389,7 +376,6 @@ export async function activateInternal(context: ExtensionContext) {
   })
 
   telemetryHelpers.askUserForTelemetryConsent()
-  updateCredentialsActiveProjectSummary()
 
   initSnippets()
   initGenerators()

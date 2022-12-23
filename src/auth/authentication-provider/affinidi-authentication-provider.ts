@@ -155,7 +155,6 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
     const session = readSessionFromStorage()
 
     if (session) {
-      configVault.delete('currentUserId')
       credentialsVault.clear()
       this._onDidChangeSessions.fire({
         added: [],

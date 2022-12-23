@@ -7,7 +7,6 @@ import { OnDidChangeCallback } from 'conf/dist/source/types'
 
 export type ConfigType = {
   version: number
-  activeProjectSummary?: ProjectSummary
   session?: Session
 }
 
@@ -31,17 +30,16 @@ class CredentialsVault {
     this.store.delete(key)
   }
 
-
-  setActiveProjectSummary(value: ProjectSummary): void {
-    this.store.set('activeProjectSummary', value)
-  }
-
   getSession(): Session | undefined {
     return this.store.get('session')
   }
 
   setSession(value: Session): void {
     this.store.set('session', value)
+  }
+
+  getCurrentUserId(): string | undefined {
+    return this.getSession()?.account.userId
   }
 
   onSessionChange(callback: OnDidChangeCallback<Session | undefined>) {

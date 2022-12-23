@@ -6,9 +6,9 @@ import deepEqual from 'fast-deep-equal'
 import { iamState } from '../features/iam/iamState'
 import { NoProjectsError } from './NoProjectsError'
 import { NoCurrentUser } from './NoCurrentUser'
-import { logger } from '../utils/logger'
 import { notifyError } from '../utils/notifyError'
 import { projectMessage } from '../messages/messages'
+import { credentialsVault } from './credentialsVault'
 
 export type UserConfig = {
   activeProjectId?: string
@@ -16,7 +16,6 @@ export type UserConfig = {
 
 export type ConfigType = {
   version: number
-  currentUserId?: string
   configs?: Record<string, UserConfig>
 }
 
@@ -34,7 +33,7 @@ class ConfigVault {
   }
 
   async requireActiveProjectId(): Promise<string> {
-    if (!this.getCurrentUserId()) {
+    if (!credentialsVault.getCurrentUserId()) {
       throw new NoCurrentUser()
     }
 
@@ -70,7 +69,7 @@ class ConfigVault {
   }
 
   async setUserConfig(userConfig: UserConfig): Promise<void> {
-    const userId = this.getCurrentUserId()
+    const userId = credentialsVault.getCurrentUserId()
     const existingConfigs = this.store.get('configs')
 
     const newConfigs = {
@@ -82,27 +81,15 @@ class ConfigVault {
   }
 
   async getUserConfig(): Promise<UserConfig | undefined> {
-    const userId = this.getCurrentUserId()
+    const userId = credentialsVault.getCurrentUserId()
     if (!userId) return undefined
 
     return this.store.get('configs')?.[userId]
   }
 
-  getCurrentUserId(): string | undefined {
-    return this.store.get('currentUserId')
-  }
-
-  setCurrentUserId(value: string): void {
-    this.store.set('currentUserId', value)
-  }
-
-  onCurrentUserIdChange(callback: OnDidChangeCallback<string | undefined>) {
-    return this.store.onDidChange('currentUserId', callback)
-  }
-
   onUserConfigChange(callback: OnDidChangeCallback<UserConfig>) {
     return this.store.onDidChange('configs', async (newValue, oldValue) => {
-      const userId = this.getCurrentUserId()
+      const userId = credentialsVault.getCurrentUserId()
       if (!userId) return
 
       const oldConfig = oldValue?.[userId]

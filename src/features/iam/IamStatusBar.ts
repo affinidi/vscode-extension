@@ -1,5 +1,6 @@
 import { Disposable, StatusBarAlignment, StatusBarItem, window } from 'vscode'
 import { configVault } from '../../config/configVault'
+import { credentialsVault } from '../../config/credentialsVault'
 import { projectMessage } from '../../messages/messages'
 import { notifyError } from '../../utils/notifyError'
 import { iamState } from './iamState'
@@ -24,7 +25,7 @@ export class IamStatusBar implements Disposable {
   }
 
   private async _generateItem(): Promise<{ text: string; command: string }> {
-    const currentUserId = configVault.getCurrentUserId()
+    const currentUserId = credentialsVault.getCurrentUserId()
     if (!currentUserId) {
       return {
         text: 'Affinidi',
