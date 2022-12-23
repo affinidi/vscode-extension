@@ -1,30 +1,49 @@
 import { OpenDialogOptions, ProgressLocation, window } from 'vscode'
+import fs from 'fs'
 import { ext } from '../../extensionVariables'
 import { issuanceMessage, labels } from '../../messages/messages'
 import { iamState } from '../iam/iamState'
 import { verifierClient } from './verifyClient'
+import { notifyError } from '../../utils/notifyError'
+import { configVault } from '../../config/configVault'
+
+const selectOptions: OpenDialogOptions = {
+  canSelectMany: false,
+  openLabel: labels.select,
+  canSelectFiles: true,
+  canSelectFolders: false,
+  filters: {
+    'JSON Files': ['JSON'],
+  },
+}
 
 export const verifyVC = async () => {
-  const options: OpenDialogOptions = {
-    canSelectMany: false,
-    openLabel: labels.select,
-    canSelectFiles: true,
-    canSelectFolders: false,
-    filters: {
-      'JSON Files': ['JSON'],
-    },
-  }
-
-  const selectedFiles = await window.showOpenDialog(options)
+  const selectedFiles = await window.showOpenDialog(selectOptions)
   const selectedFilePath = selectedFiles?.[0]?.fsPath
-  if (!selectedFilePath) {
-    return
-  }
+  if (!selectedFilePath) return
 
-  const { projectId } = await iamState.requireActiveProject()
+  const selectedFileData = fs.readFileSync(selectedFilePath)
+
+  // const selectedFileData = async (): Promise<string> => {
+  //   const fileData = fs.readFile(selectedFilePath, (data, error) => {
+  //     console.log('hitting callback')
+  //     try {
+  //       if (data) {
+  //         return data
+  //       }
+  //       return error
+  //     } catch (err: unknown) {
+  //       notifyError(err, labels.invalidFileType)
+  //     }
+  //     return data
+  //   })
+  //   return fileData
+  // }
+
+  const activeProjectId = await configVault.requireActiveProjectId()
   const {
     apiKey: { apiKeyHash },
-  } = await iamState.requireProjectSummary(projectId)
+  } = await iamState.requireProjectSummary(activeProjectId)
 
   try {
     const data = await window.withProgress(
@@ -32,22 +51,22 @@ export const verifyVC = async () => {
         location: ProgressLocation.Notification,
         title: issuanceMessage.vcBeingVerified,
       },
-      () => {
+      async () => {
         return verifierClient.verifyCredentials(
-          { verifiableCredentials: [JSON.parse(selectedFilePath)] },
+          {
+            verifiableCredentials: [JSON.parse(selectedFileData.toString())],
+          },
           { apiKeyHash },
         )
       },
     )
 
     window.showInformationMessage(
-      data.isValid ? issuanceMessage.vcVerified : issuanceMessage.vcNotVerified,
+      data.isValid ? issuanceMessage.vcValid : issuanceMessage.vcNotValid,
     )
     ext.outputChannel.appendLine(JSON.stringify(data, null, 2))
     ext.outputChannel.show()
   } catch (error: unknown) {
-    window.showErrorMessage(issuanceMessage.vcVerificaitonFailed)
-    ext.outputChannel.appendLine(JSON.stringify(error))
-    ext.outputChannel.show()
+    notifyError(error, issuanceMessage.vcVerificaitonFailed)
   }
 }

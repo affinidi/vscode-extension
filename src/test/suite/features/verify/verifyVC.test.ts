@@ -1,7 +1,6 @@
 import { window } from 'vscode'
 import { expect } from 'chai'
 import sinon from 'sinon'
-import fs from 'fs'
 import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
 import { issuanceMessage } from '../../../../messages/messages'
@@ -15,10 +14,11 @@ describe('verifyVC())', () => {
 
   let showOpenDialog: sinon.SinonStub
   let verifyVC: sinon.SinonStub
+  let showInformationMessage: sinon.SinonStub
 
   beforeEach(() => {
+    showInformationMessage = sandbox.stub(window, 'showInformationMessage')
     sandbox.stub(ext.outputChannel, 'appendLine')
-    sandbox.stub(verifierClient, 'verifyCredentials').resolves(JSON.parse(vcTemplate))
     showOpenDialog = sandbox
       .stub(window, 'showOpenDialog')
       .resolves([{ fsPath: 'fsPathTest' }] as any)
@@ -27,12 +27,13 @@ describe('verifyVC())', () => {
   describe('verifyAC()', () => {
     beforeEach(() => {
       showOpenDialog.resolves([{ fsPath: 'fsPathTest' }] as any)
-      verifyVC = sandbox.stub(verifierClient, 'verifyCredentials').resolves(JSON.parse(vcTemplate))
-      sandbox.stub(fs, 'createReadStream')
+      verifyVC = sandbox
+        .stub(verifierClient, 'verifyCredentials')
+        .resolves(JSON.parse(JSON.stringify(vcTemplate)))
     })
 
     it('should return undefined if nothing is selected', async () => {
-      verifyVC.resolves(vcTemplate)
+      verifyVC.resolves()
       showOpenDialog.resolves(undefined)
 
       const result = await verifyVC()
@@ -43,7 +44,7 @@ describe('verifyVC())', () => {
       verifyVC.resolves(invalidVC)
 
       await verifyVC({ verifiableCredentials: [invalidVC] })
-      expect(window.showInformationMessage).calledWithMatch(issuanceMessage.vcNotVerified)
+      expect(showInformationMessage).calledWith(issuanceMessage.vcNotValid)
       expect(verifyVC).calledWith(invalidVC)
     })
 
@@ -51,11 +52,11 @@ describe('verifyVC())', () => {
       verifyVC.resolves(validVC)
 
       await verifyVC({ verifiableCredentials: [validVC] })
-      expect(window.showInformationMessage).calledWithMatch(issuanceMessage.vcVerified)
+      expect(showInformationMessage).calledWith(issuanceMessage.vcValid)
       expect(verifyVC).calledWith(validVC)
     })
 
-    it('it should throw and error if it fails  ', async () => {
+    it('it should throw and error if it fails', async () => {
       verifyVC.resolves(vcTemplate)
       verifyVC.throws({ code: 'VIS-1', message: 'messageTest' })
 

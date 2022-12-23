@@ -33,6 +33,7 @@ export const labels = {
   activeProject: 'Active',
   inactiveProjects: 'Inactive Projects',
   verifyVC: 'Verify a VC',
+  invalidFileType: 'Invalid File Type',
 }
 
 export const errorMessage = {
@@ -108,8 +109,8 @@ export const issuanceMessage = {
   selectIssuance: 'Select an Issuance',
   noIssuances: "You don't have any issuances to choose from",
   vcBeingVerified: 'VC verification in progress...',
-  vcVerified: 'VC Verified',
-  vcNotVerified: 'VC Not Verified',
+  vcValid: 'VC is valid',
+  vcNotValid: 'VC is not valid',
   vcVerificaitonFailed: 'VC verification failed',
   failedToCreateIssuance: 'Failed to create issuance',
 }

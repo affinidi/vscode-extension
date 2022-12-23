@@ -392,7 +392,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidi.verifyVC', async () => {
     telemetryHelpers.trackCommand('affinidi.verifyVC')
 
-    verifyVC()
+    await verifyVC()
   })
 
   telemetryHelpers.askUserForTelemetryConsent()
