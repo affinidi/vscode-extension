@@ -1,7 +1,8 @@
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { ProgressLocation, window } from 'vscode'
-import { issuanceMessage } from '../../messages/messages'
+import { genericMessage, issuanceMessage } from '../../messages/messages'
 import { state } from '../../state'
+import { notifyError } from '../../utils/notifyError'
 import { iamState } from '../iam/iamState'
 import { issuanceClient } from './issuanceClient'
 
@@ -31,7 +32,12 @@ export class IssuanceState {
     const stored = state.get<IssuanceDto[]>(key)
     if (stored) return stored
 
-    const projectSummary = await iamState.requireProjectSummary(projectId)
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) {
+      notifyError(new Error(genericMessage.projectIsRequired))
+      return []
+    }
+
     const { issuances } = await window.withProgress(
       { location: ProgressLocation.Notification, title: issuanceMessage.fetchingIssuances },
       async () =>

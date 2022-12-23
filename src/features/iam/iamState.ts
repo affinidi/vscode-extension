@@ -20,27 +20,22 @@ export class IamState {
     return (await this.fetchProjects()).find((p) => p.projectId === projectId)
   }
 
-  async requireActiveProject(): Promise<ProjectDto> {
-    const activeProjectId = await configVault.requireActiveProjectId()
-    const activeProject = await this.getProjectById(activeProjectId)
-    if (!activeProject) {
+  async getActiveProject(): Promise<ProjectDto | undefined> {
+    const activeProjectId = await configVault.getActiveProjectId()
+    if (!activeProjectId) {
       throw new Error(projectMessage.errorFetchingActiveProject)
     }
-    return activeProject
+
+    return this.getProjectById(activeProjectId)
   }
 
   async getInactiveProjects(): Promise<ProjectDto[]> {
-    const activeProjectId = await configVault.requireActiveProjectId()
+    const activeProjectId = await configVault.getActiveProjectId()
     return (await this.fetchProjects()).filter((project) => project.projectId !== activeProjectId)
   }
 
-  async requireProjectSummary(projectId: string): Promise<ProjectSummary> {
-    const projectSummary = await this.fetchProjectSummary(projectId)
-    if (!projectSummary) {
-      throw new Error(projectMessage.projectNotFound(projectId))
-    }
-
-    return projectSummary
+  async getProjectSummary(projectId: string): Promise<ProjectSummary | undefined> {
+    return this.fetchProjectSummary(projectId)
   }
 
   clear() {

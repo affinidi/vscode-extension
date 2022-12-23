@@ -33,7 +33,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
     sandbox.stub(cliHelper, 'setActiveProject')
-    sandbox.stub(configVault, 'requireActiveProjectId').resolves(PROJECT_ID)
+    sandbox.stub(configVault, 'getActiveProjectId').resolves(PROJECT_ID)
   })
 
   it('should show error message when CLI is not installed', async () => {

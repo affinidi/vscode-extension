@@ -369,7 +369,7 @@ export async function activateInternal(context: ExtensionContext) {
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {
     telemetryHelpers.trackCommand('affinidi.openSchemaBuilder')
     try {
-      await openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
+      await openSchemaBuilder({ projectId: await configVault.getActiveProjectId() })
     } catch (error: unknown) {
       notifyError(error, schemaMessage.unableToOpenSchemaBuilder)
     }

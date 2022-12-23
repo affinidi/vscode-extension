@@ -29,7 +29,7 @@ describe('showElementProperties()', () => {
       projectId,
     })
 
-    sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
+    sandbox.stub(iamState, 'getProjectSummary').withArgs(projectId).resolves(projectSummary)
 
     await showElementProperties(element)
 

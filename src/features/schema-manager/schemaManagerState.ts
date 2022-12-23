@@ -1,7 +1,8 @@
 import { SchemaDto, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { window, ProgressLocation } from 'vscode'
-import { schemaMessage } from '../../messages/messages'
+import { genericMessage, schemaMessage } from '../../messages/messages'
 import { state } from '../../state'
+import { notifyError } from '../../utils/notifyError'
 import { iamState } from '../iam/iamState'
 import { schemaManagerClient } from './schemaManagerClient'
 
@@ -41,10 +42,16 @@ export class SchemaManagerState {
     const stored = state.get<SchemaDto[]>(key)
     if (stored) return stored
 
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) {
+      notifyError(new Error(genericMessage.projectIsRequired))
+      return []
+    }
+
     const {
-      wallet: { did },
       apiKey: { apiKeyHash },
-    } = await iamState.requireProjectSummary(projectId)
+      wallet: { did },
+    } = projectSummary
 
     const { schemas } = await window.withProgress(
       { location: ProgressLocation.Notification, title: schemaMessage.fetchingSchemas },

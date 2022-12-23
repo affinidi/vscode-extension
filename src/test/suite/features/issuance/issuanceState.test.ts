@@ -13,7 +13,7 @@ describe('IssuanceState', () => {
 
   beforeEach(async () => {
     sandbox
-      .stub(iamState, 'requireProjectSummary')
+      .stub(iamState, 'getProjectSummary')
       .resolves({ apiKey: { apiKeyHash: 'fake-api-key-hash' } } as any)
     sandbox.stub(issuanceClient, 'searchIssuances').resolves({ issuances })
 

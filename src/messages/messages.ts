@@ -192,6 +192,7 @@ export const csvMessage = {
 }
 
 export const genericMessage = {
+  projectIsRequired: 'Project is not provided or not found',
   unexpectedError: 'Unexpected error',
   errorNotification: (message: string) => `${message}. Check Affinidi Output for details.`,
 }

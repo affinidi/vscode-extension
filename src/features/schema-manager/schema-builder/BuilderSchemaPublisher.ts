@@ -3,11 +3,20 @@ import { SchemaField, SchemaFieldType, generate } from '@affinidi/affinidi-vc-sc
 import { schemaManagerClient } from '../schemaManagerClient'
 import { iamState } from '../../iam/iamState'
 import { BuilderAttribute, BuilderSchema } from './SchemaBuilderWebview'
+import { genericMessage } from '../../../messages/messages'
 
 export class BuilderSchemaPublisher {
   async publish(schema: BuilderSchema, projectId: string): Promise<SchemaDto> {
-    const { apiKey: { apiKeyHash }, wallet: { did } } = await iamState.requireProjectSummary(projectId)
-  
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) {
+      throw new Error(genericMessage.projectIsRequired)
+    }
+
+    const {
+      apiKey: { apiKeyHash },
+      wallet: { did },
+    } = projectSummary
+
     const scope = schema.isPublic ? 'public' : 'unlisted'
     const [version, revision] = await this.generateNextVersion({
       type: schema.type,

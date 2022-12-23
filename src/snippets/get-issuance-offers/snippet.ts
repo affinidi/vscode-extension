@@ -30,14 +30,17 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
   'getIssuanceOffers',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
+    const projectId = input?.projectId ?? (await configVault.getActiveProjectId())
     if (!projectId) {
       return undefined
     }
 
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) return undefined
+
     const {
       apiKey: { apiKeyHash },
-    } = await iamState.requireProjectSummary(projectId)
+    } = projectSummary
 
     const issuanceId =
       input?.issuanceId ?? (await issuanceHelpers.askForIssuance({ projectId }))?.id

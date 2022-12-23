@@ -23,9 +23,11 @@ export const implementationLabels = {
 }
 
 const openCsvTemplate = async (input: { schema: Schema; projectId: string }) => {
+  const projectSummary = await iamState.getProjectSummary(input.projectId)
+  if (!projectSummary) return
   const {
     apiKey: { apiKeyHash },
-  } = await iamState.requireProjectSummary(input.projectId)
+  } = projectSummary
 
   const template = await window.withProgress(
     { location: ProgressLocation.Notification, title: csvMessage.downloadingCsvTemplate },
@@ -62,10 +64,12 @@ const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletU
     return
   }
 
+  const projectSummary = await iamState.getProjectSummary(input.projectId)
+  if (!projectSummary) return
   const {
     apiKey: { apiKeyHash },
     wallet: { did },
-  } = await iamState.requireProjectSummary(input.projectId)
+  } = projectSummary
 
   const schema =
     input.schema ??
@@ -119,7 +123,7 @@ const initiateIssuanceCsvFlow = async (input: {
   projectId?: string
   walletUrl?: string
 }): Promise<void> => {
-  const projectId = input.projectId ?? (await configVault.requireActiveProjectId())
+  const projectId = input.projectId ?? (await configVault.getActiveProjectId())
   if (!projectId) {
     return
   }

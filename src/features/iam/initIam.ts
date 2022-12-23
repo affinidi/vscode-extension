@@ -13,11 +13,14 @@ import { InactiveProjectTreeItem } from './tree/treeItems'
 async function viewProjectProperties() {
   telemetryHelpers.trackCommand('affinidi.viewProjectProperties')
 
-  const activeProject = await iamState.requireActiveProject()
-  const activeProjectSummary = await iamState.requireProjectSummary(activeProject.projectId)
+  const activeProjectId = await configVault.getActiveProjectId()
+  if (!activeProjectId) return
+
+  const activeProjectSummary = await iamState.getProjectSummary(activeProjectId)
+  if (!activeProjectSummary) return
 
   await readOnlyContentViewer.open({
-    node: { label: activeProject.name, id: activeProject.projectId },
+    node: { label: activeProjectSummary.project.name, id: activeProjectId },
     content: activeProjectSummary,
   })
 }

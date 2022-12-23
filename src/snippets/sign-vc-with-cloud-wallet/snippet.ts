@@ -39,15 +39,18 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
+    const projectId = input?.projectId ?? (await configVault.getActiveProjectId())
     if (!projectId) {
       return undefined
     }
 
+    const projectSummary = await iamState.getProjectSummary(projectId)
+    if (!projectSummary) return undefined
+
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await iamState.requireProjectSummary(projectId)
+    } = projectSummary
 
     const schema =
       input?.schema ??

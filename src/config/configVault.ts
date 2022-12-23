@@ -4,10 +4,6 @@ import os from 'os'
 import path from 'path'
 import deepEqual from 'fast-deep-equal'
 import { iamState } from '../features/iam/iamState'
-import { NoProjectsError } from './NoProjectsError'
-import { NoCurrentUser } from './NoCurrentUser'
-import { notifyError } from '../utils/notifyError'
-import { projectMessage } from '../messages/messages'
 import { credentialsVault } from './credentialsVault'
 
 export type UserConfig = {
@@ -32,9 +28,9 @@ class ConfigVault {
     this.store.delete(key)
   }
 
-  async requireActiveProjectId(): Promise<string> {
+  async getActiveProjectId(): Promise<string | undefined> {
     if (!credentialsVault.getCurrentUserId()) {
-      throw new NoCurrentUser()
+      return undefined
     }
 
     const userConfig = await this.getUserConfig()
@@ -45,7 +41,7 @@ class ConfigVault {
     const projects = await iamState.listProjects()
     if (projects.length === 0) {
       await this.setUserConfig({ activeProjectId: undefined })
-      throw new NoProjectsError()
+      return undefined
     }
 
     const activeProjectId = projects[0].projectId
@@ -53,19 +49,6 @@ class ConfigVault {
     await this.setUserConfig({ activeProjectId })
 
     return activeProjectId
-  }
-
-  async getActiveProjectId(): Promise<string | undefined> {
-    try {
-      return await this.requireActiveProjectId()
-    } catch (error: unknown) {
-      if (error instanceof NoProjectsError || error instanceof NoCurrentUser) {
-        return undefined
-      }
-
-      notifyError(error, projectMessage.errorFetchingActiveProjectId)
-      throw error
-    }
   }
 
   async setUserConfig(userConfig: UserConfig): Promise<void> {

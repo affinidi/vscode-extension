@@ -6,6 +6,8 @@ import { ProjectFeatureTreeItem } from '../../iam/tree/treeItems'
 import { Feature } from '../../feature'
 import { IssuanceTreeItem } from './treeItems'
 import { issuanceHelpers } from '../issuanceHelpers'
+import { notifyError } from '../../../utils/notifyError'
+import { genericMessage } from '../../../messages/messages'
 
 export class IssuanceExplorerProvider implements ExplorerProvider {
   async getChildren(
@@ -19,9 +21,15 @@ export class IssuanceExplorerProvider implements ExplorerProvider {
   }
 
   private async getIssuanceItems(parent: ProjectFeatureTreeItem) {
+    const projectSummary = await iamState.getProjectSummary(parent.projectId)
+    if (!projectSummary) {
+      notifyError(new Error(genericMessage.projectIsRequired))
+      return []
+    }
+
     const {
       project: { projectId },
-    } = await iamState.requireProjectSummary(parent.projectId)
+    } = projectSummary
 
     const issuances = await issuanceState.listIssuances({ projectId })
 

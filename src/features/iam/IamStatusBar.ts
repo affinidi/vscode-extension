@@ -33,15 +33,14 @@ export class IamStatusBar implements Disposable {
       }
     }
 
-    const activeProjectId = await configVault.getActiveProjectId()
-    if (!activeProjectId) {
+    const activeProject = await iamState.getActiveProject()
+    if (!activeProject) {
       return {
         text: 'Affinidi',
         command: 'affinidi.createProject',
       }
     }
 
-    const activeProject = await iamState.requireActiveProject()
     const projects = await iamState.listProjects()
 
     return {

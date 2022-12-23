@@ -31,7 +31,7 @@ describe('csvCreationService()', () => {
 
   let showTextDocument: sinon.SinonStub
   let openTextDocument: sinon.SinonStub
-  let requireActiveProjectId: sinon.SinonStub
+  let getActiveProjectId: sinon.SinonStub
   let showOpenDialog: sinon.SinonStub
   let askForWalletUrl: sinon.SinonStub
 
@@ -39,7 +39,7 @@ describe('csvCreationService()', () => {
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(ext.outputChannel, 'show')
     sandbox.stub(logger, 'error')
-    sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
+    sandbox.stub(iamState, 'getProjectSummary').withArgs(projectId).resolves(projectSummary)
     sandbox.stub(issuanceClient, 'getCsvTemplate').resolves(csvTemplate)
     showOpenDialog = sandbox
       .stub(window, 'showOpenDialog')
@@ -47,7 +47,7 @@ describe('csvCreationService()', () => {
 
     showTextDocument = sandbox.stub(window, 'showTextDocument')
     openTextDocument = sandbox.stub(workspace, 'openTextDocument')
-    requireActiveProjectId = sandbox.stub(configVault, 'requireActiveProjectId')
+    getActiveProjectId = sandbox.stub(configVault, 'getActiveProjectId')
     askForWalletUrl = sandbox.stub(iamHelpers, 'askForWalletUrl')
   })
 
@@ -112,7 +112,7 @@ describe('csvCreationService()', () => {
     })
 
     it('should ask for a project when projectId is not provided', async () => {
-      requireActiveProjectId.resolves(anotherProjectId)
+      getActiveProjectId.resolves(anotherProjectId)
       askForWalletUrl.resolves(walletUrl)
 
       showQuickPick.resolves(implementationLabels[CSVImplementation.uploadCsvFile])

@@ -21,7 +21,7 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
       return
     }
 
-    const projectId = await configVault.requireActiveProjectId()
+    const projectId = await configVault.getActiveProjectId()
     if (!projectId) {
       return
     }

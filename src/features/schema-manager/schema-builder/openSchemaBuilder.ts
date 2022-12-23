@@ -1,5 +1,5 @@
 import { configVault } from '../../../config/configVault'
-import { schemaMessage } from '../../../messages/messages'
+import { genericMessage, schemaMessage } from '../../../messages/messages'
 import { notifyError } from '../../../utils/notifyError'
 import { BuilderSchemaPublisher } from './BuilderSchemaPublisher'
 import { SubmitHandler } from './handlers/SubmitHandler'
@@ -42,7 +42,10 @@ async function getOrCreateBuilder(input?: {
   ) {
     builder?.dispose()
 
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
+    const projectId = input?.projectId ?? (await configVault.getActiveProjectId())
+    if (!projectId) {
+      throw new Error(genericMessage.projectIsRequired)
+    }
 
     builder = new SchemaBuilderWebview(
       projectId,

@@ -22,7 +22,7 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
     const projectSummary = generateProjectSummary({ projectId, did, apiKeyHash })
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
-    sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
+    sandbox.stub(iamState, 'getProjectSummary').withArgs(projectId).resolves(projectSummary)
 
     await insertSendVcOfferToEmailSnippet(
       {
