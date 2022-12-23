@@ -22,9 +22,7 @@ export class IamState {
 
   async getActiveProject(): Promise<ProjectDto | undefined> {
     const activeProjectId = await configVault.getActiveProjectId()
-    if (!activeProjectId) {
-      throw new Error(projectMessage.errorFetchingActiveProject)
-    }
+    if (!activeProjectId) return undefined
 
     return this.getProjectById(activeProjectId)
   }
