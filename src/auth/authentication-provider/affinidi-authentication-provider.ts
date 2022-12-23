@@ -126,7 +126,6 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         account: { label: email, userId: id },
         scopes: [],
       })
-      configVault.setCurrentUserId(session.account.id)
 
       this._onDidChangeSessions.fire({
         added: [session],
@@ -180,10 +179,6 @@ export class AffinidiAuthenticationProvider implements AuthenticationProvider, D
         removed: oldSession ? [convertToVsCodeSession(oldSession)] : [],
         changed: [],
       })
-    }
-
-    if (newSession) {
-      configVault.setCurrentUserId(newSession.account.userId)
     }
   }
 }
