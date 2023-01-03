@@ -24,22 +24,6 @@ export const verifyVC = async () => {
 
   const selectedFileData = fs.readFileSync(selectedFilePath)
 
-  // const selectedFileData = async (): Promise<string> => {
-  //   const fileData = fs.readFile(selectedFilePath, (data, error) => {
-  //     console.log('hitting callback')
-  //     try {
-  //       if (data) {
-  //         return data
-  //       }
-  //       return error
-  //     } catch (err: unknown) {
-  //       notifyError(err, labels.invalidFileType)
-  //     }
-  //     return data
-  //   })
-  //   return fileData
-  // }
-
   const activeProjectId = await configVault.requireActiveProjectId()
   const {
     apiKey: { apiKeyHash },
@@ -68,5 +52,6 @@ export const verifyVC = async () => {
     ext.outputChannel.show()
   } catch (error: unknown) {
     notifyError(error, issuanceMessage.vcVerificaitonFailed)
+    ext.outputChannel.appendLine(JSON.stringify(error, null, 2))
   }
 }
