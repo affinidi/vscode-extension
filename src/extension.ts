@@ -32,6 +32,7 @@ import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { configVault } from './config/configVault'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
+import { verifyVC } from './features/verify/verifyVC'
 import { initIam } from './features/iam/initIam'
 import { notifyError } from './utils/notifyError'
 import { schemaMessage } from './messages/messages'
@@ -386,6 +387,12 @@ export async function activateInternal(context: ExtensionContext) {
     } catch (error: unknown) {
       notifyError(error, schemaMessage.unableToOpenSchemaBuilder)
     }
+  })
+
+  commands.registerCommand('affinidi.verifyVC', async () => {
+    telemetryHelpers.trackCommand('affinidi.verifyVC')
+
+    await verifyVC()
   })
 
   telemetryHelpers.askUserForTelemetryConsent()

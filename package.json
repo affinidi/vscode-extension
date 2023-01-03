@@ -35,6 +35,7 @@
     "onCommand:affinidi.selectActiveProject",
     "onCommand:affinidi.openSchemaBuilder",
     "onCommand:affinidi.initiateIssuanceCsvFlow",
+    "onCommand:affinidi.verifyVC",
     "onCommand:affinidi.docs.availableSnippets",
     "onCommand:affinidi.authenticate",
     "onCommand:affinidi.login",
@@ -229,6 +230,11 @@
       {
         "command": "affinidi.initiateIssuanceCsvFlow",
         "title": "%affinidi.initiateIssuanceCsvFlow%",
+        "category": "Affinidi"
+      },
+      {
+        "command": "affinidi.verifyVC",
+        "title": "%affinidi.verifyVC%",
         "category": "Affinidi"
       },
       {
@@ -557,6 +563,7 @@
     "@affinidi/client-issuance": "^0.4.2",
     "@affinidi/client-schema-manager": "^0.3.2",
     "@affinidi/client-user-management": "^0.3.3",
+    "@affinidi/client-verifier": "^0.1.0",
     "@vscode/l10n": "^0.0.10",
     "@vscode/test-electron": "^2.1.5",
     "@vscode/webview-ui-toolkit": "^1.1.0",

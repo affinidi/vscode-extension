@@ -8,6 +8,7 @@
   "affinidi.selectActiveProject": "Select a new active project",
   "affinidi.openSchemaBuilder": "Create VC Schema",
   "affinidi.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
+  "affinidi.verifyVC": "Verify a VC",
   "affinidi.me": "Account Details",
   "affinidi.codegen.sendVcOfferToEmail": "Build a script to \"Send a VC offer to an email\"",
   "affinidi.codegen.getIssuanceOffers": "Build a script to \"Get Issuance Offers\"",
