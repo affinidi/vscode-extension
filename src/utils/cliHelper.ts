@@ -3,6 +3,7 @@ import fs from 'fs'
 import execa from 'execa'
 import { ext } from '../extensionVariables'
 import { cliMessage, generatorMessage } from '../messages/messages'
+import { notifyError } from './notifyError'
 
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
@@ -12,7 +13,7 @@ export const buildAppGenerateCommand = (path: string) =>
   `affinidi generate-application --use-case certification-and-verification --name ${path.replaceAll(
     ' ',
     '\\ ',
-  )}`
+  )} --output=plaintext`
 
 export class CliHelper {
   constructor(private readonly exec: ExecInterface) {}
@@ -54,8 +55,8 @@ export class CliHelper {
       return
     }
 
+    ext.outputChannel.appendLine(cliMessage.appIsGenerating)
     const command = buildAppGenerateCommand(path)
-    ext.outputChannel.appendLine(command)
 
     try {
       const { stdout } = await window.withProgress(
@@ -68,7 +69,12 @@ export class CliHelper {
         },
       )
 
-      ext.outputChannel.append(stdout)
+      if (!stdout.includes('Successfully generated')) {
+        throw new Error(stdout)
+      }
+
+      ext.outputChannel.appendLine(stdout)
+      ext.outputChannel.show()
 
       window.showInformationMessage(cliMessage.appGenerated)
 
@@ -77,7 +83,7 @@ export class CliHelper {
         forceNewWindow: true,
       })
     } catch (error) {
-      ext.outputChannel.append(`${error}`)
+      notifyError(error, cliMessage.unableToGenerateApp)
     }
   }
 }

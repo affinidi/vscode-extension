@@ -70,15 +70,13 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should render app with specified params', async () => {
+    progressWindow.resolves({ stdout: 'Successfully generated' })
     existsSync.restore()
     existsSync.resolves(false)
 
     await generateAffinidiAppWithCLI()
 
     expect(dialog).called
-    expect(ext.outputChannel.appendLine).calledWith(
-      buildAppGenerateCommand(path.join(DIRECTORY_NAME, APP_NAME)),
-    )
     expect(showInformationMessage).calledWith(cliMessage.appGenerated)
     expect(commands.executeCommand).calledWith('vscode.openFolder')
   })

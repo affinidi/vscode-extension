@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import path from 'path'
-import { commands, ExtensionContext, Uri, window, env, workspace, ProgressLocation } from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, workspace } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
@@ -29,11 +29,12 @@ import { iamState } from './features/iam/iamState'
 import { BasicTreeItemWithProject } from './tree/basicTreeItemWithProject'
 import { SchemaTreeItem, ScopedSchemasTreeItem } from './features/schema-manager/tree/treeItems'
 import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
-import { notifyError } from './utils/notifyError'
 import { configVault } from './config/configVault'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
 import { initIam } from './features/iam/initIam'
+import { notifyError } from './utils/notifyError'
+import { schemaMessage } from './messages/messages'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -380,11 +381,10 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand('affinidi.openSchemaBuilder', async () => {
     telemetryHelpers.trackCommand('affinidi.openSchemaBuilder')
-
     try {
-      openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
-    } catch (error) {
-      notifyError(error)
+      await openSchemaBuilder({ projectId: await configVault.requireActiveProjectId() })
+    } catch (error: unknown) {
+      notifyError(error, schemaMessage.unableToOpenSchemaBuilder)
     }
   })
 
