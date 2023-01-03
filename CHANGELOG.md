@@ -1,3 +1,12 @@
+# [1.9.0](https://github.com/affinidi/vscode-extension/compare/v1.8.1...v1.9.0) (2023-01-03)
+
+
+### Features
+
+* checked the type of config files ([#76](https://github.com/affinidi/vscode-extension/issues/76)) ([e93cd8e](https://github.com/affinidi/vscode-extension/commit/e93cd8ea21f7a7a575b129b32e1cbf68a9bb1582))
+* **FTL-8300:** Verify a VC ([#77](https://github.com/affinidi/vscode-extension/issues/77)) ([ca68007](https://github.com/affinidi/vscode-extension/commit/ca6800708e871cf9c0a13ea6fc9cf1f51f989ab7))
+* log errors and notify user ([#78](https://github.com/affinidi/vscode-extension/issues/78)) ([52ac66f](https://github.com/affinidi/vscode-extension/commit/52ac66f2192d5f0c283c76ae971f6b9404579e15))
+
 ## [1.8.1](https://github.com/affinidi/vscode-extension/compare/v1.8.0...v1.8.1) (2022-12-15)
 
 
