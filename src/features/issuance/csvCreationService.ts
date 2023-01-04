@@ -27,24 +27,28 @@ const openCsvTemplate = async (input: { schema: Schema; projectId: string }) => 
     apiKey: { apiKeyHash },
   } = await iamState.requireProjectSummary(input.projectId)
 
-  const template = await window.withProgress(
-    { location: ProgressLocation.Notification, title: csvMessage.downloadingCsvTemplate },
-    () =>
-      issuanceClient.getCsvTemplate(
-        {
-          jsonSchemaUrl: input.schema.jsonSchemaUrl,
-          verificationMethod: 'email',
-        },
-        { apiKeyHash },
-      ),
-  )
+  try {
+    const template = await window.withProgress(
+      { location: ProgressLocation.Notification, title: csvMessage.downloadingCsvTemplate },
+      () =>
+        issuanceClient.getCsvTemplate(
+          {
+            jsonSchemaUrl: input.schema.jsonSchemaUrl,
+            verificationMethod: 'email',
+          },
+          { apiKeyHash },
+        ),
+    )
 
-  await window.showTextDocument(
-    await workspace.openTextDocument({
-      language: 'plaintext',
-      content: template,
-    }),
-  )
+    await window.showTextDocument(
+      await workspace.openTextDocument({
+        language: 'plaintext',
+        content: template,
+      }),
+    )
+  } catch (error: unknown) {
+    notifyError(error, csvMessage.unableToBuildCSVTemplate)
+  }
 }
 
 const uploadCsvFile = async (input: { schema: Schema; projectId: string; walletUrl: string }) => {
