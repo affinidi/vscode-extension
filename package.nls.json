@@ -21,6 +21,7 @@
   "affinidiExplorer.refresh": "Refresh",
   "affinidiExplorer.refreshAll": "Refresh all",
   "affinidiExplorer.viewProperties": "View Properties",
+  "affinidiExplorer.renameProject": "Rename Project",
   "affinidiExplorer.initiateIssuanceCsvFlow": "Initiate CSV Issuance",
   "affinidiExplorer.showJsonSchema": "Show JSON Schema",
   "affinidiExplorer.showJsonLdContext": "Show JSON-LD Context",

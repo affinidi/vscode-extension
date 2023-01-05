@@ -236,6 +236,18 @@ export async function activateInternal(context: ExtensionContext) {
     },
   )
 
+  commands.registerCommand(
+    'affinidiExplorer.renameProject',
+    (element: BasicTreeItemWithProject) => {
+      telemetryHelpers.trackCommand('affinidiExplorer.renameProject', {
+        projectId: element.projectId,
+        resource: element.contextValue,
+      })
+
+      showElementProperties(element)
+    },
+  )
+
   context.subscriptions.push(
     commands.registerCommand(
       'affinidiExplorer.initiateIssuanceCsvFlow',
