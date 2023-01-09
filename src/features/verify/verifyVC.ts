@@ -2,7 +2,7 @@ import { OpenDialogOptions, ProgressLocation, window } from 'vscode'
 import fs from 'fs'
 import { ext } from '../../extensionVariables'
 import { labels } from '../../messages/messages'
-// import { issuanceMessage } from '../messages'
+import { verifyVCMessage } from './messages'
 import { iamState } from '../iam/iamState'
 import { verifierClient } from './verifyClient'
 import { notifyError } from '../../utils/notifyError'
@@ -34,7 +34,7 @@ export const verifyVC = async () => {
     const data = await window.withProgress(
       {
         location: ProgressLocation.Notification,
-        title: issuanceMessage.vcBeingVerified,
+        title: verifyVCMessage.vcBeingVerified,
       },
       async () => {
         return verifierClient.verifyCredentials(
@@ -47,12 +47,12 @@ export const verifyVC = async () => {
     )
 
     window.showInformationMessage(
-      data.isValid ? issuanceMessage.vcValid : issuanceMessage.vcNotValid,
+      data.isValid ? verifyVCMessage.vcValid : verifyVCMessage.vcNotValid,
     )
     ext.outputChannel.appendLine(JSON.stringify(data, null, 2))
     ext.outputChannel.show()
   } catch (error: unknown) {
-    notifyError(error, issuanceMessage.vcVerificaitonFailed)
+    notifyError(error, verifyVCMessage.vcVerificaitonFailed)
     ext.outputChannel.appendLine(JSON.stringify(error, null, 2))
   }
 }

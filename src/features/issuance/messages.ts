@@ -2,10 +2,6 @@ export const issuanceMessage = {
   fetchingIssuances: 'Fetching project issuances...',
   selectIssuance: 'Select an Issuance',
   noIssuances: "You don't have any issuances to choose from",
-  vcBeingVerified: 'VC verification in progress...',
-  vcValid: 'VC is valid',
-  vcNotValid: 'VC is not valid',
-  vcVerificaitonFailed: 'VC verification failed',
   failedToCreateIssuance: 'Failed to create issuance',
 }
 
