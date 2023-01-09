@@ -1,7 +1,7 @@
 import { commands, window } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { ext } from '../../extensionVariables'
-import { projectMessage } from '../../messages/messages'
+import { projectMessage } from './messages'
 import { readOnlyContentViewer } from '../../utils/openReadOnlyContent'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { telemetryHelpers } from '../telemetry/telemetryHelpers'

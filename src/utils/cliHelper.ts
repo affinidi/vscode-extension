@@ -1,6 +1,7 @@
 import { ProgressLocation, window, commands, Uri } from 'vscode'
 import fs from 'fs'
 import execa from 'execa'
+import { GenerateApplication } from '@affinidi/affinidi-cli'
 import { ext } from '../extensionVariables'
 import { cliMessage, generatorMessage } from '../messages/messages'
 import { notifyError } from './notifyError'
@@ -56,7 +57,8 @@ export class CliHelper {
     }
 
     ext.outputChannel.appendLine(cliMessage.appIsGenerating)
-    const command = buildAppGenerateCommand(path)
+
+    // const command = buildAppGenerateCommand(path)
 
     try {
       const { stdout } = await window.withProgress(
@@ -65,7 +67,7 @@ export class CliHelper {
           title: cliMessage.appIsGenerating,
         },
         async () => {
-          return this.exec.command(command)
+          return GenerateApplication.run(['-n', `${path}`])
         },
       )
 

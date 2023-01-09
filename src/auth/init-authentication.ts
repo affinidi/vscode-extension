@@ -1,7 +1,8 @@
 import { authentication, commands, window, ProgressLocation } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
-import { authMessage, errorMessage, labels } from '../messages/messages'
+import { errorMessage } from '../messages/messages'
+import { authMessage } from './messages'
 import { cliHelper } from '../utils/cliHelper'
 import {
   AffinidiAuthenticationProvider,
@@ -107,8 +108,8 @@ export const initAuthentication = () => {
     commands.registerCommand('affinidi.authenticate', async () => {
       const method = await showQuickPick(
         [
-          [labels.createAnAccountWithAffinidi, 'signUp'],
-          [labels.login, 'login'],
+          [authMessage.createAnAccountWithAffinidi, 'signUp'],
+          [authMessage.login, 'login'],
         ],
         { title: authMessage.chooseAuthenticationMethod },
       )

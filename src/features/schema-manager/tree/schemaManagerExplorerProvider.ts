@@ -1,5 +1,6 @@
 import { ThemeIcon } from 'vscode'
-import { labels, schemaMessage } from '../../../messages/messages'
+import { labels } from '../../../messages/messages'
+import { schemaMessage } from '../messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
 import { Feature } from '../../feature'

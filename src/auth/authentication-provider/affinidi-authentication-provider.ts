@@ -13,7 +13,7 @@ import { executeAuthProcess, parseJwt } from './auth-process'
 import { credentialsVault, Session } from '../../config/credentialsVault'
 import { configVault } from '../../config/configVault'
 import { notifyError } from '../../utils/notifyError'
-import { authMessage } from '../../messages/messages'
+import { authMessage } from './messages'
 import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
 
 export const AUTH_PROVIDER_ID = 'AffinidiAuth'

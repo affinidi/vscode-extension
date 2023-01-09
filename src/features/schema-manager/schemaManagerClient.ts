@@ -6,3 +6,5 @@ export const SCHEMA_MANAGER_API_URL =
 export const schemaManagerClient = new SchemaManagerClient({
   apiUrl: SCHEMA_MANAGER_API_URL,
 })
+
+

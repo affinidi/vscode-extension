@@ -3,7 +3,7 @@ import { IssuanceDto } from '@affinidi/client-issuance'
 import { format } from 'date-fns'
 
 import { showQuickPick } from '../../utils/showQuickPick'
-import { issuanceMessage } from '../../messages/messages'
+import { issuanceMessage } from './messages'
 import { issuanceState } from './issuanceState'
 
 type Input = { projectId: string }

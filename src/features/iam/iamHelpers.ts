@@ -1,5 +1,6 @@
 import { window, ProgressLocation } from 'vscode'
-import { labels, projectMessage } from '../../messages/messages'
+import { labels } from '../../messages/messages'
+import { projectMessage } from './messages'
 import { iamState } from './iamState'
 import { authHelper } from '../../auth/authHelper'
 import { iamClient } from './iamClient'
