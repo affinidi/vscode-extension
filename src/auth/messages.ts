@@ -1,10 +1,8 @@
 export const authMessage = {
   chooseAuthenticationMethod: 'Authenticate in to Affinidi',
-  createAnAccountWithAffinidi: 'Create an Account with Affinidi',
   loggedIn: 'Logged in to Affinidi',
   loggedOut: 'Logged out of Affinidi',
   signedUp: 'Signed up to Affinidi',
-  login: 'Log in to Affinidi',
   loggingIn: 'Logging in to Affinidi',
   accept: 'Accept',
   reject: 'Reject',
@@ -31,6 +29,10 @@ export const authMessage = {
   fetchingAccountDetails: 'Fetching account details...',
 }
 
+export const labels = {
+  login: 'Log in to Affinidi',
+  createAnAccountWithAffinidi: 'Create an Account with Affinidi',
+}
 
 export const errorMessage = {
   unknownSelection: 'unknown selection',
