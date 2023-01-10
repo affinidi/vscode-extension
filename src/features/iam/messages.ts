@@ -14,10 +14,19 @@ export const projectMessage = {
   projectDoesNotExist: 'Project does not exist.',
   projectNotFound: (projectId: string) => `Project not found: ${projectId}`,
   errorFetchingActiveProject: 'Error while fetching the active project.',
-  errorFetchingActiveProjectId: 'Error while fetching the active project id.',
   selectActiveProject: 'Select a new active project',
   activatedProject: (projectName: string) => `Successfully activated the project "${projectName}"`,
   creatingDefaultProject: 'Creating default project...',
   failedToFetchProjects: 'Failed to fetch projects',
   failedToUpdateIamStatusBar: 'Could not update IAM status bar item',
+}
+
+export const labels = {
+  createProject: 'Create Project',
+  issuances: 'Issuances',
+  schemas: 'VC Schemas',
+  digitalIdentities: 'Digital Identities',
+  selectWallet: 'Enter a Wallet URL for VC claim',
+  activeProject: 'Active',
+  inactiveProjects: 'Inactive Projects',
 }

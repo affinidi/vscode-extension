@@ -24,3 +24,16 @@ export const schemaMessage = {
   yes: 'Yes',
   no: 'No',
 }
+
+export const errorMessage = {
+  webPanelNotOpen: 'Webview panel is not opened',
+}
+
+export const labels = {
+  schema: 'Schema',
+  schemaBuilder: 'Schema Builder',
+  schemaBuilderFork: (type: string) => `Fork "${type}" schema`,
+  initiateIssuanceCsvFlow: 'Initiate CSV Issuance',
+  public: 'Public',
+  unlisted: 'Unlisted',
+}

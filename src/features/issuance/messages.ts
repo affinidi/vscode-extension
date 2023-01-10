@@ -35,3 +35,9 @@ export const csvMessage = {
   row: 'Row',
   requiredColumns: 'Required columns',
 }
+
+
+export const labels = {
+  issuanceID: 'Issuance ID',
+  select: 'Select',
+}

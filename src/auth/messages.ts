@@ -30,3 +30,8 @@ export const authMessage = {
     'Please read and accept the [Terms of Use](https://build.affinidi.com/dev-tools/terms-of-use.pdf) and [Privacy Policy](https://build.affinidi.com/dev-tools/privacy-policy.pdf)',
   fetchingAccountDetails: 'Fetching account details...',
 }
+
+
+export const errorMessage = {
+  unknownSelection: 'unknown selection',
+}

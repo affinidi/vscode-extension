@@ -1,7 +1,7 @@
 import path from 'path'
 import { ProgressLocation, window, Uri } from 'vscode'
 import { configVault } from '../../config/configVault'
-import { generatorMessage, labels } from '../../messages/messages'
+import { generatorMessage, labels } from '../messages'
 import { cliHelper } from '../../utils/cliHelper'
 import { notifyError } from '../../utils/notifyError'
 

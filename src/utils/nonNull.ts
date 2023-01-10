@@ -1,4 +1,4 @@
-import { errorMessage } from '../messages/messages'
+import { errorMessage } from './messages'
 
 /**
  * Validates that a given value is not null and not undefined.

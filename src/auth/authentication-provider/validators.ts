@@ -1,4 +1,4 @@
-import { authMessage } from '../../messages/messages'
+import { authMessage } from '../messages'
 
 export function validateEmail(value: string) {
   const re = /\S+@\S+\.\S+/

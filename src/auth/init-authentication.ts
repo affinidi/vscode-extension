@@ -1,8 +1,7 @@
 import { authentication, commands, window, ProgressLocation } from 'vscode'
 import { ext } from '../extensionVariables'
 import { userManagementClient } from '../features/user-management/userManagementClient'
-import { errorMessage } from '../messages/messages'
-import { authMessage } from './messages'
+import { errorMessage, authMessage } from './messages'
 import { cliHelper } from '../utils/cliHelper'
 import {
   AffinidiAuthenticationProvider,

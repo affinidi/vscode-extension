@@ -1,7 +1,7 @@
 import { OpenDialogOptions, ProgressLocation, window } from 'vscode'
 import fs from 'fs'
 import { ext } from '../../extensionVariables'
-import { labels } from '../../messages/messages'
+import { labels } from '../messages'
 import { verifyVCMessage } from './messages'
 import { iamState } from '../iam/iamState'
 import { verifierClient } from './verifyClient'

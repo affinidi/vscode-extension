@@ -1,5 +1,5 @@
 import { ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode'
-import { labels } from '../messages/messages'
+import { labels } from './messages'
 import { BasicTreeItem } from './basicTreeItem'
 
 export class FeedbackTree implements TreeDataProvider<BasicTreeItem> {

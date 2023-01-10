@@ -4,7 +4,7 @@ import { ext } from '../../../../extensionVariables'
 import { showSchemaDetails } from '../../schema-details/showSchemaDetails'
 import { BuilderSchemaPublisher } from '../BuilderSchemaPublisher'
 import { isValidSchemaType, isValidAttributeName } from '../helpers/validation'
-import { schemaMessage } from '../../../../messages/messages'
+import { schemaMessage } from '../../messages'
 import { schemaManagerState } from '../../schemaManagerState'
 
 export class SubmitHandler {

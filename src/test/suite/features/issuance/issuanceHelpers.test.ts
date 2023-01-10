@@ -4,7 +4,7 @@ import sinon from 'sinon'
 
 import { sandbox } from '../../setup'
 import { issuanceHelpers } from '../../../../features/issuance/issuanceHelpers'
-import { issuanceMessage } from '../../../../messages/messages'
+import { issuanceMessage } from '../../../../features/issuance/messages'
 import { generateIssuance } from '../../helpers'
 
 describe('issuanceHelpers()', () => {
