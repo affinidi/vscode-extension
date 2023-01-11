@@ -3,7 +3,7 @@ import { authHelper } from '../../../../auth/authHelper'
 import { configVault } from '../../../../config/configVault'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { IamState } from '../../../../features/iam/iamState'
-import { projectMessage } from '../../../../messages/messages'
+import { projectMessage } from '../../../../features/iam/messages'
 import { state } from '../../../../state'
 import { sandbox } from '../../setup'
 

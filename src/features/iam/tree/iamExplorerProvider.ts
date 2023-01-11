@@ -1,10 +1,9 @@
 import { ThemeIcon, TreeItemCollapsibleState } from 'vscode'
 
 import { ext } from '../../../extensionVariables'
-import { labels, projectMessage } from '../../../messages/messages'
+import { labels, projectMessage } from '../messages'
 import { BasicTreeItem } from '../../../tree/basicTreeItem'
 import { ExplorerProvider } from '../../../tree/explorerTree'
-import { logger } from '../../../utils/logger'
 import { notifyError } from '../../../utils/notifyError'
 import { Feature } from '../../feature'
 import { iamState } from '../iamState'

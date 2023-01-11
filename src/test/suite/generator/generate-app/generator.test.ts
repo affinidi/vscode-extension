@@ -7,7 +7,8 @@ import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
 
 import { cliHelper, buildAppGenerateCommand } from '../../../../utils/cliHelper'
-import { cliMessage, generatorMessage } from '../../../../messages/messages'
+import { generatorMessage } from '../../../../generators/messages'
+import { cliMessage } from '../../../../utils/messages'
 import { generateAffinidiAppWithCLI } from '../../../../generators/create-app/generator'
 import { configVault } from '../../../../config/configVault'
 

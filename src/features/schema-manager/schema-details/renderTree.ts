@@ -1,6 +1,6 @@
 import { SchemaField, SchemaFieldType } from '@affinidi/affinidi-vc-schemas'
 
-import { schemaMessage } from '../../../messages/messages'
+import { schemaMessage } from '../messages'
 
 const ATTRIBUTE_TYPE_OPTIONS = [
   { type: 'did', label: 'DID' },

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { errorMessage } from '../../../messages/messages'
+import { errorMessage } from '../../../utils/messages'
 import { parseJsonSchemaUrl } from '../../../utils/parseJsonSchemaUrl'
 
 describe('parseJsonSchemaUrl()', () => {

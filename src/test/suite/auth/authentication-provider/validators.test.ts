@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import { validateEmail, validateOTP } from '../../../../auth/authentication-provider/validators'
-import { authMessage } from '../../../../messages/messages'
+import { authMessage } from '../../../../auth/messages'
 
 describe('validators', () => {
   describe('validateEmail()', () => {

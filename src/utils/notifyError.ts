@@ -1,6 +1,6 @@
 import { window } from 'vscode'
 import { ext } from '../extensionVariables'
-import { genericMessage } from '../messages/messages'
+import { genericMessage } from './messages'
 import { logger } from './logger'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

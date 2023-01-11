@@ -7,7 +7,7 @@ import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { AFFINIDI_IAM_API_URL } from '../../features/iam/iamClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
-import { snippetMessage } from '../../messages/messages'
+import { snippetMessage } from '../messages'
 import { iamState } from '../../features/iam/iamState'
 import { configVault } from '../../config/configVault'
 

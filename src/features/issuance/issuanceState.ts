@@ -1,6 +1,6 @@
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { ProgressLocation, window } from 'vscode'
-import { issuanceMessage } from '../../messages/messages'
+import { issuanceMessage } from './messages'
 import { state } from '../../state'
 import { iamState } from '../iam/iamState'
 import { issuanceClient } from './issuanceClient'

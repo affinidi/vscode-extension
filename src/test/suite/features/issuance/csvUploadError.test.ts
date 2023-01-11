@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import { parseUploadError } from '../../../../features/issuance/csvUploadError'
-import { csvMessage } from '../../../../messages/messages'
+import { csvMessage } from '../../../../features/issuance/messages'
 
 describe('parseUploadError()', () => {
   it('should return provided error message', () => {

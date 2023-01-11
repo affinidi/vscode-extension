@@ -1,6 +1,6 @@
 import { SchemaDto, SchemaSearchScope } from '@affinidi/client-schema-manager'
 import { window, ProgressLocation } from 'vscode'
-import { schemaMessage } from '../../messages/messages'
+import { schemaMessage } from './messages'
 import { state } from '../../state'
 import { iamState } from '../iam/iamState'
 import { schemaManagerClient } from './schemaManagerClient'
