@@ -1,20 +1,21 @@
 import { window, Uri, commands } from 'vscode'
-import path from 'path'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import fs from 'fs'
 import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
 
-import { cliHelper, buildAppGenerateCommand } from '../../../../utils/cliHelper'
 import { generatorMessage } from '../../../../generators/messages'
 import { cliMessage } from '../../../../utils/messages'
 import { generateAffinidiAppWithCLI } from '../../../../generators/create-app/generator'
 import { configVault } from '../../../../config/configVault'
+import { iamState } from '../../../../features/iam/iamState'
+import { generateProjectSummary } from '../../helpers'
 
 const DIRECTORY_NAME = '/directory'
 const APP_NAME = 'appName'
 const PROJECT_ID = 'fake-project-id'
+const PROJECT_SUMMARY = generateProjectSummary({ projectId: PROJECT_ID })
 
 describe('generateAffinidiAppWithCLI()', () => {
   let showErrorMessage: sinon.SinonStub
@@ -33,16 +34,8 @@ describe('generateAffinidiAppWithCLI()', () => {
     inputBox = sandbox.stub(window, 'showInputBox').resolves(APP_NAME)
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
-    sandbox.stub(cliHelper, 'setActiveProject')
     sandbox.stub(configVault, 'requireActiveProjectId').resolves(PROJECT_ID)
-  })
-
-  it('should show error message when CLI is not installed', async () => {
-    progressWindow.resolves(false)
-
-    await generateAffinidiAppWithCLI()
-
-    expect(dialog).not.called
+    sandbox.stub(iamState, 'requireProjectSummary').resolves(PROJECT_SUMMARY)
   })
 
   it("should show error message if user didn't specify directory", async () => {
@@ -71,7 +64,7 @@ describe('generateAffinidiAppWithCLI()', () => {
   })
 
   it('should render app with specified params', async () => {
-    progressWindow.resolves({ stdout: 'Successfully generated' })
+    progressWindow.resolves()
     existsSync.restore()
     existsSync.resolves(false)
 

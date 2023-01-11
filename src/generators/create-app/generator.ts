@@ -1,5 +1,5 @@
 import path from 'path'
-import { ProgressLocation, window, Uri } from 'vscode'
+import { window, Uri } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { generatorMessage, labels } from '../messages'
 import { cliHelper } from '../../utils/cliHelper'
@@ -7,21 +7,8 @@ import { notifyError } from '../../utils/notifyError'
 
 export async function generateAffinidiAppWithCLI(): Promise<void> {
   try {
-    const isCLIInstalled = await window.withProgress(
-      {
-        location: ProgressLocation.Notification,
-        title: generatorMessage.checkCliInstall,
-      },
-      async () => {
-        return cliHelper.isCliInstalledOrWarn({ type: 'error' })
-      },
-    )
-
-    if (!isCLIInstalled) {
-      return
-    }
-
     const projectId = await configVault.requireActiveProjectId()
+
     if (!projectId) {
       return
     }
@@ -51,7 +38,6 @@ export async function generateAffinidiAppWithCLI(): Promise<void> {
 
     const fullPath = path.join(folderPath, appName)
 
-    await cliHelper.setActiveProject(projectId)
     await cliHelper.generateApp({ path: fullPath })
   } catch (error: unknown) {
     notifyError(error, generatorMessage.failedToGenerateApp)

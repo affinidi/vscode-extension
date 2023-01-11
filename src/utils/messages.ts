@@ -8,6 +8,7 @@ export const cliMessage = {
     'Affinidi CLI needs to be installed for some actions in the extension: npm i -g @affinidi/cli',
   cliNeedsToBeInstalledForAction:
     'Affinidi CLI needs to be installed to proceed with this action: npm i -g @affinidi/cli',
+  tryCli: 'Try out Affinidi CLI: npm i -g @affinidi/cli',
   appIsGenerating: 'App is generating...',
   appGenerated: 'App successfully generated',
   unableToGenerateApp: 'Unable to generate app.',
