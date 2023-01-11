@@ -52,7 +52,7 @@ export class CliHelper {
     }
 
     ext.outputChannel.appendLine(cliMessage.appIsGenerating)
-    // const command = buildAppGenerateCommand(path)
+
     const activeProjectId = await configVault.getActiveProjectId()
     const {
       apiKey: { apiKeyHash },
