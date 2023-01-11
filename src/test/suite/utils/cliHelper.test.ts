@@ -5,7 +5,7 @@ import { ext } from '../../../extensionVariables'
 
 import { sandbox } from '../setup'
 import { CliHelper } from '../../../utils/cliHelper'
-import { cliMessage } from '../../../messages/messages'
+import { cliMessage } from '../../../utils/messages'
 
 let showWarningMessage: sinon.SinonStub
 let showErrorMessage: sinon.SinonStub

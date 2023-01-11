@@ -1,6 +1,6 @@
 import { ThemeIcon } from 'vscode'
 import { ext } from '../extensionVariables'
-import { authMessage, labels } from '../messages/messages'
+import { authMessage, labels } from './messages'
 import { BasicTreeItem } from '../tree/basicTreeItem'
 import { ExplorerProvider, ExplorerTree } from '../tree/explorerTree'
 

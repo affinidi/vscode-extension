@@ -1,6 +1,6 @@
 import { Disposable, StatusBarAlignment, StatusBarItem, window } from 'vscode'
 import { configVault } from '../../config/configVault'
-import { projectMessage } from '../../messages/messages'
+import { projectMessage } from './messages'
 import { notifyError } from '../../utils/notifyError'
 import { iamState } from './iamState'
 

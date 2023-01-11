@@ -11,7 +11,7 @@ import {
 } from '../../../../features/issuance/csvCreationService'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
-import { csvMessage } from '../../../../messages/messages'
+import { csvMessage } from '../../../../features/issuance/messages'
 import { iamState } from '../../../../features/iam/iamState'
 import { generateIssuance, generateProjectSummary, generateSchema } from '../../helpers'
 import { configVault } from '../../../../config/configVault'

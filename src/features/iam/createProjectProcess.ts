@@ -1,7 +1,7 @@
 import { ProgressLocation, window } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
 import { iamClient } from './iamClient'
-import { projectMessage } from '../../messages/messages'
+import { projectMessage } from './messages'
 import { notifyError } from '../../utils/notifyError'
 
 export const createProjectProcess = async (): Promise<void> => {

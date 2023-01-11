@@ -1,5 +1,5 @@
 import { window, workspace } from 'vscode'
-import { errorMessage, telemetryMessage } from '../../messages/messages'
+import { errorMessage, telemetryMessage } from './messages'
 import { sendRawAnalyticsEvent, EventNames, EventSubCategory } from './analyticsStreamApiService'
 
 const CONSENT = {

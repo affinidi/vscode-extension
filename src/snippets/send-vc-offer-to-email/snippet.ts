@@ -7,7 +7,7 @@ import { createSnippetCommand } from '../shared/createSnippetCommand'
 import { schemaManagerHelpers } from '../../features/schema-manager/schemaManagerHelpers'
 import { ISSUANCE_API_URL } from '../../features/issuance/issuanceClient'
 import { generateCredentialSubjectSample } from '../../features/issuance/json-schema/columnsToObject'
-import { authMessage, snippetMessage } from '../../messages/messages'
+import { snippetMessage } from '../messages'
 import { iamState } from '../../features/iam/iamState'
 import { configVault } from '../../config/configVault'
 
@@ -63,7 +63,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
     const email =
       input?.email ??
       (await window.showInputBox({
-        prompt: authMessage.enterEmail,
+        prompt: snippetMessage.enterEmail,
       }))
 
     return {

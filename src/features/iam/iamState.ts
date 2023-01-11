@@ -2,7 +2,7 @@ import { ProjectDto, ProjectSummary } from '@affinidi/client-iam'
 import { window, ProgressLocation, EventEmitter, Disposable } from 'vscode'
 import { configVault } from '../../config/configVault'
 import { authHelper } from '../../auth/authHelper'
-import { projectMessage } from '../../messages/messages'
+import { projectMessage } from './messages'
 import { state } from '../../state'
 import { iamClient } from './iamClient'
 

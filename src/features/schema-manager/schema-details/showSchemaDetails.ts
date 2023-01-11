@@ -4,7 +4,7 @@ import { Uri, ViewColumn, Webview, WebviewPanel, window } from 'vscode'
 import fetch from 'node-fetch'
 
 import { ext } from '../../../extensionVariables'
-import { labels, schemaMessage } from '../../../messages/messages'
+import { schemaMessage, labels } from '../messages'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
 import { csvCreationService } from '../../issuance/csvCreationService'
 import { schemaManagerHelpers } from '../schemaManagerHelpers'

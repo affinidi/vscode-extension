@@ -1,4 +1,4 @@
-import { errorMessage } from '../messages/messages'
+import { errorMessage } from './messages'
 
 function isValidHttpUrl(str: string | undefined): boolean {
   let url

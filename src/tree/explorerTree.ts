@@ -1,5 +1,5 @@
 import { Event, EventEmitter, ThemeIcon, TreeDataProvider, TreeItem } from 'vscode'
-import { labels } from '../messages/messages'
+import { labels } from './messages'
 import { BasicTreeItem } from './basicTreeItem'
 
 export interface ExplorerProvider {
