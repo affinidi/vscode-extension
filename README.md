@@ -22,16 +22,16 @@ To do that, click on Affinidi logo in sidebar, then click on “Create an accoun
 
 ![Create an Account](./media/docs/create_account.png)
 
-Once the account is created, a `Default Project` will be created automatically. As part of it a digital identity will be created for you – your personal DID.
+Once the account is created, a project named `Default Project` will be created automatically. As part of it, a digital identity will be created for you – your personal DID.
 
 ![Default Project](./media/docs/default_project.png)
 
-Initially `Default project` will be your `Active Project`.
+Initially the `Default Project` will be set as your `Active Project`.
 
-Active Project is the project on which you can perform all the [operations](#features) below. There will be only 1 active project at a time.
+Your `Active Project` is the project on which you can perform all the [operations](#features) below. There will always be only 1 active project at a time.
 
-You can also manually create projects by clicking on “Create project” button and enter a project’s name.
-As the default project is the active project, all other projects will be shown under the `inactive projects` folder.
+You can also manually create projects by clicking on `Create Project` button and enter a project’s name.
+As the default project is the active project, all other projects will be shown under the `Inactive Projects` folder.
 
 ![Inactive Projects](./media/docs/inactive_projects.png)
 
