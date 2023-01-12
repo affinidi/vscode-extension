@@ -1,49 +1,60 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
 import { window } from 'vscode'
-import { activateRenameProject, renameProject } from '../../../../features/iam/renameProjects'
+import { iamClient } from '../../../../features/iam/iamClient'
+import { renameProjectService } from '../../../../features/iam/renameProjects'
 
 import { sandbox } from '../../setup'
 
-const projectId = 'fake-project-id'
-const newName = 'fake-project-name'
+const input = {
+  projectId: 'fake-project-id',
+  name: 'fake-project-name',
+}
 
 describe('renameProject()', () => {
+  let renameProject: sinon.SinonStub
+
   beforeEach(() => {
-    sandbox.stub(renameProject, 'renameProject').resolves()
+    sandbox.stub(iamClient, 'patchProject').resolves()
+    renameProject = sandbox.stub(renameProjectService, 'renameProject')
   })
 
   it('should rename the project with the given ID and new name', async () => {
-    await renameProject(projectId, newName)
+    await renameProject(input)
 
-    expect(renameProject.renameProject).calledWith(projectId, newName)
+    expect(renameProject).calledWith(input)
   })
 })
 
 describe('activateRenameProject()', () => {
-  let showInputBoxStub: sinon.SinonStub
+  let showInputBox: sinon.SinonStub
+  let renameProject: sinon.SinonStub
+  let activateRenameProject: sinon.SinonStub
 
   beforeEach(() => {
-    showInputBoxStub = sandbox.stub(window, 'showInputBox').resolves(newName)
+    showInputBox = sandbox.stub(window, 'showInputBox').resolves(input.name)
+    renameProject = sandbox.stub(renameProjectService, 'renameProject')
+    activateRenameProject = sandbox.stub(renameProjectService, 'activateRenameProject')
   })
 
   it('should prompt the user for the new project name and rename the project', async () => {
-    const element = { label: 'fake-project-name', projectId }
-
+    const element = { label: 'fake-project-name', projectId: 'fake-project-id' }
     await activateRenameProject(element)
 
-    expect(showInputBoxStub).calledWith({
+    showInputBox.calledWith({
       prompt: `Enter the new name for the project "${element.label}":`,
-      value: element.label,
     })
-    expect(renameProject.renameProject).calledWith(element.projectId, newName)
+
+    await renameProject(element.projectId, input.name)
+
+    expect(renameProject).calledWith(element.projectId, input.name)
   })
 
   it('should not rename the project if the user cancels the input prompt', async () => {
-    showInputBoxStub.rejects(new Error('Input cancelled'))
-    const element = { label: 'fake-project-name', projectId }
+    showInputBox.rejects(new Error('Input cancelled'))
+    const element = { label: 'fake-project-name', projectId: 'fake-project-id' }
 
     await activateRenameProject(element)
-    expect(renameProject.renameProject).not.called
+    expect(renameProject).not.called
   })
 })

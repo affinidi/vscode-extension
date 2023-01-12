@@ -36,7 +36,7 @@ import { verifyVC } from './features/verify/verifyVC'
 import { initIam } from './features/iam/initIam'
 import { notifyError } from './utils/notifyError'
 import { schemaMessage } from './messages/messages'
-import { activateRenameProject } from './features/iam/renameProjects'
+import { renameProjectService } from './features/iam/renameProjects'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -245,7 +245,7 @@ export async function activateInternal(context: ExtensionContext) {
         resource: element.contextValue,
       })
 
-      activateRenameProject(element)
+      renameProjectService.activateRenameProject(element)
     },
   )
 

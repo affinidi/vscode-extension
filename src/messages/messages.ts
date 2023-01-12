@@ -103,7 +103,7 @@ export const projectMessage = {
   failedToFetchProjects: 'Failed to fetch projects',
   failedToUpdateIamStatusBar: 'Could not update IAM status bar item',
   renameProject: 'Project renaming...',
-  projectRenameFailed: 'Failed to rename project.',
+  projectRenameFailed: 'Failed to rename project...',
   projectRenamed: 'Project name updated.',
 }
 

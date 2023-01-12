@@ -1,30 +1,24 @@
 import { ProgressLocation, window } from 'vscode'
+import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
 import { projectMessage } from '../../messages/messages'
 import { BasicTreeItemWithProject } from '../../tree/basicTreeItemWithProject'
 import { notifyError } from '../../utils/notifyError'
 import { iamClient } from './iamClient'
-import { iamState } from './iamState'
 
-export const renameProject = async (oldName: string, newName: string) => {
-  const {
-    apiKey: { apiKeyHash },
-  } = await iamState.requireProjectSummary(oldName)
+const renameProject = async (input: { projectId: string; name: string }) => {
+  const { projectId } = input
+  const { name } = input
 
   try {
+    const consoleAuthToken = await authHelper.getConsoleAuthToken()
     const data = await window.withProgress(
       {
         location: ProgressLocation.Notification,
         title: projectMessage.renameProject,
       },
       async () => {
-        return iamClient.patchProject(
-          {
-            oldName,
-            newName,
-          },
-          { apiKeyHash },
-        )
+        return iamClient.patchProject({ projectId, name: { name } }, { consoleAuthToken })
       },
     )
 
@@ -37,12 +31,17 @@ export const renameProject = async (oldName: string, newName: string) => {
   }
 }
 
-export const activateRenameProject = async (element: BasicTreeItemWithProject) => {
-  const newName = await window.showInputBox({
+const activateRenameProject = async (element: BasicTreeItemWithProject) => {
+  const { projectId } = element
+  const name = await window.showInputBox({
     prompt: `Enter the new name for the project "${element.label}":`,
   })
 
-  if (newName) {
-    await renameProject(element.projectId, newName)
+  if (!name) return
+
+  if (name) {
+    await renameProject({ projectId, name })
   }
 }
+
+export const renameProjectService = { activateRenameProject, renameProject }
