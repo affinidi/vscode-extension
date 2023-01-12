@@ -1,7 +1,7 @@
 import { ProgressLocation, window } from 'vscode'
 import { authHelper } from '../../auth/authHelper'
 import { ext } from '../../extensionVariables'
-import { projectMessage } from '../../messages/messages'
+import { projectMessage } from './messages'
 import { BasicTreeItemWithProject } from '../../tree/basicTreeItemWithProject'
 import { notifyError } from '../../utils/notifyError'
 import { iamClient } from './iamClient'
