@@ -6,11 +6,12 @@ import { sandbox } from '../../setup'
 import { createProjectProcess } from '../../../../features/iam/createProjectProcess'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { authHelper } from '../../../../auth/authHelper'
+import { generateProjectId } from '../../helpers'
 
 describe('createProjectProcess()', () => {
   const projectName = 'fake-project-name'
   const consoleAuthToken = 'fake-console-auth-token'
-  const projectId = 'fake-project-id'
+  const projectId = generateProjectId()
 
   let showInputBoxStub: sinon.SinonStub
 

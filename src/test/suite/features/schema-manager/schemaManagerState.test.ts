@@ -2,11 +2,12 @@ import { expect } from 'chai'
 import { iamState } from '../../../../features/iam/iamState'
 import { schemaManagerClient } from '../../../../features/schema-manager/schemaManagerClient'
 import { SchemaManagerState } from '../../../../features/schema-manager/schemaManagerState'
-import { state } from '../../../../state'
+import { generateProjectId, generateProjectSummary } from '../../helpers'
 import { sandbox } from '../../setup'
 
 describe('SchemaManagerState', () => {
-  const projectId = 'fake-project-id'
+  const projectId = generateProjectId()
+  const projectSummary = generateProjectSummary({ projectId })
   const schemas: any[] = [
     { id: 'fake-schema-1', namespace: null },
     { id: 'fake-schema-2', namespace: 'fake-namespace' },
@@ -17,14 +18,10 @@ describe('SchemaManagerState', () => {
   let schemaManagerState: SchemaManagerState
 
   beforeEach(async () => {
-    sandbox
-      .stub(iamState, 'requireProjectSummary')
-      .resolves({ wallet: { did: 'fake-did' }, apiKey: { apiKeyHash: 'fake-api-key-hash' } } as any)
+    sandbox.stub(iamState, 'requireProjectSummary').resolves(projectSummary)
     sandbox.stub(schemaManagerClient, 'searchSchemas').resolves({ schemas, count: 4 })
 
     schemaManagerState = new SchemaManagerState()
-
-    state.clear()
   })
 
   describe('listAuthoredSchemas()', () => {
@@ -43,6 +40,7 @@ describe('SchemaManagerState', () => {
       await expect(
         schemaManagerState.listAuthoredSchemas({ projectId, scope: 'unlisted' }),
       ).to.eventually.deep.eq([schema2, schema4])
+
       expect(schemaManagerClient.searchSchemas).calledOnce
 
       schemaManagerState.clear()
@@ -50,7 +48,10 @@ describe('SchemaManagerState', () => {
       await expect(schemaManagerState.listAuthoredSchemas({ projectId })).to.eventually.deep.eq(
         schemas,
       )
+
       expect(schemaManagerClient.searchSchemas).calledTwice
+
+      schemaManagerState.clear()
     })
   })
 
@@ -67,6 +68,7 @@ describe('SchemaManagerState', () => {
       await expect(
         schemaManagerState.getAuthoredSchemaById({ projectId, schemaId: 'fake-schema-3' }),
       ).to.eventually.deep.eq(schema3)
+
       expect(schemaManagerClient.searchSchemas).calledOnce
 
       schemaManagerState.clear()
@@ -80,7 +82,10 @@ describe('SchemaManagerState', () => {
       await expect(
         schemaManagerState.getAuthoredSchemaById({ projectId, schemaId: 'fake-schema-4' }),
       ).to.eventually.deep.eq(schema4)
+
       expect(schemaManagerClient.searchSchemas).calledTwice
+
+      schemaManagerState.clear()
     })
   })
 })

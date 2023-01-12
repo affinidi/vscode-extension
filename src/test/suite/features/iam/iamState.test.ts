@@ -4,7 +4,6 @@ import { configVault } from '../../../../config/configVault'
 import { iamClient } from '../../../../features/iam/iamClient'
 import { IamState } from '../../../../features/iam/iamState'
 import { projectMessage } from '../../../../features/iam/messages'
-import { state } from '../../../../state'
 import { sandbox } from '../../setup'
 
 describe('IamState', () => {
@@ -29,20 +28,22 @@ describe('IamState', () => {
       .resolves(project2Summary)
 
     iamState = new IamState()
-
-    state.clear()
   })
 
   describe('listProjects()', () => {
     it('should fetch projects once and then reuse the cached value', async () => {
       await expect(iamState.listProjects()).to.eventually.deep.eq(projects)
       await expect(iamState.listProjects()).to.eventually.deep.eq(projects)
+
       expect(iamClient.listProjects).calledOnce
 
       iamState.clear()
 
       await expect(iamState.listProjects()).to.eventually.deep.eq(projects)
+
       expect(iamClient.listProjects).calledTwice
+
+      iamState.clear()
     })
   })
 
@@ -52,24 +53,32 @@ describe('IamState', () => {
 
       await expect(iamState.getProjectById('fake-project-1')).to.eventually.deep.eq(project1)
       await expect(iamState.getProjectById('fake-project-2')).to.eventually.deep.eq(project2)
+
       expect(iamClient.listProjects).calledOnce
 
       iamState.clear()
 
       await expect(iamState.getProjectById('fake-project-1')).to.eventually.deep.eq(project1)
+
       expect(iamClient.listProjects).calledTwice
+
+      iamState.clear()
     })
   })
 
   describe('getActiveProject()', () => {
     it('should fetch projects once and then reuse the cached value', async () => {
       await expect(iamState.requireActiveProject()).to.eventually.deep.eq(projects[0])
+
       expect(iamClient.listProjects).calledOnce
 
       iamState.clear()
 
       await expect(iamState.requireActiveProject()).to.eventually.deep.eq(projects[0])
+
       expect(iamClient.listProjects).calledTwice
+
+      iamState.clear()
     })
     it('should throw error when active project could not be fetched', async () => {
       sandbox.stub(iamState, 'getProjectById').resolves(undefined)
@@ -82,12 +91,16 @@ describe('IamState', () => {
   describe('getInactiveProjects()', () => {
     it('should fetch projects once and then reuse the cached value', async () => {
       await expect(iamState.getInactiveProjects()).to.eventually.deep.eq([projects[1]])
+
       expect(iamClient.listProjects).calledOnce
 
       iamState.clear()
 
       await expect(iamState.getInactiveProjects()).to.eventually.deep.eq([projects[1]])
+
       expect(iamClient.listProjects).calledTwice
+
+      iamState.clear()
     })
   })
 
@@ -114,7 +127,10 @@ describe('IamState', () => {
       await expect(iamState.requireProjectSummary('fake-project-1')).to.eventually.deep.eq(
         project1Summary,
       )
+
       expect(iamClient.getProjectSummary).calledThrice
+
+      iamState.clear()
     })
   })
 })

@@ -1,7 +1,9 @@
 import { ProjectSummary } from '@affinidi/client-iam'
 import { IssuanceDto } from '@affinidi/client-issuance'
 import { SchemaDto } from '@affinidi/client-schema-manager'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
 import { AuthenticationSession } from 'vscode'
 import { EXAMPLE_SCHEMA } from '../../features/schema-manager/schemaManagerHelpers'
 
@@ -31,6 +33,8 @@ export function generateConsoleAuthToken(values?: { userId?: string; username?: 
   )
 }
 
+export const generateProjectId = () => `project-id-${crypto.randomBytes(10).toString('hex')}`
+
 export const generateSchema = (input?: {
   id?: string
   description?: string
@@ -52,7 +56,7 @@ export const generateSchema = (input?: {
 
 export const generateIssuance = ({
   id = 'fake-issuance-id',
-  projectId = 'fake-project-id',
+  projectId = generateProjectId(),
   issuerDid = 'fake-did',
 }): IssuanceDto => ({
   id,
@@ -67,23 +71,23 @@ export const generateIssuance = ({
   projectId,
 })
 
-export const generateProjectSummary = ({
-  projectId = 'fake-project-id',
-  projectName = 'fake-project-name',
-  apiKeyHash = 'fake-api-key-hash',
-  did = 'fake-did',
+export const generateProjectSummary = (input?: {
+  projectId?: string
+  projectName?: string
+  apiKeyHash?: string
+  did?: string
 }): ProjectSummary => ({
   wallet: {
     didUrl: '',
-    did,
+    did: input?.did ?? 'fake-did',
   },
   apiKey: {
-    apiKeyHash,
+    apiKeyHash: input?.apiKeyHash ?? 'fake-api-key-hash',
     apiKeyName: '',
   },
   project: {
-    projectId,
-    name: projectName,
+    projectId: input?.projectId ?? generateProjectId(),
+    name: input?.projectName ?? 'fake-project-name',
     createdAt: '',
   },
 })

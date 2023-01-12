@@ -39,6 +39,7 @@ export class SchemaManagerState {
   private async fetchAuthoredSchemas(projectId: string): Promise<SchemaDto[]> {
     const key = storageKey(`authored:by-project:${projectId}`)
     const stored = state.get<SchemaDto[]>(key)
+
     if (stored) return stored
 
     const {

@@ -5,10 +5,10 @@ import sinon from 'sinon'
 import { sandbox } from '../../setup'
 import { issuanceHelpers } from '../../../../features/issuance/issuanceHelpers'
 import { issuanceMessage } from '../../../../features/issuance/messages'
-import { generateIssuance } from '../../helpers'
+import { generateIssuance, generateProjectId } from '../../helpers'
 
 describe('issuanceHelpers()', () => {
-  const projectId = 'fake-project-id'
+  const projectId = generateProjectId()
   const issuance = generateIssuance({ projectId })
 
   let withProgress: sinon.SinonStub

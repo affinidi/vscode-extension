@@ -8,11 +8,11 @@ import { iamClient } from '../../../../features/iam/iamClient'
 import { ISSUANCE_API_URL } from '../../../../features/issuance/issuanceClient'
 import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
-import { generateProjectSummary } from '../../helpers'
+import { generateProjectId, generateProjectSummary } from '../../helpers'
 
 describe('insertGetIssuanceOffersSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
-    const projectId = 'fake-project-id'
+    const projectId = generateProjectId()
     const issuanceId = 'fake-issuance-id'
     const apiKeyHash = 'fake-api-key-hash'
     const projectSummary = generateProjectSummary({ projectId, apiKeyHash })

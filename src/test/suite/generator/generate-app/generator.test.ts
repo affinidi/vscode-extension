@@ -10,12 +10,12 @@ import { cliMessage } from '../../../../utils/messages'
 import { generateAffinidiAppWithCLI } from '../../../../generators/create-app/generator'
 import { configVault } from '../../../../config/configVault'
 import { iamState } from '../../../../features/iam/iamState'
-import { generateProjectSummary } from '../../helpers'
+import { generateProjectId, generateProjectSummary } from '../../helpers'
 
-const DIRECTORY_NAME = '/directory'
-const APP_NAME = 'appName'
-const PROJECT_ID = 'fake-project-id'
-const PROJECT_SUMMARY = generateProjectSummary({ projectId: PROJECT_ID })
+const directoryName = '/directory'
+const appName = 'appName'
+const projectId = generateProjectId()
+const projectSummary = generateProjectSummary({ projectId })
 
 describe('generateAffinidiAppWithCLI()', () => {
   let showErrorMessage: sinon.SinonStub
@@ -28,14 +28,14 @@ describe('generateAffinidiAppWithCLI()', () => {
   beforeEach(async () => {
     showErrorMessage = sandbox.stub(window, 'showErrorMessage')
     showInformationMessage = sandbox.stub(window, 'showInformationMessage')
-    dialog = sandbox.stub(window, 'showOpenDialog').resolves([Uri.file(DIRECTORY_NAME)])
+    dialog = sandbox.stub(window, 'showOpenDialog').resolves([Uri.file(directoryName)])
     existsSync = sandbox.stub(fs, 'existsSync').resolves(true)
     progressWindow = sandbox.stub(window, 'withProgress').resolves(true)
-    inputBox = sandbox.stub(window, 'showInputBox').resolves(APP_NAME)
+    inputBox = sandbox.stub(window, 'showInputBox').resolves(appName)
     sandbox.stub(ext.outputChannel, 'appendLine')
     sandbox.stub(commands, 'executeCommand')
-    sandbox.stub(configVault, 'requireActiveProjectId').resolves(PROJECT_ID)
-    sandbox.stub(iamState, 'requireProjectSummary').resolves(PROJECT_SUMMARY)
+    sandbox.stub(configVault, 'requireActiveProjectId').resolves(projectId)
+    sandbox.stub(iamState, 'requireProjectSummary').resolves(projectSummary)
   })
 
   it("should show error message if user didn't specify directory", async () => {

@@ -1,16 +1,16 @@
-import { assert, expect } from 'chai'
+import { expect } from 'chai'
 import sinon from 'sinon'
 import { vcJsonSchemaFetcher } from '../../../../../../features/issuance/json-schema/json-schema-fetcher'
 import { createBuilderSchemaFork } from '../../../../../../features/schema-manager/schema-builder/helpers/createBuilderSchemaFork'
 import { BuilderAttribute } from '../../../../../../features/schema-manager/schema-builder/SchemaBuilderWebview'
 import { schemaManagerState } from '../../../../../../features/schema-manager/schemaManagerState'
-import { generateSchema } from '../../../../helpers'
+import { generateProjectId, generateSchema } from '../../../../helpers'
 import { sandbox } from '../../../../setup'
 import jsonSchema from './MySchemaV1-0.json'
 
 describe('createBuilderSchemaFork()', () => {
   it('should create BuilderSchema', async () => {
-    const projectId = 'fake-project-id'
+    const projectId = generateProjectId()
     const description = 'Fake description'
     const schema = generateSchema({ description })
 

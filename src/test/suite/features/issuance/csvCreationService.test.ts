@@ -13,13 +13,18 @@ import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { ext } from '../../../../extensionVariables'
 import { csvMessage } from '../../../../features/issuance/messages'
 import { iamState } from '../../../../features/iam/iamState'
-import { generateIssuance, generateProjectSummary, generateSchema } from '../../helpers'
+import {
+  generateIssuance,
+  generateProjectId,
+  generateProjectSummary,
+  generateSchema,
+} from '../../helpers'
 import { configVault } from '../../../../config/configVault'
 import { iamHelpers } from '../../../../features/iam/iamHelpers'
 import { logger } from '../../../../utils/logger'
 
 describe('csvCreationService()', () => {
-  const projectId = 'fake-project-id'
+  const projectId = generateProjectId()
   const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
   const csvTemplate = 'fake-csv-template'

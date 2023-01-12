@@ -29,6 +29,7 @@ export class IssuanceState {
   private async fetchIssuancesByProject(projectId: string): Promise<IssuanceDto[]> {
     const key = storageKey(`by-project:${projectId}`)
     const stored = state.get<IssuanceDto[]>(key)
+
     if (stored) return stored
 
     const projectSummary = await iamState.requireProjectSummary(projectId)
