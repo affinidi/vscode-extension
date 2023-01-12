@@ -12,7 +12,7 @@ import { generateProjectSummary } from '../../helpers'
 
 describe('insertSendVcOfferToEmailSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
-    const projectId = 'fake-project-id'
+    const projectId = 'fake-project-id-insertSendVcOfferToEmailSnippet'
     const apiKeyHash = 'fake-api-key-hash'
     const did = 'fake-did'
     const email = 'fake@example.com'

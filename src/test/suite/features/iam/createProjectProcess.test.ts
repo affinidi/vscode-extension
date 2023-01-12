@@ -10,7 +10,7 @@ import { authHelper } from '../../../../auth/authHelper'
 describe('createProjectProcess()', () => {
   const projectName = 'fake-project-name'
   const consoleAuthToken = 'fake-console-auth-token'
-  const projectId = 'fake-project-id'
+  const projectId = 'fake-project-id-createProjectProcess'
 
   let showInputBoxStub: sinon.SinonStub
 

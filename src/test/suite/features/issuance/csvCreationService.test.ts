@@ -19,7 +19,7 @@ import { iamHelpers } from '../../../../features/iam/iamHelpers'
 import { logger } from '../../../../utils/logger'
 
 describe('csvCreationService()', () => {
-  const projectId = 'fake-project-id'
+  const projectId = 'fake-project-id-csvCreationService'
   const did = 'fake-did'
   const apiKeyHash = 'fake-api-hash-key'
   const csvTemplate = 'fake-csv-template'

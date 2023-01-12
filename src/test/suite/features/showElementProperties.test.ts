@@ -13,7 +13,7 @@ import { generateIssuance, generateProjectSummary, generateSchema } from '../hel
 import { sandbox } from '../setup'
 
 describe('showElementProperties()', () => {
-  const projectId = 'fake-project-id'
+  const projectId = 'fake-project-id-showElementProperties'
 
   let openReadOnlyContent: sinon.SinonStub
 

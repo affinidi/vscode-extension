@@ -31,7 +31,7 @@ function createBuilderSchema(input?: Partial<BuilderSchema>): BuilderSchema {
 }
 
 describe('handleSubmit()', () => {
-  const projectId = 'fake-project-id'
+  const projectId = 'fake-project-id-handleSubmit'
 
   let handler: SubmitHandler
   let builderSchemaPublisherMock: any

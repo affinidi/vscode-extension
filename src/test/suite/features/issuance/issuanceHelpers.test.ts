@@ -8,7 +8,7 @@ import { issuanceMessage } from '../../../../features/issuance/messages'
 import { generateIssuance } from '../../helpers'
 
 describe('issuanceHelpers()', () => {
-  const projectId = 'fake-project-id'
+  const projectId = 'fake-project-id-issuanceHelpers'
   const issuance = generateIssuance({ projectId })
 
   let withProgress: sinon.SinonStub

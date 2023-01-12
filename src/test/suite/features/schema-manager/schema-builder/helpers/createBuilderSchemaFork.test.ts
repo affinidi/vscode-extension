@@ -10,7 +10,7 @@ import jsonSchema from './MySchemaV1-0.json'
 
 describe('createBuilderSchemaFork()', () => {
   it('should create BuilderSchema', async () => {
-    const projectId = 'fake-project-id'
+    const projectId = 'fake-project-id-createBuilderSchemaFork'
     const description = 'Fake description'
     const schema = generateSchema({ description })
 

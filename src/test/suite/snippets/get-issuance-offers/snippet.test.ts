@@ -12,7 +12,7 @@ import { generateProjectSummary } from '../../helpers'
 
 describe('insertGetIssuanceOffersSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {
-    const projectId = 'fake-project-id'
+    const projectId = 'fake-project-id-insertGetIssuanceOffersSnippet'
     const issuanceId = 'fake-issuance-id'
     const apiKeyHash = 'fake-api-key-hash'
     const projectSummary = generateProjectSummary({ projectId, apiKeyHash })

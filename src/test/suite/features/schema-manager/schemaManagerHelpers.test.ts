@@ -12,7 +12,7 @@ import { generateSchema } from '../../helpers'
 import { readOnlyContentViewer } from '../../../../utils/openReadOnlyContent'
 
 describe('schemaManagerHelpers()', () => {
-  const projectId = 'fake-project-id'
+  const projectId = 'fake-project-id-schemaManagerHelpers'
   const schema = generateSchema()
 
   let listAuthoredSchemas: sinon.SinonStub
