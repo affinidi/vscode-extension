@@ -48,5 +48,3 @@ export const showElementProperties = async (element: BasicTreeItem) => {
 
   await readOnlyContentViewer.open({ node: { label, id }, content })
 }
-
-
