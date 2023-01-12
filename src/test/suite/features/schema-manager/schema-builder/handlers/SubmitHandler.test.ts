@@ -9,6 +9,7 @@ import {
 } from '../../../../../../features/schema-manager/schema-builder/SchemaBuilderWebview'
 import * as showSchemaDetails from '../../../../../../features/schema-manager/schema-details/showSchemaDetails'
 import { schemaManagerState } from '../../../../../../features/schema-manager/schemaManagerState'
+import { generateProjectId } from '../../../../helpers'
 import { sandbox } from '../../../../setup'
 
 function createBuilderAttribute(input?: Partial<BuilderAttribute>): BuilderAttribute {
@@ -31,7 +32,7 @@ function createBuilderSchema(input?: Partial<BuilderSchema>): BuilderSchema {
 }
 
 describe('handleSubmit()', () => {
-  const projectId = 'fake-project-id-handleSubmit'
+  const projectId = generateProjectId()
 
   let handler: SubmitHandler
   let builderSchemaPublisherMock: any

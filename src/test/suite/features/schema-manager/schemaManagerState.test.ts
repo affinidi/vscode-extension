@@ -2,10 +2,12 @@ import { expect } from 'chai'
 import { iamState } from '../../../../features/iam/iamState'
 import { schemaManagerClient } from '../../../../features/schema-manager/schemaManagerClient'
 import { SchemaManagerState } from '../../../../features/schema-manager/schemaManagerState'
+import { generateProjectId, generateProjectSummary } from '../../helpers'
 import { sandbox } from '../../setup'
 
 describe('SchemaManagerState', () => {
-  const projectId = 'fake-project-id-SchemaManagerState'
+  const projectId = generateProjectId()
+  const projectSummary = generateProjectSummary({ projectId })
   const schemas: any[] = [
     { id: 'fake-schema-1', namespace: null },
     { id: 'fake-schema-2', namespace: 'fake-namespace' },
@@ -16,9 +18,7 @@ describe('SchemaManagerState', () => {
   let schemaManagerState: SchemaManagerState
 
   beforeEach(async () => {
-    sandbox
-      .stub(iamState, 'requireProjectSummary')
-      .resolves({ wallet: { did: 'fake-did' }, apiKey: { apiKeyHash: 'fake-api-key-hash' } } as any)
+    sandbox.stub(iamState, 'requireProjectSummary').resolves(projectSummary)
     sandbox.stub(schemaManagerClient, 'searchSchemas').resolves({ schemas, count: 4 })
 
     schemaManagerState = new SchemaManagerState()

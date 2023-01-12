@@ -2,18 +2,18 @@ import { expect } from 'chai'
 import { iamState } from '../../../../features/iam/iamState'
 import { issuanceClient } from '../../../../features/issuance/issuanceClient'
 import { IssuanceState } from '../../../../features/issuance/issuanceState'
+import { generateProjectId, generateProjectSummary } from '../../helpers'
 import { sandbox } from '../../setup'
 
 describe('IssuanceState', () => {
-  const projectId = 'fake-project-id-IssuanceState'
+  const projectId = generateProjectId()
+  const projectSummary = generateProjectSummary({ projectId })
   const issuances: any[] = [{ id: 'fake-issuance-1' }, { id: 'fake-issuance-2' }]
 
   let issuanceState: IssuanceState
 
   beforeEach(async () => {
-    sandbox
-      .stub(iamState, 'requireProjectSummary')
-      .resolves({ apiKey: { apiKeyHash: 'fake-api-key-hash' } } as any)
+    sandbox.stub(iamState, 'requireProjectSummary').resolves(projectSummary)
     sandbox.stub(issuanceClient, 'searchIssuances').resolves({ issuances })
 
     issuanceState = new IssuanceState()

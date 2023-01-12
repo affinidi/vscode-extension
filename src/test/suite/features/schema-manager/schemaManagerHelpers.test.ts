@@ -8,11 +8,11 @@ import {
   EXAMPLE_SCHEMA,
 } from '../../../../features/schema-manager/schemaManagerHelpers'
 import { schemaManagerState } from '../../../../features/schema-manager/schemaManagerState'
-import { generateSchema } from '../../helpers'
+import { generateProjectId, generateSchema } from '../../helpers'
 import { readOnlyContentViewer } from '../../../../utils/openReadOnlyContent'
 
 describe('schemaManagerHelpers()', () => {
-  const projectId = 'fake-project-id-schemaManagerHelpers'
+  const projectId = generateProjectId()
   const schema = generateSchema()
 
   let listAuthoredSchemas: sinon.SinonStub

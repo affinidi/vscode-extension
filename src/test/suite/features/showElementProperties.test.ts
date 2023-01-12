@@ -9,11 +9,16 @@ import { schemaManagerState } from '../../../features/schema-manager/schemaManag
 import { SchemaTreeItem } from '../../../features/schema-manager/tree/treeItems'
 import { showElementProperties } from '../../../features/showElementProperties'
 import { readOnlyContentViewer } from '../../../utils/openReadOnlyContent'
-import { generateIssuance, generateProjectSummary, generateSchema } from '../helpers'
+import {
+  generateIssuance,
+  generateProjectId,
+  generateProjectSummary,
+  generateSchema,
+} from '../helpers'
 import { sandbox } from '../setup'
 
 describe('showElementProperties()', () => {
-  const projectId = 'fake-project-id-showElementProperties'
+  const projectId = generateProjectId()
 
   let openReadOnlyContent: sinon.SinonStub
 
