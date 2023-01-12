@@ -239,10 +239,9 @@ export async function activateInternal(context: ExtensionContext) {
 
   commands.registerCommand(
     'affinidiExplorer.renameProject',
-    (element: BasicTreeItemWithProject) => {
+    async (element: BasicTreeItemWithProject) => {
       telemetryHelpers.trackCommand('affinidiExplorer.renameProject', {
         projectId: element.projectId,
-        resource: element.contextValue,
       })
 
       renameProjectService.activateRenameProject(element)

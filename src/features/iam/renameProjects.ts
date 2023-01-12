@@ -5,6 +5,7 @@ import { projectMessage } from './messages'
 import { BasicTreeItemWithProject } from '../../tree/basicTreeItemWithProject'
 import { notifyError } from '../../utils/notifyError'
 import { iamClient } from './iamClient'
+import { iamState } from './iamState'
 
 const renameProject = async (input: { projectId: string; name: string }) => {
   const { projectId } = input
@@ -41,6 +42,9 @@ const activateRenameProject = async (element: BasicTreeItemWithProject) => {
 
   if (name) {
     await renameProject({ projectId, name })
+
+    iamState.clear()
+    ext.explorerTree.refresh()
   }
 }
 
