@@ -4,7 +4,7 @@ import { createSnippetTools, Implementations, SnippetImplementation } from './cr
 import * as javascript from '../boilerplates/javascript'
 import * as typescript from '../boilerplates/typescript'
 import { notifyError } from '../../utils/notifyError'
-import { snippetMessage } from '../../messages/messages'
+import { snippetMessage } from '../messages'
 import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
 
 export type SnippetCommand<CommandInput = unknown> = (

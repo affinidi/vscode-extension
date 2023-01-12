@@ -6,9 +6,8 @@ import deepEqual from 'fast-deep-equal'
 import { iamState } from '../features/iam/iamState'
 import { NoProjectsError } from './NoProjectsError'
 import { NoCurrentUser } from './NoCurrentUser'
-import { logger } from '../utils/logger'
 import { notifyError } from '../utils/notifyError'
-import { projectMessage } from '../messages/messages'
+import { configMessage } from './messages'
 
 export type UserConfig = {
   activeProjectId?: string
@@ -68,7 +67,7 @@ class ConfigVault {
         return undefined
       }
 
-      notifyError(error, projectMessage.errorFetchingActiveProjectId)
+      notifyError(error, configMessage.errorFetchingActiveProjectId)
       throw error
     }
   }

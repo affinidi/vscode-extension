@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { csvMessage } from '../../messages/messages'
+import { csvMessage } from './messages'
 
 export type UploadError = {
   title: string

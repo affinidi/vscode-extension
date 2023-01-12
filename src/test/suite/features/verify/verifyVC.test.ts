@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import sinon from 'sinon'
 import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
-import { issuanceMessage } from '../../../../messages/messages'
+import { verifyVCMessage } from '../../../../features/verify/messages'
 import { vcExamples } from './vcExamples'
 import { verifierClient } from '../../../../features/verify/verifyClient'
 
@@ -45,7 +45,7 @@ describe('verifyAVC())', () => {
       verifyVC.resolves(vcTemplate)
 
       await verifyVC(invalidVC)
-      showInformationMessage.resolves(issuanceMessage.vcNotValid)
+      showInformationMessage.resolves(verifyVCMessage.vcNotValid)
       expect(verifyVC).calledWith(invalidVC)
     })
 
@@ -53,7 +53,7 @@ describe('verifyAVC())', () => {
       verifyVC.resolves(vcTemplate)
 
       await verifyVC(validVC)
-      showInformationMessage.resolves(issuanceMessage.vcValid)
+      showInformationMessage.resolves(verifyVCMessage.vcValid)
       expect(verifyVC).calledWith(validVC)
     })
   })

@@ -1,6 +1,7 @@
 import { ViewColumn, WebviewPanel, window } from 'vscode'
 import { ext } from '../../../extensionVariables'
-import { errorMessage, labels } from '../../../messages/messages'
+import { labels } from '../messages'
+import { errorMessage } from '../messages'
 import { getWebviewUri } from '../../../utils/getWebviewUri'
 import { logger } from '../../../utils/logger'
 import { SubmitHandler } from './handlers/SubmitHandler'

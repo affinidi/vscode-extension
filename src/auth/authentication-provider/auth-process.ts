@@ -1,5 +1,5 @@
 import { ProgressLocation, window } from 'vscode'
-import { authMessage } from '../../messages/messages'
+import { authMessage } from '../messages'
 import { userManagementClient } from '../../features/user-management/userManagementClient'
 import { validateEmail, validateOTP } from './validators'
 

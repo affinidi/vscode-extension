@@ -1,6 +1,5 @@
-import fetch from 'node-fetch'
 import { ProgressLocation, window } from 'vscode'
-import { csvMessage } from '../../../messages/messages'
+import { csvMessage } from '../messages'
 import { parseJsonSchemaUrl } from '../../../utils/parseJsonSchemaUrl'
 import { Schema } from '../../../utils/types'
 import { ColumnSpec, generateColumnSpecs } from './generate-empty-json-specs'

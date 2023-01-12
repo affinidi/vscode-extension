@@ -1,5 +1,5 @@
 import { configVault } from '../../../config/configVault'
-import { schemaMessage } from '../../../messages/messages'
+import { schemaMessage } from '../messages'
 import { notifyError } from '../../../utils/notifyError'
 import { BuilderSchemaPublisher } from './BuilderSchemaPublisher'
 import { SubmitHandler } from './handlers/SubmitHandler'

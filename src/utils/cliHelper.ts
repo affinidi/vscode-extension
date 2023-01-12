@@ -1,19 +1,16 @@
 import { ProgressLocation, window, commands, Uri } from 'vscode'
 import fs from 'fs'
 import execa from 'execa'
+import { generateApplication } from '@affinidi/cli'
 import { ext } from '../extensionVariables'
-import { cliMessage, generatorMessage } from '../messages/messages'
+import { cliMessage, generatorMessage } from './messages'
 import { notifyError } from './notifyError'
+import { configVault } from '../config/configVault'
+import { iamState } from '../features/iam/iamState'
 
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
 }
-
-export const buildAppGenerateCommand = (path: string) =>
-  `affinidi generate-application --use-case certification-and-verification --name ${path.replaceAll(
-    ' ',
-    '\\ ',
-  )} --output=plaintext`
 
 export class CliHelper {
   constructor(private readonly exec: ExecInterface) {}
@@ -29,13 +26,16 @@ export class CliHelper {
     }
   }
 
-  async isCliInstalledOrWarn(options?: { type: 'warning' | 'error' }): Promise<boolean> {
+  async isCliInstalledOrWarn(options?: { type: 'info' | 'warning' | 'error' }): Promise<boolean> {
     const isInstalled = await this.isCliInstalled()
 
     if (!isInstalled) {
       if (options?.type === 'warning') {
         window.showWarningMessage(cliMessage.cliNeedsToBeInstalledForExtension)
         ext.outputChannel.appendLine(cliMessage.cliNeedsToBeInstalledForExtension)
+      } else if (options?.type === 'info') {
+        window.showInformationMessage(cliMessage.tryCli)
+        ext.outputChannel.appendLine(cliMessage.tryCli)
       } else {
         window.showErrorMessage(cliMessage.cliNeedsToBeInstalledForAction)
         ext.outputChannel.appendLine(cliMessage.cliNeedsToBeInstalledForAction)
@@ -45,10 +45,6 @@ export class CliHelper {
     return isInstalled
   }
 
-  async setActiveProject(projectId: string) {
-    await this.exec.command(`affinidi use project ${projectId}`)
-  }
-
   async generateApp({ path }: { path: string }): Promise<void> {
     if (fs.existsSync(path)) {
       window.showErrorMessage(generatorMessage.directoryNameDuplication)
@@ -56,25 +52,30 @@ export class CliHelper {
     }
 
     ext.outputChannel.appendLine(cliMessage.appIsGenerating)
-    const command = buildAppGenerateCommand(path)
+
+    const activeProjectId = await configVault.getActiveProjectId()
+    const {
+      apiKey: { apiKeyHash },
+      project: { projectId },
+      wallet: { did },
+    } = await iamState.requireProjectSummary(activeProjectId ?? '')
 
     try {
-      const { stdout } = await window.withProgress(
+      await window.withProgress(
         {
           location: ProgressLocation.Notification,
           title: cliMessage.appIsGenerating,
         },
-        async () => {
-          return this.exec.command(command)
-        },
+        () =>
+          generateApplication({
+            use_case: 'certification-and-verification',
+            name: path,
+            output: 'plaintext',
+            apiKey: apiKeyHash,
+            projectDid: did,
+            projectId,
+          }),
       )
-
-      if (!stdout.includes('Successfully generated')) {
-        throw new Error(stdout)
-      }
-
-      ext.outputChannel.appendLine(stdout)
-      ext.outputChannel.show()
 
       window.showInformationMessage(cliMessage.appGenerated)
 

@@ -1,5 +1,5 @@
 import { SnippetString } from 'vscode'
-import { snippetMessage } from '../../messages/messages'
+import { snippetMessage } from '../messages'
 import { showQuickPick } from '../../utils/showQuickPick'
 
 export enum SnippetImplementation {

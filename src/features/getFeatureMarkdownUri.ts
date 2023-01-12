@@ -1,5 +1,5 @@
 import { Feature } from './feature'
-import { errorMessage } from '../messages/messages'
+import { errorMessage } from './messages'
 
 export const getFeatureMarkdownUri = async (feature: Feature) => {
   let uri: string = ''

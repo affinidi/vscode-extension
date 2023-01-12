@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { errorMessage } from '../../../messages/messages'
+import { errorMessage } from '../../../utils/messages'
 import { nonNull } from '../../../utils/nonNull'
 
 const propertyName = 'property'
