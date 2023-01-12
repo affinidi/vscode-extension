@@ -41,7 +41,7 @@ async function signUpHandler(): Promise<void> {
 
       await iamHelpers.createDefaultProject()
 
-      await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
+      await cliHelper.isCliInstalledOrWarn({ type: 'info' })
       break
 
     case CONSENT.reject:
