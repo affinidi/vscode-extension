@@ -2,6 +2,7 @@ import { window } from 'vscode'
 import { z } from 'zod'
 import { configVault } from './configVault'
 import { credentialsVault } from './credentialsVault'
+import { configMessage } from './messages'
 
 const credentials = z.object({
   version: z.number(),
@@ -57,6 +58,6 @@ export function validateVaultFiles() {
     credentialsVault.clear()
     configVault.clear()
 
-    window.showErrorMessage('Please update the version of CLI and the extension and signIn again')
+    window.showErrorMessage(configMessage.invalidConfigFiles)
   }
 }
