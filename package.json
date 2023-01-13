@@ -50,6 +50,7 @@
     "onCommand:affinidiExplorer.showJsonLdContext",
     "onCommand:affinidiExplorer.showJsonSchema",
     "onCommand:affinidiExplorer.viewProperties",
+    "onCommand:affinidiExplorer.renameProject",
     "onCommand:affinidiExplorer.activateProject",
     "onCommand:affinidiExplorer.initiateIssuanceCsvFlow",
     "onCommand:affinidiFeedback.reportIssue",
@@ -185,6 +186,11 @@
         "icon": "$(info)"
       },
       {
+        "command": "affinidiExplorer.renameProject",
+        "title": "%affinidiExplorer.renameProject%",
+        "category": "%commands.category.explorer%"
+      },
+      {
         "command": "affinidiExplorer.activateProject",
         "title": "%affinidiExplorer.activateProject%",
         "category": "%commands.category.explorer%",
@@ -303,6 +309,10 @@
           "when": "never"
         },
         {
+          "command": "affinidiExplorer.renameProject",
+          "when": "never"
+        },
+        {
           "command": "affinidiExplorer.showJsonSchema",
           "when": "never"
         },
@@ -376,6 +386,11 @@
           "command": "affinidiExplorer.viewProperties",
           "when": "view == affinidiExplorer && viewItem == inactiveProject || view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == schema || view == affinidiExplorer && viewItem == issuance",
           "group": "inline"
+        },
+        {
+          "command": "affinidiExplorer.renameProject",
+          "when": "view == affinidiExplorer && viewItem == inactiveProject || view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == schema || view == affinidiExplorer && viewItem == issuance",
+          "group": "z_commands"
         },
         {
           "command": "affinidiExplorer.activateProject",
@@ -560,8 +575,8 @@
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
+    "@affinidi/client-iam": "^0.4.2",
     "@affinidi/cli": "^1.53.0",
-    "@affinidi/client-iam": "^0.3.2",
     "@affinidi/client-issuance": "^0.4.2",
     "@affinidi/client-schema-manager": "^0.3.2",
     "@affinidi/client-user-management": "^0.3.3",

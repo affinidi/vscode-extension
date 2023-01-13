@@ -35,6 +35,7 @@ import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
 import { verifyVC } from './features/verify/verifyVC'
 import { initIam } from './features/iam/initIam'
 import { notifyError } from './utils/notifyError'
+import { renameProjectService } from './features/iam/renameProjects'
 import { schemaMessage } from './features/schema-manager/messages'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
@@ -233,6 +234,17 @@ export async function activateInternal(context: ExtensionContext) {
       })
 
       showElementProperties(element)
+    },
+  )
+
+  commands.registerCommand(
+    'affinidiExplorer.renameProject',
+    async (element: BasicTreeItemWithProject) => {
+      telemetryHelpers.trackCommand('affinidiExplorer.renameProject', {
+        projectId: element.projectId,
+      })
+
+      renameProjectService.activateRenameProject(element)
     },
   )
 
