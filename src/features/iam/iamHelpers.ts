@@ -47,7 +47,7 @@ const renameProject = async ({ projectId }: { projectId: string }) => {
         location: ProgressLocation.Notification,
       },
       () => {
-        return iamClient.patchProject({ projectId, name: { name } }, { consoleAuthToken })
+        return iamClient.patchProject(projectId, { name }, { consoleAuthToken })
       },
     )
 
