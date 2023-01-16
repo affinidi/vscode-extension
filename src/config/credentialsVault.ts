@@ -4,9 +4,11 @@ import path from 'path'
 
 import { ProjectSummary } from '@affinidi/client-iam'
 import { OnDidChangeCallback } from 'conf/dist/source/types'
+import { Environment } from '../utils/types'
 
 export type ConfigType = {
   version: number
+  env?: Environment
   activeProjectSummary?: ProjectSummary
   session?: Session
 }
@@ -49,6 +51,18 @@ class CredentialsVault {
 
   getVersion(): number | undefined {
     return this.store.get('version')
+  }
+
+  setEnvironment(value: Environment) {
+    if (value === 'prod') {
+      this.store.delete('env')
+    } else {
+      this.store.set('env', value)
+    }
+  }
+
+  getEnvironment(): Environment {
+    return this.store.get('env') || 'prod'
   }
 
   onSessionChange(callback: OnDidChangeCallback<Session | undefined>) {

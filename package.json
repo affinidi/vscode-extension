@@ -137,6 +137,11 @@
         "icon": "$(account)"
       },
       {
+        "command": "affinidi.changeEnvironment",
+        "title": "Change environment",
+        "category": "Affinidi"
+      },
+      {
         "command": "affinidi.codegen.sendVcOfferToEmail",
         "title": "%affinidi.codegen.sendVcOfferToEmail%",
         "category": "%commands.category.generators%"
@@ -274,6 +279,10 @@
       "commandPalette": [
         {
           "command": "affinidi.authenticate",
+          "when": "never"
+        },
+        {
+          "command": "affinidi.changeEnvironment",
           "when": "never"
         },
         {
@@ -575,12 +584,12 @@
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
-    "@affinidi/client-iam": "^0.4.2",
     "@affinidi/cli": "^1.53.1",
-    "@affinidi/client-issuance": "^0.4.2",
-    "@affinidi/client-schema-manager": "^0.3.2",
-    "@affinidi/client-user-management": "^0.3.3",
-    "@affinidi/client-verifier": "^0.1.0",
+    "@affinidi/client-iam": "^0.5.2",
+    "@affinidi/client-issuance": "^0.5.1",
+    "@affinidi/client-schema-manager": "^0.4.1",
+    "@affinidi/client-user-management": "^0.4.1",
+    "@affinidi/client-verifier": "^0.2.1",
     "@vscode/l10n": "^0.0.10",
     "@vscode/test-electron": "^2.1.5",
     "@vscode/webview-ui-toolkit": "^1.1.0",

@@ -32,11 +32,13 @@ import { IssuanceTreeItem } from './features/issuance/tree/treeItems'
 import { configVault } from './config/configVault'
 import { updateCredentialsActiveProjectSummary } from './config/updateCredentialsActiveProjectSummary'
 import { telemetryHelpers } from './features/telemetry/telemetryHelpers'
-import { verifyVC } from './features/verify/verifyVC'
+import { verifyVC } from './features/verifier/verifyVC'
 import { initIam } from './features/iam/initIam'
 import { notifyError } from './utils/notifyError'
 import { renameProjectService } from './features/iam/renameProjects'
 import { schemaMessage } from './features/schema-manager/messages'
+import { IS_LOCAL } from './utils/env'
+import { initDevelopment } from './features/development/initDevelopment'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -413,6 +415,7 @@ export async function activateInternal(context: ExtensionContext) {
   initSnippets()
   initGenerators()
   initIam()
+  if (IS_LOCAL) initDevelopment()
 
   logger.info({}, 'Affinidi extension is now active!')
 }

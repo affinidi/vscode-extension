@@ -4,7 +4,7 @@ import { ext } from '../../extensionVariables'
 import { labels } from '../messages'
 import { verifyVCMessage } from './messages'
 import { iamState } from '../iam/iamState'
-import { verifierClient } from './verifyClient'
+import { verifierClient } from './verifierClient'
 import { notifyError } from '../../utils/notifyError'
 import { configVault } from '../../config/configVault'
 

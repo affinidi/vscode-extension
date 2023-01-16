@@ -8,7 +8,7 @@ export class IamStatusBar implements Disposable {
   private readonly item: StatusBarItem
 
   constructor() {
-    this.item = window.createStatusBarItem(StatusBarAlignment.Left, 0)
+    this.item = window.createStatusBarItem(StatusBarAlignment.Left, 1)
   }
 
   async update() {

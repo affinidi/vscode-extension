@@ -3,3 +3,5 @@ export interface Schema {
   jsonLdContextUrl: string
   jsonSchemaUrl: string
 }
+
+export type Environment = 'prod' | 'staging' | 'dev'

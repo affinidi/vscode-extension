@@ -19,7 +19,7 @@ const renameProject = async (input: { projectId: string; name: string }) => {
         title: projectMessage.renameProject,
       },
       async () => {
-        return iamClient.patchProject({ projectId, name: { name } }, { consoleAuthToken })
+        return iamClient.patchProject(projectId, { name }, { consoleAuthToken })
       },
     )
 

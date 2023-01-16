@@ -10,6 +10,7 @@ import { generateCredentialSubjectSample } from '../../features/issuance/json-sc
 import { snippetMessage } from '../messages'
 import { iamState } from '../../features/iam/iamState'
 import { configVault } from '../../config/configVault'
+import { CLOUD_WALLET_API_URL } from '../../features/cloud-wallet'
 
 export interface SnippetInput {
   iamUrl: string
@@ -33,7 +34,6 @@ export const implementations: Implementations<SnippetInput> = {
   typescriptreact: typescript,
 }
 
-export const CLOUD_WALLET_API_URL = 'https://cloud-wallet-api.prod.affinity-project.org/api/v1'
 
 export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetInput, CommandInput>(
   'signVcWithCloudWallet',
