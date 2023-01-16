@@ -1,4 +1,5 @@
 export const schemaMessage = {
+  unlistedSuffix: ' (unlisted)',
   loadingSchemaContent: 'Fetching schema content...',
   fetchingSchemas: 'Fetching available schemas...',
   selectSchema: 'Select a VC Schema',
