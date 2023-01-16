@@ -20,26 +20,12 @@ export class CliHelper {
     return stdout.includes('@affinidi/cli')
   }
 
-  async assertCliIsInstalled(): Promise<void> {
-    if (!(await this.isCliInstalled())) {
-      throw new Error(cliMessage.cliNeedsToBeInstalledForAction)
-    }
-  }
-
-  async isCliInstalledOrWarn(options?: { type: 'info' | 'warning' | 'error' }): Promise<boolean> {
+  async suggestInstallingCLI(): Promise<boolean> {
     const isInstalled = await this.isCliInstalled()
 
     if (!isInstalled) {
-      if (options?.type === 'warning') {
-        window.showWarningMessage(cliMessage.cliNeedsToBeInstalledForExtension)
-        ext.outputChannel.appendLine(cliMessage.cliNeedsToBeInstalledForExtension)
-      } else if (options?.type === 'info') {
-        window.showInformationMessage(cliMessage.tryCli)
-        ext.outputChannel.appendLine(cliMessage.tryCli)
-      } else {
-        window.showErrorMessage(cliMessage.cliNeedsToBeInstalledForAction)
-        ext.outputChannel.appendLine(cliMessage.cliNeedsToBeInstalledForAction)
-      }
+      window.showInformationMessage(cliMessage.tryCli)
+      ext.outputChannel.appendLine(cliMessage.tryCli)
     }
 
     return isInstalled
