@@ -34,9 +34,8 @@ async function createDefaultProject(): Promise<void> {
 
 const renameProject = async ({ projectId }: { projectId: string }) => {
   const project = await iamState.getProjectById(projectId)
-  if (!project) return
   const name = await window.showInputBox({
-    prompt: `Enter the new name for the project "${project.name}":`,
+    prompt: `Enter the new name for the project "${project?.name}":`,
   })
   if (!name) return
 
