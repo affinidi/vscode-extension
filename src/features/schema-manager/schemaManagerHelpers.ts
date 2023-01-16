@@ -14,6 +14,10 @@ export const EXAMPLE_SCHEMA: Schema = {
   jsonSchemaUrl: 'https://schema.affinidi.com/MySchemaV1-0.json',
 }
 
+function getSchemaName(schema: { type: string; version: number; revision: number }) {
+  return `${schema.type}V${schema.version}-${schema.revision}`
+}
+
 async function askForAuthoredSchema(input: {
   projectId: string
   includeExample?: boolean
@@ -26,7 +30,10 @@ async function askForAuthoredSchema(input: {
     () => schemaManagerState.listAuthoredSchemas(input),
   )
 
-  const pickOptions = schemas.map<[string, Schema]>((schema) => [schema.id, schema])
+  const pickOptions = schemas.map<[string, Schema]>((schema) => [
+    `${getSchemaName(schema)}${schema.namespace ? schemaMessage.unlistedSuffix : ''}`,
+    schema,
+  ])
 
   if (input.includeExample) {
     if (schemas.length === 0) {
@@ -48,15 +55,7 @@ async function fetchSchemaUrl(projectId: string) {
   return schema.jsonSchemaUrl
 }
 
-function getSchemaName(schema: { type: string; version: number; revision: number }) {
-  return `${schema.type}V${schema.version}-${schema.revision}`
-}
-
-const showSchemaFile = async (
-  schema: SchemaDto,
-  file: 'json' | 'jsonld',
-  fetch = nodeFetch,
-) => {
+const showSchemaFile = async (schema: SchemaDto, file: 'json' | 'jsonld', fetch = nodeFetch) => {
   return window.withProgress(
     { location: ProgressLocation.Notification, title: schemaMessage.loadingSchemaContent },
     async () => {
