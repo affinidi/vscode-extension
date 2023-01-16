@@ -41,7 +41,7 @@ async function signUpHandler(): Promise<void> {
 
       await iamHelpers.createDefaultProject()
 
-      await cliHelper.isCliInstalledOrWarn({ type: 'info' })
+      cliHelper.suggestInstallingCLI()
       break
 
     case CONSENT.reject:
@@ -63,7 +63,7 @@ async function loginHandler(): Promise<void> {
 
   window.showInformationMessage(authMessage.loggedIn)
   ext.outputChannel.appendLine(authMessage.loggedIn)
-  await cliHelper.isCliInstalledOrWarn({ type: 'warning' })
+  cliHelper.suggestInstallingCLI()
 }
 
 async function logoutHandler(): Promise<void> {

@@ -83,11 +83,9 @@ export class IamState {
     const stored = state.get<ProjectDto[]>(key)
     if (stored) return stored
 
-    const { projects } = await window.withProgress(
-      { location: ProgressLocation.Notification, title: projectMessage.fetchingProjects },
-      async () =>
-        iamClient.listProjects({ consoleAuthToken: await authHelper.getConsoleAuthToken() }),
-    )
+    const { projects } = await iamClient.listProjects({
+      consoleAuthToken: await authHelper.getConsoleAuthToken(),
+    })
 
     state.update(key, projects)
     this.onDidUpdateEmitter.fire()

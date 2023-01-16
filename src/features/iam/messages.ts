@@ -2,7 +2,6 @@ export const projectMessage = {
   projectName: 'Project Name',
   enterProjectName: 'Enter Project Name',
   creatingProject: 'Creating Project...',
-  fetchingProjects: 'Fetching project list...',
   fetchingProjectSummary: 'Fetching project details...',
   successfulProjectCreation: 'Project created successfully',
   projectNameRequired: 'Project name is required',
