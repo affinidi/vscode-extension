@@ -389,7 +389,7 @@
         },
         {
           "command": "affinidiExplorer.renameProject",
-          "when": "view == affinidiExplorer && viewItem == inactiveProject || view == affinidiExplorer && viewItem == project || view == affinidiExplorer && viewItem == schema || view == affinidiExplorer && viewItem == issuance",
+          "when": "view == affinidiExplorer && viewItem == inactiveProject || view == affinidiExplorer && viewItem == project",
           "group": "z_commands"
         },
         {
@@ -575,7 +575,7 @@
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
-    "@affinidi/client-iam": "^0.4.2",
+    "@affinidi/client-iam": "^0.5.1",
     "@affinidi/cli": "^1.53.1",
     "@affinidi/client-issuance": "^0.4.2",
     "@affinidi/client-schema-manager": "^0.3.2",
