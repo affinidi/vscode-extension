@@ -12,7 +12,7 @@ import { readOnlyContentViewer } from '../utils/openReadOnlyContent'
 import { iamHelpers } from '../features/iam/iamHelpers'
 import { telemetryHelpers } from '../features/telemetry/telemetryHelpers'
 import { showQuickPick } from '../utils/showQuickPick'
-import { validateVaultFiles } from '../config/validateVaultFiles'
+import { validateVaultFiles, validateVaultFilesInLogin } from '../config/validateVaultFiles'
 
 const CONSENT = {
   accept: authMessage.accept,
@@ -53,7 +53,7 @@ async function signUpHandler(): Promise<void> {
 }
 
 async function loginHandler(): Promise<void> {
-  validateVaultFiles()
+  validateVaultFilesInLogin()
 
   telemetryHelpers.trackCommand('affinidi.login')
 
