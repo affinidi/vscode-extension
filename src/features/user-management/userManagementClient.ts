@@ -1,7 +1,6 @@
-import { UserManagementClient } from '@affinidi/client-user-management'
+import { apiUrls, UserManagementClient } from '@affinidi/client-user-management'
+import { credentialsVault } from '../../config/credentialsVault'
 
-export const USER_MANAGEMENT_API_URL = 'https://console-user-management.apse1.affinidi.com/api/v1'
+export const USER_MANAGEMENT_API_URL = apiUrls[credentialsVault.getEnvironment()]
 
-export const userManagementClient = new UserManagementClient({
-  apiUrl: USER_MANAGEMENT_API_URL,
-})
+export const userManagementClient = new UserManagementClient({ apiUrl: USER_MANAGEMENT_API_URL })

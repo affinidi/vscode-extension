@@ -3,6 +3,7 @@ import { apiFetch } from './api-client/api-fetch'
 import { AUTH_PROVIDER_ID } from '../../auth/authentication-provider/affinidi-authentication-provider'
 import { logger } from '../../utils/logger'
 import { telemetryHelpers } from './telemetryHelpers'
+import { credentialsVault } from '../../config/credentialsVault'
 
 const affinidiPackage = require('../../../package.json')
 
@@ -49,6 +50,7 @@ export const sendRawAnalyticsEvent = async ({
   subCategory?: EventSubCategory
   metadata?: any
 }): Promise<void> => {
+  if (credentialsVault.getEnvironment() !== 'prod') return
   if (!telemetryHelpers.isTelemetryEnabled()) {
     return
   }

@@ -1,5 +1,6 @@
-import { IamClient } from '@affinidi/client-iam'
+import { apiUrls, IamClient } from '@affinidi/client-iam'
+import { credentialsVault } from '../../config/credentialsVault'
 
-export const AFFINIDI_IAM_API_URL = 'https://affinidi-iam.apse1.affinidi.com/api/v1'
+export const AFFINIDI_IAM_API_URL = apiUrls[credentialsVault.getEnvironment()]
 
 export const iamClient = new IamClient({ apiUrl: AFFINIDI_IAM_API_URL })

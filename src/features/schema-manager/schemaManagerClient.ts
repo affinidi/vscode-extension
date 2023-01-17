@@ -1,10 +1,6 @@
-import { SchemaManagerClient } from '@affinidi/client-schema-manager'
+import { apiUrls, SchemaManagerClient } from '@affinidi/client-schema-manager'
+import { credentialsVault } from '../../config/credentialsVault'
 
-export const SCHEMA_MANAGER_API_URL =
-  'https://affinidi-schema-manager.prod.affinity-project.org/api/v1'
+export const SCHEMA_MANAGER_API_URL = apiUrls[credentialsVault.getEnvironment()]
 
-export const schemaManagerClient = new SchemaManagerClient({
-  apiUrl: SCHEMA_MANAGER_API_URL,
-})
-
-
+export const schemaManagerClient = new SchemaManagerClient({ apiUrl: SCHEMA_MANAGER_API_URL })
