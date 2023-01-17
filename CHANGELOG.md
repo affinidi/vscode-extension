@@ -1,3 +1,20 @@
+# [1.10.0](https://github.com/affinidi/vscode-extension/compare/v1.9.0...v1.10.0) (2023-01-17)
+
+
+### Bug Fixes
+
+* cli package updated ([#89](https://github.com/affinidi/vscode-extension/issues/89)) ([e56f1e0](https://github.com/affinidi/vscode-extension/commit/e56f1e0a4bb57a135165b52c41aae3c8635a2b7c))
+* refactoring renameProject ([#90](https://github.com/affinidi/vscode-extension/issues/90)) ([9a0545d](https://github.com/affinidi/vscode-extension/commit/9a0545dff5becc480c637e87cbcf6adce9d04586))
+* security vulnerabilities ([#82](https://github.com/affinidi/vscode-extension/issues/82)) ([b56466a](https://github.com/affinidi/vscode-extension/commit/b56466a97140bdd899066ab30c100909f7fe9c0a))
+
+
+### Features
+
+* arranged message files ([#83](https://github.com/affinidi/vscode-extension/issues/83)) ([ef75833](https://github.com/affinidi/vscode-extension/commit/ef75833b56becb9a0f9289b456346bd75aeeb138))
+* **FTL-8509:** add info about active and default project ([#84](https://github.com/affinidi/vscode-extension/issues/84)) ([f711770](https://github.com/affinidi/vscode-extension/commit/f7117700bafc9eb4ae5b3a9680c12dd11e8c6b52))
+* renameProject ([#88](https://github.com/affinidi/vscode-extension/issues/88)) ([77d79c3](https://github.com/affinidi/vscode-extension/commit/77d79c336a0e5030b4d10196633e5ebf940b9681))
+* use CLI as an npm dependency and replace Execa ([#86](https://github.com/affinidi/vscode-extension/issues/86)) ([096f849](https://github.com/affinidi/vscode-extension/commit/096f8496c6822597226a7029ced0a3b400cdb290))
+
 # [1.9.0](https://github.com/affinidi/vscode-extension/compare/v1.8.1...v1.9.0) (2023-01-03)
 
 
