@@ -46,15 +46,6 @@ async function askForAuthoredSchema(input: {
   return showQuickPick(pickOptions, { title: schemaMessage.selectSchema })
 }
 
-async function fetchSchemaUrl(projectId: string) {
-  const schema = await askForAuthoredSchema({ includeExample: true, projectId })
-  if (!schema) {
-    return undefined
-  }
-
-  return schema.jsonSchemaUrl
-}
-
 const showSchemaFile = async (schema: SchemaDto, file: 'json' | 'jsonld', fetch = nodeFetch) => {
   return window.withProgress(
     { location: ProgressLocation.Notification, title: schemaMessage.loadingSchemaContent },
@@ -76,6 +67,5 @@ const showSchemaFile = async (schema: SchemaDto, file: 'json' | 'jsonld', fetch 
 export const schemaManagerHelpers = {
   showSchemaFile,
   askForAuthoredSchema,
-  fetchSchemaUrl,
   getSchemaName,
 }
