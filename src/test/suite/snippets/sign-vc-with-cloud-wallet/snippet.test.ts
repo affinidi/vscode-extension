@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import { sandbox } from '../../setup'
 import {
-  CLOUD_WALLET_API_URL,
   implementations,
   insertSignVcWithCloudWalletSnippet,
 } from '../../../../snippets/sign-vc-with-cloud-wallet/snippet'
@@ -10,6 +9,7 @@ import { testSnippet } from '../helpers'
 import { authHelper } from '../../../../auth/authHelper'
 import { iamState } from '../../../../features/iam/iamState'
 import { generateProjectId, generateProjectSummary } from '../../helpers'
+import { CLOUD_WALLET_API_URL } from '../../../../features/cloud-wallet'
 
 describe('insertSignVcWithCloudWalletSnippet()', () => {
   testSnippet(implementations, async ({ editor, implementation }) => {

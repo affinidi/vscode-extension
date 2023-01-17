@@ -6,6 +6,7 @@ import { configMessage } from './messages'
 
 const credentials = z.object({
   version: z.number(),
+  env: z.enum(['dev', 'staging', 'prod']).optional(),
   activeProjectSummary: z
     .object({
       apiKey: z.object({ apiKeyHash: z.string(), apiKeyName: z.string() }),

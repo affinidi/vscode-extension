@@ -36,7 +36,7 @@ describe('schemaManagerHelpers()', () => {
 
       it('should return selected schema', async () => {
         listAuthoredSchemas.resolves([schema])
-        showQuickPick.resolves(schema.id)
+        showQuickPick.resolves(schemaManagerHelpers.getSchemaName(schema))
         const result = await schemaManagerHelpers.askForAuthoredSchema({
           projectId,
           includeExample: true,
@@ -63,30 +63,11 @@ describe('schemaManagerHelpers()', () => {
 
       it('should return selected schema', async () => {
         listAuthoredSchemas.resolves([schema])
-        showQuickPick.resolves(schema.id)
+        showQuickPick.resolves(schemaManagerHelpers.getSchemaName(schema))
         const result = await schemaManagerHelpers.askForAuthoredSchema({ projectId })
 
         expect(result).equal(schema)
       })
-    })
-  })
-
-  describe('fetchSchemaUrl()', () => {
-    it('should return undefined if no schemas', async () => {
-      listAuthoredSchemas.resolves([schema])
-      showQuickPick.resolves()
-
-      const result = await schemaManagerHelpers.fetchSchemaUrl(projectId)
-
-      expect(result).equal(undefined)
-    })
-
-    it('should return jsonSchemaUrl of selected schemas', async () => {
-      listAuthoredSchemas.resolves([schema])
-      showQuickPick.resolves(schema.id)
-      const result = await schemaManagerHelpers.fetchSchemaUrl(projectId)
-
-      expect(result).equal(schema.jsonSchemaUrl)
     })
   })
 

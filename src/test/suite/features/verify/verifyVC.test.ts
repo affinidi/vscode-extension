@@ -3,9 +3,9 @@ import { expect } from 'chai'
 import sinon from 'sinon'
 import { sandbox } from '../../setup'
 import { ext } from '../../../../extensionVariables'
-import { verifyVCMessage } from '../../../../features/verify/messages'
+import { verifyVCMessage } from '../../../../features/verifier/messages'
 import { vcExamples } from './vcExamples'
-import { verifierClient } from '../../../../features/verify/verifyClient'
+import { verifierClient } from '../../../../features/verifier/verifierClient'
 
 describe('verifyAVC())', () => {
   const vcTemplate = 'fake-vc-template'

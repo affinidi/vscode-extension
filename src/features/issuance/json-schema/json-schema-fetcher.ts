@@ -61,5 +61,5 @@ export class JsonSchemaFetcher {
 }
 
 export const vcJsonSchemaFetcher = new VcJsonSchemaFetcher(
-  new JsonSchemaFetcher(['affinity-project.org', 'affinidi.com'], fetch),
+  new JsonSchemaFetcher(['affinity-project.org', 'affinidi.com', 'affinidi.io'], fetch),
 )
