@@ -29,9 +29,7 @@ const credentials = z.object({
 const config = z.object({
   version: z.number(),
   currentUserId: z.string(),
-  configs: z
-    .record(z.optional(z.object({ activeProjectId: z.string() })))
-    .refine((val) => Object.keys(val).length >= 0),
+  configs: z.record(z.optional(z.object({ activeProjectId: z.string() }))),
 })
 
 function isValidObject(objectType: any, object: any) {
@@ -54,7 +52,7 @@ export function validateVaultFilesInLogin() {
   }
 }
 
-export function validateVaultFiles() {
+export function validateVaultFilesInAuth() {
   const isConfigValid = isValidObject(config, configVault.getObject())
   const isCredentialsValid = isValidObject(credentials, credentialsVault.getObject())
 
