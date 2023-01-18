@@ -42,9 +42,9 @@ const configInlogin = z.object({
 })
 
 export function validateVaultFilesInLogin() {
-  const checkOnlyVersionKeyInConfig = isValidObject(configInlogin, configVault.getObject())
+  const isConfigValid = isValidObject(configInlogin, configVault.getObject())
 
-  if (!checkOnlyVersionKeyInConfig) {
+  if (!isConfigValid) {
     clearVault()
   }
 }
