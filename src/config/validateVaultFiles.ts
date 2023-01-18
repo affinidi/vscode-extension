@@ -45,10 +45,7 @@ export function validateVaultFilesInLogin() {
   const checkOnlyVersionKeyInConfig = isValidObject(configInlogin, configVault.getObject())
 
   if (!checkOnlyVersionKeyInConfig) {
-    credentialsVault.clear()
-    configVault.clear()
-
-    window.showErrorMessage(configMessage.invalidConfigFiles)
+    clearVault()
   }
 }
 
@@ -57,9 +54,13 @@ export function validateVaultFilesInAuth() {
   const isCredentialsValid = isValidObject(credentials, credentialsVault.getObject())
 
   if (!(isConfigValid && isCredentialsValid)) {
-    credentialsVault.clear()
-    configVault.clear()
-
-    window.showErrorMessage(configMessage.invalidConfigFiles)
+    clearVault()
   }
+}
+
+function clearVault() {
+  credentialsVault.clear()
+  configVault.clear()
+
+  window.showErrorMessage(configMessage.invalidConfigFiles)
 }
