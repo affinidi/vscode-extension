@@ -6,17 +6,15 @@ import { configMessage } from './messages'
 
 const credentials = z.object({
   version: z.number(),
-  env: z.optional(z.enum(['dev', 'staging', 'prod'])),
-  activeProjectSummary: z.optional(
-    z.object({
-      apiKey: z.object({ apiKeyHash: z.string(), apiKeyName: z.string() }),
-      project: z.object({ createdAt: z.string(), name: z.string(), projectId: z.string() }),
-      wallet: z.object({
-        did: z.string(),
-        didUrl: z.string(),
-      }),
+  env: z.enum(['dev', 'staging', 'prod']).optional(),
+  activeProjectSummary: z.object({
+    apiKey: z.object({ apiKeyHash: z.string(), apiKeyName: z.string() }),
+    project: z.object({ createdAt: z.string(), name: z.string(), projectId: z.string() }),
+    wallet: z.object({
+      did: z.string(),
+      didUrl: z.string(),
     }),
-  ),
+  }),
   session: z.object({
     sessionId: z.string(),
     consoleAuthToken: z.string(),
@@ -34,31 +32,35 @@ const config = z.object({
   configs: z.record(z.optional(z.object({ activeProjectId: z.string() }))),
 })
 
-const version = z.object({
-  version: z.number(),
-})
-
 function isValidObject(objectType: any, object: any) {
   return objectType.safeParse(object).success
 }
 
-export function validateVaultFiles() {
-  // checking if extension installed for the first time
-  const checkOnlyVersionKeyInConfig =
-    isValidObject(version, configVault.getObject()) &&
-    Object.keys(configVault.getObject()).length === 1
+const configInlogin = z.object({
+  version: z.number(),
+  configs: z.record(z.optional(z.object({ activeProjectId: z.string() }))).optional(),
+})
 
-  if (checkOnlyVersionKeyInConfig) {
-    return
+export function validateConfig() {
+  const isConfigValid = isValidObject(configInlogin, configVault.getObject())
+
+  if (!isConfigValid) {
+    clearVault()
   }
+}
 
+export function validateConfigAndCredentials() {
   const isConfigValid = isValidObject(config, configVault.getObject())
   const isCredentialsValid = isValidObject(credentials, credentialsVault.getObject())
 
   if (!(isConfigValid && isCredentialsValid)) {
-    credentialsVault.clear()
-    configVault.clear()
-
-    window.showErrorMessage(configMessage.invalidConfigFiles)
+    clearVault()
   }
+}
+
+function clearVault() {
+  credentialsVault.clear()
+  configVault.clear()
+
+  window.showErrorMessage(configMessage.invalidConfigFiles)
 }
