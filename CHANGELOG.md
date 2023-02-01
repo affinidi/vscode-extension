@@ -1,3 +1,16 @@
+# [1.11.0](https://github.com/affinidi/vscode-extension/compare/v1.10.0...v1.11.0) (2023-02-01)
+
+
+### Bug Fixes
+
+* changed config file validation ([#92](https://github.com/affinidi/vscode-extension/issues/92)) ([556ced2](https://github.com/affinidi/vscode-extension/commit/556ced2bdef0b3f068ca61cf52dbbd6f8927e4b0))
+
+
+### Features
+
+* [FTL-8908] Added events to track new KPIs ([#94](https://github.com/affinidi/vscode-extension/issues/94)) ([ce6587f](https://github.com/affinidi/vscode-extension/commit/ce6587f84606d7e67ba9752a0090f0a7b3823f84))
+* Allow setting environment when developing the extension locally ([#91](https://github.com/affinidi/vscode-extension/issues/91)) ([6342e90](https://github.com/affinidi/vscode-extension/commit/6342e903c408ca16110c8551cdc3f8dbe033014a))
+
 # [1.10.0](https://github.com/affinidi/vscode-extension/compare/v1.9.0...v1.10.0) (2023-01-17)
 
 
