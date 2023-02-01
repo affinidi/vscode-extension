@@ -1,3 +1,4 @@
+import { SchemaDto } from '@affinidi/client-schema-manager'
 import nodeFetch from 'node-fetch'
 import path from 'path'
 import { window, ProgressLocation } from 'vscode'
@@ -6,7 +7,6 @@ import { showQuickPick } from '../../utils/showQuickPick'
 import { schemaMessage } from './messages'
 import { schemaManagerState } from './schemaManagerState'
 import { readOnlyContentViewer } from '../../utils/openReadOnlyContent'
-import { SchemaDto } from '@affinidi/client-schema-manager'
 
 export const EXAMPLE_SCHEMA: Schema = {
   type: 'MySchema',

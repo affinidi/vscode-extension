@@ -1,5 +1,8 @@
-import { ThemeIcon, TreeItemCollapsibleState } from 'vscode';
-import { BasicTreeItemWithProject, BasicTreeItemWithProjectInput } from '../../../tree/basicTreeItemWithProject';
+import { ThemeIcon, TreeItemCollapsibleState } from 'vscode'
+import {
+  BasicTreeItemWithProject,
+  BasicTreeItemWithProjectInput,
+} from '../../../tree/basicTreeItemWithProject'
 
 type SchemaScope = 'public' | 'unlisted'
 
