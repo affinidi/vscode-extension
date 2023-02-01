@@ -34,7 +34,6 @@ export const implementations: Implementations<SnippetInput> = {
   typescriptreact: typescript,
 }
 
-
 export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetInput, CommandInput>(
   'signVcWithCloudWallet',
   implementations,

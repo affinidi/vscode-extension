@@ -7,6 +7,7 @@ import { cliMessage, generatorMessage } from './messages'
 import { notifyError } from './notifyError'
 import { configVault } from '../config/configVault'
 import { iamState } from '../features/iam/iamState'
+import { UseCasesAppTypes } from './types'
 
 interface ExecInterface {
   command: (command: string) => Promise<{ stdout: string }>
@@ -31,7 +32,7 @@ export class CliHelper {
     return isInstalled
   }
 
-  async generateApp({ path }: { path: string }): Promise<void> {
+  async generateApp({ path, useCase }: { path: string; useCase: UseCasesAppTypes }): Promise<void> {
     if (fs.existsSync(path)) {
       window.showErrorMessage(generatorMessage.directoryNameDuplication)
       return
@@ -54,7 +55,7 @@ export class CliHelper {
         },
         () =>
           generateApplication({
-            use_case: 'certification-and-verification',
+            use_case: useCase,
             name: path,
             output: 'plaintext',
             apiKey: apiKeyHash,

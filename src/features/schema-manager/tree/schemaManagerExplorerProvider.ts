@@ -13,9 +13,7 @@ function simplifySchemaDescription(value: string) {
 }
 
 export class SchemaManagerExplorerProvider implements ExplorerProvider {
-  async getChildren(
-    element: BasicTreeItem | undefined,
-  ): Promise<BasicTreeItem[] | undefined> {
+  async getChildren(element: BasicTreeItem | undefined): Promise<BasicTreeItem[] | undefined> {
     if (element === undefined) return undefined
 
     if (element instanceof ProjectFeatureTreeItem && element.feature === Feature.SCHEMAS) {
@@ -45,12 +43,10 @@ export class SchemaManagerExplorerProvider implements ExplorerProvider {
   }
 
   private async getSchemas(parent: ScopedSchemasTreeItem) {
-    const schemas = await schemaManagerState.listAuthoredSchemas(
-      {
-        projectId: parent.projectId,
-        scope: parent.scope,
-      },
-    )
+    const schemas = await schemaManagerState.listAuthoredSchemas({
+      projectId: parent.projectId,
+      scope: parent.scope,
+    })
 
     return schemas.map(
       (schema) =>

@@ -5,3 +5,5 @@ export interface Schema {
 }
 
 export type Environment = 'prod' | 'staging' | 'dev'
+
+export type UseCasesAppTypes = 'portable-reputation' | 'certification-and-verification'

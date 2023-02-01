@@ -1,10 +1,10 @@
-import { SchemaField, parseSchema } from '@affinidi/affinidi-vc-schemas';
-import { nanoid } from 'nanoid';
-import { window, ProgressLocation } from 'vscode';
-import { schemaMessage } from '../../messages';
-import { vcJsonSchemaFetcher } from '../../../issuance/json-schema/json-schema-fetcher';
-import { schemaManagerState } from '../../schemaManagerState';
-import { BuilderAttribute } from '../SchemaBuilderWebview';
+import { SchemaField, parseSchema } from '@affinidi/affinidi-vc-schemas'
+import { nanoid } from 'nanoid'
+import { window, ProgressLocation } from 'vscode'
+import { schemaMessage } from '../../messages'
+import { vcJsonSchemaFetcher } from '../../../issuance/json-schema/json-schema-fetcher'
+import { schemaManagerState } from '../../schemaManagerState'
+import { BuilderAttribute } from '../SchemaBuilderWebview'
 
 function fieldsToAttributes(fields: SchemaField[], parentId?: string): BuilderAttribute[] {
   return fields.flatMap((field) => {
