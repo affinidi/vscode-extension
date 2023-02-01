@@ -31,6 +31,9 @@ async function activateProject(element: InactiveProjectTreeItem) {
   if (!project) return
 
   await configVault.setUserConfig({ activeProjectId: project.projectId })
+  telemetryHelpers.trackCommand('affinidiExplorer.activateProject.completed', {
+    projectId: element.projectId,
+  })
 
   window.showInformationMessage(projectMessage.activatedProject(project.name))
 }
@@ -54,7 +57,7 @@ async function createProject() {
   telemetryHelpers.trackCommand('affinidi.createProject')
 
   await createProjectProcess()
-
+  telemetryHelpers.trackCommand('affinidi.createProject.completed')
   iamState.clear()
   ext.explorerTree.refresh()
 }
@@ -65,7 +68,7 @@ export async function initIam() {
 
   ext.context.subscriptions.push(
     iamStatusBar,
-    iamState.onDidUpdate(() => iamStatusBar.update())
+    iamState.onDidUpdate(() => iamStatusBar.update()),
   )
 
   ext.context.subscriptions.push(
