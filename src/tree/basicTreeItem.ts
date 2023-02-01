@@ -22,6 +22,7 @@ export class BasicTreeItem extends TreeItem {
         ? {
             title: input.label,
             command: input.command,
+            arguments: [this],
           }
         : input.command
   }

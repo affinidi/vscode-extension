@@ -4,10 +4,9 @@ import { configVault } from '../../config/configVault'
 import { generatorMessage, labels } from '../messages'
 import { cliHelper } from '../../utils/cliHelper'
 import { notifyError } from '../../utils/notifyError'
+import { UseCasesAppTypes } from '../../utils/types'
 
-export async function generateAffinidiAppWithCLI(
-  useCase: 'certification-and-verification' | 'portable-reputation',
-): Promise<void> {
+export async function generateAffinidiAppWithCLI(useCase: UseCasesAppTypes): Promise<void> {
   try {
     const projectId = await configVault.requireActiveProjectId()
 
