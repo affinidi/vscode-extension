@@ -112,6 +112,11 @@ export class DevToolsTree implements TreeDataProvider<DevToolsTreeItem> {
         label: labels.certificationAndVerification,
         command: 'affinidi.codegen.app',
       }),
+      new DevToolsTreeItem({
+        type: DevToolsType.app,
+        label: labels.portableReputation,
+        command: 'affinidi.codegen.app',
+      }),
     ]
   }
 }

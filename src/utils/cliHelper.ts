@@ -31,7 +31,13 @@ export class CliHelper {
     return isInstalled
   }
 
-  async generateApp({ path }: { path: string }): Promise<void> {
+  async generateApp({
+    path,
+    useCase,
+  }: {
+    path: string
+    useCase: 'certification-and-verification' | 'portable-reputation'
+  }): Promise<void> {
     if (fs.existsSync(path)) {
       window.showErrorMessage(generatorMessage.directoryNameDuplication)
       return
@@ -54,7 +60,7 @@ export class CliHelper {
         },
         () =>
           generateApplication({
-            use_case: 'certification-and-verification',
+            use_case: useCase,
             name: path,
             output: 'plaintext',
             apiKey: apiKeyHash,
