@@ -33,7 +33,7 @@ async function askUserForTelemetryConsent() {
         sendRawAnalyticsEvent({
           name: EventNames.extensionInitialized,
           subCategory: EventSubCategory.affinidiExtension,
-          metadata: 'analytics disabled',
+          metadata: { analytics: 'disabled' },
         })
         break
       default:
