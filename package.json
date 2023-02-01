@@ -7,7 +7,10 @@
   "license": "Apache-2.0",
   "icon": "media/affinidi-icon-large.png",
   "preview": true,
-  "repository": "https://github.com/affinidi/vscode-extension",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/affinidi/vscode-extension"
+  },
   "version": "1.10.0",
   "engines": {
     "vscode": "^1.70.0"
@@ -584,7 +587,7 @@
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
-    "@affinidi/cli": "^1.53.1",
+    "@affinidi/cli": "^1.54.3",
     "@affinidi/client-iam": "^0.5.2",
     "@affinidi/client-issuance": "^0.5.1",
     "@affinidi/client-schema-manager": "^0.4.1",

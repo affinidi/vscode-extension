@@ -267,6 +267,9 @@ export async function activateInternal(context: ExtensionContext) {
 
           if (schema) {
             await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
+            telemetryHelpers.trackCommand('affinidiExplorer.initiateIssuanceCsvFlow.completed', {
+              projectId,
+            })
           }
         } else if (element instanceof IssuanceTreeItem) {
           const issuance = await issuanceState.getIssuanceById({
@@ -278,6 +281,9 @@ export async function activateInternal(context: ExtensionContext) {
             await csvCreationService.initiateIssuanceCsvFlow({
               projectId,
               schema: issuance.template.schema,
+            })
+            telemetryHelpers.trackCommand('affinidiExplorer.initiateIssuanceCsvFlow.completed', {
+              projectId,
             })
           }
         } else if (
@@ -291,6 +297,9 @@ export async function activateInternal(context: ExtensionContext) {
           if (!schema) return
 
           await csvCreationService.initiateIssuanceCsvFlow({ projectId, schema })
+          telemetryHelpers.trackCommand('affinidiExplorer.initiateIssuanceCsvFlow.completed', {
+            projectId,
+          })
         }
       },
     ),
@@ -301,6 +310,7 @@ export async function activateInternal(context: ExtensionContext) {
       telemetryHelpers.trackCommand('affinidi.initiateIssuanceCsvFlow')
 
       await csvCreationService.initiateIssuanceCsvFlow({})
+      telemetryHelpers.trackCommand('affinidiExplorer.initiateIssuanceCsvFlow.completed', {})
     }),
   )
 
@@ -382,6 +392,7 @@ export async function activateInternal(context: ExtensionContext) {
         projectId: element.projectId,
         scope: element instanceof ScopedSchemasTreeItem ? element.scope : 'public',
       })
+      telemetryHelpers.trackCommand('affinidiExplorer.schemaCreated')
     },
   )
 

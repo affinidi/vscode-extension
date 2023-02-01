@@ -30,6 +30,11 @@ async function askUserForTelemetryConsent() {
         break
       case CONSENT.deny:
         await workspace.getConfiguration().update('affinidi.telemetry.enabled', false, true)
+        sendRawAnalyticsEvent({
+          name: EventNames.extensionInitialized,
+          subCategory: EventSubCategory.affinidiExtension,
+          metadata: { analytics: 'disabled' },
+        })
         break
       default:
         throw new Error(`${errorMessage.unknownConsentType} ${consent}`)
