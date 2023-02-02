@@ -13,6 +13,7 @@ import { iamHelpers } from '../features/iam/iamHelpers'
 import { telemetryHelpers } from '../features/telemetry/telemetryHelpers'
 import { showQuickPick } from '../utils/showQuickPick'
 import { validateConfigAndCredentials, validateConfig } from '../config/validateVaultFiles'
+import { configVault } from '../config/configVault'
 
 const CONSENT = {
   accept: authMessage.accept,
@@ -60,7 +61,6 @@ async function loginHandler(): Promise<void> {
   await authentication.getSession(AUTH_PROVIDER_ID, ['login'], {
     forceNewSession: true,
   })
-
   window.showInformationMessage(authMessage.loggedIn)
   ext.outputChannel.appendLine(authMessage.loggedIn)
   cliHelper.suggestInstallingCLI()
@@ -115,8 +115,12 @@ export const initAuthentication = () => {
 
       if (method === 'login') {
         await commands.executeCommand('affinidi.login')
+        await configVault.setUserConfig({ timeStamp: Date.now() })
+        telemetryHelpers.trackCommand('affinidi.login.completed')
       } else if (method === 'signUp') {
         await commands.executeCommand('affinidi.signUp')
+        await configVault.setUserConfig({ timeStamp: Date.now() })
+        telemetryHelpers.trackCommand('affinidi.signUp.completed')
       }
     }),
   )

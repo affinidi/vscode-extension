@@ -5,9 +5,11 @@ import { generatorMessage, labels } from '../messages'
 import { cliHelper } from '../../utils/cliHelper'
 import { notifyError } from '../../utils/notifyError'
 import { UseCasesAppTypes } from '../../utils/types'
+import { ext } from '../../extensionVariables'
 
 export async function generateAffinidiAppWithCLI(useCase: UseCasesAppTypes): Promise<void> {
   try {
+    ext.outputChannel.appendLine('STARTING TO GENERATE APP PROCESSSSSSSSSSSSSSS')
     const projectId = await configVault.requireActiveProjectId()
 
     if (!projectId) {
