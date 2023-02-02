@@ -2,6 +2,8 @@ import { ProgressLocation, window } from 'vscode'
 import { authMessage } from '../messages'
 import { userManagementClient } from '../../features/user-management/userManagementClient'
 import { validateEmail, validateOTP } from './validators'
+import { credentialsVault } from '../../config/credentialsVault'
+import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
 
 type AuthProcessOutput = {
   id: string
@@ -73,7 +75,9 @@ export const executeAuthProcess = async ({
           })
     },
   )
-
+  credentialsVault.setTimeStamp()
+  if (isSignUp) telemetryHelpers.trackCommand('affinidi.signUp.completed')
+  else telemetryHelpers.trackCommand('affinidi.login.completed')
   const { userId } = parseJwt(consoleAuthToken)
 
   return { email, id: userId, accessToken: consoleAuthToken }
