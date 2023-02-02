@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/affinidi/vscode-extension/compare/v1.11.0...v1.12.0) (2023-02-02)
+
+
+### Features
+
+* add portable reputation app generation [FTL-8851] ([#93](https://github.com/affinidi/vscode-extension/issues/93)) ([337eddf](https://github.com/affinidi/vscode-extension/commit/337eddf50df3c8e5012f5adc7c76212a6530fbb3))
+* add remaining events  [FTL-8912] ([#95](https://github.com/affinidi/vscode-extension/issues/95)) ([7b88fef](https://github.com/affinidi/vscode-extension/commit/7b88fef005951be497db2617dedbafa2a3333ac2))
+
 # [1.11.0](https://github.com/affinidi/vscode-extension/compare/v1.10.0...v1.11.0) (2023-02-01)
 
 
