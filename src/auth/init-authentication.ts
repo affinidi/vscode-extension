@@ -38,7 +38,6 @@ async function signUpHandler(): Promise<void> {
 
       window.showInformationMessage(authMessage.signedUp)
       ext.outputChannel.appendLine(authMessage.signedUp)
-
       await iamHelpers.createDefaultProject()
 
       cliHelper.suggestInstallingCLI()
@@ -60,7 +59,6 @@ async function loginHandler(): Promise<void> {
   await authentication.getSession(AUTH_PROVIDER_ID, ['login'], {
     forceNewSession: true,
   })
-
   window.showInformationMessage(authMessage.loggedIn)
   ext.outputChannel.appendLine(authMessage.loggedIn)
   cliHelper.suggestInstallingCLI()

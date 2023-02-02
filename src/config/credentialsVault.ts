@@ -11,6 +11,7 @@ export type ConfigType = {
   env?: Environment
   activeProjectSummary?: ProjectSummary
   session?: Session
+  timeStamp?: number
 }
 
 export type Session = {
@@ -67,6 +68,14 @@ class CredentialsVault {
 
   onSessionChange(callback: OnDidChangeCallback<Session | undefined>) {
     return this.store.onDidChange('session', callback)
+  }
+
+  getTimeStamp(): number | undefined {
+    return this.store.get('timeStamp')
+  }
+
+  setTimeStamp() {
+    this.store.set('timeStamp', Date.now())
   }
 }
 

@@ -41,6 +41,12 @@ const configInlogin = z.object({
   configs: z.record(z.optional(z.object({ activeProjectId: z.string() }))).optional(),
 })
 
+function clearVault() {
+  credentialsVault.clear()
+  configVault.clear()
+
+  window.showErrorMessage(configMessage.invalidConfigFiles)
+}
 export function validateConfig() {
   const isConfigValid = isValidObject(configInlogin, configVault.getObject())
 
@@ -56,11 +62,4 @@ export function validateConfigAndCredentials() {
   if (!(isConfigValid && isCredentialsValid)) {
     clearVault()
   }
-}
-
-function clearVault() {
-  credentialsVault.clear()
-  configVault.clear()
-
-  window.showErrorMessage(configMessage.invalidConfigFiles)
 }
