@@ -537,7 +537,9 @@
     "dev": "nodemon -x 'npm run compile'",
     "generate-translation": "npx @vscode/l10n-dev export -o ./l10n ./src",
     "update-toolkit": "cp ./node_modules/@vscode/webview-ui-toolkit/dist/toolkit.js ./media/vendor",
-    "prepare": "husky install"
+    "prepare-commit-hooks": "npm install --global commitizen@4.2.4 cz-conventional-changelog@3.3.0 @commitlint/config-conventional@16.2.1 @commitlint/cli@16.2.3",
+    "prepare:dev": "is-ci || (husky install && npm run prepare-commit-hooks)",
+    "prepare": "node -e \"process.exit(process.env.NODE_ENV === 'production' ? 0 : 1)\" || npm run prepare:dev"
   },
   "devDependencies": {
     "@affinidi/eslint-config": "^2.0.0-beta.0",
