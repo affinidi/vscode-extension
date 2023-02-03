@@ -1,3 +1,5 @@
+## [1.12.1](https://github.com/affinidi/vscode-extension/compare/v1.12.0...v1.12.1) (2023-02-03)
+
 # [1.12.0](https://github.com/affinidi/vscode-extension/compare/v1.11.0...v1.12.0) (2023-02-02)
 
 
