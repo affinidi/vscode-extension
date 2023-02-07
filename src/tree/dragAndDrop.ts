@@ -135,7 +135,6 @@ export class AffinidiDragAndDropProvider
     await snippetCommand(undefined, undefined, editor, position)
   }
 
-  // { value: '{"id":"affinidiExplorer","itemHandles":["1/@did:elem:EiARLWJVMinRbZ2wr...wTOGAPUEWAo3rTq-AjJ1sKw/MySchemaV1-0"]}' }
   private parseItems(item: DataTransferItem): any | undefined {
     const itemHandle: string = JSON.parse(item.value).itemHandles[0]
     return itemHandle.split(':').at(-1)
