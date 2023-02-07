@@ -8,6 +8,7 @@ import {
   TextDocument,
   TextEditor,
   TreeDragAndDropController,
+  TreeItem,
   window,
 } from 'vscode'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
@@ -16,8 +17,6 @@ import { insertSendVcOfferToEmailSnippet } from '../snippets/send-vc-offer-to-em
 import { SnippetCommand } from '../snippets/shared/createSnippetCommand'
 import { insertSignVcWithCloudWalletSnippet } from '../snippets/sign-vc-with-cloud-wallet/snippet'
 import { labels } from './messages'
-import { BasicTreeItemWithProject } from './basicTreeItemWithProject'
-
 import { credentialsVault } from '../config/credentialsVault'
 import { SchemaTreeItem } from '../features/schema-manager/tree/treeItems'
 
@@ -28,16 +27,13 @@ const SNIPPET_COMMANDS: Record<string, SnippetCommand<any>> = {
 }
 
 export class AffinidiDragAndDropProvider
-  implements TreeDragAndDropController<BasicTreeItemWithProject>, DocumentDropEditProvider
+  implements TreeDragAndDropController<TreeItem>, DocumentDropEditProvider
 {
   dropMimeTypes = []
 
   dragMimeTypes = []
 
-  async handleDrag(
-    source: BasicTreeItemWithProject[],
-    treeDataTransfer: DataTransfer,
-  ): Promise<void> {
+  async handleDrag(source: TreeItem[], treeDataTransfer: DataTransfer): Promise<void> {
     const [selectedItem] = source
     if (selectedItem instanceof SchemaTreeItem) {
       treeDataTransfer.set(
