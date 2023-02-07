@@ -8,22 +8,18 @@ import {
   TextDocument,
   TextEditor,
   TreeDragAndDropController,
-  TreeItem,
   window,
 } from 'vscode'
 import { schemaManagerState } from '../features/schema-manager/schemaManagerState'
-import { SchemaTreeItem } from '../features/schema-manager/tree/treeItems'
 import { insertGetIssuanceOffersSnippet } from '../snippets/get-issuance-offers/snippet'
 import { insertSendVcOfferToEmailSnippet } from '../snippets/send-vc-offer-to-email/snippet'
 import { SnippetCommand } from '../snippets/shared/createSnippetCommand'
 import { insertSignVcWithCloudWalletSnippet } from '../snippets/sign-vc-with-cloud-wallet/snippet'
-import { IssuanceTreeItem } from '../features/issuance/tree/treeItems'
-import { DevToolsTreeItem } from './devToolsTreeItem'
 import { labels } from './messages'
 import { BasicTreeItemWithProject } from './basicTreeItemWithProject'
 
-// 1/@did:elem:EiARLWJVMinRbZ2wr...wTOGAPUEWAo3rTq-AjJ1sKw/MySchemaV1-0
-const ITEM_ID_REGEX = /^\d+?\/(?<value>.*)$/
+import { credentialsVault } from '../config/credentialsVault'
+import { SchemaTreeItem } from '../features/schema-manager/tree/treeItems'
 
 const SNIPPET_COMMANDS: Record<string, SnippetCommand<any>> = {
   [`${labels.sendVCOfferToEmail}`]: insertSendVcOfferToEmailSnippet,
@@ -48,22 +44,6 @@ export class AffinidiDragAndDropProvider
         'application/vnd.code.tree.affinidiExplorer',
         new DataTransferItem(source),
       )
-      return
-    }
-
-    if (selectedItem instanceof IssuanceTreeItem) {
-      treeDataTransfer.set(
-        'application/vnd.code.tree.affinidiExplorer',
-        new DataTransferItem(source),
-      )
-      return
-    }
-
-    if (selectedItem instanceof DevToolsTreeItem) {
-      treeDataTransfer.set(
-        'application/vnd.code.tree.affinidiDevTools',
-        new DataTransferItem(source),
-      )
     }
   }
 
@@ -75,30 +55,45 @@ export class AffinidiDragAndDropProvider
   ): Promise<DocumentDropEdit> {
     const editor = window.visibleTextEditors.find((editor) => editor.document === _document)
     const resourceItem = dataTransfer.get('application/vnd.code.tree.affinidiexplorer')
+    const project = credentialsVault.getActiveProjectSummary()
 
-    if (resourceItem) {
-      await this.handleResourceDrop(this.parseItem(resourceItem), editor, position)
+    if (resourceItem && project) {
+      const {
+        project: { projectId },
+        wallet: { did },
+      } = project
+      const resourceItemAsString = await resourceItem.asString()
+
+      if (resourceItemAsString.includes(':Issuances')) {
+        const id = this.parseIssuanceItem(resourceItem)
+        await this.handleResourceDrop({ id, projectId, resource: 'issuance' }, editor, position)
+      }
+
+      if (resourceItemAsString.includes('Schemas/0')) {
+        let id = this.parseItems(resourceItem)
+        if (resourceItemAsString.includes('Unlisted')) {
+          id = `@${did}/${id}`
+        }
+        await this.handleResourceDrop({ id, projectId, resource: 'schema' }, editor, position)
+      }
     }
-
     const snippetItem = dataTransfer.get('application/vnd.code.tree.affinididevtools')
     if (snippetItem) {
-      await this.handleSnippetDrop(this.parseItem(snippetItem), editor, position)
+      await this.handleSnippetDrop(this.parseItems(snippetItem), editor, position)
     }
 
     return { insertText: '' }
   }
 
   private async handleResourceDrop(
-    item: SchemaTreeItem | IssuanceTreeItem,
+    item: { resource: string; id: string; projectId: string },
     editor: TextEditor | undefined,
     position: Position,
   ) {
-    console.log('Item: ', item)
-    if (item instanceof SchemaTreeItem) {
-      const { projectId, schemaId } = item
+    if (item.resource === 'schema') {
+      const { projectId, id } = item
 
-      const schema = await schemaManagerState.getAuthoredSchemaById({ projectId, schemaId })
-
+      const schema = await schemaManagerState.getAuthoredSchemaById({ projectId, schemaId: id })
       if (!schema) {
         return
       }
@@ -118,11 +113,11 @@ export class AffinidiDragAndDropProvider
       )
     }
 
-    if (item instanceof IssuanceTreeItem) {
-      const { projectId, issuanceId } = item
+    if (item.resource === 'issuance') {
+      const { projectId, id } = item
       await insertGetIssuanceOffersSnippet(
         {
-          issuanceId,
+          issuanceId: id,
           projectId,
         },
         undefined,
@@ -133,29 +128,25 @@ export class AffinidiDragAndDropProvider
   }
 
   private async handleSnippetDrop(
-    item: DevToolsTreeItem,
+    label: string,
     editor: TextEditor | undefined,
     position: Position,
   ) {
-    const snippetCommand = SNIPPET_COMMANDS[`${item.label}`]
+    const snippetCommand = SNIPPET_COMMANDS[`${label}`]
     if (!snippetCommand) {
       return
     }
-
     await snippetCommand(undefined, undefined, editor, position)
   }
 
   // { value: '{"id":"affinidiExplorer","itemHandles":["1/@did:elem:EiARLWJVMinRbZ2wr...wTOGAPUEWAo3rTq-AjJ1sKw/MySchemaV1-0"]}' }
-  private parseItem(item: DataTransferItem): any | undefined {
-    console.log({ item })
+  private parseItems(item: DataTransferItem): any | undefined {
     const itemHandle: string = JSON.parse(item.value).itemHandles[0]
-    const match = itemHandle.match(ITEM_ID_REGEX)
-    console.log(match?.groups)
-    if (!match?.groups?.value) {
-      return
-    }
-    console.log('Parsed', JSON.parse(match?.groups?.value))
+    return itemHandle.split(':').at(-1)
+  }
 
-    return JSON.parse(match.groups.value)
+  private parseIssuanceItem(item: DataTransferItem): any | undefined {
+    const itemHandle: string = JSON.parse(item.value).itemHandles[0]
+    return itemHandle.split('(').at(-1)?.replace(')', '')
   }
 }
