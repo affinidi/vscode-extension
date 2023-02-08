@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/affinidi/vscode-extension/compare/v1.12.1...v1.13.0) (2023-02-08)
+
+
+### Features
+
+*  add drag and drop functionality [FTL-7664] ([#99](https://github.com/affinidi/vscode-extension/issues/99)) ([d99a7b0](https://github.com/affinidi/vscode-extension/commit/d99a7b0a089df7d4314610ed7e25e76a9093893c))
+
 ## [1.12.1](https://github.com/affinidi/vscode-extension/compare/v1.12.0...v1.12.1) (2023-02-03)
 
 # [1.12.0](https://github.com/affinidi/vscode-extension/compare/v1.11.0...v1.12.0) (2023-02-02)
