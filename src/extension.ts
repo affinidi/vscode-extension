@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import path from 'path'
-import { commands, ExtensionContext, Uri, window, env, workspace } from 'vscode'
+import { commands, ExtensionContext, Uri, window, env, workspace, languages } from 'vscode'
 import { ext } from './extensionVariables'
 import { initAuthentication } from './auth/init-authentication'
 import { showElementProperties } from './features/showElementProperties'
@@ -39,6 +39,7 @@ import { schemaMessage } from './features/schema-manager/messages'
 import { IS_LOCAL } from './utils/env'
 import { initDevelopment } from './features/development/initDevelopment'
 import { iamHelpers } from './features/iam/iamHelpers'
+import { AffinidiDragAndDropProvider } from './tree/dragAndDrop'
 
 const GITHUB_ISSUES_URL = 'https://github.com/affinidi/vscode-extension/issues'
 const GITHUB_NEW_ISSUE_URL = 'https://github.com/affinidi/vscode-extension/issues/new'
@@ -49,6 +50,8 @@ const DISCORD_URL = 'https://discord.com/invite/jx2hGBk5xE'
 // Your extension is activated the very first time the command is executed
 export async function activateInternal(context: ExtensionContext) {
   logger.info({}, 'Activating Affinidi extension...')
+
+  const dragAndDropProvider = new AffinidiDragAndDropProvider()
 
   ext.context = context
   ext.outputChannel = window.createOutputChannel('Affinidi')
@@ -92,12 +95,14 @@ export async function activateInternal(context: ExtensionContext) {
     treeDataProvider: ext.explorerTree,
     canSelectMany: false,
     showCollapseAll: true,
+    dragAndDropController: dragAndDropProvider,
   })
 
   window.createTreeView('affinidiDevTools', {
     treeDataProvider: ext.devToolsTree,
     canSelectMany: false,
     showCollapseAll: true,
+    dragAndDropController: dragAndDropProvider,
   })
 
   const feedbackTreeView = window.createTreeView('affinidiFeedback', {
@@ -423,6 +428,9 @@ export async function activateInternal(context: ExtensionContext) {
   telemetryHelpers.askUserForTelemetryConsent()
   updateCredentialsActiveProjectSummary()
 
+  context.subscriptions.push(
+    languages.registerDocumentDropEditProvider({ language: '*' }, dragAndDropProvider),
+  )
   initSnippets()
   initGenerators()
   initIam()
