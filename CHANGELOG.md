@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/affinidi/vscode-extension/compare/v1.13.0...v1.14.0) (2023-02-13)
+
+
+### Features
+
+* generate snippets without having an active session [FTL-8299] ([#100](https://github.com/affinidi/vscode-extension/issues/100)) ([85fec43](https://github.com/affinidi/vscode-extension/commit/85fec43804b8f42eddc3ba8225091938aa1d366b))
+
 # [1.13.0](https://github.com/affinidi/vscode-extension/compare/v1.12.1...v1.13.0) (2023-02-08)
 
 
