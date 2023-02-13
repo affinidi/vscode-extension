@@ -24,6 +24,7 @@ describe('insertGetIssuanceOffersSnippet()', () => {
       {
         projectId,
         issuanceId,
+        isLoggedIn: true,
       },
       implementation,
       editor,
