@@ -25,6 +25,7 @@ export interface CommandInput {
   projectId?: string
   schema?: Schema
   email?: string
+  isLoggedIn?: boolean
 }
 
 export const implementations: Implementations<SnippetInput> = {
@@ -38,7 +39,9 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
   'sendVcOfferToEmail',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
+    const projectId = input?.isLoggedIn
+      ? input?.projectId ?? (await configVault.requireActiveProjectId())
+      : '<PROJECT_ID>'
     if (!projectId) {
       return undefined
     }
@@ -46,25 +49,33 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await iamState.requireProjectSummary(projectId)
+    } = input?.isLoggedIn
+      ? await iamState.requireProjectSummary(projectId)
+      : { apiKey: { apiKeyHash: '<API_KEY_HASH>' }, wallet: { did: '<DID >' } }
 
-    const schema =
-      input?.schema ??
-      (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
+    const schema = input?.isLoggedIn
+      ? input?.schema ??
+        (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
+      : {
+          type: '<SCHEMA_TYPE>',
+          jsonLdContextUrl: '<JSON_LD_CONTEXT_URL>',
+          jsonSchemaUrl: '<JSON_SCHEMA_URL>',
+        }
     if (!schema) {
       return undefined
     }
 
-    const credentialSubject = await generateCredentialSubjectSample(schema)
+    const credentialSubject = input?.isLoggedIn ? await generateCredentialSubjectSample(schema) : {}
     if (!credentialSubject) {
       throw new Error(snippetMessage.credentialSubjectGeneration)
     }
 
-    const email =
-      input?.email ??
-      (await window.showInputBox({
-        prompt: snippetMessage.enterEmail,
-      }))
+    const email = input?.isLoggedIn
+      ? input?.email ??
+        (await window.showInputBox({
+          prompt: snippetMessage.enterEmail,
+        }))
+      : '<EMAIL>'
 
     return {
       issuanceApiUrl: ISSUANCE_API_URL,

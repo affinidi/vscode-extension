@@ -1,4 +1,4 @@
-import { Position, SnippetString, TextEditor, window, workspace } from 'vscode'
+import { commands, Position, SnippetString, TextEditor, window, workspace } from 'vscode'
 import { showQuickPick } from '../../utils/showQuickPick'
 import { createSnippetTools, Implementations, SnippetImplementation } from './createSnippetTools'
 import * as javascript from '../boilerplates/javascript'
@@ -6,6 +6,8 @@ import * as typescript from '../boilerplates/typescript'
 import { notifyError } from '../../utils/notifyError'
 import { snippetMessage } from '../messages'
 import { telemetryHelpers } from '../../features/telemetry/telemetryHelpers'
+import { ext } from '../../extensionVariables'
+import { labels } from '../../auth/messages'
 
 export type SnippetCommand<CommandInput = unknown> = (
   input?: CommandInput,
@@ -57,7 +59,23 @@ export function createSnippetCommand<SnippetInput, CommandInput>(
         languageId = editor.document.languageId
       } else {
         editor = undefined
+        let isLoggedIn = (await ext.authProvider.isLoggedIn()) || false
+        if (!isLoggedIn) {
+          const continueWithoutLogin = await showQuickPick(
+            [
+              [labels.login, 'Login'],
+              [labels.continueWithoutLogin, 'notLoggedIn'],
+            ],
+            {
+              title: 'Choose to continue without login',
+            },
+          )
 
+          if (continueWithoutLogin === 'Login') {
+            await commands.executeCommand('affinidi.authenticate')
+            isLoggedIn = true
+          }
+        }
         const languageIds = SUPPORTED_BOILERPLATE_LANGUAGE_IDS.filter((id) =>
           supportedLanguageIds.includes(id),
         )
