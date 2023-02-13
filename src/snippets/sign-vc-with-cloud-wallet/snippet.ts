@@ -51,7 +51,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
       wallet: { did },
     } = input?.isLoggedIn
       ? await iamState.requireProjectSummary(projectId)
-      : { apiKey: { apiKeyHash: '<API_KEY_HASH>' }, wallet: { did: '<DID >' } }
+      : { apiKey: { apiKeyHash: '<API_KEY_HASH>' }, wallet: { did: '<DID>' } }
 
     const schema = input?.isLoggedIn
       ? input?.schema ??
