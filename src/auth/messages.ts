@@ -32,6 +32,7 @@ export const authMessage = {
 export const labels = {
   login: 'Log in to Affinidi',
   createAnAccountWithAffinidi: 'Create an Account with Affinidi',
+  continueWithoutLogin: 'Continue without logging in',
 }
 
 export const errorMessage = {

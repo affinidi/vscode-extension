@@ -27,6 +27,7 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
     await insertSignVcWithCloudWalletSnippet(
       {
         projectId,
+        isLoggedIn: true,
         schema: {
           type,
           jsonSchemaUrl,

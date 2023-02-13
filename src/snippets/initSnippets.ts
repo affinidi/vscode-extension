@@ -27,10 +27,11 @@ export const initSnippets = () => {
             schemaId: element.schemaId,
           })
         }
-
+        const isLoggedin = (await ext.authProvider.isLoggedIn()) || false
         await insertSendVcOfferToEmailSnippet({
           projectId: element?.projectId,
           schema,
+          isLoggedIn: isLoggedin,
         })
       },
     ),
@@ -46,10 +47,11 @@ export const initSnippets = () => {
         })
 
         if (!element) issuanceState.clear()
-
+        const isLoggedin = (await ext.authProvider.isLoggedIn()) || false
         await insertGetIssuanceOffersSnippet({
           projectId: element?.projectId,
           issuanceId: element?.issuanceId,
+          isLoggedIn: isLoggedin,
         })
       },
     ),

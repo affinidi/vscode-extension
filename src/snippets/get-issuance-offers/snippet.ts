@@ -17,6 +17,7 @@ export interface SnippetInput {
 export interface CommandInput {
   projectId?: string
   issuanceId?: string
+  isLoggedIn?: boolean
 }
 
 export const implementations: Implementations<SnippetInput> = {
@@ -30,17 +31,22 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
   'getIssuanceOffers',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
+    const projectId = input?.isLoggedIn
+      ? input?.projectId ?? (await configVault.requireActiveProjectId())
+      : '<PROJECT_ID>'
     if (!projectId) {
       return undefined
     }
 
     const {
       apiKey: { apiKeyHash },
-    } = await iamState.requireProjectSummary(projectId)
+    } = input?.isLoggedIn
+      ? await iamState.requireProjectSummary(projectId)
+      : { apiKey: { apiKeyHash: '<API_KEY_HASH>' } }
 
-    const issuanceId =
-      input?.issuanceId ?? (await issuanceHelpers.askForIssuance({ projectId }))?.id
+    const issuanceId = input?.isLoggedIn
+      ? input?.issuanceId ?? (await issuanceHelpers.askForIssuance({ projectId }))?.id
+      : '<ISSUANCE_ID>'
     if (!issuanceId) {
       return undefined
     }

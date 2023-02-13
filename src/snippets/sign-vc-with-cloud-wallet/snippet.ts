@@ -25,6 +25,7 @@ export interface SnippetInput {
 interface CommandInput {
   projectId?: string
   schema?: Schema
+  isLoggedIn?: boolean
 }
 
 export const implementations: Implementations<SnippetInput> = {
@@ -38,7 +39,9 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const projectId = input?.projectId ?? (await configVault.requireActiveProjectId())
+    const projectId = input?.isLoggedIn
+      ? input?.projectId ?? (await configVault.requireActiveProjectId())
+      : '<PROJECT_ID>'
     if (!projectId) {
       return undefined
     }
@@ -46,16 +49,23 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = await iamState.requireProjectSummary(projectId)
+    } = input?.isLoggedIn
+      ? await iamState.requireProjectSummary(projectId)
+      : { apiKey: { apiKeyHash: '<API_KEY_HASH>' }, wallet: { did: '<DID>' } }
 
-    const schema =
-      input?.schema ??
-      (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
+    const schema = input?.isLoggedIn
+      ? input?.schema ??
+        (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
+      : {
+          type: '<SCHEMA_TYPE>',
+          jsonLdContextUrl: '<JSON_LD_CONTEXT_URL>',
+          jsonSchemaUrl: '<JSON_SCHEMA_URL>',
+        }
     if (!schema) {
       return undefined
     }
 
-    const credentialSubject = await generateCredentialSubjectSample(schema)
+    const credentialSubject = input?.isLoggedIn ? await generateCredentialSubjectSample(schema) : {}
     if (!credentialSubject) {
       throw new Error(snippetMessage.credentialSubjectGeneration)
     }

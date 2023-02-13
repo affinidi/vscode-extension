@@ -28,6 +28,7 @@ describe('insertSendVcOfferToEmailSnippet()', () => {
       {
         projectId,
         email,
+        isLoggedIn: true,
         schema: {
           type,
           jsonSchemaUrl,
