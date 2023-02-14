@@ -45,21 +45,12 @@ async function askUserForTelemetryConsent() {
 }
 
 function registerTelemetryChanged() {
-  if (!isTelemetryEnabled()) {
-    sendRawAnalyticsEvent({
-      name: EventNames.extensionInitialized,
-      subCategory: EventSubCategory.affinidiExtension,
-      metadata: { analytics: 'disabled' },
-      ignoreConfig: true,
-    })
-  }
-  if (isTelemetryEnabled()) {
-    sendRawAnalyticsEvent({
-      name: EventNames.extensionInitialized,
-      subCategory: EventSubCategory.affinidiExtension,
-      metadata: { analytics: 'enabled' },
-    })
-  }
+  sendRawAnalyticsEvent({
+    name: EventNames.extensionInitialized,
+    subCategory: EventSubCategory.affinidiExtension,
+    metadata: { analytics: isTelemetryEnabled() ? 'enabled' : 'disabled' },
+    ignoreConfig: true,
+  })
 }
 
 function trackCommand(commandId: string, metadata?: any) {
