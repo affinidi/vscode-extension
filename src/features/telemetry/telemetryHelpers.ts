@@ -21,25 +21,36 @@ async function askUserForTelemetryConsent() {
 
     switch (consent) {
       case CONSENT.accept:
-        await workspace.getConfiguration().update('affinidi.telemetry.enabled', true, true)
-
         sendRawAnalyticsEvent({
           name: EventNames.extensionInitialized,
           subCategory: EventSubCategory.affinidiExtension,
+          metadata: { analytics: 'enabled' },
         })
+        await workspace.getConfiguration().update('affinidi.telemetry.enabled', true, true)
+
         break
       case CONSENT.deny:
-        await workspace.getConfiguration().update('affinidi.telemetry.enabled', false, true)
         sendRawAnalyticsEvent({
           name: EventNames.extensionInitialized,
           subCategory: EventSubCategory.affinidiExtension,
           metadata: { analytics: 'disabled' },
+          ignoreConfig: true,
         })
+        await workspace.getConfiguration().update('affinidi.telemetry.enabled', false, true)
         break
       default:
         throw new Error(`${errorMessage.unknownConsentType} ${consent}`)
     }
   }
+}
+
+function registerTelemetryChanged() {
+  sendRawAnalyticsEvent({
+    name: EventNames.extensionInitialized,
+    subCategory: EventSubCategory.affinidiExtension,
+    metadata: { analytics: isTelemetryEnabled() ? 'enabled' : 'disabled' },
+    ignoreConfig: true,
+  })
 }
 
 function trackCommand(commandId: string, metadata?: any) {
@@ -71,4 +82,5 @@ export const telemetryHelpers = {
   askUserForTelemetryConsent,
   trackCommand,
   trackSnippetInserted,
+  registerTelemetryChanged,
 }
