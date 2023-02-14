@@ -123,6 +123,13 @@ export async function activateInternal(context: ExtensionContext) {
     }
   })
 
+  workspace.onDidChangeConfiguration((event) => {
+    const affected = event.affectsConfiguration('affinidi.telemetry.enabled')
+    if (affected) {
+      telemetryHelpers.registerTelemetryChanged()
+    }
+  })
+
   context.subscriptions.push(
     commands.registerCommand('affinidiExplorer.refreshAll', () => {
       telemetryHelpers.trackCommand('affinidiExplorer.refreshAll')
