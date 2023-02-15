@@ -7,6 +7,7 @@ import * as typescript from './typescript'
 import { iamState } from '../../features/iam/iamState'
 import { issuanceHelpers } from '../../features/issuance/issuanceHelpers'
 import { configVault } from '../../config/configVault'
+import { continueWithoutLogin } from '../../auth/authHelper'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -31,7 +32,9 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
   'getIssuanceOffers',
   implementations,
   async (input) => {
-    const projectId = input?.isLoggedIn
+    const isLoggedIn = await continueWithoutLogin()
+
+    const projectId = isLoggedIn
       ? input?.projectId ?? (await configVault.requireActiveProjectId())
       : '<PROJECT_ID>'
     if (!projectId) {
@@ -40,11 +43,11 @@ export const insertGetIssuanceOffersSnippet = createSnippetCommand<SnippetInput,
 
     const {
       apiKey: { apiKeyHash },
-    } = input?.isLoggedIn
+    } = isLoggedIn
       ? await iamState.requireProjectSummary(projectId)
       : { apiKey: { apiKeyHash: '<API_KEY_HASH>' } }
 
-    const issuanceId = input?.isLoggedIn
+    const issuanceId = isLoggedIn
       ? input?.issuanceId ?? (await issuanceHelpers.askForIssuance({ projectId }))?.id
       : '<ISSUANCE_ID>'
     if (!issuanceId) {
