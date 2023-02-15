@@ -10,7 +10,7 @@ import { generateCredentialSubjectSample } from '../../features/issuance/json-sc
 import { snippetMessage } from '../messages'
 import { iamState } from '../../features/iam/iamState'
 import { configVault } from '../../config/configVault'
-import { continueWithoutLogin } from '../../auth/authHelper'
+import { authHelper } from '../../auth/authHelper'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -40,7 +40,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
   'sendVcOfferToEmail',
   implementations,
   async (input) => {
-    const isLoggedIn = await continueWithoutLogin()
+    const isLoggedIn = await authHelper.continueWithoutLogin()
 
     const projectId = isLoggedIn
       ? input?.projectId ?? (await configVault.requireActiveProjectId())

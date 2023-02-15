@@ -11,10 +11,6 @@ async function getConsoleAuthToken() {
   return session.accessToken
 }
 
-export const authHelper = {
-  getConsoleAuthToken,
-}
-
 export const continueWithoutLogin = async (): Promise<boolean> => {
   const isLoggedIn = (await ext.authProvider.isLoggedIn()) || false
   if (!isLoggedIn) {
@@ -34,4 +30,9 @@ export const continueWithoutLogin = async (): Promise<boolean> => {
     }
   }
   return false
+}
+
+export const authHelper = {
+  getConsoleAuthToken,
+  continueWithoutLogin,
 }
