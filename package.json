@@ -522,7 +522,7 @@
   "l10n": "./l10n",
   "scripts": {
     "vscode:prepublish": "npm run esbuild",
-    "esbuild": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --external:ts-node --format=cjs --platform=node",
     "esbuild-dev": "npm run esbuild -- --sourcemap",
     "esbuild-watch": "npm run esbuild-dev -- --watch",
     "compile": "tsc -p ./",
