@@ -6,4 +6,4 @@ export interface Schema {
 
 export type Environment = 'prod' | 'staging' | 'dev'
 
-export type UseCasesAppTypes = 'portable-reputation' | 'certification-and-verification'
+export type UseCasesAppTypes = 'education' | 'health' | 'portable-reputation' | 'ticketing'
