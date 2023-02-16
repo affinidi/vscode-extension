@@ -41,7 +41,7 @@ describe('generateAffinidiAppWithCLI()', () => {
   it("should show error message if user didn't specify directory", async () => {
     dialog.resolves()
 
-    await generateAffinidiAppWithCLI('ticketing')
+    await generateAffinidiAppWithCLI('certification-and-verification')
 
     expect(dialog).called
     expect(showErrorMessage).calledWith(generatorMessage.noDirectorySelected)
@@ -50,14 +50,14 @@ describe('generateAffinidiAppWithCLI()', () => {
   it("should show error message if user didn't specify app name", async () => {
     inputBox.resolves()
 
-    await generateAffinidiAppWithCLI('ticketing')
+    await generateAffinidiAppWithCLI('certification-and-verification')
 
     expect(dialog).called
     expect(showErrorMessage).calledWith(generatorMessage.appNameNotSelected)
   })
 
   it('should show error message if app with same name already exist in selected path', async () => {
-    await generateAffinidiAppWithCLI('ticketing')
+    await generateAffinidiAppWithCLI('certification-and-verification')
 
     expect(dialog).called
     expect(showErrorMessage).calledWith(generatorMessage.directoryNameDuplication)
@@ -68,7 +68,7 @@ describe('generateAffinidiAppWithCLI()', () => {
     existsSync.restore()
     existsSync.resolves(false)
 
-    await generateAffinidiAppWithCLI('ticketing')
+    await generateAffinidiAppWithCLI('certification-and-verification')
 
     expect(dialog).called
     expect(showInformationMessage).calledWith(cliMessage.appGenerated)

@@ -11,7 +11,6 @@ import { snippetMessage } from '../messages'
 import { iamState } from '../../features/iam/iamState'
 import { configVault } from '../../config/configVault'
 import { CLOUD_WALLET_API_URL } from '../../features/cloud-wallet'
-import { authHelper } from '../../auth/authHelper'
 
 export interface SnippetInput {
   iamUrl: string
@@ -40,9 +39,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
   'signVcWithCloudWallet',
   implementations,
   async (input) => {
-    const isLoggedIn = await authHelper.continueWithoutLogin()
-
-    const projectId = isLoggedIn
+    const projectId = input?.isLoggedIn
       ? input?.projectId ?? (await configVault.requireActiveProjectId())
       : '<PROJECT_ID>'
     if (!projectId) {
@@ -52,11 +49,11 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = isLoggedIn
+    } = input?.isLoggedIn
       ? await iamState.requireProjectSummary(projectId)
       : { apiKey: { apiKeyHash: '<API_KEY_HASH>' }, wallet: { did: '<DID>' } }
 
-    const schema = isLoggedIn
+    const schema = input?.isLoggedIn
       ? input?.schema ??
         (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
       : {
@@ -68,7 +65,7 @@ export const insertSignVcWithCloudWalletSnippet = createSnippetCommand<SnippetIn
       return undefined
     }
 
-    const credentialSubject = isLoggedIn ? await generateCredentialSubjectSample(schema) : {}
+    const credentialSubject = input?.isLoggedIn ? await generateCredentialSubjectSample(schema) : {}
     if (!credentialSubject) {
       throw new Error(snippetMessage.credentialSubjectGeneration)
     }

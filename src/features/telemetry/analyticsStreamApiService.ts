@@ -45,15 +45,13 @@ export const sendRawAnalyticsEvent = async ({
   name,
   subCategory,
   metadata,
-  ignoreConfig,
 }: {
   name: EventNames
   subCategory?: EventSubCategory
   metadata?: any
-  ignoreConfig?: boolean
 }): Promise<void> => {
   if (credentialsVault.getEnvironment() !== 'prod') return
-  if (!telemetryHelpers.isTelemetryEnabled() && !ignoreConfig) {
+  if (!telemetryHelpers.isTelemetryEnabled()) {
     return
   }
 

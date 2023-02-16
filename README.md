@@ -98,13 +98,13 @@ Available snippets:
 
 ## Reference app
 
-If you want an end-to-end example implementation that uses Affinidi APIs, you can generate four types of reference applications directly from the extension.
+If you want an end-to-end example implementation that uses Affinidi APIs, you can generate two types of reference applications directly from the extension.
 
-The Education, Health, and Ticketing apps are flavours of the Certification and Verification use case and include such features as: issuing a credential, claiming & storing it in your wallet, verifying it.
+The Certification and Verification app includes such features as: issuing a credential, claiming & storing it in your wallet, verifying it.
 
 The Portable Reputation app allows the builder to connect to different data sources to construct a portable, user-owned and -managed reputation app that provides access to specific experiences, events or memberships.
 
-Just click the buttons with the app names in the "App Generators" category:
+Just click "Certification & Verification" or "Portable Reputation" buttons in "App Generators" category:
 
 ![App Generation](./media/docs/app_generation.png)
 

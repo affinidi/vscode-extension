@@ -522,7 +522,7 @@
   "l10n": "./l10n",
   "scripts": {
     "vscode:prepublish": "npm run esbuild",
-    "esbuild": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --external:ts-node --format=cjs --platform=node",
+    "esbuild": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
     "esbuild-dev": "npm run esbuild -- --sourcemap",
     "esbuild-watch": "npm run esbuild-dev -- --watch",
     "compile": "tsc -p ./",
@@ -589,7 +589,7 @@
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
-    "@affinidi/cli": "^1.61.6",
+    "@affinidi/cli": "^1.59.5",
     "@affinidi/client-iam": "^0.5.2",
     "@affinidi/client-issuance": "^0.5.1",
     "@affinidi/client-schema-manager": "^0.4.1",

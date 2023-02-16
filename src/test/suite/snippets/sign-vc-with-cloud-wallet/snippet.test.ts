@@ -23,7 +23,6 @@ describe('insertSignVcWithCloudWalletSnippet()', () => {
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
     sandbox.stub(iamState, 'requireProjectSummary').withArgs(projectId).resolves(projectSummary)
-    sandbox.stub(authHelper, 'continueWithoutLogin').resolves(true)
 
     await insertSignVcWithCloudWalletSnippet(
       {
