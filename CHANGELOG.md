@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/affinidi/vscode-extension/compare/v1.15.0...v1.15.1) (2023-02-16)
+
+
+### Bug Fixes
+
+* revert changes for v1.15 ([#105](https://github.com/affinidi/vscode-extension/issues/105)) ([20de677](https://github.com/affinidi/vscode-extension/commit/20de6774c8ae04b801522e355a3587da647175d6))
+
 # [1.15.0](https://github.com/affinidi/vscode-extension/compare/v1.14.0...v1.15.0) (2023-02-16)
 
 
