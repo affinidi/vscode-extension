@@ -10,7 +10,6 @@ import { generateCredentialSubjectSample } from '../../features/issuance/json-sc
 import { snippetMessage } from '../messages'
 import { iamState } from '../../features/iam/iamState'
 import { configVault } from '../../config/configVault'
-import { authHelper } from '../../auth/authHelper'
 
 export interface SnippetInput {
   issuanceApiUrl: string
@@ -40,9 +39,7 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
   'sendVcOfferToEmail',
   implementations,
   async (input) => {
-    const isLoggedIn = await authHelper.continueWithoutLogin()
-
-    const projectId = isLoggedIn
+    const projectId = input?.isLoggedIn
       ? input?.projectId ?? (await configVault.requireActiveProjectId())
       : '<PROJECT_ID>'
     if (!projectId) {
@@ -52,11 +49,11 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
     const {
       apiKey: { apiKeyHash },
       wallet: { did },
-    } = isLoggedIn
+    } = input?.isLoggedIn
       ? await iamState.requireProjectSummary(projectId)
       : { apiKey: { apiKeyHash: '<API_KEY_HASH>' }, wallet: { did: '<DID>' } }
 
-    const schema = isLoggedIn
+    const schema = input?.isLoggedIn
       ? input?.schema ??
         (await schemaManagerHelpers.askForAuthoredSchema({ projectId, includeExample: true }))
       : {
@@ -68,12 +65,12 @@ export const insertSendVcOfferToEmailSnippet = createSnippetCommand<SnippetInput
       return undefined
     }
 
-    const credentialSubject = isLoggedIn ? await generateCredentialSubjectSample(schema) : {}
+    const credentialSubject = input?.isLoggedIn ? await generateCredentialSubjectSample(schema) : {}
     if (!credentialSubject) {
       throw new Error(snippetMessage.credentialSubjectGeneration)
     }
 
-    const email = isLoggedIn
+    const email = input?.isLoggedIn
       ? input?.email ??
         (await window.showInputBox({
           prompt: snippetMessage.enterEmail,

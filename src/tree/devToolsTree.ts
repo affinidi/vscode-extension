@@ -109,22 +109,12 @@ export class DevToolsTree implements TreeDataProvider<DevToolsTreeItem> {
     return [
       new DevToolsTreeItem({
         type: DevToolsType.app,
-        label: labels.educationReferenceApp,
+        label: labels.certificationAndVerification,
         command: 'affinidi.codegen.app',
       }),
       new DevToolsTreeItem({
         type: DevToolsType.app,
-        label: labels.healthReferenceApp,
-        command: 'affinidi.codegen.app',
-      }),
-      new DevToolsTreeItem({
-        type: DevToolsType.app,
-        label: labels.portableReputationReferenceApp,
-        command: 'affinidi.codegen.app',
-      }),
-      new DevToolsTreeItem({
-        type: DevToolsType.app,
-        label: labels.ticketingReferenceApp,
+        label: labels.portableReputation,
         command: 'affinidi.codegen.app',
       }),
     ]

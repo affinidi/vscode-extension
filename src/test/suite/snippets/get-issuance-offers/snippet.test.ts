@@ -19,12 +19,12 @@ describe('insertGetIssuanceOffersSnippet()', () => {
 
     sandbox.stub(authHelper, 'getConsoleAuthToken').resolves('fake-console-auth-token')
     sandbox.stub(iamClient, 'getProjectSummary').resolves(projectSummary)
-    sandbox.stub(authHelper, 'continueWithoutLogin').resolves(true)
 
     await insertGetIssuanceOffersSnippet(
       {
         projectId,
         issuanceId,
+        isLoggedIn: true,
       },
       implementation,
       editor,
