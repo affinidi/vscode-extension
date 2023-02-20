@@ -1,3 +1,17 @@
+# [1.16.0](https://github.com/affinidi/vscode-extension/compare/v1.15.1...v1.16.0) (2023-02-20)
+
+
+### Bug Fixes
+
+* [FTL-9076] Updated CLI version ([#106](https://github.com/affinidi/vscode-extension/issues/106)) ([66453af](https://github.com/affinidi/vscode-extension/commit/66453af1f5adfe2fa8d3acac1af747f52def14e0))
+* when choose to login get prompted for snippet inputs [FTL-8299] ([#103](https://github.com/affinidi/vscode-extension/issues/103)) ([fcc6e44](https://github.com/affinidi/vscode-extension/commit/fcc6e44ab13446eac092bf809aa45cbeca7829c3))
+
+
+### Features
+
+* [FTL-9057] Updated app generator with new ref apps ([#102](https://github.com/affinidi/vscode-extension/issues/102)) ([cb265d1](https://github.com/affinidi/vscode-extension/commit/cb265d14aa20badaa5750ae895bfdee8ab4ae3c8))
+* Amended analytics to track telemetry disabled events ([#101](https://github.com/affinidi/vscode-extension/issues/101)) ([6b6407a](https://github.com/affinidi/vscode-extension/commit/6b6407ac1bfaf5dd37b8a38e310ce05fd8d1a98a))
+
 ## [1.15.1](https://github.com/affinidi/vscode-extension/compare/v1.15.0...v1.15.1) (2023-02-16)
 
 
