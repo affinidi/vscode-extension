@@ -20,8 +20,11 @@ export const initGenerators = () => {
         case labels.healthReferenceApp:
           refAppName = 'health'
           break
-        case labels.portableReputationReferenceApp:
-          refAppName = `portable-reputation`
+        case labels.gamingReferenceApp:
+          refAppName = `gaming`
+          break
+        case labels.careerReferenceApp:
+          refAppName = `career`
           break
         default:
           refAppName = 'ticketing'

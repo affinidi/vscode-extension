@@ -589,7 +589,7 @@
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
-    "@affinidi/cli": "^1.61.15",
+    "@affinidi/cli": "^1.65.2",
     "@affinidi/client-iam": "^0.5.2",
     "@affinidi/client-issuance": "^0.5.1",
     "@affinidi/client-schema-manager": "^0.4.1",

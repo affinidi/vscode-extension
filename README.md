@@ -102,7 +102,7 @@ If you want an end-to-end example implementation that uses Affinidi APIs, you ca
 
 The Education, Health, and Ticketing apps are flavours of the Certification and Verification use case and include such features as: issuing a credential, claiming & storing it in your wallet, verifying it.
 
-The Portable Reputation app allows the builder to connect to different data sources to construct a portable, user-owned and -managed reputation app that provides access to specific experiences, events or memberships.
+The Career and Gaming apps are flavours of the Portable Reputation usecase and allow the builder to connect to different data sources to construct a portable, user-owned and -managed reputation app that provides access to specific experiences, events or memberships.
 
 Just click the buttons with the app names in the "App Generators" category:
 
