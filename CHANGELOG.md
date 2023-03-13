@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/affinidi/vscode-extension/compare/v1.16.0...v1.17.0) (2023-03-13)
+
+
+### Features
+
+* added two new ref apps ([#107](https://github.com/affinidi/vscode-extension/issues/107)) ([786f7f3](https://github.com/affinidi/vscode-extension/commit/786f7f371b37f5658e50a1f5c70f45f87c4eaad5))
+
 # [1.16.0](https://github.com/affinidi/vscode-extension/compare/v1.15.1...v1.16.0) (2023-02-20)
 
 
