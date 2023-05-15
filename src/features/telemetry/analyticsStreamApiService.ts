@@ -9,7 +9,7 @@ const affinidiPackage = require('../../../package.json')
 
 // TODO: This JWT_TOKEN is valid only for 180 days(until 24-04-2023). We need to re-generate the new token by this date.
 const JWT_TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxOTQ0MzY0ZS02NjcwLTQ4M2QtYjM3NC1hMDMyODQwYzliYjUiLCJ1c2VyTmFtZSI6ImFudXNoYS5rQGFmZmluaWRpLmNvbSIsImlhdCI6MTY2Njg4MjE4MywiZXhwIjoxNjgyNDM0MTgzfQ.dI3c9vy3xJu_SZVIUH9T2dbuuVXRuZv-qXs3lYXFrMU'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxOTQ0MzY0ZS02NjcwLTQ4M2QtYjM3NC1hMDMyODQwYzliYjUiLCJ1c2VyTmFtZSI6InBob2VuaXgtdGVhbUBhZmZpbmlkaS5jb20iLCJpYXQiOjE2NjY4ODIxODMsImV4cCI6MTY2ODU0NzIwMH0.0kGAL9b6JHwObnmSF9UHDFS4rmdjG_7mo8-yiLw4_oU'
 const ANALYTICS_STREAM_API_URL = 'https://analytics-stream.prod.affinity-project.org'
 
 export const enum EventNames {
