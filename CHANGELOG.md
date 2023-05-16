@@ -1,3 +1,12 @@
+## [1.17.1](https://github.com/affinidi/vscode-extension/compare/v1.17.0...v1.17.1) (2023-05-16)
+
+
+### Bug Fixes
+
+* [FTL-7837] Fixed token ([#114](https://github.com/affinidi/vscode-extension/issues/114)) ([a259881](https://github.com/affinidi/vscode-extension/commit/a259881359b75cc6d8716550b7760ddb4afba993))
+* [FTL-7837] Refreshed analytics token ([#113](https://github.com/affinidi/vscode-extension/issues/113)) ([0eabb51](https://github.com/affinidi/vscode-extension/commit/0eabb51a890ed5e6f8d1ced84a6b8623209dd54e))
+* upgrade @vscode/webview-ui-toolkit from 1.2.1 to 1.2.2 ([#112](https://github.com/affinidi/vscode-extension/issues/112)) ([194644d](https://github.com/affinidi/vscode-extension/commit/194644dfe3f84d8150bd8157949680c43cc80ba0))
+
 # [1.17.0](https://github.com/affinidi/vscode-extension/compare/v1.16.0...v1.17.0) (2023-03-13)
 
 
