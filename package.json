@@ -597,7 +597,7 @@
     "@affinidi/client-verifier": "^0.2.1",
     "@vscode/l10n": "^0.0.10",
     "@vscode/test-electron": "^2.1.5",
-    "@vscode/webview-ui-toolkit": "^1.1.0",
+    "@vscode/webview-ui-toolkit": "^1.2.2",
     "conf": "^10.2.0",
     "date-fns": "^2.29.3",
     "execa": "^5.1.1",
