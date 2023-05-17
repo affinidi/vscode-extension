@@ -4,6 +4,10 @@
 
 Clone the repository and run `npm install` command.
 
+> This repository uses private NPM packages, therefore you need to have access to Affinidi Gitlab account.
+> 
+> If you are not a member of Affinidi Gitlab, you cannot build this project locally.
+
 Some useful commands:
 - Run `npm test` to run integrated tests
    > You can find them in the `src/test/suite` directory.  
@@ -13,6 +17,7 @@ Some useful commands:
    > These are useful when you want to check for compile errors.
 - `npm run lint` can be used to check for linting errors
 - Run `npm run esbuild` to compile a single-file output to `out/main.js`, which represents the final build that will be published to VS Code extension marketplace
+  > you need to define ANALYTICS_JWT_TOKEN env variable
 - Use `npm run generate-translation` to update translation files using `@vscode/l10n-dev` tool
 - `npm run update-toolkit` can be used to update the WebView UI toolkit to the latest version in the `media/vendor` directory – this is used in web views to render VS Code UI components
 

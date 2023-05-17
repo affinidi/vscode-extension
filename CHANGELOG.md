@@ -1,3 +1,12 @@
+## [1.17.2](https://github.com/affinidi/vscode-extension/compare/v1.17.1...v1.17.2) (2023-05-17)
+
+
+### Bug Fixes
+
+* move analytics token to secrets [FTL-7837] ([47f6073](https://github.com/affinidi/vscode-extension/commit/47f607386b54435ca5c688ccd3a6955c58ee47a0))
+* move analytics token to secrets [FTL-7837] ([#117](https://github.com/affinidi/vscode-extension/issues/117)) ([2815c72](https://github.com/affinidi/vscode-extension/commit/2815c721b0fd497384c945df7dbd52168463a89b))
+* move analytics token to secrets [FTL-7837] ([#118](https://github.com/affinidi/vscode-extension/issues/118)) ([e347905](https://github.com/affinidi/vscode-extension/commit/e347905a83b5010ec84cb52891a54e96cbb44b8d))
+
 ## [1.17.1](https://github.com/affinidi/vscode-extension/compare/v1.17.0...v1.17.1) (2023-05-16)
 
 
