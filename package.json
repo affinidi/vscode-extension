@@ -522,7 +522,7 @@
   "l10n": "./l10n",
   "scripts": {
     "vscode:prepublish": "npm run esbuild",
-    "esbuild": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node && node bin/inject-secrets.js",
     "esbuild-dev": "npm run esbuild -- --sourcemap",
     "esbuild-watch": "npm run esbuild-dev -- --watch",
     "compile": "tsc -p ./",
@@ -579,6 +579,7 @@
     "jsonwebtoken": "^9.0.0",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.20",
+    "replace-in-file": "^6.3.5",
     "rimraf": "^3.0.2",
     "semantic-release": "^19.0.5",
     "semantic-release-vsce": "^5.4.0",
@@ -589,7 +590,7 @@
   },
   "dependencies": {
     "@affinidi/affinidi-vc-schemas": "^1.27.0",
-    "@affinidi/cli": "^1.65.2",
+    "@affinidi/cli": "^1.65.8",
     "@affinidi/client-iam": "^0.5.2",
     "@affinidi/client-issuance": "^0.5.1",
     "@affinidi/client-schema-manager": "^0.4.1",
