@@ -31,6 +31,8 @@ jobs:
 
       - name: Build
         run: npm run esbuild
+        env:
+          ANALYTICS_JWT_TOKEN: ${{secrets.ANALYTICS_JWT_TOKEN}}
 
       - name: Release and Publish
         run: npm run semantic-release
