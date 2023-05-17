@@ -39,3 +39,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
           VSCE_PAT: ${{ secrets.PUBLISHER_TOKEN }}
+          ANALYTICS_JWT_TOKEN: ${{secrets.ANALYTICS_JWT_TOKEN}}
