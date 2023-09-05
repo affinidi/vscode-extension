@@ -1,3 +1,10 @@
+## [1.17.3](https://github.com/affinidi/vscode-extension/compare/v1.17.2...v1.17.3) (2023-09-05)
+
+
+### Bug Fixes
+
+* updated Affinidi API urls ([#120](https://github.com/affinidi/vscode-extension/issues/120)) ([79ea7d1](https://github.com/affinidi/vscode-extension/commit/79ea7d15d56e593fb4d0ef0fcbf5b20bb31e10ed))
+
 ## [1.17.2](https://github.com/affinidi/vscode-extension/compare/v1.17.1...v1.17.2) (2023-05-17)
 
 
