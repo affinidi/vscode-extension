@@ -10,7 +10,6 @@ async function changeEnvironment() {
   const environment: Environment | undefined = await showQuickPick(
     [
       ['Production', 'prod'],
-      ['Staging', 'staging'],
       ['Development', 'dev'],
     ],
     { title: 'Select environment' },
@@ -31,6 +30,6 @@ export async function initDevelopment() {
 
   ext.context.subscriptions.push(developmentStatusBar)
   ext.context.subscriptions.push(
-    commands.registerCommand('affinidi.changeEnvironment', changeEnvironment)
+    commands.registerCommand('affinidi.changeEnvironment', changeEnvironment),
   )
 }

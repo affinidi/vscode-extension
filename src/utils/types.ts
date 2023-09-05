@@ -4,6 +4,6 @@ export interface Schema {
   jsonSchemaUrl: string
 }
 
-export type Environment = 'prod' | 'staging' | 'dev'
+export type Environment = 'prod' | 'dev'
 
 export type UseCasesAppTypes = 'career' | 'education' | 'gaming' | 'health' | 'ticketing'

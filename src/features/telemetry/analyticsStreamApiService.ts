@@ -9,7 +9,7 @@ const affinidiPackage = require('../../../package.json')
 
 // TODO: This JWT_TOKEN is valid only for 180 days(until 15-11-2023). We need to re-generate the new token by this date.
 const JWT_TOKEN = 'ANALYTICS_JWT_TOKEN'
-const ANALYTICS_STREAM_API_URL = 'https://analytics-stream.prod.affinity-project.org'
+const ANALYTICS_STREAM_API_URL = 'https://analytics-stream.apse1.affinidi.io'
 
 export const enum EventNames {
   commandExecuted = 'COMMAND_EXECUTED',
